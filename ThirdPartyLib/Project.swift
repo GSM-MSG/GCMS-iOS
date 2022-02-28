@@ -12,15 +12,14 @@ let project = Project.dynamicFramework(
         .ReactorKit,
         .SnapKit,
         .Swinject,
-        .SwinjectAutoregistration,
         .Then,
-        .Hero
+        .Hero,
+        .GoogleSignIn
     ],
     deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone, .ipad]),
     dependencies: [
         .SPM.Then,
         .SPM.FCM,
-        .SPM.SwinjectAutoregistration,
         .SPM.Swinject,
         .SPM.SnapKit,
         .SPM.ReactorKit,
@@ -29,6 +28,7 @@ let project = Project.dynamicFramework(
         .SPM.RxSwift,
         .SPM.RxCocoa,
         .SPM.RxMoya,
-        .SPM.Hero
+        .SPM.Hero,
+        .SPM.GoogleSignIn
     ]
 )

@@ -10,13 +10,13 @@ public extension TargetDependency.SPM{
     static let RxMoya = TargetDependency.package(product: "RxMoya")
     static let SnapKit = TargetDependency.package(product: "SnapKit")
     static let Swinject = TargetDependency.package(product: "Swinject")
-    static let SwinjectAutoregistration = TargetDependency.package(product: "SwinjectAutoregistration")
     static let RxFlow = TargetDependency.package(product: "RxFlow")
     static let FCM = TargetDependency.package(product: "FirebaseMessaging")
     static let Then = TargetDependency.package(product: "Then")
     static let IQKeyboardManager = TargetDependency.package(product: "IQKeyboardManagerSwift")
     static let ReactorKit = TargetDependency.package(product: "ReactorKit")
     static let Hero = TargetDependency.package(product: "Hero")
+    static let GoogleSignIn = TargetDependency.package(product: "GoogleSignIn")
 }
 
 public extension Package {
@@ -35,10 +35,6 @@ public extension Package {
     static let Swinject = Package.remote(
         url: "https://github.com/Swinject/Swinject.git",
         requirement: .upToNextMajor(from: "2.7")
-    )
-    static let SwinjectAutoregistration = Package.remote(
-        url: "https://github.com/Swinject/SwinjectAutoregistration.git",
-        requirement: .upToNextMajor(from: "2.8.1")
     )
     static let RxFlow = Package.remote(
         url: "https://github.com/RxSwiftCommunity/RxFlow.git",
@@ -64,4 +60,7 @@ public extension Package {
         url: "https://github.com/HeroTransitions/Hero.git",
         requirement: .upToNextMajor(from: "1.6.1")
     )
+    static let GoogleSignIn = Package.remote(
+        url: "https://github.com/google/GoogleSignIn-iOS.git",
+        requirement: .upToNextMajor(from: "6.2.0"))
 }
