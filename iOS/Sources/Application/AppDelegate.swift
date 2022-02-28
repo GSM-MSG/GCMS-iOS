@@ -4,11 +4,22 @@ import Service
 import FirebaseMessaging
 import FirebaseCore
 import IQKeyboardManagerSwift
+import GoogleSignIn
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     static let container = Container()
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
+        GoogleSignIn.GIDSignIn.sharedInstance.restorePreviousSignIn { user, err in
+            if err != nil || user == nil {
+                // TODO: Error
+            } else {
+                // TODO: Success
+            }
+        }
         FirebaseApp.configure()
         setFCM(application)
         AppDelegate.container.registerDependencies()
@@ -21,6 +32,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    func application(
+        _ app: UIApplication,
+        open url: URL,
+        options: [UIApplication.OpenURLOptionsKey : Any] = [:]
+    ) -> Bool {
+        var handled: Bool
+        
+        handled = GIDSignIn.sharedInstance.handle(url)
+        
+        if handled {
+            return true
+        }
+        
+        return false
+    }
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         return .portrait
     }
