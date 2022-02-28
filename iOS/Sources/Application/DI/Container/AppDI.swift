@@ -1,5 +1,4 @@
 import Swinject
-import SwinjectAutoregistration
 import RxFlow
 
 extension Container{
