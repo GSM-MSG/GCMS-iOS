@@ -62,5 +62,6 @@ public extension Package {
     )
     static let GoogleSignIn = Package.remote(
         url: "https://github.com/google/GoogleSignIn-iOS.git",
-        requirement: .upToNextMajor(from: "6.2.0"))
+        requirement: .upToNextMajor(from: "6.1.0")
+    )
 }
