@@ -18,6 +18,7 @@
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 public enum GCMSAsset {
   public enum Colors {
+    public static let gcmsBackgroundColor = GCMSColors(name: "GCMS_BackgroundColor")
     public static let gcmsMainColor = GCMSColors(name: "GCMS_MainColor")
   }
   public enum Images {
