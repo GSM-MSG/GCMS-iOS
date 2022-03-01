@@ -2,6 +2,7 @@ import UIKit
 import GoogleSignIn
 import Then
 import SnapKit
+import RxCocoa
 
 final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     // MARK: - Properties
@@ -49,5 +50,14 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     }
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
+    }
+    
+    // MARK: - Reactor
+    override func bindView(reactor: OnBoardingReactor) {
+        googleSigninButton.rx.tap
+            .withUnretained(self)
+            .map { Reactor.Action.googleSigninButtonDidTap($0.0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }

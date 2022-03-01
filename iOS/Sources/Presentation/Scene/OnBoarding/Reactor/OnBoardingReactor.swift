@@ -2,6 +2,8 @@ import ReactorKit
 import RxFlow
 import RxSwift
 import RxRelay
+import GoogleSignIn
+import FirebaseCore
 
 final class OnBoardingReactor: Reactor, Stepper {
     // MARK: - Properties
@@ -11,14 +13,11 @@ final class OnBoardingReactor: Reactor, Stepper {
     
     // MARK: - Reactor
     enum Action {
-        
+        case googleSigninButtonDidTap(UIViewController)
+        case googleSigninTokenReceived(String)
     }
-    enum Mutation {
-        
-    }
-    struct State {
-        
-    }
+    enum Mutation {}
+    struct State {}
     let initialState: State
     
     // MARK: - Init
@@ -32,26 +31,32 @@ final class OnBoardingReactor: Reactor, Stepper {
 extension OnBoardingReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-            
+        case let .googleSigninButtonDidTap(vc):
+            return googleSigninButtonDidTap(vc: vc)
+        case let .googleSigninTokenReceived(token):
+            return googleSigninTokenReceived(token: token)
         }
-        return .empty()
-    }
-}
-
-// MARK: - Reduce
-extension OnBoardingReactor {
-    func reduce(state: State, mutation: Mutation) -> State {
-        var newState = state
-        
-        switch mutation {
-            
-        }
-        
-        return newState
     }
 }
 
 // MARK: - Method
 private extension OnBoardingReactor {
-    
+    func googleSigninButtonDidTap(vc: UIViewController) -> Observable<Mutation> {
+        let config = GIDConfiguration(clientID: FirebaseApp.app()?.options.clientID ?? "")
+        GIDSignIn.sharedInstance.signIn(with: config, presenting: vc) { user, err in
+            if let err = err {
+                print(err.localizedDescription)
+                print("Goolge Signin Failure")
+                return
+            }
+            
+            user?.authentication.do({ auth in
+                print(auth)
+            })
+        }
+        return .empty()
+    }
+    func googleSigninTokenReceived(token: String) -> Observable<Mutation> {
+        return .empty()
+    }
 }
