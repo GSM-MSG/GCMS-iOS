@@ -19,7 +19,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     private let logoImageView = UIImageView().then {
         $0.image = GCMSAsset.Images.gcmsWhaleLogo.image.withRenderingMode(.alwaysOriginal)
     }
-    private let googleSigninButton = GIDSignInButton()
+    private let googleSigninButton = GoogleSigninButton(title: "Sign in with Google")
     
     // MARK: - UI
     override func addView() {
@@ -42,8 +42,12 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         }
         googleSigninButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
+            $0.height.equalTo(56)
             $0.bottom.equalToSuperview().inset(bound.height*0.1)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
+    }
+    override func configureVC() {
+        view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
 }
