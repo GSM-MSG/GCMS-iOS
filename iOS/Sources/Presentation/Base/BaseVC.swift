@@ -22,11 +22,9 @@ class BaseVC<T: Reactor>: UIViewController{
         configureVC()
     }
     
-    var reactor: T
-    
-    init(reactor: T){
-        self.reactor = reactor
+    init(reactor: T?){
         super.init(nibName: nil, bundle: nil)
+        self.reactor = reactor
     }
     
     required init?(coder: NSCoder) {

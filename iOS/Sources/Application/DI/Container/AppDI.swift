@@ -9,7 +9,7 @@ extension Container{
     
     private func registerVC() {
         self.register(OnBoardingVC.self) { r in
-            return OnBoardingVC(reactor: r.resolve(OnBoardingReactor.self)!)
+            return OnBoardingVC(reactor: r.resolve(OnBoardingReactor.self))
         }
     }
     

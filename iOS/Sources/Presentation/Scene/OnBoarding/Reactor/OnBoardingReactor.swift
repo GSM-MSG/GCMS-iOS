@@ -51,7 +51,7 @@ private extension OnBoardingReactor {
             }
             
             user?.authentication.do({ auth in
-                print(auth)
+                // TODO: 서버에 idToken값 보내기
             })
         }
         return .empty()
