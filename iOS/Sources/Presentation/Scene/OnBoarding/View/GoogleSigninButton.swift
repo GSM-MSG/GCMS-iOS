@@ -17,7 +17,7 @@ final class GoogleSigninButton: UIButton {
         
         
         layer.cornerRadius = 9
-        backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
+        backgroundColor = GCMSAsset.Colors.gcmsOnBoardingMainColor.color
     }
     
     required init?(coder: NSCoder) {

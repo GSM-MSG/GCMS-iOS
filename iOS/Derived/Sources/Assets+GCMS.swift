@@ -20,6 +20,7 @@ public enum GCMSAsset {
   public enum Colors {
     public static let gcmsBackgroundColor = GCMSColors(name: "GCMS_BackgroundColor")
     public static let gcmsMainColor = GCMSColors(name: "GCMS_MainColor")
+    public static let gcmsOnBoardingMainColor = GCMSColors(name: "GCMS_OnBoardingMainColor")
   }
   public enum Images {
     public static let gcmsGoogleLogo = GCMSImages(name: "GCMS_GoogleLogo")
