@@ -7,4 +7,6 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     private let nameLabel = UILabel()
     private let logoImageView = UIImageView()
     private let googleSigninButton = GIDSignInButton()
+    
+    // MARK: - UI
 }

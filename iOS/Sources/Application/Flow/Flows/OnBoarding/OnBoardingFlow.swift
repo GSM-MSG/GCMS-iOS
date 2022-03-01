@@ -38,5 +38,9 @@ final class OnBoardingFlow: Flow{
 
 // MARK: - Method
 private extension OnBoardingFlow{
-    
+    func coordinateToOnBoarding() -> FlowContributors {
+        @Inject var vc: OnBoardingVC
+        self.rootVC.setViewControllers([vc], animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor ?? .init()))
+    }
 }
