@@ -21,8 +21,7 @@ public enum GCMSAsset {
     public static let gcmsMainColor = GCMSColors(name: "GCMS_MainColor")
   }
   public enum Images {
-    public static let accentColor = GCMSColors(name: "AccentColor")
-    public static let gcmsWhale = GCMSImages(name: "GCMS_whale")
+    public static let gcmsWhaleLogo = GCMSImages(name: "GCMS_WhaleLogo")
   }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name

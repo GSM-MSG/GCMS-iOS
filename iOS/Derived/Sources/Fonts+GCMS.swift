@@ -28,7 +28,11 @@ public enum GCMSFontFamily {
     public static let thin = GCMSFontConvertible(name: "Inter-Thin", family: "Inter", path: "Inter-Thin.ttf")
     public static let all: [GCMSFontConvertible] = [black, bold, extraBold, extraLight, light, medium, regular, semiBold, thin]
   }
-  public static let allCustomFonts: [GCMSFontConvertible] = [Inter.all].flatMap { $0 }
+  public enum SassyFrass {
+    public static let regular = GCMSFontConvertible(name: "SassyFrass-Regular", family: "Sassy Frass", path: "SassyFrass-Regular.ttf")
+    public static let all: [GCMSFontConvertible] = [regular]
+  }
+  public static let allCustomFonts: [GCMSFontConvertible] = [Inter.all, SassyFrass.all].flatMap { $0 }
   public static func registerAllCustomFonts() {
     allCustomFonts.forEach { $0.register() }
   }
