@@ -17,13 +17,13 @@
 
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 public enum GCMSAsset {
-  public enum Assets {
-    public static let accentColor = GCMSColors(name: "AccentColor")
+  public enum Colors {
+    public static let gcmsMainColor = GCMSColors(name: "GCMS_MainColor")
   }
   public enum Images {
-      public static let gcmsWhale = GCMSImages(name: "GCMS_whale")
+    public static let accentColor = GCMSColors(name: "AccentColor")
+    public static let gcmsWhale = GCMSImages(name: "GCMS_whale")
   }
-  
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
 
