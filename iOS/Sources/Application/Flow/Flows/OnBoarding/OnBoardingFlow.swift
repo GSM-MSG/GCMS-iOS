@@ -17,7 +17,7 @@ final class OnBoardingFlow: Flow{
         return self.rootVC
     }
     
-    private let stepper: OnBoardingStepper = .init()
+    let stepper: OnBoardingStepper = .init()
     private let rootVC = UINavigationController()
     
     // MARK: - Init
@@ -29,7 +29,8 @@ final class OnBoardingFlow: Flow{
     func navigate(to step: Step) -> FlowContributors {
         guard let step = step.asGCMSStep else { return .none }
         switch step{
-            
+        case .onBoardingIsRequired:
+            return coordinateToOnBoarding()
         default:
             return .none
         }
