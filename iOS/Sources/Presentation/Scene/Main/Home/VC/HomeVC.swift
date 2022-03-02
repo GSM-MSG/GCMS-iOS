@@ -5,6 +5,7 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 import Reusable
+import Service
 
 final class HomeVC: BaseVC<HomeReactor> {
     // MARK: - Properties
@@ -41,7 +42,8 @@ final class HomeVC: BaseVC<HomeReactor> {
     override func configureNavigation() {
         self.navigationItem.setLeftBarButton(myPageButton, animated: true)
         self.navigationItem.setRightBarButton(alarmButton, animated: true)
-        
+        self.navigationItem.configTitle(title: "GCMS", font: .init(font: GCMSFontFamily.SassyFrass.regular, size: 26) ?? .init())
+        self.navigationItem.configBack()
     }
     // MARK: - Reactor
     override func bindAction(reactor: HomeReactor) {
@@ -63,6 +65,18 @@ final class HomeVC: BaseVC<HomeReactor> {
             .map(\.clubList)
             .bind(to: clubListCollectionView.rx.items(dataSource: ds))
             .disposed(by: disposeBag)
+    }
+    override func bindView(reactor: HomeReactor) {
+        
+        clubListCollectionView.rx.modelSelected(ClubList.self)
+            .do(onNext: { [weak self] _ in
+                self?.navigationItem.configBack()
+            })
+            .map(\.id)
+            .map(Reactor.Action.clubDidTap)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+            
     }
 }
 
