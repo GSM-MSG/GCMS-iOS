@@ -5,9 +5,17 @@ import Kingfisher
 
 final class ClubView: UIView {
     // MARK: - Properties
-    private let clubBannerView = UIImageView()
+    private let clubBannerView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.layer.cornerRadius = 10
+        $0.clipsToBounds = true
+    }
     private let nameLabel = UILabel().then {
         $0.textAlignment = .center
+        $0.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 13)
+        $0.textColor = .white
+        $0.layer.cornerRadius = 9
+        $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
     }
     
     // MARK: - UI
