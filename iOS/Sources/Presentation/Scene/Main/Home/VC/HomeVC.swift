@@ -10,10 +10,8 @@ final class HomeVC: BaseVC<HomeReactor> {
     override func addView() {
         view.addSubViews(clubTypeSegmentedControl)
     }
-    override func setLayout() {
+    override func setLayoutSubviews() {
         clubTypeSegmentedControl.pin.top(view.pin.safeArea).pinEdges().horizontally(24%).height(19)
-        
-        
     }
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
