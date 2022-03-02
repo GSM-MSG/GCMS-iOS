@@ -14,7 +14,8 @@ let project = Project.dynamicFramework(
         .Swinject,
         .Then,
         .Hero,
-        .GoogleSignIn
+        .GoogleSignIn,
+        .Kingfisher
     ],
     deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone, .ipad]),
     dependencies: [
@@ -29,6 +30,7 @@ let project = Project.dynamicFramework(
         .SPM.RxCocoa,
         .SPM.RxMoya,
         .SPM.Hero,
-        .SPM.GoogleSignIn
+        .SPM.GoogleSignIn,
+        .SPM.Kingfisher
     ]
 )
