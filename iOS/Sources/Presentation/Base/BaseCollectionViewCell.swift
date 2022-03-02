@@ -14,8 +14,13 @@ class BaseCollectionViewCell<T>: UICollectionViewCell{
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        setLayoutSubviews()
+    }
     func addView(){}
     func setLayout(){}
+    func setLayoutSubviews(){}
     func configureCell(){}
     var model: T? {
         didSet { if let model = model { bind(model) } }
