@@ -165,6 +165,11 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             .bind { owner, item in
                 owner.descriptionLabel.text = item.description
 //                owner.activityView.setImages(urls: item.activities)
+                if item.activities.isEmpty {
+                    owner.activityView.snp.updateConstraints {
+                        $0.height.equalTo(0)
+                    }
+                }
                 owner.activityView.setImages(images: [
                     .init(systemName: "1.circle") ?? .init(),
                     .init(systemName: "2.circle") ?? .init(),
