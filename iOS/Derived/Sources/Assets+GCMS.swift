@@ -21,6 +21,12 @@ public enum GCMSAsset {
     public static let gcmsBackgroundColor = GCMSColors(name: "GCMS_BackgroundColor")
     public static let gcmsMainColor = GCMSColors(name: "GCMS_MainColor")
     public static let gcmsOnBoardingMainColor = GCMSColors(name: "GCMS_OnBoardingMainColor")
+    public static let moizaGray1 = GCMSColors(name: "MOIZA_Gray1")
+    public static let moizaGray2 = GCMSColors(name: "MOIZA_Gray2")
+    public static let moizaGray3 = GCMSColors(name: "MOIZA_Gray3")
+    public static let moizaGray4 = GCMSColors(name: "MOIZA_Gray4")
+    public static let moizaGray5 = GCMSColors(name: "MOIZA_Gray5")
+    public static let moizaGray6 = GCMSColors(name: "MOIZA_Gray6")
   }
   public enum Images {
     public static let gcmsGoogleLogo = GCMSImages(name: "GCMS_GoogleLogo")
