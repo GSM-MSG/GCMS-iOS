@@ -10,7 +10,7 @@ enum GCMSStep: Step {
     
     // MARK: Main
     case clubListIsRequired
-    case clubDetailIsRequired
+    case clubDetailIsRequired(Int)
     
     // MARK: Administrator
     case myPageIsRequired
