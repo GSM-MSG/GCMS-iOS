@@ -13,6 +13,9 @@ final class HomeVC: BaseVC<HomeReactor> {
         $0.register(cellType: ClubListCell.self)
         $0.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
+    private let alarmButton = UIBarButtonItem().then {
+        $0.image = UIImage(systemName: "person.circle")?.tintColor(.init(red: 0.8, green: 0.8, blue: 0.8, alpha: 1))
+    }
     
     // MARK: - UI
     override func setup() {
