@@ -22,6 +22,11 @@ class BaseVC<T: Reactor>: UIViewController{
         configureVC()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setLayoutSubviews()
+    }
+    
     init(reactor: T?){
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
@@ -38,6 +43,7 @@ class BaseVC<T: Reactor>: UIViewController{
     func setup(){}
     func addView(){}
     func setLayout(){}
+    func setLayoutSubviews()
     func configureVC(){}
     
     func bindView(reactor: T){}
