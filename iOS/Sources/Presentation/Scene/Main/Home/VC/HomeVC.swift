@@ -10,18 +10,22 @@ final class HomeVC: BaseVC<HomeReactor> {
     // MARK: - Properties
     private let clubTypeSegmentedControl = ClubTypeSegmentedControl(titles: ["전공", "사설", "자율"])
     private let clubListCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
-        let layout = UICollectionViewFlowLayout()
-        
         $0.register(cellType: ClubListCell.self)
-        $0.collectionViewLayout = layout
+        $0.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
     
     // MARK: - UI
+    override func setup() {
+        let lay = GCMSLayout()
+        lay.delegate = self
+        clubListCollectionView.collectionViewLayout = lay
+    }
     override func addView() {
-        view.addSubViews(clubTypeSegmentedControl)
+        view.addSubViews(clubTypeSegmentedControl, clubListCollectionView)
     }
     override func setLayoutSubviews() {
-        clubTypeSegmentedControl.pin.top(view.pin.safeArea).pinEdges().horizontally(24%).height(19)
+        clubTypeSegmentedControl.pin.top(view.pin.safeArea).pinEdges().horizontally(24%).height(33)
+        clubListCollectionView.pin.top(view.pin.safeArea.top + 33).horizontally(10).bottom(view.pin.safeArea)
     }
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
@@ -37,5 +41,26 @@ final class HomeVC: BaseVC<HomeReactor> {
     override func bindState(reactor: HomeReactor) {
         let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
         
+        let ds = RxCollectionViewSectionedReloadDataSource<ClubListSection>{ _, tv, ip, item in
+            let cell = tv.dequeueReusableCell(for: ip) as ClubListCell
+            cell.model = item
+            return cell
+        }
+        
+        sharedState
+            .map(\.clubList)
+            .bind(to: clubListCollectionView.rx.items(dataSource: ds))
+            .disposed(by: disposeBag)
+    }
+}
+
+// MARK: - Extension
+extension HomeVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, GCMSLayoutDelegate {
+    func collectionView(_ collectionView: UICollectionView, heightForItemIndexAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 1 {
+            return 190
+        } else {
+            return 250
+        }
     }
 }
