@@ -125,7 +125,6 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             $0.top.equalTo(teacherHeaderLabel.snp.bottom).offset(Metric.headerContentSpace)
             $0.leading.trailing.equalTo(teacherHeaderLabel)
             $0.height.equalTo(61)
-            $0.width.equalTo(bound.width/2)
         }
         contactHeaderLabel.snp.makeConstraints {
             $0.top.equalTo(headView.snp.bottom).offset(Metric.sectionSpace)
