@@ -48,6 +48,8 @@ final class AppFlow: Flow{
         switch step{
         case .onBoardingIsRequired:
             return coordinateToOnBoarding()
+        case .clubListIsRequired:
+            return coordinateToClubList()
         default:
             return .none
         }
@@ -66,6 +68,9 @@ private extension AppFlow{
             self.rootWindow.rootViewController = root
         }
         return .one(flowContributor: .contribute(withNextPresentable: flow, withNextStepper: flow.stepper))
+    }
+    func coordinateToClubList() -> FlowContributors {
+        return .none
     }
 }
 

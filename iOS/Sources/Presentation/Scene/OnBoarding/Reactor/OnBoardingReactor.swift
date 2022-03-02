@@ -43,7 +43,7 @@ extension OnBoardingReactor {
 private extension OnBoardingReactor {
     func googleSigninButtonDidTap(vc: UIViewController) -> Observable<Mutation> {
         let config = GIDConfiguration(clientID: FirebaseApp.app()?.options.clientID ?? "")
-        GIDSignIn.sharedInstance.signIn(with: config, presenting: vc) { user, err in
+        GIDSignIn.sharedInstance.signIn(with: config, presenting: vc) {[weak self] user, err in
             if let err = err {
                 print(err.localizedDescription)
                 print("Goolge Signin Failure")
@@ -51,12 +51,13 @@ private extension OnBoardingReactor {
             }
             
             user?.authentication.do({ auth in
-                // TODO: 서버에 idToken값 보내기
+                self?.action.onNext(.googleSigninTokenReceived(auth.idToken ?? ""))
             })
         }
         return .empty()
     }
     func googleSigninTokenReceived(token: String) -> Observable<Mutation> {
+        steps.accept(GCMSStep.clubListIsRequired)
         return .empty()
     }
 }

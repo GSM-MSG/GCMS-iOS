@@ -31,6 +31,8 @@ final class OnBoardingFlow: Flow{
         switch step{
         case .onBoardingIsRequired:
             return coordinateToOnBoarding()
+        case .clubListIsRequired:
+            return .end(forwardToParentFlowWithStep: GCMSStep.clubListIsRequired)
         default:
             return .none
         }
