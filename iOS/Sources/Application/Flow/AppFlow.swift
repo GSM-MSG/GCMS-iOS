@@ -70,7 +70,14 @@ private extension AppFlow{
         return .one(flowContributor: .contribute(withNextPresentable: flow, withNextStepper: flow.stepper))
     }
     func coordinateToClubList() -> FlowContributors {
-        return .none
+        let flow = MainFlow()
+        Flows.use(
+            flow,
+            when: .created
+        ) { [unowned self] root in
+            self.rootWindow.rootViewController = root
+        }
+        return .one(flowContributor: .contribute(withNextPresentable: flow, withNextStepper: flow.stepper))
     }
 }
 

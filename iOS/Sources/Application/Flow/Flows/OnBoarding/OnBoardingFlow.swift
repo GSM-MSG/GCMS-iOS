@@ -44,6 +44,6 @@ private extension OnBoardingFlow{
     func coordinateToOnBoarding() -> FlowContributors {
         let vc = AppDelegate.container.resolve(OnBoardingVC.self)!
         self.rootVC.setViewControllers([vc], animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor ?? .init()))
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
 }
