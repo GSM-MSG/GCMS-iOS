@@ -13,9 +13,14 @@ final class HomeVC: BaseVC<HomeReactor> {
         $0.register(cellType: ClubListCell.self)
         $0.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
-    private let alarmButton = UIBarButtonItem().then {
-        $0.image = UIImage(systemName: "person.circle")?.tintColor(.init(red: 0.8, green: 0.8, blue: 0.8, alpha: 1))
-    }
+    private let myPageButton = UIBarButtonItem(image: .init(systemName: "person.circle")?.tintColor(GCMSAsset.Colors.gcmsGray4.color),
+                                               style: .plain,
+                                               target: nil,
+                                               action: nil)
+    private let alarmButton = UIBarButtonItem(image: .init(systemName: "bell")?.tintColor(GCMSAsset.Colors.gcmsGray4.color),
+                                              style: .plain,
+                                              target: nil,
+                                              action: nil)
     
     // MARK: - UI
     override func setup() {
@@ -33,7 +38,11 @@ final class HomeVC: BaseVC<HomeReactor> {
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
-    
+    override func configureNavigation() {
+        self.navigationItem.setLeftBarButton(myPageButton, animated: true)
+        self.navigationItem.setRightBarButton(alarmButton, animated: true)
+        
+    }
     // MARK: - Reactor
     override func bindAction(reactor: HomeReactor) {
         self.rx.viewDidLoad
