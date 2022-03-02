@@ -23,6 +23,7 @@ final class ClubTypeSegmentedControl: UIView {
     convenience init(
         titles: [String]
     ) {
+        self.init(frame: .zero)
         self.titles = titles
     }
     
