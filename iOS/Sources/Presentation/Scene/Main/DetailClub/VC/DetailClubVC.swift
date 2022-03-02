@@ -19,7 +19,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         $0.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
     private let bannerImageView = UIImageView().then {
-        $0.backgroundColor = .white
+        $0.backgroundColor = GCMSAsset.Colors.gcmsGray3.color
     }
     private let descriptionHeaderLabel = HeaderLabel(title: "동아리 설명")
     private let descriptionLabel = UILabel().then {
