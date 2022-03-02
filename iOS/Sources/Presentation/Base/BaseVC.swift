@@ -20,6 +20,7 @@ class BaseVC<T: Reactor>: UIViewController{
         addView()
         setLayout()
         configureVC()
+        configureNavigation()
     }
     
     override func viewDidLayoutSubviews() {
@@ -45,6 +46,7 @@ class BaseVC<T: Reactor>: UIViewController{
     func setLayout(){}
     func setLayoutSubviews(){}
     func configureVC(){}
+    func configureNavigation(){}
     
     func bindView(reactor: T){}
     func bindAction(reactor: T){}
