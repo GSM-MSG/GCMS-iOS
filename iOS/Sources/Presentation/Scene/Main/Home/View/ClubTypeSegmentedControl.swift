@@ -57,6 +57,9 @@ fileprivate extension ClubTypeSegmentedControl {
             button.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
             self.buttons.append(button)
         }
+        buttons[0].backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
+        buttons[0].titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 11)
+        buttons[0].setTitleColor(.white, for: .normal)
     }
     func configStack() {
         let stack = UIStackView(arrangedSubviews: buttons)
