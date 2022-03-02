@@ -17,6 +17,7 @@ public extension TargetDependency.SPM{
     static let ReactorKit = TargetDependency.package(product: "ReactorKit")
     static let Hero = TargetDependency.package(product: "Hero")
     static let GoogleSignIn = TargetDependency.package(product: "GoogleSignIn")
+    static let Kingfisher = TargetDependency.package(product: "Kingfisher")
 }
 
 public extension Package {
@@ -63,5 +64,9 @@ public extension Package {
     static let GoogleSignIn = Package.remote(
         url: "https://github.com/google/GoogleSignIn-iOS.git",
         requirement: .upToNextMajor(from: "6.1.0")
+    )
+    static let Kingfisher = Package.remote(
+        url: "https://github.com/onevcat/Kingfisher.git",
+        requirement: .upToNextMajor(from: "7.0.0")
     )
 }
