@@ -1,6 +1,9 @@
 import UIKit
 import SnapKit
 import PinLayout
+import RxSwift
+import RxCocoa
+import RxDataSources
 
 final class HomeVC: BaseVC<HomeReactor> {
     // MARK: - Properties
@@ -15,5 +18,15 @@ final class HomeVC: BaseVC<HomeReactor> {
     }
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
+    }
+    
+    // MARK: - Reactor
+    override func bindAction(reactor: HomeReactor) {
+        
+    }
+    override func bindState(reactor: HomeReactor) {
+        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        
+        
     }
 }
