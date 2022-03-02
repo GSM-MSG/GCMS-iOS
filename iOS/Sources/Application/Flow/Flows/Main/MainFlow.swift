@@ -17,7 +17,7 @@ final class MainFlow: Flow{
         return self.rootVC
     }
     
-    private let stepper: MainStepper = .init()
+    let stepper: MainStepper = .init()
     private let rootVC = UINavigationController()
     
     // MARK: - Init
@@ -29,7 +29,8 @@ final class MainFlow: Flow{
     func navigate(to step: Step) -> FlowContributors {
         guard let step = step.asGCMSStep else { return .none }
         switch step{
-            
+        case .clubListIsRequired:
+        return coordinateToClubList()
         default:
             return .none
         }
@@ -38,5 +39,9 @@ final class MainFlow: Flow{
 
 // MARK: - Method
 private extension MainFlow{
-    
+    func coordinateToClubList() -> FlowContributors {
+        let vc = AppDelegate.container.resolve(HomeVC.self)!
+        self.rootVC.setViewControllers([vc], animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
 }

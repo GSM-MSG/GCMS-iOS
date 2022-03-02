@@ -54,6 +54,7 @@ fileprivate extension ClubTypeSegmentedControl {
             button.backgroundColor = .clear
             button.layer.cornerRadius = 11.5
             button.layer.masksToBounds = true
+            button.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
             self.buttons.append(button)
         }
     }
