@@ -14,6 +14,8 @@ final class HomeReactor: Reactor, Stepper {
     enum Action {
         case viewDidLoad
         case clubDidTap(Int)
+        case myPageButtonDidTap
+        case alarmButtonDidTap
     }
     enum Mutation {
         case setClubList([ClubList])
@@ -40,6 +42,10 @@ extension HomeReactor {
             return viewDidLoad()
         case let .clubDidTap(id):
             steps.accept(GCMSStep.clubDetailIsRequired(id))
+        case .myPageButtonDidTap:
+            steps.accept(GCMSStep.myPageIsRequired)
+        case .alarmButtonDidTap:
+            steps.accept(GCMSStep.alarmListIsRequired)
         }
         return .empty()
     }
