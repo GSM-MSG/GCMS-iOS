@@ -15,7 +15,8 @@ let project = Project.dynamicFramework(
         .Then,
         .Hero,
         .GoogleSignIn,
-        .Kingfisher
+        .Kingfisher,
+        .PinLayout
     ],
     deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone, .ipad]),
     dependencies: [
@@ -31,6 +32,7 @@ let project = Project.dynamicFramework(
         .SPM.RxMoya,
         .SPM.Hero,
         .SPM.GoogleSignIn,
-        .SPM.Kingfisher
+        .SPM.Kingfisher,
+        .SPM.PinLayout
     ]
 )

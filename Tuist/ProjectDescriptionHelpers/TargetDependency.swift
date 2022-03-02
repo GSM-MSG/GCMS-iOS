@@ -18,6 +18,7 @@ public extension TargetDependency.SPM{
     static let Hero = TargetDependency.package(product: "Hero")
     static let GoogleSignIn = TargetDependency.package(product: "GoogleSignIn")
     static let Kingfisher = TargetDependency.package(product: "Kingfisher")
+    static let PinLayout = TargetDependency.package(product: "PinLayout")
 }
 
 public extension Package {
@@ -68,5 +69,9 @@ public extension Package {
     static let Kingfisher = Package.remote(
         url: "https://github.com/onevcat/Kingfisher.git",
         requirement: .upToNextMajor(from: "7.0.0")
+    )
+    static let PinLayout = Package.remote(
+        url: "https://github.com/layoutBox/PinLayout.git",
+        requirement: .upToNextMajor(from: "1.10.0")
     )
 }
