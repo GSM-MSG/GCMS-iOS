@@ -20,6 +20,7 @@ public extension TargetDependency.SPM{
     static let Kingfisher = TargetDependency.package(product: "Kingfisher")
     static let RxDataSources = TargetDependency.package(product: "RxDataSources")
     static let PinLayout = TargetDependency.package(product: "PinLayout")
+    static let Reusable = TargetDependency.package(product: "Reusable")
 }
 
 public extension Package {
@@ -78,5 +79,9 @@ public extension Package {
     static let PinLayout = Package.remote(
         url: "https://github.com/layoutBox/PinLayout.git",
         requirement: .upToNextMajor(from: "1.10.0")
+    )
+    static let Reusable = Package.remote(
+        url: "https://github.com/AliSoftware/Reusable.git",
+        requirement: .upToNextMajor(from: "4.1.0")
     )
 }

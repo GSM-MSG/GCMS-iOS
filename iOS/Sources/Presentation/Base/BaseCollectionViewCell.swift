@@ -1,7 +1,8 @@
 import UIKit
 import RxSwift
+import Reusable
 
-class BaseCollectionViewCell<T>: UICollectionViewCell{
+class BaseCollectionViewCell<T>: UICollectionViewCell, Reusable {
     let bound = UIScreen.main.bounds
     lazy var disposeBag: DisposeBag = .init()
     override init(frame: CGRect) {

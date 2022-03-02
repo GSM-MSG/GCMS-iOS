@@ -1,7 +1,8 @@
 import UIKit
 import RxSwift
+import Reusable
 
-class BaseTableViewCell<T>: UITableViewCell{
+class BaseTableViewCell<T>: UITableViewCell, Reusable {
     let bound = UIScreen.main.bounds
     lazy var disposeBag: DisposeBag = .init()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
