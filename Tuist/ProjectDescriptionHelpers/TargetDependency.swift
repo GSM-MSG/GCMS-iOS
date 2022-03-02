@@ -74,6 +74,7 @@ public extension Package {
     static let RxDataSources = Package.remote(
         url: "https://github.com/RxSwiftCommunity/RxDataSources.git",
         requirement: .upToNextMajor(from: "5.0.0")
+    )
     static let PinLayout = Package.remote(
         url: "https://github.com/layoutBox/PinLayout.git",
         requirement: .upToNextMajor(from: "1.10.0")
