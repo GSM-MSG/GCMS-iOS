@@ -15,7 +15,7 @@ struct AppStepper: Stepper{
     private let disposeBag: DisposeBag = .init()
     
     func readyToEmitSteps() {
-        
+        steps.accept(GCMSStep.onBoardingIsRequired)
     }
 }
 
@@ -43,9 +43,11 @@ final class AppFlow: Flow{
     // MARK: - Navigate
     
     func navigate(to step: Step) -> FlowContributors {
-        
+        guard let step = step.asGCMSStep else { return .none }
         
         switch step{
+        case .onBoardingIsRequired:
+            return coordinateToOnBoarding()
         default:
             return .none
         }
@@ -55,5 +57,15 @@ final class AppFlow: Flow{
 // MARK: - Method
 
 private extension AppFlow{
+    func coordinateToOnBoarding() -> FlowContributors {
+        let flow = OnBoardingFlow()
+        Flows.use(
+            flow,
+            when: .created
+        ) { [unowned self] root in
+            self.rootWindow.rootViewController = root
+        }
+        return .one(flowContributor: .contribute(withNextPresentable: flow, withNextStepper: flow.stepper))
+    }
 }
 

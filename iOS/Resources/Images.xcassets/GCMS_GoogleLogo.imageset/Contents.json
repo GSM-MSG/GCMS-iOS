@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "Google_\"G\"_Logo.svg.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "Google_\"G\"_Logo.svg-1.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "Google_\"G\"_Logo.svg-2.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
