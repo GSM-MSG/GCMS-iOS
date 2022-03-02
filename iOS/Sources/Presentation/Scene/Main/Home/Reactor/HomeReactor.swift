@@ -61,8 +61,12 @@ private extension HomeReactor {
     func viewDidLoad() -> Observable<Mutation> {
         
         return .just(.setClubList([
-            .init(bannerUrl: "https://avatars.githubusercontent.com/u/74440939?s=48&v=4", title: "대충 타이틀"),
-            .init(bannerUrl: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4", title: "ㅁㄴㅇㄹㅁㄴㅇㅁㄴㅇ")
+            .init(bannerUrl: "https://avatars.githubusercontent.com/u/74440939?s=48&v=4", title: "대충 타이틀", type: .autonomy),
+            .init(bannerUrl: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4", title: "ㅁㄴㅇㄹㅁㄴㅇㅁㄴㅇ", type: .major),
+            .init(bannerUrl: "https://i.ytimg.com/vi/mMVom4c5eOM/hqdefault_live.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLCtqyUGuso25mxzd_eKxjK92OnEiA", title: "Gura", type: .editorial),
+            .init(bannerUrl: "https://avatars.githubusercontent.com/u/74440939?s=48&v=4", title: "대충 타이틀", type: .autonomy),
+            .init(bannerUrl: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4", title: "ㅁㄴㅇㄹㅁㄴㅇㅁㄴㅇ", type: .major),
+            .init(bannerUrl: "https://user-images.githubusercontent.com/74440939/156344036-247e71ef-e020-40bb-bc4d-9553f0636e30.png", title: "Gura", type: .editorial)
         ]))
     }
 }
