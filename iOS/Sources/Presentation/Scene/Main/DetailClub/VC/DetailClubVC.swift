@@ -63,9 +63,6 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         contentView.addSubViews(bannerImageView, containerView)
         containerView.addSubViews(descriptionHeaderLabel, descriptionLabel, activityHeaderLabel, activityView, memberHeaderLabel, memberCollectionView, headHeaderLabel, headView, teacherHeaderLabel, teacherView, contactHeaderLabel, contactDescriptionLabel)
     }
-    override func setLayoutSubviews() {
-        
-    }
     override func setLayout() {
         contentView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
@@ -78,7 +75,6 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         containerView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(200)
             $0.bottom.leading.trailing.equalToSuperview()
-            $0.height.greaterThanOrEqualToSuperview()
         }
         applyButton.snp.makeConstraints {
             $0.bottom.leading.trailing.equalToSuperview()
