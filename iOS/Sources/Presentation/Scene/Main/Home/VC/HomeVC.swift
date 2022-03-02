@@ -44,6 +44,7 @@ final class HomeVC: BaseVC<HomeReactor> {
         self.navigationItem.setRightBarButton(alarmButton, animated: true)
         self.navigationItem.configTitle(title: "GCMS", font: .init(font: GCMSFontFamily.SassyFrass.regular, size: 26) ?? .init())
         self.navigationItem.configBack()
+        self.navigationController?.navigationBar.setClear()
     }
     // MARK: - Reactor
     override func bindAction(reactor: HomeReactor) {
