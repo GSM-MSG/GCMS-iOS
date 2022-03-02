@@ -1,5 +1,6 @@
 import UIKit
 import SnapKit
+import PinLayout
 
 final class HomeVC: BaseVC<HomeReactor> {
     // MARK: - Properties
@@ -10,11 +11,11 @@ final class HomeVC: BaseVC<HomeReactor> {
         view.addSubViews(clubTypeSegmentedControl)
     }
     override func setLayout() {
-        clubTypeSegmentedControl.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.leading.trailing.equalToSuperview().inset(bound.width*0.24)
-            $0.height.equalTo(19)
-        }
+        clubTypeSegmentedControl.pin.top(view.pin.safeArea).pinEdges().horizontally(24%).height(19)
         
+        
+    }
+    override func configureVC() {
+        view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
 }
