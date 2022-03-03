@@ -30,6 +30,7 @@ public enum GCMSAsset {
   }
   public enum Images {
     public static let gcmsGoogleLogo = GCMSImages(name: "GCMS_GoogleLogo")
+    public static let gcmsNewClubPlaceholder = GCMSImages(name: "GCMS_NewClubPlaceholder")
     public static let gcmsWhaleLogo = GCMSImages(name: "GCMS_WhaleLogo")
   }
 }
