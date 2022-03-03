@@ -35,6 +35,8 @@ final class MainFlow: Flow{
             return navigateToDetailClub(id: id)
         case .myPageIsRequired:
             return navigateToMyPage()
+        case .alarmListIsRequired:
+            return navigateToAlarm()
         default:
             return .none
         }
@@ -56,6 +58,11 @@ private extension MainFlow{
     }
     func navigateToMyPage() -> FlowContributors {
         let vc = AppDelegate.container.resolve(MyPageVC.self)!
+        self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
+    func navigateToAlarm() -> FlowContributors {
+        let vc = AppDelegate.container.resolve(AlarmVC.self)!
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
