@@ -9,7 +9,12 @@ final class NewClubVC: BaseVC<NewClubReactor> {
         $0.contentMode = .scaleAspectFill
     }
     private let clubNameLabel = HeaderLabel(title: "동아리 이름")
-    private let clubNameTextField = UITextField()
+    private let clubNameTextField = UITextField().then {
+        $0.layer.cornerRadius = 5
+        $0.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
+        $0.layer.borderWidth = 1
+        $0.clipsToBounds = true
+    }
     private let clubDescriptionLabel = HeaderLabel(title: "동아리 소개")
     private let clubDescriptionTextView = UITextView()
     private let clubActivitiesLabel = HeaderLabel(title: "동아리 활동")
