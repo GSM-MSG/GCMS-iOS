@@ -23,14 +23,25 @@ final class NewClubVC: BaseVC<NewClubReactor> {
         $0.clipsToBounds = true
     }
     private let clubActivitiesLabel = HeaderLabel(title: "동아리 활동")
-    private let clubActivityAppendButton = UIButton()
+    private let clubActivityAppendButton = UIButton().then {
+        $0.setImage(.init(systemName: "plus")?.tintColor(.white), for: .normal)
+        $0.layer.cornerRadius = 5
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
+        $0.clipsToBounds = true
+    }
     private let clubActivitiesCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         $0.collectionViewLayout = layout
     }
     private let teacherLabel = HeaderLabel(title: "담당 선생님")
-    private let teacherTextField = UITextField()
+    private let teacherTextField = UITextField().then {
+        $0.layer.cornerRadius = 5
+        $0.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
+        $0.layer.borderWidth = 1
+        $0.clipsToBounds = true
+    }
     private let memberLabel = HeaderLabel(title: "동아리 구성원")
     private let memberAppendButton = UIButton()
     private let memberCountLabel = UILabel()
