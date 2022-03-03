@@ -90,7 +90,7 @@ final class MyPageVC: BaseVC<MyPageReactor> {
         editorialCollectionView.snp.makeConstraints {
             $0.top.equalTo(editorialLabel.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview().inset(15)
-            $0.height.equalTo(205)
+            $0.height.equalTo(210)
         }
         majorLabel.snp.makeConstraints {
             $0.top.equalTo(editorialCollectionView.snp.bottom).offset(45)
