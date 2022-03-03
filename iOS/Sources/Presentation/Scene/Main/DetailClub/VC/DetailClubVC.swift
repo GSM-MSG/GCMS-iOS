@@ -159,18 +159,12 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             .withUnretained(self)
             .bind { owner, item in
                 owner.descriptionLabel.text = item.description
-//                owner.activityView.setImages(urls: item.activities)
+                owner.activityView.setImages(urls: item.activities)
                 if item.activities.isEmpty {
                     owner.activityView.snp.updateConstraints {
                         $0.height.equalTo(0)
                     }
                 }
-                owner.activityView.setImages(images: [
-                    .init(systemName: "1.circle") ?? .init(),
-                    .init(systemName: "2.circle") ?? .init(),
-                    .init(systemName: "3.circle") ?? .init(),
-                    .init(systemName: "4.circle") ?? .init()
-                ])
                 owner.headView.bind(user: item.head)
                 if let teacher = item.teacher {
                     owner.teacherHeaderLabel.isHidden = false
