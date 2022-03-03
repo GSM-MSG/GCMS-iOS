@@ -7,7 +7,8 @@ final class NoticeVC: BaseVC<NoticeReactor> {
     private let completeButton = UIButton().then {
         $0.setTitle("완료", for: .normal)
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
-        
+        $0.titleLabel?.textAlignment = .center
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 18)
     }
     
     // MARK: - UI
