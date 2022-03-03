@@ -9,12 +9,7 @@ final class NewClubVC: BaseVC<NewClubReactor> {
         $0.contentMode = .scaleAspectFill
     }
     private let clubNameLabel = HeaderLabel(title: "동아리 이름")
-    private let clubNameTextField = UITextField().then {
-        $0.layer.cornerRadius = 5
-        $0.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
-        $0.layer.borderWidth = 1
-        $0.clipsToBounds = true
-    }
+    private let clubNameTextField = NewClubTextField(placeholder: "동아리 이름을 입력해주세요.")
     private let clubDescriptionLabel = HeaderLabel(title: "동아리 소개")
     private let clubDescriptionTextView = UITextView().then {
         $0.layer.cornerRadius = 5
@@ -36,12 +31,7 @@ final class NewClubVC: BaseVC<NewClubReactor> {
         $0.collectionViewLayout = layout
     }
     private let teacherLabel = HeaderLabel(title: "담당 선생님")
-    private let teacherTextField = UITextField().then {
-        $0.layer.cornerRadius = 5
-        $0.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
-        $0.layer.borderWidth = 1
-        $0.clipsToBounds = true
-    }
+    private let teacherTextField = NewClubTextField(placeholder: "선생님 이름을 입력해주세요.")
     private let memberLabel = HeaderLabel(title: "동아리 구성원")
     private let memberAppendButton = UIButton()
     private let memberCountLabel = UILabel()
@@ -51,5 +41,5 @@ final class NewClubVC: BaseVC<NewClubReactor> {
         $0.collectionViewLayout = layout
     }
     private let contactLabel = HeaderLabel(title: "연락처")
-    private let contactTextField = UITextField()
+    private let contactTextField = NewClubTextField(placeholder: "연락처를 입력해주세요.;(디스코드, 전화번호 등)")
 }
