@@ -68,6 +68,10 @@ final class HomeVC: BaseVC<HomeReactor> {
             .disposed(by: disposeBag)
     }
     override func bindView(reactor: HomeReactor) {
+        myPageButton.rx.tap
+            .map { Reactor.Action.myPageButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
         
         clubListCollectionView.rx.modelSelected(ClubList.self)
             .do(onNext: { [weak self] _ in
@@ -77,7 +81,7 @@ final class HomeVC: BaseVC<HomeReactor> {
             .map(Reactor.Action.clubDidTap)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-            
+                
     }
 }
 
