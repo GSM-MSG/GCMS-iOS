@@ -73,6 +73,11 @@ final class HomeVC: BaseVC<HomeReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
+        alarmButton.rx.tap
+            .map { Reactor.Action.alarmButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         clubListCollectionView.rx.modelSelected(ClubList.self)
             .do(onNext: { [weak self] _ in
                 self?.navigationItem.configBack()
