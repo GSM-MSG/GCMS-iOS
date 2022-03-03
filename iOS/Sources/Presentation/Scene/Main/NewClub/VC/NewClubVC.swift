@@ -2,6 +2,8 @@ import UIKit
 
 final class NewClubVC: BaseVC<NewClubReactor> {
     // MARK: - Properties
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
     private let bannerLabel = HeaderLabel(title: "배너")
     private let bannerImageView = UIImageView().then {
         $0.layer.cornerRadius = 9
@@ -48,5 +50,21 @@ final class NewClubVC: BaseVC<NewClubReactor> {
         $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
         $0.layer.cornerRadius = 9
         $0.clipsToBounds = true
+    }
+    
+    // MARK: - UI
+    override func addView() {
+        view.addSubViews(scrollView)
+        scrollView.addSubViews(contentView)
+        
+    }
+    override func setLayout() {
+        scrollView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        contentView.snp.makeConstraints {
+            $0.width.equalToSuperview()
+            $0.centerX.top.bottom.equalToSuperview()
+        }
     }
 }
