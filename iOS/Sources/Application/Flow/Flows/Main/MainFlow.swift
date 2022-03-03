@@ -33,6 +33,8 @@ final class MainFlow: Flow{
             return coordinateToClubList()
         case let .clubDetailIsRequired(id):
             return navigateToDetailClub(id: id)
+        case .myPageIsRequired:
+            return navigateToMyPage()
         default:
             return .none
         }
@@ -51,5 +53,10 @@ private extension MainFlow{
         let vc = DetailClubVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
+    }
+    func navigateToMyPage() -> FlowContributors {
+        let vc = AppDelegate.container.resolve(MyPageVC.self)!
+        self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
 }
