@@ -1,8 +1,9 @@
 import RxFlow
+import UIKit
 
 enum GCMSStep: Step {
     // MARK: Global
-    case alert(title: String?, message: String?)
+    case alert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction])
     case dismiss
     
     // MARK: OnBoading
@@ -10,7 +11,7 @@ enum GCMSStep: Step {
     
     // MARK: Main
     case clubListIsRequired
-    case clubDetailIsRequired
+    case clubDetailIsRequired(Int)
     
     // MARK: Administrator
     case myPageIsRequired

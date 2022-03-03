@@ -30,7 +30,9 @@ final class MainFlow: Flow{
         guard let step = step.asGCMSStep else { return .none }
         switch step{
         case .clubListIsRequired:
-        return coordinateToClubList()
+            return coordinateToClubList()
+        case let .clubDetailIsRequired(id):
+            return navigateToDetailClub(id: id)
         default:
             return .none
         }
@@ -43,5 +45,11 @@ private extension MainFlow{
         let vc = AppDelegate.container.resolve(HomeVC.self)!
         self.rootVC.setViewControllers([vc], animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
+    func navigateToDetailClub(id: Int) -> FlowContributors {
+        let reactor = DetailClubReactor(id: id)
+        let vc = DetailClubVC(reactor: reactor)
+        self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
 }

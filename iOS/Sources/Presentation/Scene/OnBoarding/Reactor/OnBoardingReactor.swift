@@ -32,6 +32,8 @@ extension OnBoardingReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case let .googleSigninButtonDidTap(vc):
+            steps.accept(GCMSStep.clubListIsRequired)
+            return .empty()
             return googleSigninButtonDidTap(vc: vc)
         case let .googleSigninTokenReceived(token):
             return googleSigninTokenReceived(token: token)
