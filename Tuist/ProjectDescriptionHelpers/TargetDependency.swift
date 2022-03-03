@@ -21,6 +21,7 @@ public extension TargetDependency.SPM{
     static let RxDataSources = TargetDependency.package(product: "RxDataSources")
     static let PinLayout = TargetDependency.package(product: "PinLayout")
     static let Reusable = TargetDependency.package(product: "Reusable")
+    static let BTImageView = TargetDependency.package(product: "BTImageView")
 }
 
 public extension Package {
@@ -83,5 +84,9 @@ public extension Package {
     static let Reusable = Package.remote(
         url: "https://github.com/AliSoftware/Reusable.git",
         requirement: .upToNextMajor(from: "4.1.0")
+    )
+    static let BTImageView = Package.remote(
+        url: "https://github.com/baekteun/BTImageView.git",
+        requirement: .upToNextMajor(from: "1.1.0")
     )
 }

@@ -15,6 +15,7 @@ final class ClubView: UIView {
         $0.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 13)
         $0.textColor = .white
         $0.layer.cornerRadius = 9
+        $0.clipsToBounds = true
         $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
     }
     
@@ -56,7 +57,7 @@ private extension ClubView {
         }
         clubBannerView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview().inset(5)
-            $0.bottom.equalTo(nameLabel.snp.top).inset(5)
+            $0.bottom.equalTo(nameLabel.snp.top).offset(-7)
         }
     }
 }

@@ -18,7 +18,8 @@ let project = Project.dynamicFramework(
         .Kingfisher,
         .RxDataSources,
         .PinLayout,
-        .Reusable
+        .Reusable,
+        .BTImageView
     ],
     deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone, .ipad]),
     dependencies: [
@@ -37,6 +38,7 @@ let project = Project.dynamicFramework(
         .SPM.Kingfisher,
         .SPM.RxDataSources,
         .SPM.PinLayout,
-        .SPM.Reusable
+        .SPM.Reusable,
+        .SPM.BTImageView
     ]
 )

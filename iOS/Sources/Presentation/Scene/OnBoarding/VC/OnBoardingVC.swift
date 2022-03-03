@@ -51,6 +51,9 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
+    override func configureNavigation() {
+        self.navigationController?.navigationBar.setClear()
+    }
     
     // MARK: - Reactor
     override func bindView(reactor: OnBoardingReactor) {
