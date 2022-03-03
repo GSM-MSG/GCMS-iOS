@@ -42,4 +42,11 @@ final class NewClubVC: BaseVC<NewClubReactor> {
     }
     private let contactLabel = HeaderLabel(title: "연락처")
     private let contactTextField = NewClubTextField(placeholder: "연락처를 입력해주세요.;(디스코드, 전화번호 등)")
+    private let completeButton = UIButton().then {
+        $0.setTitle("완료", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
+        $0.layer.cornerRadius = 9
+        $0.clipsToBounds = true
+    }
 }
