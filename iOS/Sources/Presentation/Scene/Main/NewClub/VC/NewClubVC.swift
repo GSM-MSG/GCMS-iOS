@@ -3,7 +3,11 @@ import UIKit
 final class NewClubVC: BaseVC<NewClubReactor> {
     // MARK: - Properties
     private let bannerLabel = HeaderLabel(title: "배너")
-    private let bannerImageView = UIImageView()
+    private let bannerImageView = UIImageView().then {
+        $0.layer.cornerRadius = 9
+        $0.clipsToBounds = true
+        $0.contentMode = .scaleAspectFill
+    }
     private let clubNameLabel = HeaderLabel(title: "동아리 이름")
     private let clubNameTextField = UITextField()
     private let clubDescriptionLabel = HeaderLabel(title: "동아리 소개")
