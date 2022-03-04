@@ -20,6 +20,9 @@ extension Container{
         self.register(AlarmVC.self) { r in
             return AlarmVC(reactor: r.resolve(AlarmReactor.self))
         }
+        self.register(NewClubVC.self) { r in
+            return NewClubVC(reactor: r.resolve(NewClubReactor.self))
+        }
     }
     
     private func registerReactor() {
@@ -34,6 +37,9 @@ extension Container{
         }
         self.register(AlarmReactor.self) { r in
             return AlarmReactor()
+        }
+        self.register(NewClubReactor.self) { r in
+            return NewClubReactor()
         }
     }
 }
