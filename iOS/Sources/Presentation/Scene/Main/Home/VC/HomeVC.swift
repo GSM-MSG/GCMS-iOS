@@ -6,6 +6,7 @@ import RxCocoa
 import RxDataSources
 import Reusable
 import Service
+import Hero
 
 final class HomeVC: BaseVC<HomeReactor> {
     // MARK: - Properties
@@ -78,15 +79,17 @@ final class HomeVC: BaseVC<HomeReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        clubListCollectionView.rx.modelSelected(ClubList.self)
-            .do(onNext: { [weak self] _ in
-                self?.navigationItem.configBack()
-            })
-            .map(\.id)
-            .map(Reactor.Action.clubDidTap)
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
+        Observable.zip(clubListCollectionView.rx.modelSelected(ClubList.self),
+                       clubListCollectionView.rx.itemSelected)
+            .bind { [weak self] model, index in
+                self?.clubListCollectionView.visibleCells.forEach { $0.heroID = nil }
+                let cell = self?.clubListCollectionView.cellForItem(at: index)
+                cell?.isHeroEnabled = true
+                cell?.heroID = "banner"
                 
+                self?.reactor?.action.onNext(.clubDidTap(model.id))
+            }
+            .disposed(by: disposeBag)
     }
 }
 
