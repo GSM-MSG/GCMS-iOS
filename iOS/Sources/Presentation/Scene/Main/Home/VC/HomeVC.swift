@@ -43,7 +43,7 @@ final class HomeVC: BaseVC<HomeReactor> {
     override func configureNavigation() {
         self.navigationItem.setLeftBarButton(myPageButton, animated: true)
         self.navigationItem.setRightBarButton(alarmButton, animated: true)
-        self.navigationItem.configTitle(title: "GCMS", font: .init(font: GCMSFontFamily.SassyFrass.regular, size: 26) ?? .init())
+        self.navigationItem.configTitleImage()
         self.navigationItem.configBack()
         self.navigationController?.navigationBar.setClear()
     }
@@ -84,7 +84,6 @@ final class HomeVC: BaseVC<HomeReactor> {
             .bind { [weak self] model, index in
                 self?.clubListCollectionView.visibleCells.forEach { $0.heroID = nil }
                 let cell = self?.clubListCollectionView.cellForItem(at: index)
-                cell?.isHeroEnabled = true
                 cell?.heroID = "banner"
                 
                 self?.reactor?.action.onNext(.clubDidTap(model.id))

@@ -176,6 +176,9 @@ final class NewClubVC: BaseVC<NewClubReactor> {
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
+    override func configureNavigation() {
+        self.navigationItem.configTitle(title: "동아리 개설")
+    }
     
     // MARK: - Reactor
     override func bindView(reactor: NewClubReactor) {
