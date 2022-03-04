@@ -8,6 +8,11 @@ final class NewClubTextField: UITextField {
         self.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
         self.layer.borderWidth = 1
         self.clipsToBounds = true
+        self.textColor = GCMSAsset.Colors.gcmsGray1.color
+        self.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 13)
+        self.leftSpace(10)
+        self.rightSpace(10)
+        self.setPlaceholderColor(GCMSAsset.Colors.gcmsGray4.color)
     }
     
     required init?(coder: NSCoder) {
