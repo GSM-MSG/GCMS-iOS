@@ -11,6 +11,15 @@ extension UINavigationItem {
         lb.text = title
         self.titleView = lb
     }
+    func configTitleImage() {
+        let iv = UIImageView()
+        iv.image = GCMSAsset.Images.gcmsWhaleLogo.image.withRenderingMode(.alwaysOriginal)
+        iv.snp.makeConstraints {
+            $0.width.equalTo(44)
+            $0.height.equalTo(50)
+        }
+        self.titleView = iv
+    }
     func configBack(){
         let back = UIBarButtonItem(title: "돌아가기", style: .plain, target: nil, action: nil)
         back.tintColor = GCMSAsset.Colors.gcmsGray1.color
