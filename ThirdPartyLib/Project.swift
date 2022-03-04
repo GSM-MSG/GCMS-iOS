@@ -19,7 +19,8 @@ let project = Project.dynamicFramework(
         .RxDataSources,
         .PinLayout,
         .Reusable,
-        .BTImageView
+        .BTImageView,
+        .RxGesture
     ],
     deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone, .ipad]),
     dependencies: [
@@ -39,6 +40,7 @@ let project = Project.dynamicFramework(
         .SPM.RxDataSources,
         .SPM.PinLayout,
         .SPM.Reusable,
-        .SPM.BTImageView
+        .SPM.BTImageView,
+        .SPM.RxGesture
     ]
 )

@@ -22,6 +22,7 @@ public extension TargetDependency.SPM{
     static let PinLayout = TargetDependency.package(product: "PinLayout")
     static let Reusable = TargetDependency.package(product: "Reusable")
     static let BTImageView = TargetDependency.package(product: "BTImageView")
+    static let RxGesture = TargetDependency.package(product: "RxGesture")
 }
 
 public extension Package {
@@ -88,5 +89,9 @@ public extension Package {
     static let BTImageView = Package.remote(
         url: "https://github.com/baekteun/BTImageView.git",
         requirement: .upToNextMajor(from: "1.1.0")
+    )
+    static let RxGesture = Package.remote(
+        url: "https://github.com/RxSwiftCommunity/RxGesture.git",
+        requirement: .upToNextMajor(from: "4.0.0")
     )
 }
