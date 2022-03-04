@@ -76,7 +76,7 @@ final class NewClubVC: BaseVC<NewClubReactor> {
         view.addSubViews(scrollView)
         scrollView.addSubViews(contentView)
         contentView.addSubViews(
-            bannerLabel, bannerImageView, clubNameLabel, clubNameTextField, clubDescriptionLabel, clubDescriptionTextView, clubActivitiesLabel, clubActivityAppendButton, clubActivitiesCollectionView, teacherLabel, teacherTextField, memberLabel, memberCountLabel, memberCollectionView, memberAppendButton, contactLabel, contactTextField
+            bannerLabel, bannerImageView, clubNameLabel, clubNameTextField, clubDescriptionLabel, clubDescriptionTextView, clubActivitiesLabel, clubActivityAppendButton, clubActivitiesCollectionView, teacherLabel, teacherTextField, memberLabel, memberCountLabel, memberCollectionView, memberAppendButton, contactLabel, contactTextField, completeButton
         )
     }
     override func setLayout() {
@@ -164,6 +164,12 @@ final class NewClubVC: BaseVC<NewClubReactor> {
             $0.top.equalTo(contactLabel.snp.bottom).offset(15)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(52)
+        }
+        completeButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(contactTextField.snp.bottom).offset(50)
+            $0.width.equalTo(166)
+            $0.height.equalTo(33)
             $0.bottom.equalToSuperview().offset(-50)
         }
     }
