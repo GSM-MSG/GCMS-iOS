@@ -64,7 +64,7 @@ private extension MainFlow{
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
     func navigateToAlarm() -> FlowContributors {
-        let vc = AppDelegate.container.resolve(AlarmVC.self)!
+        let vc = AppDelegate.container.resolve(NewClubVC.self)!
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
