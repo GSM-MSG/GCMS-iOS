@@ -14,6 +14,11 @@ final class MemberCell: BaseCollectionViewCell<User> {
         $0.textAlignment = .center
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        model = nil
+    }
+    
     // MARK: - UI
     override func addView() {
         addSubViews(profileImageView, nameLabel)

@@ -15,6 +15,11 @@ final class AlarmCell: BaseTableViewCell<Alarm> {
         $0.numberOfLines = 0
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        model = nil
+    }
+    
     // MARK: - UI
     override func addView() {
         contentView.addSubViews(view)

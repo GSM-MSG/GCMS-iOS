@@ -6,6 +6,11 @@ final class ClubListCell: BaseCollectionViewCell<ClubList> {
     // MARK: - Properties
     private let clubView = ClubView()
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        model = nil
+    }
+    
     // MARK: - UI
     override func addView() {
         addSubViews(clubView)
