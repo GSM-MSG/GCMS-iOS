@@ -23,6 +23,7 @@ public extension TargetDependency.SPM{
     static let Reusable = TargetDependency.package(product: "Reusable")
     static let BTImageView = TargetDependency.package(product: "BTImageView")
     static let RxGesture = TargetDependency.package(product: "RxGesture")
+    static let PanModal = TargetDependency.package(product: "PanModal")
 }
 
 public extension Package {
@@ -93,5 +94,9 @@ public extension Package {
     static let RxGesture = Package.remote(
         url: "https://github.com/RxSwiftCommunity/RxGesture.git",
         requirement: .upToNextMajor(from: "4.0.0")
+    )
+    static let PanModal = Package.remote(
+        url: "https://github.com/slackhq/PanModal.git",
+        requirement: .upToNextMajor(from: "1.2.6")
     )
 }
