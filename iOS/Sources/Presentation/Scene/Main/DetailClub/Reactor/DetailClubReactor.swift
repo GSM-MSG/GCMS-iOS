@@ -71,10 +71,10 @@ private extension DetailClubReactor {
                     "https://avatars.githubusercontent.com/u/81291116?s=48&v=4",
                     "https://avatars.githubusercontent.com/u/81291116?s=48&v=4"
                   ], members: [
-                    .init(profileImage: "https://avatars.githubusercontent.com/u/81291116?s=48&v=4", name: "asdf")
+                    .init(id: .init(), profileImage: "https://avatars.githubusercontent.com/u/81291116?s=48&v=4", name: "asdf")
                   ],
-                  head: .init(profileImage: "https://avatars.githubusercontent.com/u/74440939?v=4", name: "bae"),
-                  teacher: .init(profileImage: "https://avatars.githubusercontent.com/u/81291116?s=48&v=4", name: "asdf"),
+                  head: .init(id: .init(), profileImage: "https://avatars.githubusercontent.com/u/74440939?v=4", name: "bae"),
+                  teacher: .init(id: .init(), profileImage: "https://avatars.githubusercontent.com/u/81291116?s=48&v=4", name: "asdf"),
                   contact: "baekteun#4235"
                  )
         ))
