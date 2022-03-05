@@ -1,6 +1,7 @@
 import UIKit
 import RxCocoa
 import RxGesture
+import RxSwift
 
 final class NewClubVC: BaseVC<NewClubReactor> {
     // MARK: - Metric
@@ -236,6 +237,18 @@ final class NewClubVC: BaseVC<NewClubReactor> {
             .subscribe(onNext: { owner, _ in
                 owner.present(owner.imagePicker, animated: true)
             })
+            .disposed(by: disposeBag)
+    }
+    override func bindState(reactor: NewClubReactor) {
+        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        
+        sharedState
+            .map(\.imageData)
+            .compactMap { $0 }
+            .map { UIImage(data: $0) }
+            .bind(with: self) { owner, image in
+                owner.bannerImageView.image = image
+            }
             .disposed(by: disposeBag)
     }
 }
