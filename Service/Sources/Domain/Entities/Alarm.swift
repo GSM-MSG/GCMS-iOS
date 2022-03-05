@@ -1,5 +1,4 @@
 import Foundation
-import RxDataSources
 
 public struct Alarm: Equatable {
     public init(id: Int, name: String, content: String) {
@@ -11,10 +10,4 @@ public struct Alarm: Equatable {
     public let id: Int
     public let name: String
     public let content: String
-}
-
-extension Alarm: IdentifiableType {
-    public var identity: String {
-        return UUID().uuidString
-    }
 }

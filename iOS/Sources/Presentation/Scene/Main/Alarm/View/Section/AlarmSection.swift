@@ -2,19 +2,15 @@ import RxDataSources
 import Service
 import Foundation
 
-struct AlarmSection: AnimatableSectionModelType {
+struct AlarmSection: SectionModelType {
     let header: String
     var items: [Alarm]
 }
 
-extension AlarmSection: IdentifiableType {
+extension AlarmSection {
     typealias Item = Alarm
     init(original: AlarmSection, items: [Alarm]) {
         self = original
         self.items = items
-    }
-    
-    var identity: String {
-        return UUID().uuidString
     }
 }

@@ -40,7 +40,7 @@ final class AlarmVC: BaseVC<AlarmReactor> {
     override func bindState(reactor: AlarmReactor) {
         let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
         
-        let ds = RxTableViewSectionedAnimatedDataSource<AlarmSection> { _, tv, ip, item in
+        let ds = RxTableViewSectionedReloadDataSource<AlarmSection> { _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip) as AlarmCell
             cell.model = item
             return cell
