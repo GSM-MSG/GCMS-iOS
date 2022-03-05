@@ -39,6 +39,8 @@ final class MainFlow: Flow{
             return navigateToMyPage()
         case .alarmListIsRequired:
             return navigateToAlarm()
+        case let .alert(title, message, style, actions):
+            return presentToAlert(title: title, message: message, style: style, actions: actions)
         default:
             return .none
         }
@@ -64,8 +66,14 @@ private extension MainFlow{
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
     func navigateToAlarm() -> FlowContributors {
-        let vc = AppDelegate.container.resolve(AlarmVC.self)!
+        let vc = AppDelegate.container.resolve(NewClubVC.self)!
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
+    func presentToAlert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction]) -> FlowContributors {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: style)
+        actions.forEach { alert.addAction($0) }
+        self.rootVC.visibleViewController?.present(alert, animated: true)
+        return .none
     }
 }
