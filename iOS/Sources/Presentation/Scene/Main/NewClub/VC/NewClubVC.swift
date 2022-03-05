@@ -11,16 +11,22 @@ final class NewClubVC: BaseVC<NewClubReactor> {
     // MARK: - Properties
     private let scrollView = UIScrollView()
     private let contentView = UIView()
-    private let bannerLabel = HeaderLabel(title: "배너")
+    private let bannerLabel = HeaderLabel(title: "배너").then {
+        $0.appendRequired()
+    }
     private let bannerImageView = UIImageView().then {
         $0.layer.cornerRadius = 9
         $0.clipsToBounds = true
         $0.contentMode = .scaleAspectFill
         $0.image = GCMSAsset.Images.gcmsNewClubPlaceholder.image
     }
-    private let clubNameLabel = HeaderLabel(title: "동아리 이름")
+    private let clubNameLabel = HeaderLabel(title: "동아리 이름").then {
+        $0.appendRequired()
+    }
     private let clubNameTextField = NewClubTextField(placeholder: "동아리 이름을 입력해주세요.")
-    private let clubDescriptionLabel = HeaderLabel(title: "동아리 소개")
+    private let clubDescriptionLabel = HeaderLabel(title: "동아리 소개").then {
+        $0.appendRequired()
+    }
     private let clubDescriptionTextView = UITextView().then {
         $0.layer.cornerRadius = 5
         $0.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
@@ -64,7 +70,7 @@ final class NewClubVC: BaseVC<NewClubReactor> {
         $0.backgroundColor = .clear
     }
     private let contactLabel = HeaderLabel(title: "연락처")
-    private let contactTextField = NewClubTextField(placeholder: "연락처를 입력해주세요.;(디스코드, 전화번호 등)")
+    private let contactTextField = NewClubTextField(placeholder: "연락처를 입력해주세요.(디스코드, 전화번호 등)")
     private let completeButton = UIButton().then {
         $0.setTitle("완료", for: .normal)
         $0.setTitleColor(.white, for: .normal)
