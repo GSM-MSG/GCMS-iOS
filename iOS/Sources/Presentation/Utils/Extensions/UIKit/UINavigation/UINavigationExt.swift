@@ -14,10 +14,7 @@ extension UINavigationItem {
     func configTitleImage() {
         let iv = UIImageView()
         iv.image = GCMSAsset.Images.gcmsWhaleLogo.image.withRenderingMode(.alwaysOriginal)
-        iv.snp.makeConstraints {
-            $0.width.equalTo(44)
-            $0.height.equalTo(50)
-        }
+        iv.contentMode = .scaleAspectFit
         self.titleView = iv
     }
     func configBack(){
