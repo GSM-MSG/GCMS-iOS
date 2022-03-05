@@ -2,6 +2,8 @@ import UIKit
 import RxCocoa
 import RxGesture
 import RxSwift
+import Reusable
+import RxDataSources
 
 final class NewClubVC: BaseVC<NewClubReactor> {
     // MARK: - Metric
@@ -49,8 +51,10 @@ final class NewClubVC: BaseVC<NewClubReactor> {
     private let clubActivitiesCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
+        layout.itemSize = .init(width: 80, height: 80)
         $0.collectionViewLayout = layout
         $0.backgroundColor = .clear
+        $0.register(cellType: ClubActivityCell.self)
     }
     private let teacherLabel = HeaderLabel(title: "담당 선생님")
     private let teacherTextField = NewClubTextField(placeholder: "선생님 이름을 입력해주세요.")
@@ -62,7 +66,11 @@ final class NewClubVC: BaseVC<NewClubReactor> {
         $0.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
         $0.clipsToBounds = true
     }
-    private let memberCountLabel = UILabel()
+    private let memberCountLabel = UILabel().then {
+        $0.text = "0명"
+        $0.textColor = GCMSAsset.Colors.gcmsGray3.color
+        $0.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 12)
+    }
     private let memberCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -237,16 +245,36 @@ final class NewClubVC: BaseVC<NewClubReactor> {
             }
             .disposed(by: disposeBag)
         
+        clubActivityAppendButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.reactor?.action.onNext(.activityAppendButtonDidTap)
+                owner.present(owner.imagePicker, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
         bannerImageView.rx.tapGesture()
             .when(.recognized)
             .withUnretained(self)
             .subscribe(onNext: { owner, _ in
+                owner.reactor?.action.onNext(.activityAppendButtonDidTap)
                 owner.present(owner.imagePicker, animated: true)
             })
             .disposed(by: disposeBag)
+        
+        clubActivitiesCollectionView.rx.itemSelected
+            .map(\.row)
+            .map(Reactor.Action.activityDeleteDidTap)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     override func bindState(reactor: NewClubReactor) {
-        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 2).observe(on: MainScheduler.asyncInstance)
+        
+        let activityDS = RxCollectionViewSectionedReloadDataSource<ClubActivitySection>{ _, tv, ip, item in
+            let cell = tv.dequeueReusableCell(for: ip, cellType: ClubActivityCell.self) as ClubActivityCell
+            cell.model = item
+            return cell
+        }
         
         sharedState
             .map(\.imageData)
@@ -256,18 +284,28 @@ final class NewClubVC: BaseVC<NewClubReactor> {
                 owner.bannerImageView.image = image
             }
             .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.activitiesData)
+            .map { [ClubActivitySection.init(items: $0)] }
+            .bind(to: clubActivitiesCollectionView.rx.items(dataSource: activityDS))
+            .disposed(by: disposeBag)
+            
     }
 }
 
 // MARK: - Extension
 extension NewClubVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        var imageData: Data = .init()
         if let editedImage = info[.editedImage] as? UIImage {
-            reactor?.action.onNext(.imageDidSelect(editedImage.pngData() ?? .init()))
+            imageData = editedImage.pngData() ?? .init()
         } else if let image = info[.originalImage] as? UIImage {
-            reactor?.action.onNext(.imageDidSelect(image.pngData() ?? .init()))
+            imageData = image.pngData() ?? .init()
         }
-        dismiss(animated: true)
+        dismiss(animated: true) { [weak self] in
+            self?.reactor?.action.onNext(.imageDidSelect(imageData))
+        }
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true)
