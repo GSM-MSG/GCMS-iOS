@@ -2,15 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>앨범에서 사진을 가져올 때 사진 앨범 권한이 필요합니다.</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                    <string>com.googleusercontent.apps.406780900894-7d58bqmag51kpd71a4ma3kk8md92g9q8</string>
-            </array>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.406780900894-7d58bqmag51kpd71a4ma3kk8md92g9q8</string>
+			</array>
 		</dict>
 	</array>
 	<key>UIUserInterfaceStyle</key>
