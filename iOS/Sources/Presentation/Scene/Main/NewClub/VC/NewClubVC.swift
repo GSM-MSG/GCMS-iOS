@@ -1,5 +1,6 @@
 import UIKit
 import RxCocoa
+import RxGesture
 
 final class NewClubVC: BaseVC<NewClubReactor> {
     // MARK: - Metric
@@ -70,8 +71,15 @@ final class NewClubVC: BaseVC<NewClubReactor> {
         $0.layer.cornerRadius = 9
         $0.clipsToBounds = true
     }
+    private let imagePicker = UIImagePickerController().then {
+        $0.allowsEditing = true
+        $0.sourceType = .photoLibrary
+    }
     
     // MARK: - UI
+    override func setup() {
+        imagePicker.delegate = self
+    }
     override func addView() {
         view.addSubViews(scrollView)
         scrollView.addSubViews(contentView)
@@ -221,5 +229,28 @@ final class NewClubVC: BaseVC<NewClubReactor> {
                 }
             }
             .disposed(by: disposeBag)
+        
+        bannerImageView.rx.tapGesture()
+            .when(.recognized)
+            .withUnretained(self)
+            .subscribe(onNext: { owner, _ in
+                owner.present(owner.imagePicker, animated: true)
+            })
+            .disposed(by: disposeBag)
+    }
+}
+
+// MARK: - Extension
+extension NewClubVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let editedImage = info[.editedImage] as? UIImage {
+            reactor?.action.onNext(.imageDidSelect(editedImage.pngData() ?? .init()))
+        } else if let image = info[.originalImage] as? UIImage {
+            reactor?.action.onNext(.imageDidSelect(image.pngData() ?? .init()))
+        }
+        dismiss(animated: true)
+    }
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true)
     }
 }

@@ -2,6 +2,7 @@ import ReactorKit
 import RxFlow
 import RxSwift
 import RxRelay
+import UIKit
 
 final class NewClubReactor: Reactor, Stepper {
     // MARK: - Properties
@@ -11,13 +12,13 @@ final class NewClubReactor: Reactor, Stepper {
     
     // MARK: - Reactor
     enum Action {
-        
+        case imageDidSelect(Data)
     }
     enum Mutation {
-        
+        case setImageData(Data)
     }
     struct State {
-        
+        var imageData: Data?
     }
     let initialState: State
     
@@ -32,7 +33,8 @@ final class NewClubReactor: Reactor, Stepper {
 extension NewClubReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-            
+        case let .imageDidSelect(data):
+            return .just(.setImageData(data))
         }
         return .empty()
     }
@@ -44,7 +46,8 @@ extension NewClubReactor {
         var newState = state
         
         switch mutation {
-            
+        case let .setImageData(data):
+            newState.imageData = data
         }
         
         return newState
