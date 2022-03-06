@@ -10,17 +10,6 @@ enum JWTTokenType {
     
     case accessToken
     case refreshToken
-    
-    public var headerString: String {
-        switch self {
-        case .accessToken:
-            return "Authorization"
-        case .refreshToken:
-            return "refreshToken"
-        default:
-            return ""
-        }
-    }
 }
 
 final class JWTPlugin: PluginType {
@@ -36,8 +25,12 @@ final class JWTPlugin: PluginType {
         
         var request = request
         
-        let token = getToken(type: tokenType)
-        request.addValue(token, forHTTPHeaderField: tokenType.headerString)
+        let token = getToken(type: .accessToken)
+        request.addValue(token, forHTTPHeaderField: "Authorization")
+        
+        if tokenType == .refreshToken {
+            request.addValue(getToken(type: .refreshToken), forHTTPHeaderField: "refreshToken")
+        }
         return request
     }
     
