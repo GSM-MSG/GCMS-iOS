@@ -16,17 +16,32 @@ final class MemberAppendVC: BaseVC<MemberAppendReactor> {
         $0.setTitleColor(.systemBlue, for: .normal)
         $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 13)
     }
-    private let currentUserListCollectionView = UICollectionView()
+    private let currentUserListCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        $0.collectionViewLayout = layout
+        $0.register(cellType: AddedUserCell.self)
+        $0.backgroundColor = .clear
+    }
     private let searchTextField = UITextField().then {
         $0.textColor = .white
-        $0.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 18)
+        $0.layer.cornerRadius = 5
+        $0.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
+        $0.layer.borderWidth = 1
+        $0.clipsToBounds = true
+        $0.addLeftImage(image: .init(systemName: "magnifyingglass")?.tintColor(.white) ?? .init(), space: 10)
+        $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 18)
     }
     private let studentListTableView = UITableView().then {
         $0.register(cellType: StudentCell.self)
         $0.rowHeight = 50
+        $0.backgroundColor = .clear
     }
     
     // MARK: - UI
+    override func setup() {
+        currentUserListCollectionView.rx.setDelegate(self).disposed(by: disposeBag)
+    }
     override func addView() {
         view.addSubViews(
             cancelButton, completeButton, currentUserListCollectionView, searchTextField, studentListTableView
@@ -55,6 +70,9 @@ final class MemberAppendVC: BaseVC<MemberAppendReactor> {
             $0.bottom.equalToSuperview()
         }
     }
+    override func configureVC() {
+        view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
+    }
     
     // MARK: - Reactor
     override func bindState(reactor: MemberAppendReactor) {
@@ -66,10 +84,22 @@ final class MemberAppendVC: BaseVC<MemberAppendReactor> {
             return cell
         }
         
+        let memberDS = RxCollectionViewSectionedReloadDataSource<AddedUserSection> { _, tv, ip, item in
+            let cell = tv.dequeueReusableCell(for: ip, cellType: AddedUserCell.self)
+            cell.model = item
+            return cell
+        }
+        
         sharedState
             .map(\.users)
             .map { [StudentSection.init(items: $0)] }
             .bind(to: studentListTableView.rx.items(dataSource: studentDS))
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.addedUsers)
+            .map { [AddedUserSection.init(items: $0)] }
+            .bind(to: currentUserListCollectionView.rx.items(dataSource: memberDS))
             .disposed(by: disposeBag)
     }
     override func bindView(reactor: MemberAppendReactor) {
@@ -100,6 +130,13 @@ final class MemberAppendVC: BaseVC<MemberAppendReactor> {
             .map(Reactor.Action.updateQuery)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+    }
+}
+
+// MARK: - Extension
+extension MemberAppendVC: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return AddedUserCell.fittingSize(availableHeight: 20, user: reactor?.currentState.addedUsers[indexPath.row] ?? .init(id: .init(), profileImage: "", name: "", grade: 1, class: 1, number: 1))
     }
 }
 
