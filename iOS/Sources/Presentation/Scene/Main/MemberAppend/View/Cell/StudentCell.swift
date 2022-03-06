@@ -40,6 +40,10 @@ final class StudentCell: BaseTableViewCell<User> {
             $0.leading.equalTo(profileImageView.snp.trailing).offset(10)
         }
     }
+    override func configureCell() {
+        self.backgroundColor = .clear
+        contentView.backgroundColor = .clear
+    }
     override func bind(_ model: User) {
         profileImageView.kf.setImage(with: URL(string: model.profileImage) ?? .none,
                                      placeholder: UIImage(),
