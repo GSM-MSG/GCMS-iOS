@@ -3,6 +3,7 @@ import Foundation
 public final class UserDefaultsLocal {
     public enum forKeys {
         public static let isApple = "isapple"
+        public static let name = ""
     }
     static let shared = UserDefaultsLocal()
     private init() {}
@@ -14,6 +15,15 @@ public final class UserDefaultsLocal {
         }
         set {
             preferences.set(newValue, forKey: forKeys.isApple)
+        }
+    }
+    
+    var name: String {
+        get {
+            preferences.string(forKey: forKeys.name) ?? ""
+        }
+        set {
+            preferences.set(newValue, forKey: forKeys.name)
         }
     }
 }
