@@ -100,7 +100,6 @@ extension NewClubReactor {
         case let .appendMember(users):
             newState.members.append(contentsOf: users)
             newState.members.removeDuplicates()
-            print(newState.members)
         case let .memberRemove(index):
             newState.members.remove(at: index)
         }
