@@ -74,8 +74,10 @@ final class NewClubVC: BaseVC<NewClubReactor> {
     private let memberCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
+        layout.itemSize = .init(width: 61, height: 82)
         $0.collectionViewLayout = layout
         $0.backgroundColor = .clear
+        $0.register(cellType: MemberCell.self)
     }
     private let contactLabel = HeaderLabel(title: "연락처")
     private let contactTextField = NewClubTextField(placeholder: "연락처를 입력해주세요.(디스코드, 전화번호 등)")
@@ -266,12 +268,31 @@ final class NewClubVC: BaseVC<NewClubReactor> {
             .map(Reactor.Action.activityDeleteDidTap)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        memberAppendButton.rx.tap
+            .map { Reactor.Action.memberAppendButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        memberCollectionView.rx.itemSelected
+            .map(\.row)
+            .map(Reactor.Action.memberRemove)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        
     }
     override func bindState(reactor: NewClubReactor) {
-        let sharedState = reactor.state.share(replay: 2).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 3).observe(on: MainScheduler.asyncInstance)
         
         let activityDS = RxCollectionViewSectionedReloadDataSource<ClubActivitySection>{ _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip, cellType: ClubActivityCell.self) as ClubActivityCell
+            cell.model = item
+            return cell
+        }
+        
+        let memberDS = RxCollectionViewSectionedReloadDataSource<MemberSection>{ _, tv, ip, item in
+            let cell = tv.dequeueReusableCell(for: ip, cellType: MemberCell.self) as MemberCell
             cell.model = item
             return cell
         }
@@ -290,7 +311,14 @@ final class NewClubVC: BaseVC<NewClubReactor> {
             .map { [ClubActivitySection.init(items: $0)] }
             .bind(to: clubActivitiesCollectionView.rx.items(dataSource: activityDS))
             .disposed(by: disposeBag)
-            
+        
+        sharedState
+            .map(\.members)
+            .do(onNext: { [weak self] item in
+                self?.memberCountLabel.text = "\(item.count)명"
+            }).map { [MemberSection.init(header: "", items: $0)] }
+            .bind(to: memberCollectionView.rx.items(dataSource: memberDS))
+            .disposed(by: disposeBag)
     }
 }
 
