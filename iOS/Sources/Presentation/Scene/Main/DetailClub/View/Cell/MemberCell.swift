@@ -5,9 +5,7 @@ import Kingfisher
 
 final class MemberCell: BaseCollectionViewCell<User> {
     // MARK: - Properties
-    private let profileImageView = UIImageView().then {
-        $0.backgroundColor = GCMSAsset.Colors.gcmsGray3.color
-    }
+    private let profileImageView = UIImageView()
     private let nameLabel = UILabel().then {
         $0.textColor = GCMSAsset.Colors.gcmsGray1.color
         $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 12)
