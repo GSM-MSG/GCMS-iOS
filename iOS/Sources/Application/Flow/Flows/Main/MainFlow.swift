@@ -2,6 +2,7 @@ import RxFlow
 import RxRelay
 import RxSwift
 import UIKit
+import Service
 
 struct MainStepper: Stepper{
     let steps: PublishRelay<Step> = .init()
@@ -41,6 +42,10 @@ final class MainFlow: Flow{
             return navigateToAlarm()
         case let .alert(title, message, style, actions):
             return presentToAlert(title: title, message: message, style: style, actions: actions)
+        case let .memberAppendIsRequired(closure):
+            return presentToMemberAppend(closure: closure)
+        case .dismiss:
+            return dismiss()
         default:
             return .none
         }
@@ -74,6 +79,16 @@ private extension MainFlow{
         let alert = UIAlertController(title: title, message: message, preferredStyle: style)
         actions.forEach { alert.addAction($0) }
         self.rootVC.visibleViewController?.present(alert, animated: true)
+        return .none
+    }
+    func presentToMemberAppend(closure: @escaping (([User]) -> Void)) -> FlowContributors {
+        let reactor = MemberAppendReactor(closure: closure)
+        let vc = MemberAppendVC(reactor: reactor)
+        self.rootVC.visibleViewController?.presentPanModal(vc)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
+    }
+    func dismiss() -> FlowContributors {
+        self.rootVC.visibleViewController?.dismiss(animated: true)
         return .none
     }
 }
