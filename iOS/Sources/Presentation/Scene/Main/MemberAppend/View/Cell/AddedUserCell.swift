@@ -6,6 +6,7 @@ final class AddedUserCell: BaseCollectionViewCell<User> {
     private let nameLabel = UILabel().then {
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
+        $0.textAlignment = .center
         $0.backgroundColor = GCMSAsset.Colors.gcmsGray1.color
         $0.textColor = GCMSAsset.Colors.gcmsGray6.color
         $0.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 12)
@@ -36,7 +37,7 @@ final class AddedUserCell: BaseCollectionViewCell<User> {
         let cell = AddedUserCell()
         cell.model = user
         let target = CGSize(width: UIView.layoutFittingCompressedSize.width, height: availableHeight)
-        let width = cell.contentView.systemLayoutSizeFitting(target, withHorizontalFittingPriority: .fittingSizeLevel, verticalFittingPriority: .required).width
+        let width = cell.contentView.systemLayoutSizeFitting(target, withHorizontalFittingPriority: .fittingSizeLevel, verticalFittingPriority: .required).width + 10
         return .init(width: width, height: availableHeight)
     }
 }
