@@ -26,6 +26,7 @@ extension GCMSAPI {
 }
 
 enum GCMSDomain: String {
+    case misc = ""
     case user
     case club
     case majorClub = "club/major"
