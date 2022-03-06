@@ -1,6 +1,6 @@
 
-public enum ClubType: Codable {
-    case major
-    case editorial
-    case freedom
+public enum ClubType: String, Codable {
+    case major = "MAJOR"
+    case editorial = "EDITORIAL"
+    case freedom = "FREEDOM"
 }
