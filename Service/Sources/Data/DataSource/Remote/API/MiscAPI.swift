@@ -3,6 +3,7 @@ import Moya
 enum MiscAPI {
     case login(req: LoginRequest)
     case notice
+    case reissue
 }
 
 extension MiscAPI: GCMSAPI {
@@ -15,13 +16,15 @@ extension MiscAPI: GCMSAPI {
             return "login"
         case .notice:
             return "notice"
+        case .reissue:
+            return "notice"
         }
     }
     var method: Method {
         switch self {
         case .login:
             return .post
-        case .notice:
+        case .notice, .reissue:
             return .get
         }
     }
@@ -32,7 +35,7 @@ extension MiscAPI: GCMSAPI {
                 "id_token": req.idToken,
                 "deviceToken": req.deviceToken
             ], encoding: JSONEncoding.default)
-        case .notice:
+        case .notice, .reissue:
             return .requestPlain
         }
     }
@@ -40,6 +43,8 @@ extension MiscAPI: GCMSAPI {
         switch self {
         case .notice:
             return .accessToken
+        case .reissue:
+            return .refreshToken
         default:
             return JWTTokenType.none
         }
