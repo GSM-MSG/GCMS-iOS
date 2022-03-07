@@ -1,5 +1,6 @@
 import RxFlow
 import UIKit
+import Service
 
 enum GCMSStep: Step {
     // MARK: Global
@@ -11,7 +12,9 @@ enum GCMSStep: Step {
     
     // MARK: Main
     case clubListIsRequired
-    case clubDetailIsRequired(Int)
+    case clubDetailIsRequired(id: Int)
+    case newClubIsRequired(category: ClubType)
+    case memberAppendIsRequired((([User]) -> Void))
     
     // MARK: Administrator
     case myPageIsRequired

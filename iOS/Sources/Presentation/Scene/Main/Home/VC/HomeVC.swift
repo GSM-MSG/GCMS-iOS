@@ -42,7 +42,7 @@ final class HomeVC: BaseVC<HomeReactor> {
     override func configureNavigation() {
         self.navigationItem.setLeftBarButton(myPageButton, animated: true)
         self.navigationItem.setRightBarButton(alarmButton, animated: true)
-        self.navigationItem.configTitle(title: "GCMS", font: .init(font: GCMSFontFamily.SassyFrass.regular, size: 26) ?? .init())
+        self.navigationItem.configTitleImage()
         self.navigationItem.configBack()
         self.navigationController?.navigationBar.setClear()
     }
@@ -68,16 +68,21 @@ final class HomeVC: BaseVC<HomeReactor> {
             .disposed(by: disposeBag)
     }
     override func bindView(reactor: HomeReactor) {
+        myPageButton.rx.tap
+            .map { Reactor.Action.myPageButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        alarmButton.rx.tap
+            .map { Reactor.Action.alarmButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
         
         clubListCollectionView.rx.modelSelected(ClubList.self)
-            .do(onNext: { [weak self] _ in
-                self?.navigationItem.configBack()
-            })
             .map(\.id)
             .map(Reactor.Action.clubDidTap)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-            
     }
 }
 

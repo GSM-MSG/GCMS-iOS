@@ -20,6 +20,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
     }
     private let bannerImageView = UIImageView().then {
         $0.backgroundColor = GCMSAsset.Colors.gcmsGray3.color
+        $0.contentMode = .scaleAspectFill
     }
     private let descriptionHeaderLabel = HeaderLabel(title: "동아리 설명")
     private let descriptionLabel = UILabel().then {
@@ -141,6 +142,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
     }
     override func configureNavigation() {
         self.navigationController?.navigationBar.setClear()
+        bannerImageView.kf.setImage(with: URL(string: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4") ?? .none)
     }
     
     // MARK: - Reactor
@@ -159,18 +161,12 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             .withUnretained(self)
             .bind { owner, item in
                 owner.descriptionLabel.text = item.description
-//                owner.activityView.setImages(urls: item.activities)
+                owner.activityView.setImages(urls: item.activities)
                 if item.activities.isEmpty {
                     owner.activityView.snp.updateConstraints {
                         $0.height.equalTo(0)
                     }
                 }
-                owner.activityView.setImages(images: [
-                    .init(systemName: "1.circle") ?? .init(),
-                    .init(systemName: "2.circle") ?? .init(),
-                    .init(systemName: "3.circle") ?? .init(),
-                    .init(systemName: "4.circle") ?? .init()
-                ])
                 owner.headView.bind(user: item.head)
                 if let teacher = item.teacher {
                     owner.teacherHeaderLabel.isHidden = false

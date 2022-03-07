@@ -119,15 +119,6 @@
         }
       },
       {
-        "package": "Hero",
-        "repositoryURL": "https://github.com/HeroTransitions/Hero.git",
-        "state": {
-          "branch": null,
-          "revision": "efa709686035831b23b7bf58f652b0c4b892aa1d",
-          "version": "1.6.1"
-        }
-      },
-      {
         "package": "IQKeyboardManagerSwift",
         "repositoryURL": "https://github.com/hackiftekhar/IQKeyboardManager.git",
         "state": {
@@ -170,6 +161,15 @@
           "branch": null,
           "revision": "7ee9ef9f627d85cbe1b8c4f49a3ed26eed216c77",
           "version": "2.30908.0"
+        }
+      },
+      {
+        "package": "PanModal",
+        "repositoryURL": "https://github.com/slackhq/PanModal.git",
+        "state": {
+          "branch": null,
+          "revision": "b012aecb6b67a8e46369227f893c12544846613f",
+          "version": "1.2.7"
         }
       },
       {
@@ -233,6 +233,15 @@
           "branch": null,
           "revision": "8114d4781b9c5de693ed225cfb28ca3b695b023a",
           "version": "2.12.4"
+        }
+      },
+      {
+        "package": "RxGesture",
+        "repositoryURL": "https://github.com/RxSwiftCommunity/RxGesture.git",
+        "state": {
+          "branch": null,
+          "revision": "53ebed7fe3f15021bf518d9d1e8b147e2ddffa0a",
+          "version": "4.0.3"
         }
       },
       {

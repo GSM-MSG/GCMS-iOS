@@ -41,7 +41,7 @@ extension HomeReactor {
         case .viewDidLoad:
             return viewDidLoad()
         case let .clubDidTap(id):
-            steps.accept(GCMSStep.clubDetailIsRequired(id))
+            steps.accept(GCMSStep.clubDetailIsRequired(id: id))
         case .myPageButtonDidTap:
             steps.accept(GCMSStep.myPageIsRequired)
         case .alarmButtonDidTap:
@@ -70,10 +70,10 @@ private extension HomeReactor {
     func viewDidLoad() -> Observable<Mutation> {
         
         return .just(.setClubList([
-            .init(id: 0, bannerUrl: "https://avatars.githubusercontent.com/u/74440939?s=48&v=4", title: "대충 타이틀", type: .autonomy),
+            .init(id: 0, bannerUrl: "https://avatars.githubusercontent.com/u/74440939?s=48&v=4", title: "대충 타이틀", type: .freedom),
             .init(id: 1, bannerUrl: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4", title: "ㅁㄴㅇㄹㅁㄴㅇㅁㄴㅇ", type: .major),
             .init(id: 2, bannerUrl: "https://i.ytimg.com/vi/Kkc8aJct6qQ/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLDIZTIWGHrxuF6NijuyVWUsKHi1fw", title: "ㅁㄴ", type: .editorial),
-            .init(id: 3, bannerUrl: "https://avatars.githubusercontent.com/u/74440939?s=48&v=4", title: "대충 타이틀", type: .autonomy),
+            .init(id: 3, bannerUrl: "https://avatars.githubusercontent.com/u/74440939?s=48&v=4", title: "대충 타이틀", type: .freedom),
             .init(id: 4, bannerUrl: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4", title: "ㅁㄴㅇㄹㅁㄴㅇㅁㄴㅇ", type: .major),
             .init(id: 5, bannerUrl: "https://user-images.githubusercontent.com/74440939/156344036-247e71ef-e020-40bb-bc4d-9553f0636e30.png", title: "ㄴㅁㅇㅁㄴㄹ", type: .editorial)
         ]))
