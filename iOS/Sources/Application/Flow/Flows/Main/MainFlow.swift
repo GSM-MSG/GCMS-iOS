@@ -2,6 +2,7 @@ import RxFlow
 import RxRelay
 import RxSwift
 import UIKit
+import Service
 
 struct MainStepper: Stepper{
     let steps: PublishRelay<Step> = .init()
@@ -33,6 +34,18 @@ final class MainFlow: Flow{
             return coordinateToClubList()
         case let .clubDetailIsRequired(id):
             return navigateToDetailClub(id: id)
+        case .myPageIsRequired:
+            return navigateToMyPage()
+        case .alarmListIsRequired:
+            return navigateToAlarm()
+            return presentToAlert(title: title, message: message, style: style, actions: actions)
+        case let .alert(title, message, style, actions):
+        case let .memberAppendIsRequired(closure):
+            return presentToMemberAppend(closure: closure)
+        case .dismiss:
+            return dismiss()
+        case let .newClubIsRequired(category):
+            return navigateToNewClub(category: category)
         case .clubManagementIsRequired:
             return navigateToManagement()
         default:
@@ -58,5 +71,37 @@ private extension MainFlow{
         let vc = AppDelegate.container.resolve(ManagementVC.self)!
         self.rootVC.setViewControllers([vc], animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
+    func navigateToMyPage() -> FlowContributors {
+        let vc = AppDelegate.container.resolve(MyPageVC.self)!
+        self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
+    func navigateToAlarm() -> FlowContributors {
+        let vc = AppDelegate.container.resolve(AlarmVC.self)!
+        self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
+    func presentToAlert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction]) -> FlowContributors {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: style)
+        actions.forEach { alert.addAction($0) }
+        self.rootVC.visibleViewController?.present(alert, animated: true)
+        return .none
+    }
+    func presentToMemberAppend(closure: @escaping (([User]) -> Void)) -> FlowContributors {
+        let reactor = MemberAppendReactor(closure: closure)
+        let vc = MemberAppendVC(reactor: reactor)
+        self.rootVC.visibleViewController?.presentPanModal(vc)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
+    }
+        self.rootVC.visibleViewController?.dismiss(animated: true)
+    func dismiss() -> FlowContributors {
+        return .none
+    }
+    func navigateToNewClub(category: ClubType) -> FlowContributors {
+        let reactor = NewClubReactor(category: category)
+        let vc = NewClubVC(reactor: reactor)
+        self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
 }

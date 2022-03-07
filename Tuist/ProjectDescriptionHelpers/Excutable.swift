@@ -22,8 +22,9 @@ extension Project{
                     infoPlist: .file(path: Path("Support/Info.plist")),
                     sources: ["Sources/**"],
                     resources: ["Resources/**"],
+                    entitlements: Path("Support/\(name).entitlements"),
                     dependencies: [
-                        .project(target: "ThirdPartyLib", path: Path("../ThirdPartyLib"))
+                        .project(target: "ThirdPartyLib", path: Path("../ThirdPartyLib")),
                     ] + dependencies
                 ),
                 Target(

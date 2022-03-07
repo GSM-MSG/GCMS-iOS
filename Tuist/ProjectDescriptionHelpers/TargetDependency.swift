@@ -15,13 +15,14 @@ public extension TargetDependency.SPM{
     static let Then = TargetDependency.package(product: "Then")
     static let IQKeyboardManager = TargetDependency.package(product: "IQKeyboardManagerSwift")
     static let ReactorKit = TargetDependency.package(product: "ReactorKit")
-    static let Hero = TargetDependency.package(product: "Hero")
     static let GoogleSignIn = TargetDependency.package(product: "GoogleSignIn")
     static let Kingfisher = TargetDependency.package(product: "Kingfisher")
     static let RxDataSources = TargetDependency.package(product: "RxDataSources")
     static let PinLayout = TargetDependency.package(product: "PinLayout")
     static let Reusable = TargetDependency.package(product: "Reusable")
     static let BTImageView = TargetDependency.package(product: "BTImageView")
+    static let RxGesture = TargetDependency.package(product: "RxGesture")
+    static let PanModal = TargetDependency.package(product: "PanModal")
 }
 
 public extension Package {
@@ -61,10 +62,6 @@ public extension Package {
         url: "https://github.com/firebase/firebase-ios-sdk.git",
         requirement: .upToNextMajor(from: "8.12.0")
     )
-    static let Hero = Package.remote(
-        url: "https://github.com/HeroTransitions/Hero.git",
-        requirement: .upToNextMajor(from: "1.6.1")
-    )
     static let GoogleSignIn = Package.remote(
         url: "https://github.com/google/GoogleSignIn-iOS.git",
         requirement: .upToNextMajor(from: "6.1.0")
@@ -88,5 +85,13 @@ public extension Package {
     static let BTImageView = Package.remote(
         url: "https://github.com/baekteun/BTImageView.git",
         requirement: .upToNextMajor(from: "1.1.0")
+    )
+    static let RxGesture = Package.remote(
+        url: "https://github.com/RxSwiftCommunity/RxGesture.git",
+        requirement: .upToNextMajor(from: "4.0.0")
+    )
+    static let PanModal = Package.remote(
+        url: "https://github.com/slackhq/PanModal.git",
+        requirement: .upToNextMajor(from: "1.2.6")
     )
 }
