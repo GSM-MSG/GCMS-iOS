@@ -13,6 +13,7 @@ final class MyPageReactor: Reactor, Stepper {
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
+        case clubManageButtonDidTap
     }
     enum Mutation {
         case setEditorialClubList([ClubList])
@@ -41,6 +42,9 @@ extension MyPageReactor {
         switch action {
         case .viewDidLoad:
             return viewDidLoad()
+        case .clubManageButtonDidTap:
+//          TODO:  steps.accept(GCMSStep.clubManagementIsRequired)
+            return clubManageButtonDidTap()
         }
         return .empty()
     }
@@ -71,11 +75,26 @@ private extension MyPageReactor {
             .just(.setEditorialClubList([
                 .init(id: 0, bannerUrl: "https://avatars.githubusercontent.com/u/74440939?v=4", title: "asdf", type: .editorial),
                 .init(id: 1, bannerUrl: "https://avatars.githubusercontent.com/u/67373938?v=4", title: "대충 타이틀", type: .editorial),
-                .init(id: 0, bannerUrl: "https://avatars.githubusercontent.com/u/74440939?v=4", title: "asdf", type: .editorial),
-                .init(id: 0, bannerUrl: "https://avatars.githubusercontent.com/u/74440939?v=4", title: "asdf", type: .editorial)
+                .init(id: 2, bannerUrl: "https://avatars.githubusercontent.com/u/74440939?v=4", title: "ㅁㄴㅇ", type: .editorial),
+                .init(id: 3, bannerUrl: "https://avatars.githubusercontent.com/u/74440939?v=4", title: "ㅍ", type: .editorial)
             ])),
             .just(.setMajorClub(.init(id: 2, bannerUrl: "https://avatars.githubusercontent.com/u/80966659?v=4", title: "MAJOR", type: .major))),
             .just(.setFreedomClub(.init(id: 3, bannerUrl: "https://camo.githubusercontent.com/9ed64b042a76b8a97016e877cbaee0d6df224a148034afef658d841cf0cd1791/68747470733a2f2f63756c746f667468657061727479706172726f742e636f6d2f706172726f74732f68642f6c6170746f705f706172726f742e676966", title: "FREEDOM", type: .freedom)))
         ])
+    }
+    func clubManageButtonDidTap() -> Observable<Mutation> {
+        steps.accept(GCMSStep.alert(title: "동아리 개설하기", message: nil, style: .actionSheet, actions: [
+            .init(title: "전공동아리", style: .default, handler: { [weak self] _ in
+                self?.steps.accept(GCMSStep.newClubIsRequired(category: .major))
+            }),
+            .init(title: "자율동아리", style: .default, handler: { [weak self] _ in
+                self?.steps.accept(GCMSStep.newClubIsRequired(category: .freedom))
+            }),
+            .init(title: "사설동아리", style: .default, handler: { [weak self] _ in
+                self?.steps.accept(GCMSStep.newClubIsRequired(category: .editorial))
+            }),
+            .init(title: "취소", style: .cancel)
+        ]))
+        return .empty()
     }
 }

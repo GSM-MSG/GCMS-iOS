@@ -119,6 +119,9 @@ final class MyPageVC: BaseVC<MyPageReactor> {
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
+    override func configureNavigation() {
+        self.navigationItem.configBack()
+    }
     
     // MARK: - Reactor
     override func bindAction(reactor: MyPageReactor) {
@@ -146,6 +149,12 @@ final class MyPageVC: BaseVC<MyPageReactor> {
         majorClubView.setName(name: "Wallflower")
         freedomClubView.setImage(url: "https://avatars.githubusercontent.com/u/78971821?s=100&v=4")
         freedomClubView.setName(name: "전승원")
+    }
+    override func bindView(reactor: MyPageReactor) {
+        managementButton.rx.tap
+            .map { Reactor.Action.clubManageButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 
