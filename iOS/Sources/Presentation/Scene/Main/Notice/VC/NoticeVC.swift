@@ -16,13 +16,14 @@ final class NoticeVC: BaseVC<NoticeReactor> {
         view.addSubViews(contentTextView, completeButton)
     }
     override func setLayout() {
-        contentTextView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview().inset(15)
-        }
         completeButton.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-50)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.bottom.equalToSuperview().offset(-30)
             $0.height.equalTo(50)
+        }
+        contentTextView.snp.makeConstraints {
+            $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(15)
+            $0.bottom.equalTo(completeButton.snp.top).offset(-30)
         }
     }
     override func configureNavigation() {
