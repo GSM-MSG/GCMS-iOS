@@ -258,7 +258,7 @@ final class NewClubVC: BaseVC<NewClubReactor> {
             .when(.recognized)
             .withUnretained(self)
             .subscribe(onNext: { owner, _ in
-                owner.reactor?.action.onNext(.activityAppendButtonDidTap)
+                owner.reactor?.action.onNext(.bannerDidTap)
                 owner.present(owner.imagePicker, animated: true)
             })
             .disposed(by: disposeBag)
