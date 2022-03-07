@@ -172,5 +172,23 @@ final class ManagementVC : BaseVC<ManagementReactor> {
             .map { Reactor.Action.newClubButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        managementMajorCollectionView.rx.modelSelected(ClubList.self)
+            .map(\.id)
+            .map(Reactor.Action.clubDidTap)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        managementEditorialCollectionView.rx.modelSelected(ClubList.self)
+            .map(\.id)
+            .map(Reactor.Action.clubDidTap)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        managementFreedomCollectionView.rx.modelSelected(ClubList.self)
+            .map(\.id)
+            .map(Reactor.Action.clubDidTap)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }

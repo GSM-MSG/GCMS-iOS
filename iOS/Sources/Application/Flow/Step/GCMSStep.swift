@@ -19,7 +19,7 @@ enum GCMSStep: Step {
     // MARK: Administrator
     case myPageIsRequired
     case clubManagementIsRequired
-    case clubJoinerListIsRequired
+    case clubJoinerListIsRequired(id: Int)
     case notificationIsRequired
     
     // MARK: Alarm
