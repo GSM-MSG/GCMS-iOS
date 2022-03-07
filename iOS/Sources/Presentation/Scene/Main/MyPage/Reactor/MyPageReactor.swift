@@ -43,8 +43,8 @@ extension MyPageReactor {
         case .viewDidLoad:
             return viewDidLoad()
         case .clubManageButtonDidTap:
-//          TODO:  steps.accept(GCMSStep.clubManagementIsRequired)
-            return clubManageButtonDidTap()
+            steps.accept(GCMSStep.clubManagementIsRequired)
+//            return clubManageButtonDidTap()
         }
         return .empty()
     }
@@ -82,19 +82,5 @@ private extension MyPageReactor {
             .just(.setFreedomClub(.init(id: 3, bannerUrl: "https://camo.githubusercontent.com/9ed64b042a76b8a97016e877cbaee0d6df224a148034afef658d841cf0cd1791/68747470733a2f2f63756c746f667468657061727479706172726f742e636f6d2f706172726f74732f68642f6c6170746f705f706172726f742e676966", title: "FREEDOM", type: .freedom)))
         ])
     }
-    func clubManageButtonDidTap() -> Observable<Mutation> {
-        steps.accept(GCMSStep.alert(title: "동아리 개설하기", message: nil, style: .actionSheet, actions: [
-            .init(title: "전공동아리", style: .default, handler: { [weak self] _ in
-                self?.steps.accept(GCMSStep.newClubIsRequired(category: .major))
-            }),
-            .init(title: "자율동아리", style: .default, handler: { [weak self] _ in
-                self?.steps.accept(GCMSStep.newClubIsRequired(category: .freedom))
-            }),
-            .init(title: "사설동아리", style: .default, handler: { [weak self] _ in
-                self?.steps.accept(GCMSStep.newClubIsRequired(category: .editorial))
-            }),
-            .init(title: "취소", style: .cancel)
-        ]))
-        return .empty()
-    }
+    
 }

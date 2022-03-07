@@ -38,8 +38,8 @@ final class MainFlow: Flow{
             return navigateToMyPage()
         case .alarmListIsRequired:
             return navigateToAlarm()
-            return presentToAlert(title: title, message: message, style: style, actions: actions)
         case let .alert(title, message, style, actions):
+            return presentToAlert(title: title, message: message, style: style, actions: actions)
         case let .memberAppendIsRequired(closure):
             return presentToMemberAppend(closure: closure)
         case .dismiss:
@@ -69,7 +69,7 @@ private extension MainFlow{
     }
     func navigateToManagement() -> FlowContributors {
         let vc = AppDelegate.container.resolve(ManagementVC.self)!
-        self.rootVC.setViewControllers([vc], animated: true)
+        self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
     func navigateToMyPage() -> FlowContributors {
@@ -94,8 +94,8 @@ private extension MainFlow{
         self.rootVC.visibleViewController?.presentPanModal(vc)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
-        self.rootVC.visibleViewController?.dismiss(animated: true)
     func dismiss() -> FlowContributors {
+        self.rootVC.visibleViewController?.dismiss(animated: true)
         return .none
     }
     func navigateToNewClub(category: ClubType) -> FlowContributors {

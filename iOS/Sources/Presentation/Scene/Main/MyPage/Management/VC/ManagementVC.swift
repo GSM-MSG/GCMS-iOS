@@ -32,16 +32,14 @@ final class ManagementVC : BaseVC<ManagementReactor> {
     
     private let clubAddButton = UIButton().then {
         $0.contentMode = .scaleToFill
-        $0.setImage(UIImage(systemName: "plus"), for: .normal)
+        $0.setImage(UIImage(systemName: "plus")?.tintColor(.white), for: .normal)
         $0.setTitle("동아리 개설", for: .normal)
         $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 14)
-        $0.tintColor = .white
-        $0.imageEdgeInsets = .init(top: 0, left: 5, bottom: 0, right: 0)
         $0.semanticContentAttribute = .forceRightToLeft
         $0.imageView?.layer.transform = CATransform3DMakeScale(0.7, 0.7, 0.7)
     }
     
-    private let barbutton = UIBarButtonItem()
+    private lazy var barbutton = UIBarButtonItem(customView: clubAddButton)
         
     private let managementMajorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
         let layout = UICollectionViewFlowLayout()
@@ -87,7 +85,7 @@ final class ManagementVC : BaseVC<ManagementReactor> {
             $0.centerX.top.bottom.equalToSuperview()
         }
         majorLabel.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalToSuperview().offset(10)
             $0.left.right.equalToSuperview().inset(10)
         }
         managementMajorCollectionView.snp.makeConstraints {
@@ -116,11 +114,11 @@ final class ManagementVC : BaseVC<ManagementReactor> {
         }
     }
     override func configureNavigation() {
-        barbutton.customView = clubAddButton
         self.navigationController?.navigationBar.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationItem.rightBarButtonItem = barbutton
+        self.navigationItem.configBack()
     }
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
@@ -167,6 +165,12 @@ final class ManagementVC : BaseVC<ManagementReactor> {
         sharedState
             .map(\.freedomList)
             .bind(to: managementFreedomCollectionView.rx.items(dataSource: freedomDS))
+            .disposed(by: disposeBag)
+    }
+    override func bindView(reactor: ManagementReactor) {
+        clubAddButton.rx.tap
+            .map { Reactor.Action.newClubButtonDidTap }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
 }

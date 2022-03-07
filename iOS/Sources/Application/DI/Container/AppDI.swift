@@ -14,15 +14,15 @@ extension Container{
         self.register(HomeVC.self) { r in
             return HomeVC(reactor: r.resolve(HomeReactor.self))
         }
-        }
-            return AlarmVC(reactor: r.resolve(AlarmReactor.self))
         self.register(AlarmVC.self) { r in
+            return AlarmVC(reactor: r.resolve(AlarmReactor.self))
         }
-            return MyPageVC(reactor: r.resolve(MyPageReactor.self))
         self.register(MyPageVC.self) { r in
+            return MyPageVC(reactor: r.resolve(MyPageReactor.self))
         }
-            return ManagementVC(reactor: r.resolve(ManagementReactor.self))
         self.register(ManagementVC.self) { r in
+            return ManagementVC(reactor: r.resolve(ManagementReactor.self))
+        }
     }
     
     private func registerReactor() {
@@ -32,14 +32,14 @@ extension Container{
         self.register(HomeReactor.self) { r in
             return HomeReactor()
         }
-        }
-            return ManagementReactor()
         self.register(ManagementReactor.self) { r in
+            return ManagementReactor()
         }
-            return AlarmReactor()
         self.register(AlarmReactor.self) { r in
+            return AlarmReactor()
         }
-            return MyPageReactor()
         self.register(MyPageReactor.self) { r in
+            return MyPageReactor()
+        }
     }
 }
