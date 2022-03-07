@@ -7,7 +7,7 @@ struct MainStepper: Stepper{
     let steps: PublishRelay<Step> = .init()
     
     var initialStep: Step{
-        return GCMSStep.clubManagementIsRequired
+        return GCMSStep.clubListIsRequired
     }
 }
 
@@ -34,7 +34,7 @@ final class MainFlow: Flow{
         case let .clubDetailIsRequired(id):
             return navigateToDetailClub(id: id)
         case .clubManagementIsRequired:
-            return test()
+            return navigateToManagement()
         default:
             return .none
         }
@@ -54,7 +54,7 @@ private extension MainFlow{
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
-    func test() -> FlowContributors {
+    func navigateToManagement() -> FlowContributors {
         let vc = AppDelegate.container.resolve(ManagementVC.self)!
         self.rootVC.setViewControllers([vc], animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))

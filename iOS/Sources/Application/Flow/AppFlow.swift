@@ -15,7 +15,7 @@ struct AppStepper: Stepper{
     private let disposeBag: DisposeBag = .init()
     
     func readyToEmitSteps() {
-        steps.accept(GCMSStep.clubListIsRequired)
+        steps.accept(GCMSStep.onBoardingIsRequired)
     }
 }
 

@@ -1,11 +1,3 @@
-//
-//  ManagementVC.swift
-//  GCMS
-//
-//  Created by Sunghun Kim on 2022/03/02.
-//  Copyright © 2022 baegteun. All rights reserved.
-//
-
 import UIKit
 import SnapKit
 import PinLayout
@@ -17,7 +9,28 @@ import Service
 
 final class ManagementVC : BaseVC<ManagementReactor> {
     // MARK: - Properties
-    private let button2 = UIButton().then {
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    
+    private let majorLabel = UILabel().then {
+        $0.text = "관리중인 전공 동아리"
+        $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 16)
+        $0.textColor = .white
+    }
+    
+    private let editorialLabel = UILabel().then {
+        $0.text = "관리중인 사설 동아리"
+        $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 16)
+        $0.textColor = .white
+    }
+    
+    private let freedomLabel = UILabel().then {
+        $0.text = "관리중인 자율 동아리"
+        $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 16)
+        $0.textColor = .white
+    }
+    
+    private let clubAddButton = UIButton().then {
         $0.contentMode = .scaleToFill
         $0.setImage(UIImage(systemName: "plus"), for: .normal)
         $0.setTitle("동아리 개설", for: .normal)
@@ -29,41 +42,84 @@ final class ManagementVC : BaseVC<ManagementReactor> {
     }
     
     private let barbutton = UIBarButtonItem()
-    
-    let collectionViewHeaderReuseIdentifier = "InteractiveHeader"
-    
-    private let managementCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
+        
+    private let managementMajorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
         let layout = UICollectionViewFlowLayout()
-        var layoutConfig = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
-        layoutConfig.headerMode = .supplementary
-        let listLayout = UICollectionViewCompositionalLayout.list(using: layoutConfig)
         layout.scrollDirection = .horizontal
         $0.register(cellType: ClubListCell.self)
         layout.itemSize = CGSize(width: 166, height: 205)
         $0.collectionViewLayout = layout
         $0.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
+    
+    private let managementEditorialCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        $0.register(cellType: ClubListCell.self)
+        layout.itemSize = CGSize(width: 166, height: 205)
+        $0.collectionViewLayout = layout
+        $0.backgroundColor = .clear
+    }
+    
+    private let managementFreedomCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        $0.register(cellType: ClubListCell.self)
+        layout.itemSize = CGSize(width: 166, height: 205)
+        $0.collectionViewLayout = layout
+        $0.backgroundColor = .clear
+    }
+    
     // MARK: - UI
     
-    override func setup() {
-    }
-    
     override func addView() {
-        view.addSubview(managementCollectionView)
+        view.addSubViews(scrollView)
+        scrollView.addSubViews(contentView)
+        contentView.addSubViews(managementMajorCollectionView, managementEditorialCollectionView, managementFreedomCollectionView,majorLabel,editorialLabel,freedomLabel)
     }
-    
-    override func setLayoutSubviews() {
-        managementCollectionView.snp.makeConstraints {
-            $0.height.equalTo(bound.height * 0.9)
-            $0.width.equalTo(bound.width * 0.9)
-            $0.left.equalTo(view.safeAreaLayoutGuide).offset(10)
+    override func setLayout() {
+        scrollView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.leading.trailing.equalToSuperview()
+        }
+        contentView.snp.makeConstraints {
+            $0.width.equalToSuperview()
+            $0.centerX.top.bottom.equalToSuperview()
+        }
+        majorLabel.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.left.right.equalToSuperview().inset(10)
+        }
+        managementMajorCollectionView.snp.makeConstraints {
+            $0.top.equalTo(majorLabel.snp.bottom).offset(10)
+            $0.left.right.equalToSuperview().inset(10)
+            $0.height.equalTo(205)
+        }
+        editorialLabel.snp.makeConstraints {
+            $0.top.equalTo(managementMajorCollectionView.snp.bottom).offset(35)
+            $0.left.right.equalToSuperview().inset(10)
+        }
+        managementEditorialCollectionView.snp.makeConstraints {
+            $0.top.equalTo(editorialLabel.snp.bottom).offset(10)
+            $0.left.right.equalToSuperview().inset(10)
+            $0.height.equalTo(205)
+        }
+        freedomLabel.snp.makeConstraints {
+            $0.top.equalTo(managementEditorialCollectionView.snp.bottom).offset(35)
+            $0.left.right.equalToSuperview().inset(10)
+        }
+        managementFreedomCollectionView.snp.makeConstraints {
+            $0.top.equalTo(freedomLabel.snp.bottom).offset(10)
+            $0.left.right.equalToSuperview().inset(10)
+            $0.height.equalTo(205)
+            $0.bottom.equalToSuperview().offset(-10)
         }
     }
-    
     override func configureNavigation() {
-        self.navigationController?.navigationBar.setClear()
-        barbutton.customView = button2
+        barbutton.customView = clubAddButton
+        self.navigationController?.navigationBar.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.isTranslucent = true
         self.navigationItem.rightBarButtonItem = barbutton
     }
     override func configureVC() {
@@ -80,73 +136,37 @@ final class ManagementVC : BaseVC<ManagementReactor> {
     }
     
     override func bindState(reactor: ManagementReactor) {
-        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 3).observe(on: MainScheduler.asyncInstance)
 
-        
-        let ds = RxCollectionViewSectionedReloadDataSource<ClubListSection>{ _, tv, ip, item in
+        let manageDS = RxCollectionViewSectionedReloadDataSource<ClubListSection>{ _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip) as ClubListCell
             cell.model = item
             return cell
         }
-        
+        let editorialDS = RxCollectionViewSectionedReloadDataSource<ClubListSection>{ _, tv, ip, item in
+            let cell = tv.dequeueReusableCell(for: ip) as ClubListCell
+            cell.model = item
+            return cell
+        }
+        let freedomDS = RxCollectionViewSectionedReloadDataSource<ClubListSection>{ _, tv, ip, item in
+            let cell = tv.dequeueReusableCell(for: ip) as ClubListCell
+            cell.model = item
+            return cell
+        }
+
         sharedState
             .map(\.clubList)
-            .bind(to: managementCollectionView.rx.items(dataSource: ds))
+            .bind(to: managementMajorCollectionView.rx.items(dataSource: manageDS))
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.editorialList)
+            .bind(to: managementEditorialCollectionView.rx.items(dataSource: editorialDS))
+            .disposed(by: disposeBag)
+
+        sharedState
+            .map(\.freedomList)
+            .bind(to: managementFreedomCollectionView.rx.items(dataSource: freedomDS))
             .disposed(by: disposeBag)
     }
-    
-    
 }
-
-extension ManagementVC : UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        3
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ClubListCell", for: indexPath) as! ClubListCell
-        cell.data
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-            return CGSize(width: collectionView.frame.width, height: 180.0)
-    }
-        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-            return CGSize(width: 60.0, height: 30.0)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-                
-                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: collectionViewHeaderReuseIdentifier, for: indexPath)
-                
-                headerView.backgroundColor = UIColor.blue
-                return headerView
-        default:
-               
-               assert(false, "Unexpected element kind")
-           }
-        }
-    }
-
-
-class InteractiveHeader: UICollectionReusableView {
-    
-    let titleLabel = UILabel().then {
-        $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 14)
-    }
-    
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        addSubViews(titleLabel)
-        
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("Not implemented")
-    }
-}
-
