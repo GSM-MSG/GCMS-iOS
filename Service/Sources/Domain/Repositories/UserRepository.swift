@@ -1,7 +1,7 @@
 import RxSwift
 import Foundation
 
-protocol UserRepository {
+public protocol UserRepository {
     func fetchUerInfo(isTest: Bool) -> Single<User>
     func fetchNoticeList(isTest: Bool) -> Single<[Notice]>
     func editProfile(url: String, isTest: Bool) -> Completable
