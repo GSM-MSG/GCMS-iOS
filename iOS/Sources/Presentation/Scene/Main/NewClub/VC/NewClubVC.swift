@@ -106,7 +106,8 @@ final class NewClubVC: BaseVC<NewClubReactor> {
     }
     override func setLayout() {
         scrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.bottom.equalToSuperview()   
         }
         contentView.snp.makeConstraints {
             $0.width.equalToSuperview()

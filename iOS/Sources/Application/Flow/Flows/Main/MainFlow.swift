@@ -46,6 +46,8 @@ final class MainFlow: Flow{
             return dismiss()
         case let .newClubIsRequired(category):
             return navigateToNewClub(category: category)
+        case .clubManagementIsRequired:
+            return navigateToManagement()
         default:
             return .none
         }
@@ -64,6 +66,11 @@ private extension MainFlow{
         let vc = DetailClubVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
+    }
+    func navigateToManagement() -> FlowContributors {
+        let vc = AppDelegate.container.resolve(ManagementVC.self)!
+        self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
     func navigateToMyPage() -> FlowContributors {
         let vc = AppDelegate.container.resolve(MyPageVC.self)!
