@@ -199,6 +199,7 @@ final class NewClubVC: BaseVC<NewClubReactor> {
         }
     }
     override func configureVC() {
+        scrollView.addGestureRecognizer(panGR)
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
     override func configureNavigation() {

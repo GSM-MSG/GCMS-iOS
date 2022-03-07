@@ -19,7 +19,7 @@ final class AlarmVC: BaseVC<AlarmReactor> {
     }
     override func setLayout() {
         alarmTableView.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview()
+            $0.top.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
     }
