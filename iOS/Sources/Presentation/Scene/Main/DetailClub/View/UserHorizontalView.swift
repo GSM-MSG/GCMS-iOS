@@ -29,7 +29,7 @@ final class UserHorizontalView: UIView {
     }
     
     public func bind(user: User) {
-        profileImageView.kf.setImage(with: URL(string: user.profileImage) ?? .none,
+        profileImageView.kf.setImage(with: URL(string: user.picture) ?? .none,
                                      placeholder: UIImage(),
                                      options: [])
         nameLabel.text = user.name
