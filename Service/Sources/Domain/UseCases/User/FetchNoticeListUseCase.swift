@@ -8,6 +8,6 @@ public final class FetchNoticeListUseCase {
     private let repository: UserRepository
     
     public func execute(isTest: Bool = false) -> Single<[Notice]> {
-        return repository.fetchNoticeList(isTest: isTest)
+        repository.fetchNoticeList(isTest: isTest)
     }
 }

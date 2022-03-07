@@ -8,6 +8,6 @@ public final class AcceptClubUseCase {
     private let repository: UserRepository
     
     public func execute(clubId: Int, isTest: Bool = false) -> Completable {
-        return repository.acceptClub(clubId: clubId, isTest: isTest)
+        repository.acceptClub(clubId: clubId, isTest: isTest)
     }
 }

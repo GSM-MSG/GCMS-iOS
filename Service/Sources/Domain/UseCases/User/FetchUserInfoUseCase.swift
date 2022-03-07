@@ -8,6 +8,6 @@ public final class FetchUserInfoUseCase {
     private let repository: UserRepository
     
     public func execute(isTest: Bool = false) -> Single<User> {
-        return repository.fetchUerInfo(isTest: isTest)
+        repository.fetchUerInfo(isTest: isTest)
     }
 }

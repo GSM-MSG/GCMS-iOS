@@ -8,6 +8,6 @@ public final class LoginUseCase {
     private let repository: AuthRepository
     
     public func execute(idToken: String, isTest: Bool = false) -> Completable {
-        return repository.login(idToken: idToken, isTest: isTest)
+        repository.login(idToken: idToken, isTest: isTest)
     }
 }
