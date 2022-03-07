@@ -6,7 +6,7 @@ final class DefaultClubRepository: ClubRepository {
     func createNewClub(req: NewClubRequest, isTest: Bool) -> Completable {
         clubRemote.newClub(req: req, isTest: isTest)
     }
-    func managementClub(isTest: Bool) -> Single<[ClubList]> {
+    func fetchManagementClub(isTest: Bool) -> Single<[ClubList]> {
         clubRemote.managementClub(isTest: isTest)
             .map { $0.toDomain() }
     }
