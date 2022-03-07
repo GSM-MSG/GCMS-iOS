@@ -32,6 +32,7 @@ enum GCMSDomain: String {
     case majorClub = "club/major"
     case editorialClub = "club/editorial"
     case freedomClub = "club/freedom"
+    case image
 }
 
 extension GCMSDomain {
