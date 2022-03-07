@@ -37,7 +37,7 @@ final class ManagementReactor: Reactor, Stepper{
     // MARK: - Init
     init() {
         initialState = State(
-            clubList: [],
+            majorList: [],
             editorialList: [],
             freedomList: []
         )

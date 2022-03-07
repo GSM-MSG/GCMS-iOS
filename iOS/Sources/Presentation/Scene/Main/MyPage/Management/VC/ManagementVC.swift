@@ -153,7 +153,7 @@ final class ManagementVC : BaseVC<ManagementReactor> {
         }
 
         sharedState
-            .map(\.clubList)
+            .map(\.majorList)
             .bind(to: managementMajorCollectionView.rx.items(dataSource: manageDS))
             .disposed(by: disposeBag)
         
