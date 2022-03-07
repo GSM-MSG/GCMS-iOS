@@ -7,7 +7,7 @@ public final class FetchUserInfoUseCase {
     
     private let repository: UserRepository
     
-    func execute(isTest: Bool = false) -> Single<User> {
+    public func execute(isTest: Bool = false) -> Single<User> {
         return repository.fetchUerInfo(isTest: isTest)
     }
 }

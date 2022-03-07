@@ -7,7 +7,7 @@ public final class FetchNoticeListUseCase {
     
     private let repository: UserRepository
     
-    func execute(isTest: Bool = false) -> Single<[Notice]> {
+    public func execute(isTest: Bool = false) -> Single<[Notice]> {
         return repository.fetchNoticeList(isTest: isTest)
     }
 }

@@ -13,7 +13,7 @@ public final class EditProfileUseCase {
     private let userRepository: UserRepository
     private let imageRepository: ImageRepository
     
-    func execute(data: Data, isTest: Bool = false) -> Completable {
+    public func execute(data: Data, isTest: Bool = false) -> Completable {
         return imageRepository.uploadPicture(data: data, isTest: isTest)
             .flatMapCompletable { url in
                 return self.userRepository.editProfile(url: url, isTest: isTest)
