@@ -15,7 +15,7 @@ struct AppStepper: Stepper{
     private let disposeBag: DisposeBag = .init()
     
     func readyToEmitSteps() {
-        steps.accept(GCMSStep.onBoardingIsRequired)
+        steps.accept(GCMSStep.clubListIsRequired)
     }
 }
 
@@ -80,4 +80,3 @@ private extension AppFlow{
         return .one(flowContributor: .contribute(withNextPresentable: flow, withNextStepper: flow.stepper))
     }
 }
-
