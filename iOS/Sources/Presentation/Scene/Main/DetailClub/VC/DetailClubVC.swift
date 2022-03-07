@@ -4,7 +4,6 @@ import Reusable
 import PinLayout
 import RxSwift
 import RxDataSources
-import Hero
 
 final class DetailClubVC: BaseVC<DetailClubReactor> {
     // MARK: - Metric
@@ -22,7 +21,6 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
     private let bannerImageView = UIImageView().then {
         $0.backgroundColor = GCMSAsset.Colors.gcmsGray3.color
         $0.contentMode = .scaleAspectFill
-        $0.heroID = "banner"
     }
     private let descriptionHeaderLabel = HeaderLabel(title: "동아리 설명")
     private let descriptionLabel = UILabel().then {
@@ -140,7 +138,6 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         }
     }
     override func configureVC() {
-        self.isHeroEnabled = true
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
     override func configureNavigation() {

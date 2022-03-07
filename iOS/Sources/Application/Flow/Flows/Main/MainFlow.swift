@@ -19,9 +19,7 @@ final class MainFlow: Flow{
     }
     
     let stepper: MainStepper = .init()
-    private let rootVC = UINavigationController().then {
-        $0.isHeroEnabled = true
-    }
+    private let rootVC = UINavigationController()
     
     // MARK: - Init
     deinit {

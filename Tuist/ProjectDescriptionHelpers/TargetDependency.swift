@@ -15,7 +15,6 @@ public extension TargetDependency.SPM{
     static let Then = TargetDependency.package(product: "Then")
     static let IQKeyboardManager = TargetDependency.package(product: "IQKeyboardManagerSwift")
     static let ReactorKit = TargetDependency.package(product: "ReactorKit")
-    static let Hero = TargetDependency.package(product: "Hero")
     static let GoogleSignIn = TargetDependency.package(product: "GoogleSignIn")
     static let Kingfisher = TargetDependency.package(product: "Kingfisher")
     static let RxDataSources = TargetDependency.package(product: "RxDataSources")
@@ -62,10 +61,6 @@ public extension Package {
     static let Firebase = Package.remote(
         url: "https://github.com/firebase/firebase-ios-sdk.git",
         requirement: .upToNextMajor(from: "8.12.0")
-    )
-    static let Hero = Package.remote(
-        url: "https://github.com/HeroTransitions/Hero.git",
-        requirement: .exact("1.5.0")
     )
     static let GoogleSignIn = Package.remote(
         url: "https://github.com/google/GoogleSignIn-iOS.git",
