@@ -11,24 +11,11 @@ import ReactorKit
 class BaseVC<T: Reactor>: UIViewController{
     let bound = UIScreen.main.bounds
     var disposeBag: DisposeBag = .init()
-    lazy var panGR: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(leftSwipeDismiss(gestureRecognizer:)))
     
-    public var enableScreenPanGesture: Bool = true {
-        didSet {
-            if(enableScreenPanGesture) {
-                self.view.addGestureRecognizer(self.panGR)
-                return
-            }
-            if self.view.gestureRecognizers?.contains(panGR) ?? false {
-                self.view.removeGestureRecognizer(panGR)
-            }
-        }
-    }
     @available(*, unavailable)
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        enableScreenPanGesture = navigationController?.viewControllers.count ?? 0 > 1 && navigationController?.viewControllers.last == self
         setup()
         addView()
         setLayout()
