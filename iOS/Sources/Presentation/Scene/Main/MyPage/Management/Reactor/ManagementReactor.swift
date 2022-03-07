@@ -27,7 +27,7 @@ final class ManagementReactor: Reactor, Stepper{
         case setClubList([ClubList])
     }
     struct State{
-        var clubList: [ClubListSection]
+        var majorList: [ClubListSection]
         var editorialList: [ClubListSection]
         var freedomList : [ClubListSection]
     }
@@ -66,7 +66,7 @@ extension ManagementReactor{
         switch mutation {
         case let .setClubList(lists):
             let majorList = lists.filter { $0.type == .major }
-            newState.clubList = [ClubListSection.init(header: "major", items: majorList )]
+            newState.majorList = [ClubListSection.init(header: "major", items: majorList )]
             let editorialList = lists.filter { $0.type == .editorial }
             newState.editorialList = [ClubListSection.init(header: "editorial", items: editorialList)]
             let freedomList = lists.filter { $0.type == .freedom }
