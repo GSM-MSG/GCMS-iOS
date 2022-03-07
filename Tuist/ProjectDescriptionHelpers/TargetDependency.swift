@@ -65,7 +65,7 @@ public extension Package {
     )
     static let Hero = Package.remote(
         url: "https://github.com/HeroTransitions/Hero.git",
-        requirement: .upToNextMajor(from: "1.6.1")
+        requirement: .exact("1.5.0")
     )
     static let GoogleSignIn = Package.remote(
         url: "https://github.com/google/GoogleSignIn-iOS.git",
