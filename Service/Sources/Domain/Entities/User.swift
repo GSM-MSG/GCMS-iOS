@@ -1,7 +1,7 @@
 import Foundation
 
 public struct User: Equatable {
-    public init(id: Int, picture: String, name: String, grade: Int, class: Int, number: Int, joinedMajorClub: Int, joinedEditorialClub: [Int], joinedFreedomClub: Int) {
+    public init(id: Int, picture: String, name: String, grade: Int, class: Int, number: Int, joinedMajorClub: Int? = nil, joinedEditorialClub: [Int]? = nil, joinedFreedomClub: Int? = nil) {
         self.id = id
         self.picture = picture
         self.name = name
@@ -19,7 +19,7 @@ public struct User: Equatable {
     public let grade: Int
     public let `class`: Int
     public let number: Int
-    public let joinedMajorClub: Int
-    public let joinedEditorialClub: [Int]
-    public let joinedFreedomClub: Int
+    public let joinedMajorClub: Int?
+    public let joinedEditorialClub: [Int]?
+    public let joinedFreedomClub: Int?
 }
