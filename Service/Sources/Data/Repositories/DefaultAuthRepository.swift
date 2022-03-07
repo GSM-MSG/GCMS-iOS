@@ -17,7 +17,7 @@ final class DefaultAuthRepository: AuthRepository {
 
 private extension DefaultAuthRepository {
     func fetchDeviceToken() -> Single<String> {
-        return Single<String>.create { single in
+        return .create { single in
             Messaging.messaging().token { token, _ in
                 single(.success(token ?? ""))
             }
