@@ -8,6 +8,6 @@ public final class SearchUserUseCase {
     private let repository: UserRepository
     
     public func execute(query: String, isTest: Bool = false) -> Single<[User]> {
-        repository.searchUser(query: qulery, isTest: isTest)
+        repository.searchUser(query: query, isTest: isTest)
     }
 }
