@@ -23,7 +23,7 @@ let project = Project.dynamicFramework(
         .RxGesture,
         .PanModal
     ],
-    deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone, .ipad]),
+    deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
     dependencies: [
         .SPM.Then,
         .SPM.FCM,
