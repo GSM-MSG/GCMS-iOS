@@ -46,6 +46,8 @@ final class MainFlow: Flow{
             return presentToMemberAppend(closure: closure)
         case .dismiss:
             return dismiss()
+        case let .newClubIsRequired(category):
+            return navigateToNewClub(category: category)
         default:
             return .none
         }
@@ -71,7 +73,7 @@ private extension MainFlow{
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
     func navigateToAlarm() -> FlowContributors {
-        let vc = AppDelegate.container.resolve(NewClubVC.self)!
+        let vc = AppDelegate.container.resolve(AlarmVC.self)!
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
@@ -90,5 +92,11 @@ private extension MainFlow{
     func dismiss() -> FlowContributors {
         self.rootVC.visibleViewController?.dismiss(animated: true)
         return .none
+    }
+    func navigateToNewClub(category: ClubType) -> FlowContributors {
+        let reactor = NewClubReactor(category: category)
+        let vc = NewClubVC(reactor: reactor)
+        self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
 }
