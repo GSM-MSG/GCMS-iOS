@@ -26,6 +26,7 @@ extension GCMSAPI {
 }
 
 enum GCMSDomain: String {
+    case image
     case auth
     case user
     case club
