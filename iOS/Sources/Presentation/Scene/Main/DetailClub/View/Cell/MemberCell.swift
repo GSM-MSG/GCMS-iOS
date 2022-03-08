@@ -22,14 +22,22 @@ final class MemberCell: BaseCollectionViewCell<User> {
         addSubViews(profileImageView, nameLabel)
     }
     override func setLayoutSubviews() {
-        profileImageView.pin.size(self.bounds.width).top().hCenter()
+        profileImageView.snp.makeConstraints {
+            $0.size.equalTo(bounds.width)
+            $0.top.centerY.equalToSuperview()
+        }
         profileImageView.layer.cornerRadius = self.bounds.width/2
         profileImageView.clipsToBounds = true
-        nameLabel.pin.topCenter(to: profileImageView.anchor.bottomCenter).marginTop(5).sizeToFit()
+        nameLabel.snp.makeConstraints {
+            $0.top.equalTo(profileImageView.snp.bottom).offset(5)
+            $0.centerX.equalToSuperview()
+        }
+        
     }
     
+    
     override func bind(_ model: User) {
-        profileImageView.kf.setImage(with: URL(string: model.profileImage) ?? .none,
+        profileImageView.kf.setImage(with: URL(string: model.picture) ?? .none,
                                      placeholder: UIImage(),
                                      options: [])
         nameLabel.text = model.name
