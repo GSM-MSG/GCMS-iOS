@@ -6,7 +6,7 @@ public struct User: Equatable {
         self.picture = picture
         self.name = name
         self.grade = grade
-        self.class = class
+        self.class = `class`
         self.number = number
         self.joinedMajorClub = joinedMajorClub
         self.joinedEditorialClub = joinedEditorialClub
