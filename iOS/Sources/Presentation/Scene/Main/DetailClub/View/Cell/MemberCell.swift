@@ -5,7 +5,10 @@ import Kingfisher
 
 final class MemberCell: BaseCollectionViewCell<User> {
     // MARK: - Properties
-    private let profileImageView = UIImageView()
+    private let profileImageView = UIImageView().then {
+        $0.layer.cornerRadius = 30.5
+        $0.clipsToBounds = true
+    }
     private let nameLabel = UILabel().then {
         $0.textColor = GCMSAsset.Colors.gcmsGray1.color
         $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 12)
@@ -21,20 +24,17 @@ final class MemberCell: BaseCollectionViewCell<User> {
     override func addView() {
         addSubViews(profileImageView, nameLabel)
     }
-    override func setLayoutSubviews() {
+    override func setLayout() {
         profileImageView.snp.makeConstraints {
-            $0.size.equalTo(bounds.width)
-            $0.top.centerY.equalToSuperview()
+            $0.size.equalTo(61)
+            $0.top.centerX.equalToSuperview()
         }
-        profileImageView.layer.cornerRadius = self.bounds.width/2
-        profileImageView.clipsToBounds = true
         nameLabel.snp.makeConstraints {
-            $0.top.equalTo(profileImageView.snp.bottom).offset(5)
+            $0.top.equalTo(profileImageView.snp.bottom)
             $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
-        
     }
-    
     
     override func bind(_ model: User) {
         profileImageView.kf.setImage(with: URL(string: model.picture) ?? .none,
