@@ -16,4 +16,10 @@ public struct ClubList {
         self.title = title
         self.type = type
     }
+    
+    enum CodingKeys: String, CodingKey {
+        case id, type
+        case bannerUrl = "picture"
+        case title = "name"
+    }
 }
