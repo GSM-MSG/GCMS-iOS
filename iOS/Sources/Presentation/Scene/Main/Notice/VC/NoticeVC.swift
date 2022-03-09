@@ -1,5 +1,6 @@
 import UIKit
 import SnapKit
+import RxSwift
 
 final class NoticeVC: BaseVC<NoticeReactor> {
     // MARK: - Properties
@@ -28,5 +29,17 @@ final class NoticeVC: BaseVC<NoticeReactor> {
     }
     override func configureNavigation() {
         self.navigationItem.configTitle(title: "공지")
+    }
+    
+    // MARK: - Reator
+    override func bindState(reactor: NoticeReactor) {
+        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        
+        sharedState
+            .map(\.isLoading)
+            .bind(with: self) { owner, load in
+                load ? owner.startIndicator() : owner.stopIndicator()
+            }
+            .disposed(by: disposeBag)
     }
 }

@@ -11,19 +11,21 @@ final class NoticeReactor: Reactor, Stepper {
     
     // MARK: - Reactor
     enum Action {
-        
+        case updateLoading(Bool)
     }
     enum Mutation {
-        
+        case setIsLoading(Bool)
     }
     struct State {
-        
+        var isLoading: Bool
     }
     let initialState: State
     
     // MARK: - Init
     init() {
-        initialState = State()
+        initialState = State(
+            isLoading: false
+        )
     }
     
 }
@@ -32,7 +34,8 @@ final class NoticeReactor: Reactor, Stepper {
 extension NoticeReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-            
+        case let .updateLoading(load):
+            return .just(.setIsLoading(load))
         }
         return .empty()
     }
@@ -44,7 +47,8 @@ extension NoticeReactor {
         var newState = state
         
         switch mutation {
-            
+        case let .setIsLoading(load):
+            newState.isLoading = load
         }
         
         return newState
