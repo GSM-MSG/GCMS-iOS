@@ -4,7 +4,10 @@ import Kingfisher
 
 final class MemberCell: BaseCollectionViewCell<User> {
     // MARK: - Properties
-    private let profileImageView = UIImageView()
+    private let profileImageView = UIImageView().then {
+        $0.layer.cornerRadius = 30.5
+        $0.clipsToBounds = true
+    }
     private let nameLabel = UILabel().then {
         $0.textColor = GCMSAsset.Colors.gcmsGray1.color
         $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 12)
@@ -33,7 +36,7 @@ final class MemberCell: BaseCollectionViewCell<User> {
     }
     
     override func bind(_ model: User) {
-        profileImageView.kf.setImage(with: URL(string: model.profileImage) ?? .none,
+        profileImageView.kf.setImage(with: URL(string: model.picture) ?? .none,
                                      placeholder: UIImage(),
                                      options: [])
         nameLabel.text = model.name

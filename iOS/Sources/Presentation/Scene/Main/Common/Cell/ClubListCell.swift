@@ -14,7 +14,7 @@ final class ClubListCell: BaseCollectionViewCell<ClubList> {
     override func addView() {
         addSubViews(clubView)
     }
-    override func setLayoutSubviews() {
+    override func setLayout() {
         clubView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
         }

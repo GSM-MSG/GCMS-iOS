@@ -29,14 +29,14 @@ extension ClubAPI: GCMSAPI {
         switch self {
         case let .newClub(req):
             return .requestParameters(parameters: [
-                "photo": req.photo,
+                "photo": req.picture,
                 "type": req.type.rawValue,
                 "name": req.name,
                 "description": req.description,
                 "teacher": req.teacher,
                 "head": req.head,
                 "discord": req.discord,
-                "clubPhoto": req.clubPhoto,
+                "clubPhoto": req.clubPicture,
                 "clubMember": req.clubMember
             ], encoding: JSONEncoding.default)
         case .manageList:
