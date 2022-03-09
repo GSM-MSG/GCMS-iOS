@@ -284,7 +284,7 @@ final class NewClubVC: BaseVC<NewClubReactor> {
         
     }
     override func bindState(reactor: NewClubReactor) {
-        let sharedState = reactor.state.share(replay: 3).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 4).observe(on: MainScheduler.asyncInstance)
         
         let activityDS = RxCollectionViewSectionedReloadDataSource<ClubActivitySection>{ _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip, cellType: ClubActivityCell.self) as ClubActivityCell
@@ -319,6 +319,13 @@ final class NewClubVC: BaseVC<NewClubReactor> {
                 self?.memberCountLabel.text = "\(item.count)명"
             }).map { [MemberSection.init(header: "", items: $0)] }
             .bind(to: memberCollectionView.rx.items(dataSource: memberDS))
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.isLoading)
+            .bind(with: self) { owner, load in
+                load ? owner.startIndicator() : owner.stopIndicator()
+            }
             .disposed(by: disposeBag)
     }
 }
