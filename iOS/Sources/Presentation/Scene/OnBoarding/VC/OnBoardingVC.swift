@@ -3,6 +3,7 @@ import GoogleSignIn
 import Then
 import SnapKit
 import RxCocoa
+import AuthenticationServices
 
 final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     // MARK: - Properties
@@ -20,7 +21,21 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     private let logoImageView = UIImageView().then {
         $0.image = GCMSAsset.Images.gcmsWhaleLogo.image.withRenderingMode(.alwaysOriginal)
     }
-    private let googleSigninButton = GoogleSigninButton(title: "Sign in with Google")
+    private let googleSigninButton = UIButton().then {
+        $0.setTitle("Sign in with Google", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.setImage(GCMSAsset.Images.gcmsGoogleLogo.image.downSample(size: .init(width: 6, height: 6)), for: .normal)
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 18)
+        $0.layer.cornerRadius = 9
+        $0.backgroundColor = GCMSAsset.Colors.gcmsOnBoardingMainColor.color
+        if #available(iOS 15.0, *){
+            $0.configuration = .plain()
+            $0.configuration?.imagePadding = 10
+        } else {
+            $0.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 10)
+        }
+    }
+    private let appleSigninButton = ASAuthorizationAppleIDButton(authorizationButtonType: .signIn, authorizationButtonStyle: .white)
     
     // MARK: - UI
     override func addView() {
@@ -41,10 +56,16 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             $0.width.equalTo(234)
             $0.height.equalTo(266)
         }
+        appleSigninButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(51)
+            $0.bottom.equalToSuperview().offset(-bound.height*0.1)
+            $0.leading.trailing.equalToSuperview().inset(15)
+        }
         googleSigninButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.height.equalTo(56)
-            $0.bottom.equalToSuperview().inset(bound.height*0.1)
+            $0.height.equalTo(51)
+            $0.bottom.equalTo(appleSigninButton.snp.top).offset(-30)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
     }
