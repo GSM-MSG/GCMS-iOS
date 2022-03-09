@@ -3,6 +3,7 @@ import Moya
 enum ClubAPI {
     case newClub(req: NewClubRequest)
     case managementList
+    case clubList(type: ClubType)
 }
 
 extension ClubAPI: GCMSAPI {
@@ -15,13 +16,15 @@ extension ClubAPI: GCMSAPI {
             return "/write"
         case .managementList:
             return "/list/manage"
+        case .clubList:
+            return "/list"
         }
     }
     var method: Method {
         switch self {
         case .newClub:
             return .post
-        case .managementList:
+        case .managementList, .clubList:
             return .get
         }
     }
@@ -29,6 +32,10 @@ extension ClubAPI: GCMSAPI {
         switch self {
         case let .newClub(req):
             return .requestJSONEncodable(req)
+        case let .clubList(type):
+            return .requestParameters(parameters: [
+                "type": type.rawValue
+            ], encoding: URLEncoding.queryString)
         default:
             return .requestPlain
         }
