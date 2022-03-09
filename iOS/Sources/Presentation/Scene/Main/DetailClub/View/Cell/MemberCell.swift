@@ -1,6 +1,5 @@
 import UIKit
 import Service
-import PinLayout
 import Kingfisher
 
 final class MemberCell: BaseCollectionViewCell<User> {

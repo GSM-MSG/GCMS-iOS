@@ -1,7 +1,6 @@
 import UIKit
 import BTImageView
 import Reusable
-import PinLayout
 import RxSwift
 import RxDataSources
 

@@ -1,6 +1,5 @@
 import UIKit
 import SnapKit
-import PinLayout
 import RxSwift
 import RxCocoa
 import RxDataSources
