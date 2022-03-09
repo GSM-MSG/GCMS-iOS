@@ -13,19 +13,23 @@ final class AlarmReactor: Reactor, Stepper {
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
+        case updateLoading(Bool)
     }
     enum Mutation {
         case setAlarmList([Alarm])
+        case setIsLoading(Bool)
     }
     struct State {
         var alarmList: [Alarm]
+        var isLoading: Bool
     }
     let initialState: State
     
     // MARK: - Init
     init() {
         initialState = State(
-            alarmList: []
+            alarmList: [],
+            isLoading: false
         )
     }
     
@@ -37,6 +41,8 @@ extension AlarmReactor {
         switch action {
         case .viewDidLoad:
             return viewDidLoad()
+        case let .updateLoading(load):
+            return .just(.setIsLoading(load))
         }
         return .empty()
     }
@@ -50,6 +56,8 @@ extension AlarmReactor {
         switch mutation {
         case let .setAlarmList(list):
             newState.alarmList = list
+        case let .setIsLoading(load):
+            newState.isLoading = load
         }
         
         return newState

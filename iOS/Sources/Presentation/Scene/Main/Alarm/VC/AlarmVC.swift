@@ -38,7 +38,7 @@ final class AlarmVC: BaseVC<AlarmReactor> {
             .disposed(by: disposeBag)
     }
     override func bindState(reactor: AlarmReactor) {
-        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 2).observe(on: MainScheduler.asyncInstance)
         
         let ds = RxTableViewSectionedReloadDataSource<AlarmSection> { _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip) as AlarmCell
@@ -51,5 +51,11 @@ final class AlarmVC: BaseVC<AlarmReactor> {
             .bind(to: alarmTableView.rx.items(dataSource: ds))
             .disposed(by: disposeBag)
             
+        sharedState
+            .map(\.isLoading)
+            .bind(with: self) { owner, load in
+                load ? owner.startIndicator() : owner.stopIndicator()
+            }
+            .disposed(by: disposeBag)
     }
 }
