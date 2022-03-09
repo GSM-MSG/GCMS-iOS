@@ -13,12 +13,15 @@ final class DetailClubReactor: Reactor, Stepper {
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
+        case updateLoading(Bool)
     }
     enum Mutation {
         case setClub(DetailClub)
+        case setIsLoading(Bool)
     }
     struct State {
         var clubDetail: DetailClub?
+        var isLoading: Bool
     }
     private let id: Int
     let initialState: State
@@ -28,7 +31,9 @@ final class DetailClubReactor: Reactor, Stepper {
         id: Int
     ) {
         self.id = id
-        initialState = State()
+        initialState = State(
+            isLoading: false
+        )
     }
     
 }
@@ -39,6 +44,8 @@ extension DetailClubReactor {
         switch action {
         case .viewDidLoad:
             return viewDidLoad()
+        case let .updateLoading(load):
+            return .just(.setIsLoading(load))
         }
         return .empty()
     }
@@ -52,6 +59,8 @@ extension DetailClubReactor {
         switch mutation {
         case let .setClub(club):
             newState.clubDetail = club
+        case let .setIsLoading(load):
+            newState.isLoading = load
         }
         
         return newState
