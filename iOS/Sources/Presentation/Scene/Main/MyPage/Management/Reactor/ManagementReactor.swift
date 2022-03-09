@@ -22,14 +22,17 @@ final class ManagementReactor: Reactor, Stepper{
     enum Action{
         case viewDidLoad
         case newClubButtonDidTap
+        case updateLoading(Bool)
     }
     enum Mutation{
         case setClubList([ClubList])
+        case setIsLoading(Bool)
     }
     struct State{
         var majorList: [ClubListSection]
         var editorialList: [ClubListSection]
         var freedomList : [ClubListSection]
+        var isLoading: Bool
     }
     
     var initialState: State
@@ -39,7 +42,8 @@ final class ManagementReactor: Reactor, Stepper{
         initialState = State(
             majorList: [],
             editorialList: [],
-            freedomList: []
+            freedomList: [],
+            isLoading: false
         )
     }
     
@@ -53,6 +57,8 @@ extension ManagementReactor{
             return viewDidLoad()
         case .newClubButtonDidTap:
             return newClubManageButtonDidTap()
+        case let .updateLoading(load):
+            return .just(.setIsLoading(load))
         default:
             return .empty()
         }
@@ -71,6 +77,8 @@ extension ManagementReactor{
             newState.editorialList = [ClubListSection.init(header: "editorial", items: editorialList)]
             let freedomList = lists.filter { $0.type == .freedom }
             newState.freedomList = [ClubListSection.init(header: "Freedom", items: freedomList)]
+        case let .setIsLoading(load):
+            newState.isLoading = load
         }
         return newState
     }
