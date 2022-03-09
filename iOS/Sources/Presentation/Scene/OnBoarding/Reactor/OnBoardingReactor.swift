@@ -18,14 +18,21 @@ final class OnBoardingReactor: Reactor, Stepper {
         case googleSigninButtonDidTap(UIViewController)
         case googleSigninTokenReceived(String)
         case appleSigninButtonDidTap
+        case updateLoading(Bool)
     }
-    enum Mutation {}
-    struct State {}
+    enum Mutation {
+        case setIsLoading(Bool)
+    }
+    struct State {
+        var isLoading: Bool
+    }
     let initialState: State
     
     // MARK: - Init
     init() {
-        initialState = State()
+        initialState = State(
+            isLoading: false
+        )
     }
     
 }
@@ -42,7 +49,22 @@ extension OnBoardingReactor {
             return googleSigninTokenReceived(token: token)
         case .appleSigninButtonDidTap:
             return appleSigninDidComplete()
+        case let .updateLoading(load):
+            return .just(.setIsLoading(load))
         }
+    }
+}
+
+// MARK: - Reduce
+extension OnBoardingReactor {
+    func reduce(state: State, mutation: Mutation) -> State {
+        var newState = state
+        
+        switch mutation {
+        case let .setIsLoading(load):
+            newState.isLoading = load
+        }
+        return newState
     }
 }
 

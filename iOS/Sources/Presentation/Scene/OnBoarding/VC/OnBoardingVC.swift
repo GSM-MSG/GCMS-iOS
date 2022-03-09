@@ -5,6 +5,7 @@ import SnapKit
 import RxCocoa
 import AuthenticationServices
 import Service
+import RxSwift
 
 final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     // MARK: - Properties
@@ -94,6 +95,16 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
                 UserDefaultsLocal.shared.name = auth.fullName?.nickname ?? ""
                 owner.reactor?.action.onNext(.appleSigninButtonDidTap)
             })
+            .disposed(by: disposeBag)
+    }
+    override func bindState(reactor: OnBoardingReactor) {
+        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        
+        sharedState
+            .map(\.isLoading)
+            .bind(with: self) { owner, load in
+                load ? owner.startIndicator() : owner.stopIndicator()
+            }
             .disposed(by: disposeBag)
     }
 }
