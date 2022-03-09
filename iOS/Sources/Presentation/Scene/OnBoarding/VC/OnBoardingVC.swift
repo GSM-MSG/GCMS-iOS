@@ -4,6 +4,7 @@ import Then
 import SnapKit
 import RxCocoa
 import AuthenticationServices
+import Service
 
 final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     // MARK: - Properties
@@ -26,7 +27,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         $0.setTitleColor(.white, for: .normal)
         $0.setImage(GCMSAsset.Images.gcmsGoogleLogo.image.downSample(size: .init(width: 6, height: 6)), for: .normal)
         $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 18)
-        $0.layer.cornerRadius = 9
+        $0.layer.cornerRadius = 5
         $0.backgroundColor = GCMSAsset.Colors.gcmsOnBoardingMainColor.color
         if #available(iOS 15.0, *){
             $0.configuration = .plain()
@@ -39,7 +40,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     
     // MARK: - UI
     override func addView() {
-        view.addSubViews(headerLabel, nameLabel, logoImageView, googleSigninButton)
+        view.addSubViews(headerLabel, nameLabel, logoImageView, googleSigninButton, appleSigninButton)
     }
     override func setLayout() {
         headerLabel.snp.makeConstraints {
@@ -82,6 +83,17 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             .withUnretained(self)
             .map { Reactor.Action.googleSigninButtonDidTap($0.0) }
             .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        appleSigninButton.rx
+            .loginDidTap(scope: [.fullName])
+            .withUnretained(self)
+            .subscribe(onNext: { owner, res in
+                guard let auth = res.credential as? ASAuthorizationAppleIDCredential else { return }
+                UserDefaultsLocal.shared.isApple = true
+                UserDefaultsLocal.shared.name = auth.fullName?.nickname ?? ""
+                owner.reactor?.action.onNext(.appleSigninButtonDidTap)
+            })
             .disposed(by: disposeBag)
     }
 }

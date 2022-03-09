@@ -8,7 +8,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private let disposeBag: DisposeBag = .init()
     private let coordinator: FlowCoordinator = .init()
     
-    let appFlow = AppFlow(with: window)
     let appStepper = AppStepper()
 
     func scene(
@@ -25,6 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private func coordinateToAppFlow(with scene: UIWindowScene){
         let window = UIWindow(windowScene: scene)
         self.window = window
+        let appFlow = AppFlow(with: window)
         
         coordinator.coordinate(flow: appFlow, with: appStepper)
         window.makeKeyAndVisible()

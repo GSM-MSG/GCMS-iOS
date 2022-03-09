@@ -4,6 +4,7 @@ import RxSwift
 import RxRelay
 import GoogleSignIn
 import FirebaseCore
+import AuthenticationServices
 
 final class OnBoardingReactor: Reactor, Stepper {
     // MARK: - Properties
@@ -39,7 +40,7 @@ extension OnBoardingReactor {
         case let .googleSigninTokenReceived(token):
             return googleSigninTokenReceived(token: token)
         case .appleSigninButtonDidTap:
-            return appleSigninButtonDidTap()
+            return appleSigninDidComplete()
         }
     }
 }
@@ -65,7 +66,8 @@ private extension OnBoardingReactor {
         steps.accept(GCMSStep.clubListIsRequired)
         return .empty()
     }
-    func appleSigninButtonDidTap() -> Observable<Mutation> {
+    func appleSigninDidComplete() -> Observable<Mutation> {
+        steps.accept(GCMSStep.clubListIsRequired)
         return .empty()
     }
 }
