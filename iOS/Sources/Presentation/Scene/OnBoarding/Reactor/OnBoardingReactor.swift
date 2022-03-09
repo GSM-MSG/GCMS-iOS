@@ -5,6 +5,7 @@ import RxRelay
 import GoogleSignIn
 import FirebaseCore
 import AuthenticationServices
+import Service
 
 final class OnBoardingReactor: Reactor, Stepper {
     // MARK: - Properties
@@ -57,6 +58,8 @@ private extension OnBoardingReactor {
             }
             
             user?.authentication.do({ auth in
+                UserDefaultsLocal.shared.isApple = false
+                UserDefaultsLocal.shared.name = ""
                 self?.action.onNext(.googleSigninTokenReceived(auth.idToken ?? ""))
             })
         }
