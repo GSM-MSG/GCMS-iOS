@@ -4,6 +4,9 @@ enum UserAPI {
     case userInfo
     case editPicture(url: String)
     case search(String)
+    case notice
+    case accept(clubId: Int)
+    case reject(clubId: Int)
 }
 
 extension UserAPI: GCMSAPI {
@@ -18,35 +21,41 @@ extension UserAPI: GCMSAPI {
             return "/edit/picture"
         case .search:
             return "/search"
+        case .notice:
+            return "/notice"
+        case let .accept(clubId):
+            return "/invite/accept/\(clubId)"
+        case let .reject(clubId):
+            return "/invite/reject/\(clubId)"
         }
     }
     var method: Method {
         switch self {
-        case .userInfo:
+        case .userInfo, .search, .notice:
             return .get
-        case .editPicture:
+        case .editPicture, .accept:
             return .put
-        case .search:
-            return .get
+        case .reject:
+            return .delete
         }
     }
     var task: Task {
         switch self {
-        case .userInfo:
-            return .requestPlain
         case let .editPicture(url):
             return .requestParameters(parameters: [
-                "photo_url": url
+                "pictureUrll": url
             ], encoding: JSONEncoding.default)
         case let .search(q):
             return .requestParameters(parameters: [
                 "q": q
             ], encoding: URLEncoding.queryString)
+        default:
+            return .requestPlain
         }
     }
     var jwtTokenType: JWTTokenType? {
         switch self {
-        case .userInfo, .editPicture, .search:
+        case .userInfo, .editPicture, .search, .notice, .accept, .reject:
             return .accessToken
         default:
             return JWTTokenType.none

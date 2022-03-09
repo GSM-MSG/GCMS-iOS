@@ -5,7 +5,10 @@ import Kingfisher
 
 final class MemberCell: BaseCollectionViewCell<User> {
     // MARK: - Properties
-    private let profileImageView = UIImageView()
+    private let profileImageView = UIImageView().then {
+        $0.layer.cornerRadius = 30.5
+        $0.clipsToBounds = true
+    }
     private let nameLabel = UILabel().then {
         $0.textColor = GCMSAsset.Colors.gcmsGray1.color
         $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 12)
@@ -21,15 +24,20 @@ final class MemberCell: BaseCollectionViewCell<User> {
     override func addView() {
         addSubViews(profileImageView, nameLabel)
     }
-    override func setLayoutSubviews() {
-        profileImageView.pin.size(self.bounds.width).top().hCenter()
-        profileImageView.layer.cornerRadius = self.bounds.width/2
-        profileImageView.clipsToBounds = true
-        nameLabel.pin.topCenter(to: profileImageView.anchor.bottomCenter).marginTop(5).sizeToFit()
+    override func setLayout() {
+        profileImageView.snp.makeConstraints {
+            $0.size.equalTo(61)
+            $0.top.centerX.equalToSuperview()
+        }
+        nameLabel.snp.makeConstraints {
+            $0.top.equalTo(profileImageView.snp.bottom)
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
     }
     
     override func bind(_ model: User) {
-        profileImageView.kf.setImage(with: URL(string: model.profileImage) ?? .none,
+        profileImageView.kf.setImage(with: URL(string: model.picture) ?? .none,
                                      placeholder: UIImage(),
                                      options: [])
         nameLabel.text = model.name
