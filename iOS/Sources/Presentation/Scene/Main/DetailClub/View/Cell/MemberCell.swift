@@ -21,11 +21,16 @@ final class MemberCell: BaseCollectionViewCell<User> {
     override func addView() {
         addSubViews(profileImageView, nameLabel)
     }
-    override func setLayoutSubviews() {
-        profileImageView.pin.size(self.bounds.width).top().hCenter()
-        profileImageView.layer.cornerRadius = self.bounds.width/2
-        profileImageView.clipsToBounds = true
-        nameLabel.pin.topCenter(to: profileImageView.anchor.bottomCenter).marginTop(5).sizeToFit()
+    override func setLayout() {
+        profileImageView.snp.makeConstraints {
+            $0.size.equalTo(61)
+            $0.top.centerX.equalToSuperview()
+        }
+        nameLabel.snp.makeConstraints {
+            $0.top.equalTo(profileImageView.snp.bottom)
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
     }
     
     override func bind(_ model: User) {

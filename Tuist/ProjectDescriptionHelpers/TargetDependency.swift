@@ -18,11 +18,11 @@ public extension TargetDependency.SPM{
     static let GoogleSignIn = TargetDependency.package(product: "GoogleSignIn")
     static let Kingfisher = TargetDependency.package(product: "Kingfisher")
     static let RxDataSources = TargetDependency.package(product: "RxDataSources")
-    static let PinLayout = TargetDependency.package(product: "PinLayout")
     static let Reusable = TargetDependency.package(product: "Reusable")
     static let BTImageView = TargetDependency.package(product: "BTImageView")
     static let RxGesture = TargetDependency.package(product: "RxGesture")
     static let PanModal = TargetDependency.package(product: "PanModal")
+    static let Lottie = TargetDependency.package(product: "Lottie")
 }
 
 public extension Package {
@@ -74,10 +74,6 @@ public extension Package {
         url: "https://github.com/RxSwiftCommunity/RxDataSources.git",
         requirement: .upToNextMajor(from: "5.0.0")
     )
-    static let PinLayout = Package.remote(
-        url: "https://github.com/layoutBox/PinLayout.git",
-        requirement: .upToNextMajor(from: "1.10.0")
-    )
     static let Reusable = Package.remote(
         url: "https://github.com/AliSoftware/Reusable.git",
         requirement: .upToNextMajor(from: "4.1.0")
@@ -93,5 +89,9 @@ public extension Package {
     static let PanModal = Package.remote(
         url: "https://github.com/slackhq/PanModal.git",
         requirement: .upToNextMajor(from: "1.2.6")
+    )
+    static let Lottie = Package.remote(
+        url: "https://github.com/airbnb/lottie-ios.git",
+        requirement: .upToNextMajor(from: "3.2.1")
     )
 }

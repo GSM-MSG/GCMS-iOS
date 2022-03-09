@@ -1,4 +1,6 @@
 import UIKit
+import SnapKit
+
 extension UITextField {
     func setPlaceholderColor(_ placeholderColor: UIColor) {
         attributedPlaceholder = NSAttributedString(
@@ -10,14 +12,12 @@ extension UITextField {
         )
     }
     func leftSpace(_ space: CGFloat) {
-        let spacer = UIView()
-        spacer.pin.width(space).height(of: self)
+        let spacer = UIView(frame: .init(x: 0, y: 0, width: space, height: self.frame.height))
         leftView = spacer
         leftViewMode = .always
     }
     func rightSpace(_ space: CGFloat) {
-        let spacer = UIView()
-        spacer.pin.width(space).height(of: self)
+        let spacer = UIView(frame: .init(x: 0, y: 0, width: space, height: self.frame.height))
         rightView = spacer
         rightViewMode = .always
     }

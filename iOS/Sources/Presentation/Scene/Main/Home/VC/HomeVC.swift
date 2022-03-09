@@ -33,8 +33,16 @@ final class HomeVC: BaseVC<HomeReactor> {
         view.addSubViews(clubTypeSegmentedControl, clubListCollectionView)
     }
     override func setLayoutSubviews() {
-        clubTypeSegmentedControl.pin.top(view.pin.safeArea).pinEdges().horizontally(24%).height(33)
-        clubListCollectionView.pin.top(view.pin.safeArea.top + 33).horizontally(10).bottom(view.pin.safeArea)
+        clubTypeSegmentedControl.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.height.equalTo(33)
+            $0.leading.trailing.equalToSuperview().inset(bound.width*0.24)
+        }
+        clubListCollectionView.snp.makeConstraints {
+            $0.top.equalTo(clubTypeSegmentedControl.snp.bottom)
+            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
     }
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color

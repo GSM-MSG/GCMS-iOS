@@ -1,6 +1,5 @@
 import UIKit
 import Service
-import PinLayout
 
 final class ClubListCell: BaseCollectionViewCell<ClubList> {
     // MARK: - Properties
@@ -16,7 +15,9 @@ final class ClubListCell: BaseCollectionViewCell<ClubList> {
         addSubViews(clubView)
     }
     override func setLayoutSubviews() {
-        clubView.pin.all()
+        clubView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalToSuperview()
+        }
     }
     override func bind(_ model: ClubList) {
         clubView.setImage(url: model.bannerUrl)

@@ -37,7 +37,7 @@ final class NewClubVC: BaseVC<NewClubReactor> {
         $0.backgroundColor = .clear
         $0.text = "동아리 소개를 입력해주세요."
         $0.textColor = GCMSAsset.Colors.gcmsGray4.color
-        $0.textContainerInset = .init(top: 10, left: 10, bottom: 10, right: 10)
+        $0.textContainerInset = .init(top: 10, left: 5, bottom: 10, right: 5)
         $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 13)
     }
     private let clubActivitiesLabel = HeaderLabel(title: "동아리 활동")
