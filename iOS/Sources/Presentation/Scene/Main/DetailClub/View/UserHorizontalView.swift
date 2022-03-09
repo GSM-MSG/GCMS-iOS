@@ -29,7 +29,7 @@ final class UserHorizontalView: UIView {
     }
     
     public func bind(user: User) {
-        profileImageView.kf.setImage(with: URL(string: user.profileImage) ?? .none,
+        profileImageView.kf.setImage(with: URL(string: user.picture) ?? .none,
                                      placeholder: UIImage(),
                                      options: [])
         nameLabel.text = user.name
@@ -43,9 +43,15 @@ private extension UserHorizontalView {
         addSubViews(profileImageView, nameLabel)
     }
     func setLayoutSubviews() {
-        profileImageView.pin.size(self.bounds.height).vCenter().left()
+        profileImageView.snp.makeConstraints {
+            $0.size.equalTo(bounds.height)
+            $0.centerY.leading.equalToSuperview()
+        }
+        nameLabel.snp.makeConstraints {
+            $0.leading.equalTo(profileImageView.snp.trailing).offset(10)
+            $0.centerY.equalToSuperview()
+        }
         profileImageView.layer.cornerRadius = self.bounds.height/2
         profileImageView.clipsToBounds = true
-        nameLabel.pin.centerLeft(to: profileImageView.anchor.centerRight).marginLeft(10)
     }
 }
