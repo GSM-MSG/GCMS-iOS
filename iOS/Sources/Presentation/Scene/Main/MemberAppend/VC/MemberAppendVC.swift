@@ -76,7 +76,7 @@ final class MemberAppendVC: BaseVC<MemberAppendReactor> {
     
     // MARK: - Reactor
     override func bindState(reactor: MemberAppendReactor) {
-        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 3).observe(on: MainScheduler.asyncInstance)
         
         let studentDS = RxTableViewSectionedReloadDataSource<StudentSection> { _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip, cellType: StudentCell.self)
@@ -100,6 +100,13 @@ final class MemberAppendVC: BaseVC<MemberAppendReactor> {
             .map(\.addedUsers)
             .map { [AddedUserSection.init(items: $0)] }
             .bind(to: currentUserListCollectionView.rx.items(dataSource: memberDS))
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.isLoading)
+            .bind(with: self) { owner, load in
+                load ? owner.startIndicator() : owner.stopIndicator()
+            }
             .disposed(by: disposeBag)
     }
     override func bindView(reactor: MemberAppendReactor) {

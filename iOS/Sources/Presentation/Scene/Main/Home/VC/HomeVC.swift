@@ -62,7 +62,7 @@ final class HomeVC: BaseVC<HomeReactor> {
             .disposed(by: disposeBag)
     }
     override func bindState(reactor: HomeReactor) {
-        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 2).observe(on: MainScheduler.asyncInstance)
         
         let ds = RxCollectionViewSectionedReloadDataSource<ClubListSection>{ _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip) as ClubListCell
@@ -73,6 +73,13 @@ final class HomeVC: BaseVC<HomeReactor> {
         sharedState
             .map(\.clubList)
             .bind(to: clubListCollectionView.rx.items(dataSource: ds))
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.isLoading)
+            .bind(with: self) { owner, load in
+                load ? owner.startIndicator() : owner.stopIndicator()
+            }
             .disposed(by: disposeBag)
     }
     override func bindView(reactor: HomeReactor) {
