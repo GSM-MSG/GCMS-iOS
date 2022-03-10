@@ -16,4 +16,8 @@ final class ClubRemote: BaseRemote<ClubAPI> {
         return request(.clubList(type: type), isTest: isTest)
             .map(ClubListResponse.self)
     }
+    func fetchDetailClub(id: Int, isTest: Bool = false) -> Single<DetailClubResponse> {
+        return request(.detailClub(id), isTest: isTest)
+            .map(DetailClubResponse.self)
+    }
 }
