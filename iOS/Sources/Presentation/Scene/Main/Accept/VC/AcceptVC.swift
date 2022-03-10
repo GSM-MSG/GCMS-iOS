@@ -34,10 +34,17 @@ class AcceptVC : BaseVC<AcceptReactor> {
         $0.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
     
+    private let deadlineButton = UIButton().then {
+        $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
+        $0.titleLabel?.textAlignment = .center
+        $0.setTitle("마감하기", for: .normal)
+        $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
+    }
+    
     // MARK: - UI
     
     override func addView() {
-        view.addSubViews(bannerImageView, containerView)
+        view.addSubViews(bannerImageView, containerView, deadlineButton)
         containerView.addSubViews(descriptionHeaderLabel,acceptTableView)
     }
     
@@ -63,6 +70,10 @@ class AcceptVC : BaseVC<AcceptReactor> {
             $0.bottom.equalToSuperview()
         }
         
+        deadlineButton.snp.makeConstraints {
+            $0.bottom.leading.trailing.equalToSuperview()
+            $0.height.equalTo(50)
+        }
     }
     
     override func configureVC() {
