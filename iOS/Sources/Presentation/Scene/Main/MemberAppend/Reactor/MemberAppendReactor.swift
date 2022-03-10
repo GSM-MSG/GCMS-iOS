@@ -34,7 +34,7 @@ final class MemberAppendReactor: Reactor, Stepper {
     
     // MARK: - Init
     init(closure: @escaping (([User]) -> Void)) {
-        initialState = State(
+        initialState = State(   
             query: "",
             users: [],
             addedUsers: []

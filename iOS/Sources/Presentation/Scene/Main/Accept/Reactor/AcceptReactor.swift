@@ -2,6 +2,7 @@ import ReactorKit
 import RxFlow
 import RxSwift
 import RxRelay
+import Service
 
 final class AcceptReactor: Reactor, Stepper {
     // MARK: - Properties
@@ -11,13 +12,13 @@ final class AcceptReactor: Reactor, Stepper {
     
     // MARK: - Reactor
     enum Action {
-        
+        case viewDidLoad
     }
     enum Mutation {
-        
+        case setUser([User])
     }
     struct State {
-        
+        var acceptUser: [User]
     }
     private let id : Int
     let initialState: State
@@ -27,7 +28,7 @@ final class AcceptReactor: Reactor, Stepper {
         id: Int
     ) {
         self.id = id
-        initialState = State()
+        initialState = State(acceptUser: [])
     }
     
 }
@@ -37,6 +38,8 @@ extension AcceptReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
             
+        case .viewDidLoad:
+            return viewDidLoad()
         }
         return .empty()
     }
@@ -49,6 +52,8 @@ extension AcceptReactor {
         
         switch mutation {
             
+        case let .setUser(user):
+            newState.acceptUser = user
         }
         
         return newState
@@ -57,5 +62,13 @@ extension AcceptReactor {
 
 // MARK: - Method
 private extension AcceptReactor {
+    
+    func viewDidLoad() -> Observable<Mutation> {
+        return .just(.setUser([
+        .init(id: 0, profileImage: "https://avatars.githubusercontent.com/u/74440939?v=4", name: "변찬우", grade: 1, class: 3, number: 4),
+        .init(id: 1, profileImage: "https://avatars.githubusercontent.com/u/74440939?v=4", name: "변찬우", grade: 1, class: 3, number: 4),
+        .init(id: 2, profileImage: "https://avatars.githubusercontent.com/u/74440939?v=4", name: "변찬우", grade: 1, class: 3, number: 4)
+        ]))
+    }
     
 }

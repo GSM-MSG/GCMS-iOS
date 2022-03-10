@@ -110,7 +110,7 @@ private extension MainFlow{
         let reactor = AcceptReactor(id: id)
         let vc = AcceptVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
     
 }
