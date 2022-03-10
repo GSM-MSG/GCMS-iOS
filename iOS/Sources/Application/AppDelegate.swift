@@ -22,8 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         FirebaseApp.configure()
         setFCM(application)
-        AppDelegate.container.registerDependencies()
         AppDelegate.container.registerServiceDependencies()
+        AppDelegate.container.registerDependencies()
         
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.enableAutoToolbar = true
