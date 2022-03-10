@@ -37,6 +37,7 @@ class AcceptVC : BaseVC<AcceptReactor> {
     private let deadlineButton = UIButton().then {
         $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
         $0.titleLabel?.textAlignment = .center
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 18)
         $0.setTitle("마감하기", for: .normal)
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
     }
@@ -84,6 +85,7 @@ class AcceptVC : BaseVC<AcceptReactor> {
         self.navigationItem.configTitle(title: "맛소금")
         self.navigationItem.setRightBarButton(megaphoneButton, animated: true)
         bannerImageView.kf.setImage(with: URL(string: "https://images.unsplash.com/photo-1627483262092-9f73bdf005cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3000&q=80") ?? .none)
+        self.navigationItem.configBack()
     }
     
     // MARK: - Reactor
