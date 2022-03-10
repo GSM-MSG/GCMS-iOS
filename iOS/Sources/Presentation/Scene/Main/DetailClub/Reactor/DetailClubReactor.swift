@@ -63,20 +63,33 @@ private extension DetailClubReactor {
     func viewDidLoad() -> Observable<Mutation> {
         
         return .just(.setClub(
-            .init(id: 0,
-                  bannerUrl: "https://avatars.githubusercontent.com/u/74440939?v=4",
-                  name: "asdf",
-                  description: "대충설명대충설명대충설명\n대충설명대충설명\n대충설명대충설명대충설명대충설명대충설명",
-                  activities: [
-                    "https://avatars.githubusercontent.com/u/81291116?s=48&v=4",
-                    "https://avatars.githubusercontent.com/u/81291116?s=48&v=4"
-                  ], members: [
-                    .init(id: .init(), picture: "https://avatars.githubusercontent.com/u/81291116?s=48&v=4", name: "asdf", grade: 1, class: 2, number: 3)
-                  ],
-                  head: .init(id: .init(), picture: "https://avatars.githubusercontent.com/u/74440939?v=4", name: "bae", grade: 3, class: 2, number: 14),
-                  teacher: .init(id: .init(), picture: "https://avatars.githubusercontent.com/u/81291116?s=48&v=4", name: "asdf", grade: 2, class: 3, number: 11),
-                  contact: "baekteun#4235"
-                 )
+            .init(
+                id: 1,
+                bannerUrl: "https://avatars.githubusercontent.com/u/74440939?s=70&v=4",
+                name: "with권",
+                description: "대충설명대충설명대충설명대충설명\n대충설명\n\n대충설명대충설명",
+                activities: [
+                    "https://avatars.githubusercontent.com/u/95753750?s=200&v=4",
+                    "https://avatars.githubusercontent.com/u/82383294?s=70&v=4",
+                    "https://avatars.githubusercontent.com/u/82383983?s=70&v=4"
+                ],
+                members: [
+                    .init(
+                        id: 1,
+                        picture: "https://avatars.githubusercontent.com/u/82383983?s=70&v=4",
+                        name: "현빈리",
+                        grade: 2,
+                        class: 1,
+                        number: 14
+                    )
+                ],
+                head: "누구였지?",
+                teacher: "강권",
+                contact: "AAAA#1234",
+                isDeadline: false,
+                isHead: false,
+                isApplied: false
+            )
         ))
     }
 }

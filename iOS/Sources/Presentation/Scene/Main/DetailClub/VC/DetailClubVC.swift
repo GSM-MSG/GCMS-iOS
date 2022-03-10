@@ -66,7 +66,8 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
     }
     override func setLayout() {
         contentView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalToSuperview()
+            $0.top.equalToSuperview().offset(-20)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
         bannerImageView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
@@ -141,7 +142,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
     override func configureNavigation() {
-        self.navigationController?.navigationBar.setClear()
+//        self.navigationController?.navigationBar.setClear()
         bannerImageView.kf.setImage(with: URL(string: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4") ?? .none)
     }
     
@@ -166,12 +167,16 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                     owner.activityView.snp.updateConstraints {
                         $0.height.equalTo(0)
                     }
+                } else {
+                    owner.activityView.snp.updateConstraints {
+                        $0.height.equalTo(owner.bound.width-32)
+                    }
                 }
-                owner.headView.bind(user: item.head)
-                if let teacher = item.teacher {
+                owner.headView.setName(name: item.head)
+                if !item.teacher.isEmpty {
                     owner.teacherHeaderLabel.isHidden = false
                     owner.teacherView.isHidden = false
-                    owner.teacherView.bind(user: teacher)
+                    owner.teacherView.setName(name: item.teacher)
                 } else {
                     owner.teacherHeaderLabel.isHidden = true
                     owner.teacherView.isHidden = true

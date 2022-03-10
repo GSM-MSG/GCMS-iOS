@@ -4,6 +4,7 @@ enum ClubAPI {
     case newClub(req: NewClubRequest)
     case managementList
     case clubList(type: ClubType)
+    case detailClub(Int)
 }
 
 extension ClubAPI: GCMSAPI {
@@ -18,13 +19,15 @@ extension ClubAPI: GCMSAPI {
             return "/list/manage"
         case .clubList:
             return "/list"
+        case let .detailClub(id):
+            return "/detailPage/\(id)"
         }
     }
     var method: Method {
         switch self {
         case .newClub:
             return .post
-        case .managementList, .clubList:
+        case .managementList, .clubList, .detailClub:
             return .get
         }
     }
