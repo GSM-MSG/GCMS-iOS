@@ -83,15 +83,9 @@ final class AcceptCell : BaseTableViewCell<User> {
         }
         
     }
-//    override func setLayoutSubviews() {
-//        userImageView.pin.size(self.bounds.width).top().hCenter()
-//        userImageView.layer.cornerRadius = self.bounds.width/2
-//        userImageView.clipsToBounds = true
-//
-//    }
     
     override func bind(_ model: User) {
-        userImageView.kf.setImage(with: URL(string: model.profileImage) ?? .none,
+        userImageView.kf.setImage(with: URL(string: model.picture) ?? .none,
                                        placeholder: UIImage(),
                                        options: [])
         userName.text = model.name
