@@ -7,6 +7,10 @@ import Reusable
 import Service
 
 final class ManagementVC : BaseVC<ManagementReactor> {
+    // MARK: - Metric
+    enum Metric {
+        static let clubViewHegith = 205
+    }
     // MARK: - Properties
     private let scrollView = UIScrollView()
     private let contentView = UIView()
@@ -90,7 +94,7 @@ final class ManagementVC : BaseVC<ManagementReactor> {
         managementMajorCollectionView.snp.makeConstraints {
             $0.top.equalTo(majorLabel.snp.bottom).offset(10)
             $0.left.right.equalToSuperview().inset(10)
-            $0.height.equalTo(205)
+            $0.height.equalTo(Metric.clubViewHegith)
         }
         editorialLabel.snp.makeConstraints {
             $0.top.equalTo(managementMajorCollectionView.snp.bottom).offset(35)
@@ -99,7 +103,7 @@ final class ManagementVC : BaseVC<ManagementReactor> {
         managementEditorialCollectionView.snp.makeConstraints {
             $0.top.equalTo(editorialLabel.snp.bottom).offset(10)
             $0.left.right.equalToSuperview().inset(10)
-            $0.height.equalTo(205)
+            $0.height.equalTo(Metric.clubViewHegith)
         }
         freedomLabel.snp.makeConstraints {
             $0.top.equalTo(managementEditorialCollectionView.snp.bottom).offset(35)
@@ -108,7 +112,7 @@ final class ManagementVC : BaseVC<ManagementReactor> {
         managementFreedomCollectionView.snp.makeConstraints {
             $0.top.equalTo(freedomLabel.snp.bottom).offset(10)
             $0.left.right.equalToSuperview().inset(10)
-            $0.height.equalTo(205)
+            $0.height.equalTo(Metric.clubViewHegith)
             $0.bottom.equalToSuperview().offset(-10)
         }
     }
@@ -176,6 +180,24 @@ final class ManagementVC : BaseVC<ManagementReactor> {
     override func bindView(reactor: ManagementReactor) {
         clubAddButton.rx.tap
             .map { Reactor.Action.newClubButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        managementMajorCollectionView.rx.modelSelected(ClubList.self)
+            .map(\.id)
+            .map(Reactor.Action.clubDidTap)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        managementEditorialCollectionView.rx.modelSelected(ClubList.self)
+            .map(\.id)
+            .map(Reactor.Action.clubDidTap)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        managementFreedomCollectionView.rx.modelSelected(ClubList.self)
+            .map(\.id)
+            .map(Reactor.Action.clubDidTap)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }

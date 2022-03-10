@@ -22,6 +22,7 @@ final class ManagementReactor: Reactor, Stepper{
     enum Action{
         case viewDidLoad
         case newClubButtonDidTap
+        case clubDidTap(Int)
         case updateLoading(Bool)
     }
     enum Mutation{
@@ -57,11 +58,12 @@ extension ManagementReactor{
             return viewDidLoad()
         case .newClubButtonDidTap:
             return newClubManageButtonDidTap()
+        case let .clubDidTap(id):
+            steps.accept(GCMSStep.clubJoinerListIsRequired(id: id))
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
-        default:
-            return .empty()
         }
+        return .empty()
     }
 }
 
@@ -112,4 +114,5 @@ private extension ManagementReactor{
         ]))
         return .empty()
     }
+    
 }
