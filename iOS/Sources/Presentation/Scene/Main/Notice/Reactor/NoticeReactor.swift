@@ -20,9 +20,13 @@ final class NoticeReactor: Reactor, Stepper {
         
     }
     let initialState: State
+    private let id: Int
     
     // MARK: - Init
-    init() {
+    init(
+        id: Int
+    ) {
+        self.id = id
         initialState = State()
     }
     

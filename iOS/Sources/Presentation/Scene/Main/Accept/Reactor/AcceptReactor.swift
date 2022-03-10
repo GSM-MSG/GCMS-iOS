@@ -13,6 +13,7 @@ final class AcceptReactor: Reactor, Stepper {
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
+        case noticeButtonDidTap
     }
     enum Mutation {
         case setUser([User])
@@ -20,7 +21,7 @@ final class AcceptReactor: Reactor, Stepper {
     struct State {
         var acceptUser: [User]
     }
-    private let id : Int
+    private let id: Int
     let initialState: State
     
     // MARK: - Init
@@ -40,6 +41,8 @@ extension AcceptReactor {
             
         case .viewDidLoad:
             return viewDidLoad()
+        case .noticeButtonDidTap:
+            steps.accept(GCMSStep.notificationIsRequired(id: id))
         }
         return .empty()
     }
