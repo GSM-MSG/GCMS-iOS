@@ -20,7 +20,7 @@ final class AcceptCell : BaseTableViewCell<User> {
         $0.clipsToBounds = true
     }
     
-    private let userName = UILabel().then {
+    private let userNameLabel = UILabel().then {
         $0.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 13)
     }
     
@@ -42,7 +42,7 @@ final class AcceptCell : BaseTableViewCell<User> {
         $0.layer.cornerRadius = 4
         $0.layer.borderWidth = 1
         $0.setTitle("승인", for: .normal)
-        $0.backgroundColor = UIColor(red: 81/255, green: 105/255, blue: 232/255, alpha: 1)
+        $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
         $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 14)
     }
     
@@ -53,20 +53,20 @@ final class AcceptCell : BaseTableViewCell<User> {
     }
     
     override func addView() {
-        contentView.addSubViews(userImageView,userName,classLabel,refuseButton,approveButton)
+        contentView.addSubViews(userImageView,userNameLabel,classLabel,refuseButton,approveButton)
     }
     override func setLayout() {
         userImageView.snp.makeConstraints {
             $0.top.bottom.equalToSuperview().inset(10)
             $0.height.width.equalTo(40)
         }
-        userName.snp.makeConstraints {
+        userNameLabel.snp.makeConstraints {
             $0.top.equalToSuperview().inset(14)
             $0.leading.equalTo(userImageView.snp.trailing).offset(9)
         }
         
         classLabel.snp.makeConstraints {
-            $0.top.equalTo(userName.snp.bottom)
+            $0.top.equalTo(userNameLabel.snp.bottom)
             $0.leading.equalTo(userImageView.snp.trailing).offset(9)
         }
         approveButton.snp.makeConstraints {
@@ -88,7 +88,7 @@ final class AcceptCell : BaseTableViewCell<User> {
         userImageView.kf.setImage(with: URL(string: model.picture) ?? .none,
                                        placeholder: UIImage(),
                                        options: [])
-        userName.text = model.name
+        userNameLabel.text = model.name
         classLabel.text = "\(model.grade)학년 \(model.class)반 \(model.number)번"
     }
     
