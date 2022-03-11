@@ -1,6 +1,5 @@
 import UIKit
 import Service
-import PinLayout
 
 final class ClubListCell: BaseCollectionViewCell<ClubList> {
     // MARK: - Properties

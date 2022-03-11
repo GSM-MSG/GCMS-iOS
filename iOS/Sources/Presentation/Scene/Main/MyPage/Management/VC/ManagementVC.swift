@@ -1,6 +1,5 @@
 import UIKit
 import SnapKit
-import PinLayout
 import RxSwift
 import RxCocoa
 import RxDataSources
@@ -138,7 +137,7 @@ final class ManagementVC : BaseVC<ManagementReactor> {
     }
     
     override func bindState(reactor: ManagementReactor) {
-        let sharedState = reactor.state.share(replay: 3).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 4).observe(on: MainScheduler.asyncInstance)
 
         let manageDS = RxCollectionViewSectionedReloadDataSource<ClubListSection>{ _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip) as ClubListCell
@@ -169,6 +168,13 @@ final class ManagementVC : BaseVC<ManagementReactor> {
         sharedState
             .map(\.freedomList)
             .bind(to: managementFreedomCollectionView.rx.items(dataSource: freedomDS))
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.isLoading)
+            .bind(with: self) { owner, load in
+                load ? owner.startIndicator() : owner.stopIndicator()
+            }
             .disposed(by: disposeBag)
     }
     override func bindView(reactor: ManagementReactor) {

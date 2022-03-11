@@ -1,7 +1,6 @@
 import UIKit
 import BTImageView
 import Reusable
-import PinLayout
 import RxSwift
 import RxDataSources
 
@@ -154,7 +153,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             .disposed(by: disposeBag)
     }
     override func bindState(reactor: DetailClubReactor) {
-        let sharedState = reactor.state.share(replay: 2).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 3).observe(on: MainScheduler.asyncInstance)
         
         sharedState
             .map(\.clubDetail)
@@ -199,5 +198,11 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             .bind(to: memberCollectionView.rx.items(dataSource: ds))
             .disposed(by: disposeBag)
             
+        sharedState
+            .map(\.isLoading)
+            .bind(with: self) { owner, load in
+                load ? owner.startIndicator() : owner.stopIndicator()
+            }
+            .disposed(by: disposeBag)
     }
 }

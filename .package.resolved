@@ -146,6 +146,15 @@
         }
       },
       {
+        "package": "Lottie",
+        "repositoryURL": "https://github.com/airbnb/lottie-ios.git",
+        "state": {
+          "branch": null,
+          "revision": "4a6058cbbdfe4f74aeae92c8bd51ad3b0de2a1ee",
+          "version": "3.3.0"
+        }
+      },
+      {
         "package": "Moya",
         "repositoryURL": "https://github.com/Moya/Moya.git",
         "state": {
@@ -170,15 +179,6 @@
           "branch": null,
           "revision": "b012aecb6b67a8e46369227f893c12544846613f",
           "version": "1.2.7"
-        }
-      },
-      {
-        "package": "PinLayout",
-        "repositoryURL": "https://github.com/layoutBox/PinLayout.git",
-        "state": {
-          "branch": null,
-          "revision": "b44e3c8891a75fc711d85b86c03fed582d6c6ca5",
-          "version": "1.10.2"
         }
       },
       {

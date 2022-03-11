@@ -17,17 +17,20 @@ final class MemberAppendReactor: Reactor, Stepper {
         case removeAddedUser(Int)
         case completeButtonDidTap
         case cancelButtonDidTap
+        case updateLoading(Bool)
     }
     enum Mutation {
         case setQuery(String)
         case setUsers([User])
         case appendAddedUser(User)
         case removeAddedUser(Int)
+        case setIsLoading(Bool)
     }
     struct State {
         var query: String
         var users: [User]
         var addedUsers: [User]
+        var isLoading: Bool
     }
     private let closure: (([User]) -> Void)
     let initialState: State
@@ -37,7 +40,8 @@ final class MemberAppendReactor: Reactor, Stepper {
         initialState = State(   
             query: "",
             users: [],
-            addedUsers: []
+            addedUsers: [],
+            isLoading: false
         )
         self.closure = closure
     }
@@ -59,6 +63,8 @@ extension MemberAppendReactor {
             steps.accept(GCMSStep.dismiss)
         case .cancelButtonDidTap:
             steps.accept(GCMSStep.dismiss)
+        case let .updateLoading(load):
+            return .just(.setIsLoading(load))
         }
         return .empty()
     }
@@ -79,6 +85,8 @@ extension MemberAppendReactor {
             newState.addedUsers.removeDuplicates()
         case let .removeAddedUser(index):
             newState.addedUsers.remove(at: index)
+        case let .setIsLoading(load):
+            newState.isLoading = load
         }
         return newState
     }
