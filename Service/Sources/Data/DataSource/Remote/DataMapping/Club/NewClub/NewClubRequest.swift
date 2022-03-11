@@ -1,6 +1,6 @@
 import Foundation
 
-public struct NewClubRequest {
+public struct NewClubRequest: Encodable {
     public let picture: String
     public let type: ClubType
     public let name: String

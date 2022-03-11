@@ -14,23 +14,27 @@ final class MyPageReactor: Reactor, Stepper {
     enum Action {
         case viewDidLoad
         case clubManageButtonDidTap
+        case updateLoading(Bool)
     }
     enum Mutation {
         case setEditorialClubList([ClubList])
         case setMajorClub(ClubList)
         case setFreedomClub(ClubList)
+        case setIsLoading(Bool)
     }
     struct State {
         var editorialClubList: [ClubList]
         var majorClub: ClubList?
         var freedomClub: ClubList?
+        var isLoading: Bool
     }
     let initialState: State
     
     // MARK: - Init
     init() {
         initialState = State(
-            editorialClubList: []
+            editorialClubList: [],
+            isLoading: false
         )
     }
     
@@ -45,6 +49,8 @@ extension MyPageReactor {
         case .clubManageButtonDidTap:
             steps.accept(GCMSStep.clubManagementIsRequired)
 //            return clubManageButtonDidTap()
+        case let .updateLoading(load):
+            return .just(.setIsLoading(load))
         }
         return .empty()
     }
@@ -62,6 +68,8 @@ extension MyPageReactor {
             newState.majorClub = club
         case let .setFreedomClub(club):
             newState.freedomClub = club
+        case let .setIsLoading(load):
+            newState.isLoading = load
         }
         
         return newState

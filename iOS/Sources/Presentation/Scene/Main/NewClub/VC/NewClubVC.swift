@@ -37,7 +37,7 @@ final class NewClubVC: BaseVC<NewClubReactor> {
         $0.backgroundColor = .clear
         $0.text = "동아리 소개를 입력해주세요."
         $0.textColor = GCMSAsset.Colors.gcmsGray4.color
-        $0.textContainerInset = .init(top: 10, left: 10, bottom: 10, right: 10)
+        $0.textContainerInset = .init(top: 10, left: 5, bottom: 10, right: 5)
         $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 13)
     }
     private let clubActivitiesLabel = HeaderLabel(title: "동아리 활동")
@@ -284,7 +284,7 @@ final class NewClubVC: BaseVC<NewClubReactor> {
         
     }
     override func bindState(reactor: NewClubReactor) {
-        let sharedState = reactor.state.share(replay: 3).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 4).observe(on: MainScheduler.asyncInstance)
         
         let activityDS = RxCollectionViewSectionedReloadDataSource<ClubActivitySection>{ _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip, cellType: ClubActivityCell.self) as ClubActivityCell
@@ -319,6 +319,13 @@ final class NewClubVC: BaseVC<NewClubReactor> {
                 self?.memberCountLabel.text = "\(item.count)명"
             }).map { [MemberSection.init(header: "", items: $0)] }
             .bind(to: memberCollectionView.rx.items(dataSource: memberDS))
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.isLoading)
+            .bind(with: self) { owner, load in
+                load ? owner.startIndicator() : owner.stopIndicator()
+            }
             .disposed(by: disposeBag)
     }
 }

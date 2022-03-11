@@ -20,6 +20,7 @@ final class NewClubReactor: Reactor, Stepper {
         case memberAppendButtonDidTap
         case memberDidSelected([User])
         case memberRemove(Int)
+        case updateLoading(Bool)
     }
     enum Mutation {
         case setImageData(Data)
@@ -27,12 +28,14 @@ final class NewClubReactor: Reactor, Stepper {
         case removeImageData(Int)
         case appendMember([User])
         case memberRemove(Int)
+        case setIsLoading(Bool)
     }
     struct State {
         var isBanner: Bool
         var imageData: Data?
         var activitiesData: [Data]
         var members: [User]
+        var isLoading: Bool
     }
     let initialState: State
     private let category: ClubType
@@ -42,7 +45,8 @@ final class NewClubReactor: Reactor, Stepper {
         initialState = State(
             isBanner: false,
             activitiesData: [],
-            members: []
+            members: [],
+            isLoading: false
         )
         self.category = category
     }
@@ -69,6 +73,8 @@ extension NewClubReactor {
             return .just(.appendMember(users))
         case let .memberRemove(index):
             return .just(.memberRemove(index))
+        case let .updateLoading(load):
+            return .just(.setIsLoading(load))
         }
         return .empty()
     }
@@ -104,6 +110,8 @@ extension NewClubReactor {
             newState.members.removeDuplicates()
         case let .memberRemove(index):
             newState.members.remove(at: index)
+        case let .setIsLoading(load):
+            newState.isLoading = load
         }
         
         return newState

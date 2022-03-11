@@ -5,11 +5,11 @@ public final class UserDefaultsLocal {
         public static let isApple = "isapple"
         public static let name = ""
     }
-    static let shared = UserDefaultsLocal()
+    public static let shared = UserDefaultsLocal()
     private init() {}
     private let preferences = UserDefaults.standard
     
-    var isApple: Bool {
+    public var isApple: Bool {
         get {
             preferences.bool(forKey: forKeys.isApple)
         }
@@ -18,7 +18,7 @@ public final class UserDefaultsLocal {
         }
     }
     
-    var name: String {
+    public var name: String {
         get {
             preferences.string(forKey: forKeys.name) ?? ""
         }

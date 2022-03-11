@@ -3,13 +3,15 @@ import Swinject
 public extension Container {
     func registerServiceDependencies() {
         registerRepositories()
-        registerUseCase()
+        registerUseCases()
     }
-    
+
     private func registerRepositories() {
         
     }
-    private func registerUseCase() {
+
+    private func registerUseCases() {
         
     }
+
 }

@@ -1,5 +1,4 @@
 import UIKit
-import PinLayout
 import Service
 import Kingfisher
 
@@ -7,21 +6,19 @@ final class UserHorizontalView: UIView {
     // MARK: - Properties
     private let profileImageView = UIImageView().then {
         $0.backgroundColor = .gray
+        $0.layer.cornerRadius = 30.5
+        $0.clipsToBounds = true
     }
     private let nameLabel = UILabel().then {
         $0.textColor = GCMSAsset.Colors.gcmsGray1.color
         $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 12)
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        setLayoutSubviews()
-    }
-    
     // MARK: - UI
     init() {
         super.init(frame: .zero)
         addView()
+        setLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -35,6 +32,15 @@ final class UserHorizontalView: UIView {
         nameLabel.text = user.name
         nameLabel.sizeToFit()
     }
+    public func setImage(url: String) {
+        profileImageView.kf.setImage(with: URL(string: url) ?? .none,
+                                     placeholder: UIImage(),
+                                     options: [])
+    }
+    public func setName(name: String) {
+        nameLabel.text = name
+        nameLabel.sizeToFit()
+    }
 }
 
 // MARK: - UI
@@ -42,16 +48,14 @@ private extension UserHorizontalView {
     func addView() {
         addSubViews(profileImageView, nameLabel)
     }
-    func setLayoutSubviews() {
+    func setLayout() {
         profileImageView.snp.makeConstraints {
-            $0.size.equalTo(bounds.height)
+            $0.size.equalTo(61)
             $0.centerY.leading.equalToSuperview()
         }
         nameLabel.snp.makeConstraints {
-            $0.leading.equalTo(profileImageView.snp.trailing).offset(10)
             $0.centerY.equalToSuperview()
+            $0.leading.equalTo(profileImageView.snp.trailing).offset(10)
         }
-        profileImageView.layer.cornerRadius = self.bounds.height/2
-        profileImageView.clipsToBounds = true
     }
 }

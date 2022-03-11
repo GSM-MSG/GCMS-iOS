@@ -1,6 +1,6 @@
 
 public struct DetailClub {
-    public init(id: Int, bannerUrl: String, name: String, description: String, activities: [String], members: [User], head: User, teacher: User?, contact: String) {
+    public init(id: Int, bannerUrl: String, name: String, description: String, activities: [String], members: [User], head: String, teacher: String, contact: String, isDeadline: Bool, isHead: Bool, isApplied: Bool) {
         self.id = id
         self.bannerUrl = bannerUrl
         self.name = name
@@ -10,6 +10,9 @@ public struct DetailClub {
         self.head = head
         self.teacher = teacher
         self.contact = contact
+        self.isDeadline = isDeadline
+        self.isHead = isHead
+        self.isApplied = isApplied
     }
     
     
@@ -19,8 +22,11 @@ public struct DetailClub {
     public let description: String
     public let activities: [String]
     public let members: [User]
-    public let head: User
-    public let teacher: User?
+    public let head: String
+    public let teacher: String
     public let contact: String
+    public let isDeadline: Bool
+    public let isHead: Bool
+    public let isApplied: Bool
 
 }

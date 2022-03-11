@@ -131,7 +131,7 @@ final class MyPageVC: BaseVC<MyPageReactor> {
             .disposed(by: disposeBag)
     }
     override func bindState(reactor: MyPageReactor) {
-        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 4).observe(on: MainScheduler.asyncInstance)
         
         let ds = RxCollectionViewSectionedReloadDataSource<ClubListSection> { _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip) as ClubListCell
@@ -145,10 +145,30 @@ final class MyPageVC: BaseVC<MyPageReactor> {
             .bind(to: editorialCollectionView.rx.items(dataSource: ds))
             .disposed(by: disposeBag)
         
-        majorClubView.setImage(url: "https://avatars.githubusercontent.com/u/90985750?s=100&v=4")
-        majorClubView.setName(name: "Wallflower")
-        freedomClubView.setImage(url: "https://avatars.githubusercontent.com/u/78971821?s=100&v=4")
-        freedomClubView.setName(name: "전승원")
+        sharedState
+            .map(\.majorClub)
+            .compactMap { $0 }
+            .bind(with: self) { owner, major in
+                owner.majorClubView.setImage(url: major.bannerUrl)
+                owner.majorClubView.setName(name: major.title)
+            }
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.freedomClub)
+            .compactMap { $0 }
+            .bind(with: self) { owner, free in
+                owner.freedomClubView.setImage(url: free.bannerUrl)
+                owner.freedomClubView.setName(name: free.title)
+            }
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.isLoading)
+            .bind(with: self) { owner, load in
+                load ? owner.startIndicator() : owner.stopIndicator()
+            }
+            .disposed(by: disposeBag)
     }
     override func bindView(reactor: MyPageReactor) {
         managementButton.rx.tap

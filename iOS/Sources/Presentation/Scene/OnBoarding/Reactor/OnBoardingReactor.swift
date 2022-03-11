@@ -4,6 +4,8 @@ import RxSwift
 import RxRelay
 import GoogleSignIn
 import FirebaseCore
+import AuthenticationServices
+import Service
 
 final class OnBoardingReactor: Reactor, Stepper {
     // MARK: - Properties
@@ -15,14 +17,22 @@ final class OnBoardingReactor: Reactor, Stepper {
     enum Action {
         case googleSigninButtonDidTap(UIViewController)
         case googleSigninTokenReceived(String)
+        case appleSigninButtonDidTap
+        case updateLoading(Bool)
     }
-    enum Mutation {}
-    struct State {}
+    enum Mutation {
+        case setIsLoading(Bool)
+    }
+    struct State {
+        var isLoading: Bool
+    }
     let initialState: State
     
     // MARK: - Init
     init() {
-        initialState = State()
+        initialState = State(
+            isLoading: false
+        )
     }
     
 }
@@ -37,7 +47,24 @@ extension OnBoardingReactor {
             return googleSigninButtonDidTap(vc: vc)
         case let .googleSigninTokenReceived(token):
             return googleSigninTokenReceived(token: token)
+        case .appleSigninButtonDidTap:
+            return appleSigninDidComplete()
+        case let .updateLoading(load):
+            return .just(.setIsLoading(load))
         }
+    }
+}
+
+// MARK: - Reduce
+extension OnBoardingReactor {
+    func reduce(state: State, mutation: Mutation) -> State {
+        var newState = state
+        
+        switch mutation {
+        case let .setIsLoading(load):
+            newState.isLoading = load
+        }
+        return newState
     }
 }
 
@@ -53,12 +80,18 @@ private extension OnBoardingReactor {
             }
             
             user?.authentication.do({ auth in
+                UserDefaultsLocal.shared.isApple = false
+                UserDefaultsLocal.shared.name = ""
                 self?.action.onNext(.googleSigninTokenReceived(auth.idToken ?? ""))
             })
         }
         return .empty()
     }
     func googleSigninTokenReceived(token: String) -> Observable<Mutation> {
+        steps.accept(GCMSStep.clubListIsRequired)
+        return .empty()
+    }
+    func appleSigninDidComplete() -> Observable<Mutation> {
         steps.accept(GCMSStep.clubListIsRequired)
         return .empty()
     }
