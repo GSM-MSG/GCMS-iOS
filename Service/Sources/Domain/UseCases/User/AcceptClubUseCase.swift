@@ -1,13 +1,13 @@
 import RxSwift
 
-public final class RejectClubUseCase {
-    public init(repository: UserRepository) {
+public final class AcceptClubUseCase {
+    public init(userRepository: UserRepository) {
         self.repository = repository
     }
     
     private let repository: UserRepository
     
     public func execute(clubId: Int, isTest: Bool = false) -> Completable {
-        repository.rejectClub(clubId: clubId, isTest: isTest)
+        repository.acceptClub(clubId: clubId, isTest: isTest)
     }
 }

@@ -1,8 +1,8 @@
 import RxSwift
 
 public final class FetchClubListUseCase {
-    internal init(repository: ClubRepository) {
-        self.repository = repository
+    internal init(clubRepository: ClubRepository) {
+        self.repository = clubRepository
     }
     
     private let repository: ClubRepository
