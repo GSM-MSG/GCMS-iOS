@@ -12,6 +12,7 @@ final class OnBoardingReactor: Reactor, Stepper {
     var steps: PublishRelay<Step> = .init()
     
     private let disposeBag: DisposeBag = .init()
+    private let loginUseCase: LoginUseCase
     
     // MARK: - Reactor
     enum Action {
@@ -29,10 +30,13 @@ final class OnBoardingReactor: Reactor, Stepper {
     let initialState: State
     
     // MARK: - Init
-    init() {
+    init(
+        loginUseCase: LoginUseCase
+    ) {
         initialState = State(
             isLoading: false
         )
+        self.loginUseCase = loginUseCase
     }
     
 }
