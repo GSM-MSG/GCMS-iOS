@@ -17,7 +17,7 @@ final class AcceptReactor: Reactor, Stepper {
         case noticeButtonDidTap
         case deadlineButtonDidTap
         case approveButtonDidTap(User)
-        case refuseDidTap(User)
+        case refuseButtonDidTap(User)
     }
     enum Mutation {
         case setUser([User])
@@ -51,7 +51,7 @@ extension AcceptReactor {
             return deadlineButtonDidTap()
         case let .approveButtonDidTap(user):
             return approveDidTap(model: user)
-        case let .refuseDidTap(user):
+        case let .refuseButtonDidTap(user):
             return refuseDidTap(model: user)
         }
         return .empty()

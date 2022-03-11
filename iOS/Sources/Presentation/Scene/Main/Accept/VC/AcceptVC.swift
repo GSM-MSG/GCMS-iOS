@@ -139,6 +139,6 @@ extension AcceptVC : AcceptCellDelegate{
         self.reactor?.action.onNext(.approveButtonDidTap(user))
     }
     func didSelectedRejectButton(user: User) {
-        self.reactor?.action.onNext(.refuseDidTap(user))
+        self.reactor?.action.onNext(.refuseButtonDidTap(user))
     }
 }
