@@ -20,12 +20,14 @@ final class NoticeReactor: Reactor, Stepper {
         var isLoading: Bool
     }
     let initialState: State
+    private let id: Int
     
     // MARK: - Init
-    init() {
-        initialState = State(
-            isLoading: false
-        )
+    init(
+        id: Int
+    ) {
+        self.id = id
+        initialState = State(isLoading: false)
     }
     
 }
