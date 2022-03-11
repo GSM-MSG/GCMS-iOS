@@ -2,7 +2,7 @@ import RxSwift
 
 public final class AcceptClubUseCase {
     public init(userRepository: UserRepository) {
-        self.repository = repository
+        self.repository = userRepository
     }
     
     private let repository: UserRepository

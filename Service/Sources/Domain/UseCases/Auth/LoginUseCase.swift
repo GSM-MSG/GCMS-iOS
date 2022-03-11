@@ -2,7 +2,7 @@ import RxSwift
 
 public final class LoginUseCase {
     public init(authRepository: AuthRepository) {
-        self.repository = repository
+        self.repository = authRepository
     }
     
     private let repository: AuthRepository
