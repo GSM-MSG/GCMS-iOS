@@ -34,10 +34,18 @@ class AcceptVC : BaseVC<AcceptReactor> {
         $0.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
     
+    private let deadlineButton = UIButton().then {
+        $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
+        $0.titleLabel?.textAlignment = .center
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 18)
+        $0.setTitle("마감하기", for: .normal)
+        $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
+    }
+    
     // MARK: - UI
     
     override func addView() {
-        view.addSubViews(bannerImageView, containerView)
+        view.addSubViews(bannerImageView, containerView, deadlineButton)
         containerView.addSubViews(descriptionHeaderLabel,acceptTableView)
     }
     
@@ -62,16 +70,23 @@ class AcceptVC : BaseVC<AcceptReactor> {
             $0.leading.trailing.equalTo(descriptionHeaderLabel)
             $0.bottom.equalToSuperview()
         }
+        
+        deadlineButton.snp.makeConstraints {
+            $0.bottom.leading.trailing.equalToSuperview()
+            $0.height.equalTo(50)
+        }
     }
     
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
+        
     }
     
     override func configureNavigation() {
         self.navigationItem.configTitle(title: "맛소금")
         self.navigationItem.setRightBarButton(megaphoneButton, animated: true)
         bannerImageView.kf.setImage(with: URL(string: "https://images.unsplash.com/photo-1627483262092-9f73bdf005cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3000&q=80") ?? .none)
+        self.navigationItem.configBack()
     }
     
     // MARK: - Reactor
@@ -86,9 +101,10 @@ class AcceptVC : BaseVC<AcceptReactor> {
     override func bindState(reactor: AcceptReactor) {
         let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
         
-        let studentDS = RxTableViewSectionedReloadDataSource<ApplicantSection> { _, tv, ip, item in
+        let studentDS = RxTableViewSectionedReloadDataSource<ApplicantSection> {[weak self] _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip, cellType: AcceptCell.self)
             cell.model = item
+            cell.delegate = self
             return cell
         }
         
@@ -101,4 +117,26 @@ class AcceptVC : BaseVC<AcceptReactor> {
         
     }
         
+    override func bindView(reactor: AcceptReactor) {
+        megaphoneButton.rx.tap
+            .map { Reactor.Action.noticeButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        deadlineButton.rx.tap
+            .map { Reactor.Action.deadlineButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+}
+
+extension AcceptVC : AcceptCellDelegate{
+    
+    func didSelectedApproveButton(user: User) {
+        self.reactor?.action.onNext(.approveButtonDidTap(user))
+    }
+    func didSelectedRejectButton(user: User) {
+        self.reactor?.action.onNext(.refuseButtonDidTap(user))
+    }
 }
