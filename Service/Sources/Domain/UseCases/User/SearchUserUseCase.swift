@@ -1,8 +1,8 @@
 import RxSwift
 
 public final class SearchUserUseCase {
-    public init(repository: UserRepository) {
-        self.repository = repository
+    public init(userRepository: UserRepository) {
+        self.repository = userRepository
     }
     
     private let repository: UserRepository
