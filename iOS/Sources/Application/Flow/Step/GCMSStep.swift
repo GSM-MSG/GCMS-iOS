@@ -20,7 +20,7 @@ enum GCMSStep: Step {
     case myPageIsRequired
     case clubManagementIsRequired
     case clubJoinerListIsRequired(id: Int)
-    case notificationIsRequired
+    case notificationIsRequired(id: Int)
     
     // MARK: Alarm
     case alarmListIsRequired

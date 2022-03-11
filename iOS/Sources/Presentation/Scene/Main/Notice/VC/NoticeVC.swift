@@ -27,6 +27,11 @@ final class NoticeVC: BaseVC<NoticeReactor> {
             $0.bottom.equalTo(completeButton.snp.top).offset(-30)
         }
     }
+    
+    override func configureVC() {
+        self.view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
+    }
+    
     override func configureNavigation() {
         self.navigationItem.configTitle(title: "공지")
     }

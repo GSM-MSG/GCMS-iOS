@@ -62,6 +62,7 @@ class AcceptVC : BaseVC<AcceptReactor> {
             $0.leading.trailing.equalTo(descriptionHeaderLabel)
             $0.bottom.equalToSuperview()
         }
+        
     }
     
     override func configureVC() {
@@ -101,4 +102,11 @@ class AcceptVC : BaseVC<AcceptReactor> {
         
     }
         
+    override func bindView(reactor: AcceptReactor) {
+        megaphoneButton.rx.tap
+            .map { Reactor.Action.noticeButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
 }
