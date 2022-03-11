@@ -27,7 +27,7 @@ final class NoticeReactor: Reactor, Stepper {
         id: Int
     ) {
         self.id = id
-        initialState = State()
+        initialState = State(isLoading: false)
     }
     
 }
