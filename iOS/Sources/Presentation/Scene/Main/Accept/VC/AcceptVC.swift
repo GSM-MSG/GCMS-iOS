@@ -13,8 +13,6 @@ import RxSwift
 import RxDataSources
 import SnapKit
 
-
-
 class AcceptVC : BaseVC<AcceptReactor> {
     // MARK: - Properties
     private let megaphoneButton = UIBarButtonItem(image: .init(systemName: "megaphone.fill")?.tintColor(GCMSAsset.Colors.gcmsGray1.color), style: .plain, target: nil, action: nil)
