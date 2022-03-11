@@ -49,7 +49,7 @@ final class MainFlow: Flow{
         case .clubManagementIsRequired:
             return navigateToManagement()
         case let .clubJoinerListIsRequired(id):
-            return presentToJoinerList(id: id)
+            return navigateToJoinerList(id: id)
         case let .notificationIsRequired(id):
             return navigateToNotificationList(id: id)
         default:
@@ -108,7 +108,7 @@ private extension MainFlow{
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
-    func presentToJoinerList(id : Int) -> FlowContributors {
+    func navigateToJoinerList(id : Int) -> FlowContributors {
         let reactor = AcceptReactor(id: id)
         let vc = AcceptVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
