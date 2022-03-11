@@ -8,6 +8,7 @@
 import UIKit
 import ReactorKit
 import Lottie
+import Service
 
 class BaseVC<T: Reactor>: UIViewController{
     let bound = UIScreen.main.bounds
@@ -18,6 +19,10 @@ class BaseVC<T: Reactor>: UIViewController{
         $0.loopMode = .loop
         $0.stop()
         $0.isHidden = true
+    }
+    private lazy var indicatorBackgroundView = UIView().then {
+        $0.isHidden = true
+        $0.backgroundColor = .black.withAlphaComponent(0.4)
     }
     
     @available(*, unavailable)
@@ -30,6 +35,7 @@ class BaseVC<T: Reactor>: UIViewController{
         configureVC()
         configureNavigation()
         configureIndicator()
+        if UserDefaultsLocal.shared.isApple { appleConfigure() }
     }
     
     override func viewDidLayoutSubviews() {
@@ -56,8 +62,12 @@ class BaseVC<T: Reactor>: UIViewController{
     func setLayoutSubviews(){}
     func configureVC(){}
     func configureNavigation(){}
+    func appleConfigure(){}
     private func configureIndicator() {
-        view.addSubViews(indicator)
+        view.addSubViews(indicatorBackgroundView, indicator)
+        indicatorBackgroundView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
         indicator.snp.makeConstraints {
             $0.center.equalToSuperview()
             $0.size.equalTo(150)
@@ -65,10 +75,12 @@ class BaseVC<T: Reactor>: UIViewController{
     }
     
     func startIndicator() {
+        indicatorBackgroundView.isHidden = false
         indicator.isHidden = false
         indicator.play()
     }
     func stopIndicator() {
+        indicatorBackgroundView.isHidden = true
         indicator.isHidden = true
         indicator.stop()
     }
