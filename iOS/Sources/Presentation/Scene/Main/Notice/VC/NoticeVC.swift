@@ -70,7 +70,6 @@ final class NoticeVC: BaseVC<NoticeReactor> {
             .disposed(by: disposeBag)
     }
     
-    
     // MARK: - Reator
     override func bindState(reactor: NoticeReactor) {
         let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
