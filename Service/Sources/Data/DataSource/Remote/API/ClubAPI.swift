@@ -2,7 +2,9 @@ import Moya
 
 enum ClubAPI {
     case newClub(req: NewClubRequest)
-    case manageList
+    case managementList
+    case clubList(type: ClubType)
+    case detailClub(Int)
 }
 
 extension ClubAPI: GCMSAPI {
@@ -13,40 +15,40 @@ extension ClubAPI: GCMSAPI {
         switch self {
         case .newClub:
             return "/write"
-        case .manageList:
+        case .managementList:
             return "/list/manage"
+        case .clubList:
+            return "/list"
+        case let .detailClub(id):
+            return "/detailPage/\(id)"
         }
     }
     var method: Method {
         switch self {
         case .newClub:
             return .post
-        case .manageList:
+        case .managementList, .clubList, .detailClub:
             return .get
         }
     }
     var task: Task {
         switch self {
         case let .newClub(req):
+            return .requestJSONEncodable(req)
+        case let .clubList(type):
             return .requestParameters(parameters: [
-                "photo": req.picture,
-                "type": req.type.rawValue,
-                "name": req.name,
-                "description": req.description,
-                "teacher": req.teacher,
-                "head": req.head,
-                "discord": req.discord,
-                "clubPhoto": req.clubPicture,
-                "clubMember": req.clubMember
-            ], encoding: JSONEncoding.default)
-        case .manageList:
+                "type": type.rawValue
+            ], encoding: URLEncoding.queryString)
+        default:
             return .requestPlain
         }
     }
     var jwtTokenType: JWTTokenType? {
         switch self {
-        case .newClub, .manageList:
+        case .newClub, .managementList:
             return .accessToken
+        default:
+            return JWTTokenType.none
         }
     }
 }
