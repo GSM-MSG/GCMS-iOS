@@ -11,9 +11,15 @@ import SnapKit
 import Service
 import Kingfisher
 
+protocol AcceptCellDelegate : AnyObject {
+    func didSelectedApproveButton(user: User)
+    func didSelectedRejectButton(user: User)
+}
 final class AcceptCell : BaseTableViewCell<User> {
     
     // MARK: - Properties
+    
+    var delegate : AcceptCellDelegate?
     
     private let userImageView = UIImageView().then {
         $0.layer.cornerRadius = 20
@@ -28,7 +34,6 @@ final class AcceptCell : BaseTableViewCell<User> {
         $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 11)
         $0.textColor = GCMSAsset.Colors.gcmsGray3.color
     }
-
     
     private let refuseButton = UIButton().then {
         $0.layer.cornerRadius = 4
@@ -46,10 +51,14 @@ final class AcceptCell : BaseTableViewCell<User> {
         $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 14)
     }
     
-    // MARK: - UI
-    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        model = nil
+        disposeBag = .init()
+    }
     override func configureCell() {
         backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
+        self.selectionStyle = .none
     }
     
     override func addView() {
@@ -90,6 +99,21 @@ final class AcceptCell : BaseTableViewCell<User> {
                                        options: [])
         userNameLabel.text = model.name
         classLabel.text = "\(model.grade)학년 \(model.class)반 \(model.number)번"
+        
+        approveButton.rx.tap
+            .map { model }
+            .bind(with: self) { owner, item in
+                owner.delegate?.didSelectedApproveButton(user: item)
+            }
+            .disposed(by: disposeBag)
+        
+        refuseButton.rx.tap
+            .map { model }
+            .bind(with: self) { owner, item in
+                owner.delegate?.didSelectedRejectButton(user: item)
+            }
+            .disposed(by: disposeBag)
     }
+    
     
 }

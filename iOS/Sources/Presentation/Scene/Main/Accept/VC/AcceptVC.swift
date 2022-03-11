@@ -13,6 +13,8 @@ import RxSwift
 import RxDataSources
 import SnapKit
 
+
+
 class AcceptVC : BaseVC<AcceptReactor> {
     // MARK: - Properties
     private let megaphoneButton = UIBarButtonItem(image: .init(systemName: "megaphone.fill")?.tintColor(GCMSAsset.Colors.gcmsGray1.color), style: .plain, target: nil, action: nil)
@@ -79,6 +81,7 @@ class AcceptVC : BaseVC<AcceptReactor> {
     
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
+        
     }
     
     override func configureNavigation() {
@@ -100,9 +103,10 @@ class AcceptVC : BaseVC<AcceptReactor> {
     override func bindState(reactor: AcceptReactor) {
         let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
         
-        let studentDS = RxTableViewSectionedReloadDataSource<ApplicantSection> { _, tv, ip, item in
+        let studentDS = RxTableViewSectionedReloadDataSource<ApplicantSection> {[weak self] _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip, cellType: AcceptCell.self)
             cell.model = item
+            cell.delegate = self
             return cell
         }
         
@@ -120,6 +124,21 @@ class AcceptVC : BaseVC<AcceptReactor> {
             .map { Reactor.Action.noticeButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        deadlineButton.rx.tap
+            .map { Reactor.Action.deadlineButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
+}
+
+extension AcceptVC : AcceptCellDelegate{
+    
+    func didSelectedApproveButton(user: User) {
+        self.reactor?.action.onNext(.approveButtonDidTap(user))
+    }
+    func didSelectedRejectButton(user: User) {
+        self.reactor?.action.onNext(.refuseDidTap(user))
+    }
 }

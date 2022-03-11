@@ -3,6 +3,7 @@ import RxFlow
 import RxSwift
 import RxRelay
 import Service
+import UIKit
 
 final class AcceptReactor: Reactor, Stepper {
     // MARK: - Properties
@@ -14,6 +15,9 @@ final class AcceptReactor: Reactor, Stepper {
     enum Action {
         case viewDidLoad
         case noticeButtonDidTap
+        case deadlineButtonDidTap
+        case approveButtonDidTap(User)
+        case refuseDidTap(User)
     }
     enum Mutation {
         case setUser([User])
@@ -43,6 +47,12 @@ extension AcceptReactor {
             return viewDidLoad()
         case .noticeButtonDidTap:
             steps.accept(GCMSStep.notificationIsRequired(id: id))
+        case .deadlineButtonDidTap:
+            return deadlineButtonDidTap()
+        case let .approveButtonDidTap(user):
+            return approveDidTap(model: user)
+        case let .refuseDidTap(user):
+            return refuseDidTap(model: user)
         }
         return .empty()
     }
@@ -72,6 +82,33 @@ private extension AcceptReactor {
         .init(id: 1, picture: "https://avatars.githubusercontent.com/u/74440939?v=4", name: "변찬우", grade: 1, class: 3, number: 4, joinedMajorClub: 1, joinedEditorialClub: [1,2], joinedFreedomClub: 1),
         .init(id: 2, picture: "https://avatars.githubusercontent.com/u/74440939?v=4", name: "변찬우", grade: 1, class: 3, number: 4, joinedMajorClub: 1, joinedEditorialClub: [1,2], joinedFreedomClub: 1)
         ]))
+    }
+    
+    func refuseDidTap(model: User) -> Observable<Mutation>{
+        let cancelButton = UIAlertAction(title: "취소", style: .destructive, handler: { [weak self] _ in
+            
+        })
+        let okButton = UIAlertAction(title: "확인", style: .default, handler: nil)
+        steps.accept(GCMSStep.alert(title: nil, message: "\(model.name)님의 가입을 거절하시겠습니까?", style: .alert, actions: [cancelButton, okButton]))
+        return .empty()
+    }
+    
+    func approveDidTap(model: User) -> Observable<Mutation>{
+        let cancelButton = UIAlertAction(title: "취소", style: .destructive, handler: { [weak self] _ in
+            
+        })
+        let okButton = UIAlertAction(title: "확인", style: .default, handler: nil)
+        steps.accept(GCMSStep.alert(title: nil, message: "\(model.name)님의 가입을 승인하시겠습니까?", style: .alert, actions: [cancelButton, okButton]))
+        return .empty()
+    }
+    
+    func deadlineButtonDidTap() -> Observable<Mutation>{
+        let cancelButton = UIAlertAction(title: "취소", style: .destructive, handler: { [weak self] _ in
+            
+        })
+        let okButton = UIAlertAction(title: "확인", style: .default, handler: nil)
+        steps.accept(GCMSStep.alert(title: nil, message: "동아리 신청을 마감하시겠습니까?", style: .alert, actions: [cancelButton, okButton]))
+        return .empty()
     }
     
 }
