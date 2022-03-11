@@ -13,14 +13,64 @@ public extension Container {
         self.register(UserRepository.self) { _ in DefaultUserRepository() }
     }
     private func registerUseCase() {
+        // MARK: Auth
         self.register(LoginUseCase.self) { r in
             return LoginUseCase(
                 authRepository: r.resolve(AuthRepository.self)
             )
         }
+        // MARK: User
         self.register(AcceptClubUseCase.self) { r in
             return AcceptClubUseCase(
                 userRepository: r.resolve(UserRepository.self)
+            )
+        }
+        self.register(RejectClubUseCase.self) { r in
+            return RejectClubUseCase(
+                userRepository: r.resolve(UserRepository.self)
+            )
+        }
+        self.register(EditProfileUseCase.self) { r in
+            return EditProfileUseCase(
+                userRepository: r.resolve(UserRepository.self),
+                imageRepository: r.resolve(ImageRepository.self)
+            )
+        }
+        self.register(FetchNoticeListUseCase.self) { r in
+            return FetchNoticeListUseCase(
+                userRepository: r.resolve(UserRepository.self)
+            )
+        }
+        self.register(FetchUserInfoUseCase.self) { r in
+            return FetchUserInfoUseCase(
+                userRepository: r.resolve(UserRepository.self)
+            )
+        }
+        self.register(SearchUserUseCase.self) { r in
+            return SearchUserUseCase(
+                userRepository: r.resolve(UserRepository.self)
+            )
+        }
+        // MARK: Club
+        self.register(CreateNewClubUseCase.self) { r in
+            return CreateNewClubUseCase(
+                clubRepository: r.resolve(ClubRepository.self),
+                imageRepository: r.resolve(ImageRepository.self)
+            )
+        }
+        self.register(FetchClubListUseCase.self) { r in
+            return FetchClubListUseCase(
+                clubRepository: r.resolve(ClubRepository.self)
+            )
+        }
+        self.register(FetchDetailClubUseCase.self) { r in
+            return FetchDetailClubUseCase(
+                clubRepository: r.resolve(ClubRepository.self)
+            )
+        }
+        self.register(FetchManagementClubUseCase.self) { r in
+            return FetchManagementClubUseCase(
+                clubRepository: r.resolve(ClubRepository.self)
             )
         }
     }
