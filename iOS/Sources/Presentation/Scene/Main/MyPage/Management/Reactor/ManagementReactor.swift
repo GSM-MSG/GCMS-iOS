@@ -17,6 +17,7 @@ final class ManagementReactor: Reactor, Stepper{
     var steps: PublishRelay<Step> = .init()
     
     private let disposeBag = DisposeBag()
+    private let fetchManagementClubUseCase: FetchManagementClubUseCase
     
     // MARK: - Reactor
     enum Action{
@@ -39,7 +40,10 @@ final class ManagementReactor: Reactor, Stepper{
     var initialState: State
     
     // MARK: - Init
-    init() {
+    init(
+        fetchManagementClubUseCase: FetchManagementClubUseCase
+    ) {
+        self.fetchManagementClubUseCase = fetchManagementClubUseCase
         initialState = State(
             majorList: [],
             editorialList: [],

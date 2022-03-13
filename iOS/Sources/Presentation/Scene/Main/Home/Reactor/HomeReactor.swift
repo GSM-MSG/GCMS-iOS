@@ -10,6 +10,8 @@ final class HomeReactor: Reactor, Stepper {
     
     private let disposeBag: DisposeBag = .init()
     
+    private let fetchClubListUseCase: FetchClubListUseCase
+    
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
@@ -32,7 +34,10 @@ final class HomeReactor: Reactor, Stepper {
     let initialState: State
     
     // MARK: - Init
-    init() {
+    init(
+        fetchClubListUseCase: FetchClubListUseCase
+    ) {
+        self.fetchClubListUseCase = fetchClubListUseCase
         initialState = State(
             clubList: [],
             clubType: .major,
