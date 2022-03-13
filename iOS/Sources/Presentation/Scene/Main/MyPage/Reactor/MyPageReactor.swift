@@ -29,13 +29,18 @@ final class MyPageReactor: Reactor, Stepper {
         var isLoading: Bool
     }
     let initialState: State
+    private let fetchUserInfoUseCase: FetchUserInfoUseCase
     
     // MARK: - Init
-    init() {
+    init(
+        fetchUserInfoUseCase: FetchUserInfoUseCase
+    ) {
         initialState = State(
             editorialClubList: [],
             isLoading: false
         )
+        self.fetchUserInfoUseCase = fetchUserInfoUseCase
+        
     }
     
 }

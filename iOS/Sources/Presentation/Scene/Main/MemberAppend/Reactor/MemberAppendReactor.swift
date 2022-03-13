@@ -34,15 +34,20 @@ final class MemberAppendReactor: Reactor, Stepper {
     }
     private let closure: (([User]) -> Void)
     let initialState: State
+    private let searchUserUseCase: SearchUserUseCase
     
     // MARK: - Init
-    init(closure: @escaping (([User]) -> Void)) {
+    init(
+        closure: @escaping (([User]) -> Void),
+        searchUserUseCase: SearchUserUseCase
+    ) {
         initialState = State(   
             query: "",
             users: [],
             addedUsers: [],
             isLoading: false
         )
+        self.searchUserUseCase = searchUserUseCase
         self.closure = closure
     }
     

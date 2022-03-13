@@ -66,7 +66,10 @@ private extension MainFlow{
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
     func navigateToDetailClub(id: Int) -> FlowContributors {
-        let reactor = DetailClubReactor(id: id)
+        let reactor = DetailClubReactor(
+            id: id,
+            fetchDetailClubUseCase: AppDelegate.container.resolve(FetchDetailClubUseCase.self)!
+        )
         let vc = DetailClubVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
@@ -93,7 +96,10 @@ private extension MainFlow{
         return .none
     }
     func presentToMemberAppend(closure: @escaping (([User]) -> Void)) -> FlowContributors {
-        let reactor = MemberAppendReactor(closure: closure)
+        let reactor = MemberAppendReactor(
+            closure: closure,
+            searchUserUseCase: AppDelegate.container.resolve(SearchUserUseCase.self)!
+        )
         let vc = MemberAppendVC(reactor: reactor)
         self.rootVC.visibleViewController?.presentPanModal(vc)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))

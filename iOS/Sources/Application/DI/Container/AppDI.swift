@@ -1,5 +1,6 @@
 import Swinject
 import RxFlow
+import Service
 
 extension Container{
     func registerDependencies() {
@@ -27,19 +28,29 @@ extension Container{
     
     private func registerReactor() {
         self.register(OnBoardingReactor.self) { r in
-            return OnBoardingReactor()
+            return OnBoardingReactor(
+                loginUseCase: r.resolve(LoginUseCase.self)!
+            )
         }
         self.register(HomeReactor.self) { r in
-            return HomeReactor()
+            return HomeReactor(
+                fetchClubListUseCase: r.resolve(FetchClubListUseCase.self)!
+            )
         }
         self.register(ManagementReactor.self) { r in
-            return ManagementReactor()
+            return ManagementReactor(
+                fetchManagementClubUseCase: r.resolve(FetchManagementClubUseCase.self)!
+            )
         }
         self.register(AlarmReactor.self) { r in
-            return AlarmReactor()
+            return AlarmReactor(
+                fetchNoticeListUseCase: r.resolve(FetchNoticeListUseCase.self)!
+            )
         }
         self.register(MyPageReactor.self) { r in
-            return MyPageReactor()
+            return MyPageReactor(
+                fetchUserInfoUseCase: r.resolve(FetchUserInfoUseCase.self)!
+            )
         }
     }
 }

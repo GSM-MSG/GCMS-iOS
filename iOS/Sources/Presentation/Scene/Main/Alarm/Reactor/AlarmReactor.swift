@@ -9,6 +9,7 @@ final class AlarmReactor: Reactor, Stepper {
     var steps: PublishRelay<Step> = .init()
     
     private let disposeBag: DisposeBag = .init()
+    private let fetchNoticeListUseCase: FetchNoticeListUseCase
     
     // MARK: - Reactor
     enum Action {
@@ -26,11 +27,14 @@ final class AlarmReactor: Reactor, Stepper {
     let initialState: State
     
     // MARK: - Init
-    init() {
+    init(
+        fetchNoticeListUseCase: FetchNoticeListUseCase
+    ) {
         initialState = State(
             alarmList: [],
             isLoading: false
         )
+        self.fetchNoticeListUseCase = fetchNoticeListUseCase
     }
     
 }
