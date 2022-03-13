@@ -27,6 +27,7 @@ final class HomeVC: BaseVC<HomeReactor> {
         let lay = GCMSLayout()
         lay.delegate = self
         clubListCollectionView.collectionViewLayout = lay
+        clubTypeSegmentedControl.delegate = self
     }
     override func addView() {
         view.addSubViews(clubTypeSegmentedControl, clubListCollectionView)
@@ -53,6 +54,10 @@ final class HomeVC: BaseVC<HomeReactor> {
         self.navigationItem.configBack()
         self.navigationController?.navigationBar.setClear()
     }
+    override func appleConfigure() {
+        self.navigationItem.setRightBarButton(nil, animated: false)
+    }
+    
     // MARK: - Reactor
     override func bindAction(reactor: HomeReactor) {
         self.rx.viewDidLoad
@@ -108,5 +113,18 @@ extension HomeVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         } else {
             return 250
         }
+    }
+}
+
+extension HomeVC: ClubTypeSegmentedControlDelegate {
+    func segmentValueChanged(to index: Int) {
+        var type: ClubType = .major
+        switch index {
+        case 0: type = .major
+        case 1: type = .editorial
+        case 2: type = .freedom
+        default: type = .major
+        }
+        reactor?.action.onNext(.segmentDidTap(type))
     }
 }

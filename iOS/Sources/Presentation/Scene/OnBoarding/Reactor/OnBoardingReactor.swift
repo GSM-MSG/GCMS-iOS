@@ -85,7 +85,6 @@ private extension OnBoardingReactor {
             
             user?.authentication.do({ auth in
                 UserDefaultsLocal.shared.isApple = false
-                UserDefaultsLocal.shared.name = ""
                 self?.action.onNext(.googleSigninTokenReceived(auth.idToken ?? ""))
             })
         }

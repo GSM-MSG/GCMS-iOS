@@ -16,6 +16,7 @@ final class HomeReactor: Reactor, Stepper {
     enum Action {
         case viewDidLoad
         case clubDidTap(Int)
+        case segmentDidTap(ClubType)
         case myPageButtonDidTap
         case alarmButtonDidTap
         case updateLoading(Bool)
@@ -23,9 +24,11 @@ final class HomeReactor: Reactor, Stepper {
     enum Mutation {
         case setClubList([ClubList])
         case setIsLoading(Bool)
+        case setClubType(ClubType)
     }
     struct State {
         var clubList: [ClubListSection]
+        var clubType: ClubType
         var isLoading: Bool
     }
     let initialState: State
@@ -37,6 +40,7 @@ final class HomeReactor: Reactor, Stepper {
         self.fetchClubListUseCase = fetchClubListUseCase
         initialState = State(
             clubList: [],
+            clubType: .major,
             isLoading: false
         )
     }
@@ -57,6 +61,8 @@ extension HomeReactor {
             steps.accept(GCMSStep.alarmListIsRequired)
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
+        case let .segmentDidTap(type):
+            return .just(.setClubType(type))
         }
         return .empty()
     }
@@ -72,6 +78,8 @@ extension HomeReactor {
             newState.clubList = [ClubListSection(header: "", items: lists)]
         case let .setIsLoading(load):
             newState.isLoading = load
+        case let .setClubType(type):
+            newState.clubType = type
         }
         
         return newState
