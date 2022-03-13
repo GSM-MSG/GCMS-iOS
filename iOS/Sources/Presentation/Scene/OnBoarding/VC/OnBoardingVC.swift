@@ -86,16 +86,14 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        appleSigninButton.rx
-            .loginDidTap(scope: [.fullName])
-            .withUnretained(self)
-            .subscribe(onNext: { owner, res in
-                guard let auth = res.credential as? ASAuthorizationAppleIDCredential else { return }
-                UserDefaultsLocal.shared.isApple = true
-                UserDefaultsLocal.shared.name = auth.fullName?.nickname ?? ""
-                owner.reactor?.action.onNext(.appleSigninButtonDidTap)
-            })
+        
+        appleSigninButton.rx.tapGesture()
+            .when(.recognized)
+            .bind(with: self) { owner, _ in
+                owner.appleSigninButtonDidTap()
+            }
             .disposed(by: disposeBag)
+        
     }
     override func bindState(reactor: OnBoardingReactor) {
         let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
@@ -106,5 +104,40 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
                 load ? owner.startIndicator() : owner.stopIndicator()
             }
             .disposed(by: disposeBag)
+    }
+}
+
+// MARK: - Extension
+extension OnBoardingVC: ASAuthorizationControllerPresentationContextProviding, ASAuthorizationControllerDelegate {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return view.window ?? .init()
+    }
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        print("A")
+        guard let auth = authorization.credential as? ASAuthorizationAppleIDCredential else { return }
+        if let name = auth.fullName?.nickname {
+            print(name)
+            UserDefaultsLocal.shared.isApple = true
+            UserDefaultsLocal.shared.name = name
+            self.reactor?.action.onNext(.appleSigninButtonDidTap)
+        } else {
+            UserDefaultsLocal.shared.isApple = true
+            self.reactor?.action.onNext(.appleSigninButtonDidTap)
+        }
+    }
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        print("B")
+    }
+}
+
+private extension OnBoardingVC {
+    func appleSigninButtonDidTap() {
+        let req = ASAuthorizationAppleIDProvider().createRequest()
+        req.requestedScopes = [.fullName]
+        
+        let authController = ASAuthorizationController(authorizationRequests: [req])
+        authController.delegate = self
+        authController.presentationContextProvider = self
+        authController.performRequests()
     }
 }

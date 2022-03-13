@@ -20,7 +20,7 @@ class BaseVC<T: Reactor>: UIViewController{
         $0.stop()
         $0.isHidden = true
     }
-    private lazy var indicatorBackgroundView = UIView().then {
+    private let indicatorBackgroundView = UIView().then {
         $0.isHidden = true
         $0.backgroundColor = .black.withAlphaComponent(0.4)
     }

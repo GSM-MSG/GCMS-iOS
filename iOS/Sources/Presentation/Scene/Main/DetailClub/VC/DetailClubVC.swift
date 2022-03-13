@@ -144,6 +144,9 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
 //        self.navigationController?.navigationBar.setClear()
         bannerImageView.kf.setImage(with: URL(string: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4") ?? .none)
     }
+    override func appleConfigure() {
+        applyButton.isHidden = true
+    }
     
     // MARK: - Reactor
     override func bindAction(reactor: DetailClubReactor) {
