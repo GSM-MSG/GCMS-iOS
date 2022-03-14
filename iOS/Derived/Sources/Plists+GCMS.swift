@@ -12,11 +12,12 @@ import Foundation
 
 // swiftlint:disable identifier_name line_length number_separator type_body_length
 public enum GoogleServiceInfo {
+    public static let androidClientId: String = "406780900894-jcch2pqu5iuphdu4i1tri7gsn7lcg4h6.apps.googleusercontent.com"
     public static let apiKey: String = "AIzaSyARbQFjUnups3mKAlKvN6XyFaKqwPzQaPI"
-    public static let bundleId: String = "baegteun.GCMS"
-    public static let clientId: String = "406780900894-7d58bqmag51kpd71a4ma3kk8md92g9q8.apps.googleusercontent.com"
+    public static let bundleId: String = "com.msg.gcms"
+    public static let clientId: String = "406780900894-2nscd4l7v98s0ltk3in1f2sqclkg2da3.apps.googleusercontent.com"
     public static let gcmSenderId: String = "406780900894"
-    public static let googleAppId: String = "1:406780900894:ios:8f568808da53781acfe00f"
+    public static let googleAppId: String = "1:406780900894:ios:177175d3468674accfe00f"
     public static let isAdsEnabled: Bool = false
     public static let isAnalyticsEnabled: Bool = false
     public static let isAppinviteEnabled: Bool = true
@@ -24,7 +25,7 @@ public enum GoogleServiceInfo {
     public static let isSigninEnabled: Bool = true
     public static let plistVersion: String = "1"
     public static let projectId: String = "msg-gcms"
-    public static let reversedClientId: String = "com.googleusercontent.apps.406780900894-7d58bqmag51kpd71a4ma3kk8md92g9q8"
+    public static let reversedClientId: String = "com.googleusercontent.apps.406780900894-2nscd4l7v98s0ltk3in1f2sqclkg2da3"
     public static let storageBucket: String = "msg-gcms.appspot.com"
 }
 // swiftlint:enable identifier_name line_length number_separator type_body_length

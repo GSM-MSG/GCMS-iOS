@@ -11,7 +11,7 @@ extension Project{
         return Project(
             name: name,
             organizationName: publicOrganizationName,
-            settings: nil,
+            settings: .settings(base: .codeSign),
             targets: [
                 Target(
                     name: name,

@@ -14,7 +14,7 @@ extension Project{
         return Project(
             name: name,
             packages: packages,
-            settings: nil,
+            settings: .settings(base: .codeSign),
             targets: [
                 Target(
                     name: name,
