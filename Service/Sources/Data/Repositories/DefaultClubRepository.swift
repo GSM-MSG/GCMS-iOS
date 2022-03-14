@@ -14,8 +14,8 @@ final class DefaultClubRepository: ClubRepository {
         clubRemote.fetchClubList(type: type, isTest: isTest)
             .map { $0.toDomain() }
     }
-    func fetchDetailClub(id: Int, isTest: Bool) -> Single<DetailClub> {
-        clubRemote.fetchDetailClub(id: id, isTest: isTest)
+    func fetchDetailClub(name: String, type: ClubType, isTest: Bool) -> Single<DetailClub> {
+        clubRemote.fetchDetailClub(name: name, type: type, isTest: isTest)
             .map { $0.toDomain() }
     }
 }
