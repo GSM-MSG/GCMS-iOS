@@ -82,8 +82,15 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 private extension AppDelegate {
     func setFCM(_ application: UIApplication){
         UNUserNotificationCenter.current().delegate = self
+        Messaging.messaging().delegate = self
         let authOption: UNAuthorizationOptions = [.alert, .badge, .sound]
         UNUserNotificationCenter.current().requestAuthorization(options: authOption, completionHandler: { _,_ in } )
         application.registerForRemoteNotifications()
+    }
+}
+
+extension AppDelegate: MessagingDelegate {
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        print(fcmToken ?? "")
     }
 }
