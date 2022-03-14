@@ -7,7 +7,7 @@ public final class FetchDetailClubUseCase {
     
     private let repository: ClubRepository
     
-    func execute(id: Int, isTest: Bool = false) -> Single<DetailClub> {
-        repository.fetchDetailClub(id: id, isTest: isTest)
+    func execute(name: String, type: ClubType, isTest: Bool = false) -> Single<DetailClub> {
+        repository.fetchDetailClub(name: name, type: type, isTest: isTest)
     }
 }
