@@ -15,12 +15,12 @@ final class DefaultUserRepository: UserRepository {
         userRemote.editPicture(url: url, isTest: isTest)
     }
     
-    func acceptClub(clubId: Int, isTest: Bool = false) -> Completable {
-        userRemote.accept(clubId: clubId, isTest: isTest)
+    func acceptClub(name: String, type: ClubType, isTest: Bool = false) -> Completable {
+        userRemote.accept(name: name, type: type, isTest: isTest)
     }
     
-    func rejectClub(clubId: Int, isTest: Bool = false) -> Completable {
-        userRemote.reject(clubId: clubId, isTest: isTest)
+    func rejectClub(name: String, type: ClubType, isTest: Bool = false) -> Completable {
+        userRemote.reject(name: name, type: type, isTest: isTest)
     }
     
     func searchUser(query: String, isTest: Bool = false) -> Single<[User]> {

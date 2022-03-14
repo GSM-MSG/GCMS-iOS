@@ -5,8 +5,8 @@ enum UserAPI {
     case editPicture(url: String)
     case search(String)
     case notice
-    case accept(clubId: Int)
-    case reject(clubId: Int)
+    case accept(name: String, type: ClubType)
+    case reject(name: String, type: ClubType)
 }
 
 extension UserAPI: GCMSAPI {
@@ -24,9 +24,9 @@ extension UserAPI: GCMSAPI {
         case .notice:
             return "/notice"
         case let .accept(clubId):
-            return "/invite/accept/\(clubId)"
+            return "/invite/accept"
         case let .reject(clubId):
-            return "/invite/reject/\(clubId)"
+            return "/invite/reject"
         }
     }
     var method: Method {
@@ -48,6 +48,16 @@ extension UserAPI: GCMSAPI {
         case let .search(q):
             return .requestParameters(parameters: [
                 "q": q
+            ], encoding: URLEncoding.queryString)
+        case let .accept(name, type):
+            return .requestParameters(parameters: [
+                "q": name,
+                "type": type.rawValue
+            ], encoding: URLEncoding.queryString)
+        case let .reject(name, type):
+            return .requestParameters(parameters: [
+                "q": name,
+                "type": type.rawValue
             ], encoding: URLEncoding.queryString)
         default:
             return .requestPlain

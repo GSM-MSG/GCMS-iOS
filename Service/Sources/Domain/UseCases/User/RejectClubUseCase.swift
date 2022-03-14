@@ -7,7 +7,7 @@ public final class RejectClubUseCase {
     
     private let repository: UserRepository
     
-    public func execute(clubId: Int, isTest: Bool = false) -> Completable {
-        repository.rejectClub(clubId: clubId, isTest: isTest)
+    public func execute(name: String, type: ClubType, isTest: Bool = false) -> Completable {
+        repository.rejectClub(name: name, type: type, isTest: isTest)
     }
 }

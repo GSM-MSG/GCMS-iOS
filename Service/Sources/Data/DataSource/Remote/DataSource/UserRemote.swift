@@ -20,12 +20,12 @@ final class UserRemote: BaseRemote<UserAPI> {
         return request(.notice, isTest: isTest)
             .map(UserNoticeResponse.self)
     }
-    func accept(clubId: Int, isTest: Bool = false) -> Completable {
-        return request(.accept(clubId: clubId), isTest: isTest)
+    func accept(name: String, type: ClubType, isTest: Bool = false) -> Completable {
+        return request(.accept(name: name, type: type), isTest: isTest)
             .asCompletable()
     }
-    func reject(clubId: Int, isTest: Bool = false) -> Completable {
-        return request(.reject(clubId: clubId), isTest: isTest)
+    func reject(name: String, type: ClubType, isTest: Bool = false) -> Completable {
+        return request(.reject(name: name, type: type), isTest: isTest)
             .asCompletable()
     }
 }
