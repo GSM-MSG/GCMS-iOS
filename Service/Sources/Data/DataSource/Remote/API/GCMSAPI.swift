@@ -30,9 +30,6 @@ enum GCMSDomain: String {
     case auth
     case user
     case club
-    case majorClub = "club/major"
-    case editorialClub = "club/editorial"
-    case freedomClub = "club/freedom"
 }
 
 extension GCMSDomain {
