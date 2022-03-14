@@ -1,3 +1,3 @@
 import ProjectDescription
 
-let publicOrganizationName: String = "baegteun"
+let publicOrganizationName: String = "com.msg"
