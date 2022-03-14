@@ -22,12 +22,12 @@ public final class CreateNewClubUseCase {
         clubMember: [Int],
         isTest: Bool = false
     ) -> Completable {
-        return Single.zip(imageRepository.uploadPicture(data: picture, isTest: isTest),
+        return Single.zip(imageRepository.uploadPictures(datas: [picture], isTest: isTest),
                    imageRepository.uploadPictures(datas: clubPicture, isTest: isTest))
             .flatMapCompletable { bannerUrl, pictureUrls in
                 self.clubRepository.createNewClub(
                     req: .init(
-                        picture: bannerUrl,
+                        picture: bannerUrl.first ?? "",
                         type: type,
                         name: name,
                         description: description,
