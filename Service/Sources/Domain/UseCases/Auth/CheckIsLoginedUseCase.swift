@@ -1,13 +1,13 @@
 import RxSwift
 
-public final class RegisterUseCase {
+public final class CheckIsLoginedUseCase {
     public init(authRepository: AuthRepository) {
         self.authRepository = authRepository
     }
     
     private let authRepository: AuthRepository
     
-    public func execute(req: RegisterReqeust, isTest: Bool = false) -> Completable {
-        authRepository.register(req: req, isTest: isTest)
+    public func execute(isTest: Bool = false) -> Completable {
+        authRepository.refresh(isTest: isTest)
     }
 }

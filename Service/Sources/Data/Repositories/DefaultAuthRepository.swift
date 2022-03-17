@@ -10,8 +10,17 @@ final class DefaultAuthRepository: AuthRepository {
                 self?.keychainLocal.saveRefreshToken(token.refreshToken)
             }).asCompletable()
     }
-    func register(req: RegisterReqeust, isTest: Bool) -> Completable {
+    func register(req: RegisterReqeust, isTest: Bool = false) -> Completable {
         return authRemote.register(req: req, isTest: isTest)
+    }
+    func refresh(isTest: Bool = false) -> Completable {
+        return authRemote.refresh(isTest: isTest)
+    }
+    func sendVerify(email: String, isTest: Bool = false) -> Completable {
+        return authRemote.sendVerify(email: email, isTest: isTest)
+    }
+    func isVerified(email: String, isTest: Bool) -> Completable {
+        return authRemote.isVerified(email: email, isTest: isTest)
     }
 }
 

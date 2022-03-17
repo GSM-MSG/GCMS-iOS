@@ -25,11 +25,11 @@ final class JWTPlugin: PluginType {
         
         var request = request
         
-        let token = getToken(type: .accessToken)
-        request.addValue(token, forHTTPHeaderField: "Authorization")
         
+        
+        request.addValue(getToken(type: .accessToken), forHTTPHeaderField: "Authorization")
         if tokenType == .refreshToken {
-            request.addValue(getToken(type: .refreshToken), forHTTPHeaderField: "refreshToken")
+            request.addValue(getToken(type: .refreshToken), forHTTPHeaderField: "X-Refresh-Token")
         }
         return request
     }

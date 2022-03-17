@@ -1,13 +1,13 @@
 import RxSwift
 
-public final class RegisterUseCase {
+public final class SendVerifyUseCase {
     public init(authRepository: AuthRepository) {
         self.authRepository = authRepository
     }
     
     private let authRepository: AuthRepository
     
-    public func execute(req: RegisterReqeust, isTest: Bool = false) -> Completable {
-        authRepository.register(req: req, isTest: isTest)
+    public func execute(email: String, isTest: Bool = false) -> Completable {
+        authRepository.sendVerify(email: email, isTest: isTest)
     }
 }
