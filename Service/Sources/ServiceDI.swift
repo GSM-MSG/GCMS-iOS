@@ -72,26 +72,5 @@ public extension Container {
             )
         }
         // MARK: Club
-        self.register(CreateNewClubUseCase.self) { r in
-            return CreateNewClubUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!,
-                imageRepository: r.resolve(ImageRepository.self)!
-            )
-        }
-        self.register(FetchClubListUseCase.self) { r in
-            return FetchClubListUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
-            )
-        }
-        self.register(FetchDetailClubUseCase.self) { r in
-            return FetchDetailClubUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
-            )
-        }
-        self.register(FetchManagementClubUseCase.self) { r in
-            return FetchManagementClubUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
-            )
-        }
     }
 }

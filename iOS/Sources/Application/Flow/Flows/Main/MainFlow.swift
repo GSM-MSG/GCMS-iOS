@@ -66,10 +66,7 @@ private extension MainFlow{
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
     func navigateToDetailClub(id: Int) -> FlowContributors {
-        let reactor = DetailClubReactor(
-            id: id,
-            fetchDetailClubUseCase: AppDelegate.container.resolve(FetchDetailClubUseCase.self)!
-        )
+        let reactor = DetailClubReactor()
         let vc = DetailClubVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))

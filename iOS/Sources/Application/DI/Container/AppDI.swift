@@ -37,12 +37,12 @@ extension Container{
         }
         self.register(HomeReactor.self) { r in
             return HomeReactor(
-                fetchClubListUseCase: r.resolve(FetchClubListUseCase.self)!
+                
             )
         }
         self.register(ManagementReactor.self) { r in
             return ManagementReactor(
-                fetchManagementClubUseCase: r.resolve(FetchManagementClubUseCase.self)!
+                
             )
         }
         self.register(AlarmReactor.self) { r in

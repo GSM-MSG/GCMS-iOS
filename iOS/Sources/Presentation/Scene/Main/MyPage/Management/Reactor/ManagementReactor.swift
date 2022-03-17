@@ -17,7 +17,7 @@ final class ManagementReactor: Reactor, Stepper{
     var steps: PublishRelay<Step> = .init()
     
     private let disposeBag = DisposeBag()
-    private let fetchManagementClubUseCase: FetchManagementClubUseCase
+    
     
     // MARK: - Reactor
     enum Action{
@@ -41,9 +41,9 @@ final class ManagementReactor: Reactor, Stepper{
     
     // MARK: - Init
     init(
-        fetchManagementClubUseCase: FetchManagementClubUseCase
+        
     ) {
-        self.fetchManagementClubUseCase = fetchManagementClubUseCase
+        
         initialState = State(
             majorList: [],
             editorialList: [],
@@ -97,10 +97,10 @@ private extension ManagementReactor{
     func viewDidLoad() -> Observable<Mutation> {
         
         return .just(.setClubList([
-            .init(id: 0, bannerUrl: "https://images.unsplash.com/photo-1627483262092-9f73bdf005cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3000&q=80", title: "그냥 아무말", type: .freedom),
-            .init(id: 1, bannerUrl: "https://images.unsplash.com/photo-1627483262092-9f73bdf005cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3000&q=80", title: "그냥 아무말", type: .major),
-            .init(id: 2, bannerUrl: "https://images.unsplash.com/photo-1627483262092-9f73bdf005cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3000&q=80", title: "그냥 아무말", type: .editorial),
-            .init(id: 3, bannerUrl: "https://images.unsplash.com/photo-1627483262092-9f73bdf005cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3000&q=80", title: "그냥 아무말", type: .major),
+            .init(bannerUrl: "https://images.unsplash.com/photo-1627483262092-9f73bdf005cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3000&q=80", title: "그냥 아무말", type: .freedom),
+            .init(bannerUrl: "https://images.unsplash.com/photo-1627483262092-9f73bdf005cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3000&q=80", title: "그냥 아무말", type: .major),
+            .init(bannerUrl: "https://images.unsplash.com/photo-1627483262092-9f73bdf005cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3000&q=80", title: "그냥 아무말", type: .editorial),
+            .init(bannerUrl: "https://images.unsplash.com/photo-1627483262092-9f73bdf005cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3000&q=80", title: "그냥 아무말", type: .major),
         ]))
     }
     func newClubManageButtonDidTap() -> Observable<Mutation> {

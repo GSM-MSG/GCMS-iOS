@@ -23,18 +23,14 @@ final class DetailClubReactor: Reactor, Stepper {
         var clubDetail: DetailClub?
         var isLoading: Bool
     }
-    private let id: Int
     let initialState: State
-    
-    private let fetchDetailClubUseCase: FetchDetailClubUseCase
     
     // MARK: - Init
     init(
-        id: Int,
-        fetchDetailClubUseCase: FetchDetailClubUseCase
+    
     ) {
-        self.id = id
-        self.fetchDetailClubUseCase = fetchDetailClubUseCase
+        
+        
         initialState = State(
             isLoading: false
         )
