@@ -19,6 +19,26 @@ public extension Container {
                 authRepository: r.resolve(AuthRepository.self)!
             )
         }
+        self.register(RegisterUseCase.self) { r in
+            return RegisterUseCase(
+                authRepository: r.resolve(AuthRepository.self)!
+            )
+        }
+        self.register(CheckIsLoginedUseCase.self) { r in
+            return CheckIsLoginedUseCase(
+                authRepository: r.resolve(AuthRepository.self)!
+            )
+        }
+        self.register(SendVerifyUseCase.self) { r in
+            return SendVerifyUseCase(
+                authRepository: r.resolve(AuthRepository.self)!
+            )
+        }
+        self.register(CheckIsVerifiedUseCase.self) { r in
+            return CheckIsVerifiedUseCase(
+                authRepository: r.resolve(AuthRepository.self)!
+            )
+        }
         // MARK: User
         self.register(AcceptClubUseCase.self) { r in
             return AcceptClubUseCase(
