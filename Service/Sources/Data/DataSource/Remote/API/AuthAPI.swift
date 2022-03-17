@@ -2,6 +2,7 @@ import Moya
 
 enum AuthAPI {
     case login(req: LoginRequest)
+    case register(req: RegisterReqeust)
     case reissue
 }
 
@@ -13,13 +14,15 @@ extension AuthAPI: GCMSAPI {
         switch self {
         case .login:
             return "/login"
+        case .register:
+            return "/register"
         case .reissue:
             return "/notice"
         }
     }
     var method: Method {
         switch self {
-        case .login:
+        case .login, .register:
             return .post
         case .reissue:
             return .get
@@ -28,10 +31,9 @@ extension AuthAPI: GCMSAPI {
     var task: Task {
         switch self {
         case let .login(req):
-            return .requestParameters(parameters: [
-                "idToken": req.idToken,
-                "deviceToken": req.deviceToken
-            ], encoding: JSONEncoding.default)
+            return .requestJSONEncodable(req)
+        case let .register(req):
+            return .requestJSONEncodable(req)
         case .reissue:
             return .requestPlain
         }

@@ -1,4 +1,4 @@
-public struct LoginRequest: Encodable {
+public struct RegisterReqeust: Encodable {
     public init(email: String, password: String) {
         self.email = email
         self.password = password
