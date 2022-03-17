@@ -12,7 +12,7 @@ extension ImageAPI: GCMSAPI {
     var urlPath: String {
         switch self {
         case .uploadImages:
-            return "/upload/pictures"
+            return "/"
         }
     }
     var method: Moya.Method {
