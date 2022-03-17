@@ -10,8 +10,6 @@ final class HomeReactor: Reactor, Stepper {
     
     private let disposeBag: DisposeBag = .init()
     
-    private let fetchClubListUseCase: FetchClubListUseCase
-    
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
@@ -35,9 +33,9 @@ final class HomeReactor: Reactor, Stepper {
     
     // MARK: - Init
     init(
-        fetchClubListUseCase: FetchClubListUseCase
+        
     ) {
-        self.fetchClubListUseCase = fetchClubListUseCase
+        
         initialState = State(
             clubList: [],
             clubType: .major,
@@ -91,12 +89,12 @@ private extension HomeReactor {
     func viewDidLoad() -> Observable<Mutation> {
         
         return .just(.setClubList([
-            .init(id: 0, bannerUrl: "https://avatars.githubusercontent.com/u/74440939?s=48&v=4", title: "대충 타이틀", type: .freedom),
-            .init(id: 1, bannerUrl: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4", title: "ㅁㄴㅇㄹㅁㄴㅇㅁㄴㅇ", type: .major),
-            .init(id: 2, bannerUrl: "https://i.ytimg.com/vi/Kkc8aJct6qQ/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLDIZTIWGHrxuF6NijuyVWUsKHi1fw", title: "ㅁㄴ", type: .editorial),
-            .init(id: 3, bannerUrl: "https://avatars.githubusercontent.com/u/74440939?s=48&v=4", title: "대충 타이틀", type: .freedom),
-            .init(id: 4, bannerUrl: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4", title: "ㅁㄴㅇㄹㅁㄴㅇㅁㄴㅇ", type: .major),
-            .init(id: 5, bannerUrl: "https://user-images.githubusercontent.com/74440939/156344036-247e71ef-e020-40bb-bc4d-9553f0636e30.png", title: "ㄴㅁㅇㅁㄴㄹ", type: .editorial)
+            .init(bannerUrl: "https://avatars.githubusercontent.com/u/74440939?s=48&v=4", title: "대충 타이틀", type: .freedom),
+            .init(bannerUrl: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4", title: "ㅁㄴㅇㄹㅁㄴㅇㅁㄴㅇ", type: .major),
+            .init(bannerUrl: "https://i.ytimg.com/vi/Kkc8aJct6qQ/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLDIZTIWGHrxuF6NijuyVWUsKHi1fw", title: "ㅁㄴ", type: .editorial),
+            .init(bannerUrl: "https://avatars.githubusercontent.com/u/74440939?s=48&v=4", title: "대충 타이틀", type: .freedom),
+            .init(bannerUrl: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4", title: "ㅁㄴㅇㄹㅁㄴㅇㅁㄴㅇ", type: .major),
+            .init(bannerUrl: "https://user-images.githubusercontent.com/74440939/156344036-247e71ef-e020-40bb-bc4d-9553f0636e30.png", title: "ㄴㅁㅇㅁㄴㄹ", type: .editorial)
         ]))
     }
 }
