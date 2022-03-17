@@ -54,9 +54,6 @@ final class HomeVC: BaseVC<HomeReactor> {
         self.navigationItem.configBack()
         self.navigationController?.navigationBar.setClear()
     }
-    override func appleConfigure() {
-        self.navigationItem.setRightBarButton(nil, animated: false)
-    }
     
     // MARK: - Reactor
     override func bindAction(reactor: HomeReactor) {

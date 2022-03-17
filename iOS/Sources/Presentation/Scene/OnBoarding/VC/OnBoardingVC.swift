@@ -37,11 +37,9 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             $0.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 10)
         }
     }
-    private let appleSigninButton = ASAuthorizationAppleIDButton(authorizationButtonType: .signIn, authorizationButtonStyle: .white)
-    
     // MARK: - UI
     override func addView() {
-        view.addSubViews(headerLabel, nameLabel, logoImageView, googleSigninButton, appleSigninButton)
+        view.addSubViews(headerLabel, nameLabel, logoImageView, googleSigninButton)
     }
     override func setLayout() {
         headerLabel.snp.makeConstraints {
@@ -58,16 +56,10 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             $0.width.equalTo(234)
             $0.height.equalTo(266)
         }
-        appleSigninButton.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.height.equalTo(51)
-            $0.bottom.equalToSuperview().offset(-bound.height*0.1)
-            $0.leading.trailing.equalToSuperview().inset(15)
-        }
         googleSigninButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.height.equalTo(51)
-            $0.bottom.equalTo(appleSigninButton.snp.top).offset(-30)
+            $0.bottom.equalToSuperview().offset(-bound.height*0.1)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
     }
@@ -84,14 +76,6 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             .withUnretained(self)
             .map { Reactor.Action.googleSigninButtonDidTap($0.0) }
             .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        
-        appleSigninButton.rx.tapGesture()
-            .when(.recognized)
-            .bind(with: self) { owner, _ in
-                owner.appleSigninButtonDidTap()
-            }
             .disposed(by: disposeBag)
         
     }
@@ -130,14 +114,3 @@ extension OnBoardingVC: ASAuthorizationControllerPresentationContextProviding, A
     }
 }
 
-private extension OnBoardingVC {
-    func appleSigninButtonDidTap() {
-        let req = ASAuthorizationAppleIDProvider().createRequest()
-        req.requestedScopes = [.fullName]
-        
-        let authController = ASAuthorizationController(authorizationRequests: [req])
-        authController.delegate = self
-        authController.presentationContextProvider = self
-        authController.performRequests()
-    }
-}

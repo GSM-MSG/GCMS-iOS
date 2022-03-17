@@ -49,18 +49,12 @@ final class MyPageVC: BaseVC<MyPageReactor> {
     private let majorClubView = ClubView()
     private let freedomLabel = HeaderLabel(title: "내가 속한 자율 동아리")
     private let freedomClubView = ClubView()
-    private let appleDescriptionLabel = UILabel().then {
-        $0.text = "광주소프트웨어마이스터고등학교의\n 학생 계정(@gsm.hs.kr)이 아니라면\n서비스 이용에 제한이 있을 수 있습니다."
-        $0.numberOfLines = 0
-        $0.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 16)
-        $0.textColor = GCMSAsset.Colors.gcmsGray4.color
-    }
     
     // MARK: - UI
     override func addView() {
         view.addSubViews(scrollView)
         scrollView.addSubViews(containerView)
-        containerView.addSubViews(userProfileImageView, usernameLabel, classLabel, managementButton, editorialLabel, editorialCollectionView, majorLabel, majorClubView, freedomLabel, freedomClubView, appleDescriptionLabel)
+        containerView.addSubViews(userProfileImageView, usernameLabel, classLabel, managementButton, editorialLabel, editorialCollectionView, majorLabel, majorClubView, freedomLabel, freedomClubView)
     }
     override func setLayout() {
         scrollView.snp.makeConstraints {
@@ -121,21 +115,12 @@ final class MyPageVC: BaseVC<MyPageReactor> {
             $0.height.equalTo(205)
             $0.bottom.equalToSuperview().offset(-20)
         }
-        appleDescriptionLabel.snp.makeConstraints {
-            $0.center.equalToSuperview()
-        }
     }
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
     override func configureNavigation() {
         self.navigationItem.configBack()
-    }
-    override func appleConfigure() {
-        [
-            managementButton, editorialCollectionView, majorClubView, freedomClubView, editorialLabel, freedomLabel, majorLabel
-        ].forEach { $0.isHidden = true }
-        appleDescriptionLabel.isHidden = false
     }
     
     // MARK: - Reactor

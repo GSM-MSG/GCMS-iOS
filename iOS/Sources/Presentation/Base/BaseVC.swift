@@ -35,7 +35,6 @@ class BaseVC<T: Reactor>: UIViewController{
         configureVC()
         configureNavigation()
         configureIndicator()
-        if UserDefaultsLocal.shared.isApple { appleConfigure() }
     }
     
     override func viewDidLayoutSubviews() {
@@ -62,7 +61,6 @@ class BaseVC<T: Reactor>: UIViewController{
     func setLayoutSubviews(){}
     func configureVC(){}
     func configureNavigation(){}
-    func appleConfigure(){}
     private func configureIndicator() {
         view.addSubViews(indicatorBackgroundView, indicator)
         indicatorBackgroundView.snp.makeConstraints {
