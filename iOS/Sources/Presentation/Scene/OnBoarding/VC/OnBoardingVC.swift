@@ -81,12 +81,10 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     }
     override func configureNavigation() {
         self.navigationController?.navigationBar.setClear()
+        self.navigationItem.configBack()
     }
     
     // MARK: - Reactor
-    override func bindView(reactor: OnBoardingReactor) {
-        
-    }
     override func bindState(reactor: OnBoardingReactor) {
         let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
         
@@ -95,6 +93,13 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             .bind(with: self) { owner, load in
                 load ? owner.startIndicator() : owner.stopIndicator()
             }
+            .disposed(by: disposeBag)
+    }
+    
+    override func bindView(reactor: OnBoardingReactor) {
+        loginButton.rx.tap
+            .map { Reactor.Action.loginButtonDidTap }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
 }

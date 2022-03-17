@@ -2,21 +2,16 @@ import ReactorKit
 import RxFlow
 import RxSwift
 import RxRelay
-import GoogleSignIn
-import FirebaseCore
-import AuthenticationServices
 import Service
 
-final class OnBoardingReactor: Reactor, Stepper {
+final class LoginReactor: Reactor, Stepper {
     // MARK: - Properties
     var steps: PublishRelay<Step> = .init()
     
     private let disposeBag: DisposeBag = .init()
-    private let loginUseCase: LoginUseCase
     
     // MARK: - Reactor
     enum Action {
-        case loginButtonDidTap
         case updateLoading(Bool)
     }
     enum Mutation {
@@ -26,34 +21,31 @@ final class OnBoardingReactor: Reactor, Stepper {
         var isLoading: Bool
     }
     let initialState: State
+    private let id: Int
     
     // MARK: - Init
     init(
-        loginUseCase: LoginUseCase
+        id: Int
     ) {
-        initialState = State(
-            isLoading: false
-        )
-        self.loginUseCase = loginUseCase
+        self.id = id
+        initialState = State(isLoading: false)
     }
     
 }
 
 // MARK: - Mutate
-extension OnBoardingReactor {
+extension LoginReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .loginButtonDidTap:
-            steps.accept(GCMSStep.loginIsRequired)
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
         }
-    return .empty()
+        return .empty()
     }
 }
 
 // MARK: - Reduce
-extension OnBoardingReactor {
+extension LoginReactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         
@@ -61,11 +53,12 @@ extension OnBoardingReactor {
         case let .setIsLoading(load):
             newState.isLoading = load
         }
+        
         return newState
     }
 }
 
 // MARK: - Method
-private extension OnBoardingReactor {
- 
+private extension LoginReactor {
+    
 }
