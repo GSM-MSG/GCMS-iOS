@@ -18,7 +18,6 @@ final class OnBoardingReactor: Reactor, Stepper {
     enum Action {
         case googleSigninButtonDidTap(UIViewController)
         case googleSigninTokenReceived(String)
-        case appleSigninButtonDidTap
         case updateLoading(Bool)
     }
     enum Mutation {
@@ -51,8 +50,6 @@ extension OnBoardingReactor {
             return googleSigninButtonDidTap(vc: vc)
         case let .googleSigninTokenReceived(token):
             return googleSigninTokenReceived(token: token)
-        case .appleSigninButtonDidTap:
-            return appleSigninDidComplete()
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
         }
@@ -91,10 +88,6 @@ private extension OnBoardingReactor {
         return .empty()
     }
     func googleSigninTokenReceived(token: String) -> Observable<Mutation> {
-        steps.accept(GCMSStep.clubListIsRequired)
-        return .empty()
-    }
-    func appleSigninDidComplete() -> Observable<Mutation> {
         steps.accept(GCMSStep.clubListIsRequired)
         return .empty()
     }
