@@ -91,26 +91,3 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     }
 }
 
-// MARK: - Extension
-extension OnBoardingVC: ASAuthorizationControllerPresentationContextProviding, ASAuthorizationControllerDelegate {
-    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return view.window ?? .init()
-    }
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        print("A")
-        guard let auth = authorization.credential as? ASAuthorizationAppleIDCredential else { return }
-        if let name = auth.fullName?.nickname {
-            print(name)
-            UserDefaultsLocal.shared.isApple = true
-            UserDefaultsLocal.shared.name = name
-            self.reactor?.action.onNext(.appleSigninButtonDidTap)
-        } else {
-            UserDefaultsLocal.shared.isApple = true
-            self.reactor?.action.onNext(.appleSigninButtonDidTap)
-        }
-    }
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        print("B")
-    }
-}
-
