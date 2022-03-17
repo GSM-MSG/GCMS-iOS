@@ -2,7 +2,10 @@ import Moya
 
 enum AuthAPI {
     case login(req: LoginRequest)
-    case reissue
+    case register(req: RegisterReqeust)
+    case refresh
+    case verify(email: String)
+    case isVerified(email: String)
 }
 
 extension AuthAPI: GCMSAPI {
@@ -13,32 +16,43 @@ extension AuthAPI: GCMSAPI {
         switch self {
         case .login:
             return "/login"
-        case .reissue:
-            return "/notice"
+        case .register:
+            return "/register"
+        case .refresh:
+            return "/refresh"
+        case .verify, .isVerified:
+            return "/verify"
         }
     }
     var method: Method {
         switch self {
-        case .login:
+        case .login, .register, .refresh, .verify:
             return .post
-        case .reissue:
-            return .get
+        case .isVerified:
+            return .head
         }
     }
     var task: Task {
         switch self {
         case let .login(req):
-            return .requestParameters(parameters: [
-                "idToken": req.idToken,
-                "deviceToken": req.deviceToken
-            ], encoding: JSONEncoding.default)
-        case .reissue:
+            return .requestJSONEncodable(req)
+        case let .register(req):
+            return .requestJSONEncodable(req)
+        case .refresh:
             return .requestPlain
+        case let .verify(email):
+            return .requestParameters(parameters: [
+                "email": email
+            ], encoding: JSONEncoding.default)
+        case let .isVerified(email):
+            return .requestParameters(parameters: [
+                "email": email
+            ], encoding: URLEncoding.queryString)
         }
     }
     var jwtTokenType: JWTTokenType? {
         switch self {
-        case .reissue:
+        case .refresh:
             return .refreshToken
         default:
             return JWTTokenType.none

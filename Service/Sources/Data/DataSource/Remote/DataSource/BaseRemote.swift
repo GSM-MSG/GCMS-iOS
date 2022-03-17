@@ -97,7 +97,7 @@ private extension BaseRemote {
     func reissueToken() -> Completable {
         return MoyaProvider<AuthAPI>(plugins: [JWTPlugin()])
             .rx
-            .request(.reissue)
+            .request(.refresh)
             .asCompletable()
     }
 }
