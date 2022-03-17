@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Google_\"G\"_Logo.svg.png",
+      "filename" : "Exclude.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Google_\"G\"_Logo.svg-1.png",
+      "filename" : "Exclude-1.svg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Google_\"G\"_Logo.svg-2.png",
+      "filename" : "Exclude-2.svg",
       "idiom" : "universal",
       "scale" : "3x"
     }
