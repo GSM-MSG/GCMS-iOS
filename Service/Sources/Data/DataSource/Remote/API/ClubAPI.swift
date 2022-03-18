@@ -3,8 +3,8 @@ import Moya
 enum ClubAPI {
     case clubList(type: ClubType)
     case clubDetail(query: ClubRequestComponent)
-    case createNewClub(req: CreateNewClubRequest)
-    case updateClub(query: ClubRequestComponent, req: CreateNewClubRequest)
+    case createNewClub(req: NewClubRequest)
+    case updateClub(query: ClubRequestComponent, req: NewClubRequest)
     case deleteClub(query: ClubRequestComponent)
     case clubMember(query: ClubRequestComponent)
     case clubApplicant(query: ClubRequestComponent)
