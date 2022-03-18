@@ -26,9 +26,13 @@ final class UserHorizontalView: UIView {
     }
     
     public func bind(user: User) {
-        profileImageView.kf.setImage(with: URL(string: user.picture) ?? .none,
-                                     placeholder: UIImage(),
-                                     options: [])
+        if let url = user.profileImageUrl {
+            profileImageView.kf.setImage(with: URL(string: url) ?? .none,
+                                         placeholder: UIImage(),
+                                         options: [])
+        } else {
+            profileImageView.image = .init(systemName: "person.crop.circle")
+        }
         nameLabel.text = user.name
         nameLabel.sizeToFit()
     }

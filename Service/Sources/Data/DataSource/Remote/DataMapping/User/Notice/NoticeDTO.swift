@@ -7,13 +7,4 @@ struct NoticeDTO: Codable {
 }
 
 extension NoticeDTO {
-    func toDomain() -> Notice {
-        return .init(
-            id: self.id,
-            club: self.club,
-            content: self.content,
-            isInvite: self.isInvite,
-            clubId: self.clubId
-        )
-    }
 }

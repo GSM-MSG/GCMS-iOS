@@ -78,9 +78,7 @@ private extension AcceptReactor {
     
     func viewDidLoad() -> Observable<Mutation> {
         return .just(.setUser([
-        .init(id: 0, picture: "https://avatars.githubusercontent.com/u/74440939?v=4", name: "변찬우", grade: 1, class: 3, number: 4, joinedMajorClub: 1, joinedEditorialClub: [1,2], joinedFreedomClub: 1),
-        .init(id: 1, picture: "https://avatars.githubusercontent.com/u/74440939?v=4", name: "변찬우", grade: 1, class: 3, number: 4, joinedMajorClub: 1, joinedEditorialClub: [1,2], joinedFreedomClub: 1),
-        .init(id: 2, picture: "https://avatars.githubusercontent.com/u/74440939?v=4", name: "변찬우", grade: 1, class: 3, number: 4, joinedMajorClub: 1, joinedEditorialClub: [1,2], joinedFreedomClub: 1)
+            
         ]))
     }
     
