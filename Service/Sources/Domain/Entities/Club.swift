@@ -1,5 +1,5 @@
 public struct Club: Equatable {
-    public init(type: ClubType, bannerUrl: String, title: String, description: String, contact: String, head: User, relatedLink: [RelatedLink], scope: MemberScope, isApplied: Bool, isOpen: Bool, activities: [String], teacher: String?) {
+    public init(type: ClubType, bannerUrl: String, title: String, description: String, contact: String, head: User, relatedLink: [RelatedLink], scope: MemberScope, isApplied: Bool, isOpen: Bool, activities: [String], member: [User], teacher: String?) {
         self.type = type
         self.bannerUrl = bannerUrl
         self.title = title
@@ -11,8 +11,10 @@ public struct Club: Equatable {
         self.isApplied = isApplied
         self.isOpen = isOpen
         self.activities = activities
+        self.member = member
         self.teacher = teacher
     }
+    
     
     public static func == (lhs: Club, rhs: Club) -> Bool {
         lhs.title == rhs.title && lhs.`type` == rhs.`type`
@@ -29,5 +31,6 @@ public struct Club: Equatable {
     public let isApplied: Bool
     public let isOpen: Bool
     public let activities: [String]
+    public let member: [User]
     public let teacher: String?
 }

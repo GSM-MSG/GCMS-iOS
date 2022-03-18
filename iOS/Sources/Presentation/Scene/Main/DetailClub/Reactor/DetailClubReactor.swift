@@ -16,11 +16,11 @@ final class DetailClubReactor: Reactor, Stepper {
         case updateLoading(Bool)
     }
     enum Mutation {
-        case setClub(DetailClub)
+        case setClub(Club)
         case setIsLoading(Bool)
     }
     struct State {
-        var clubDetail: DetailClub?
+        var clubDetail: Club?
         var isLoading: Bool
     }
     let initialState: State
@@ -73,28 +73,41 @@ private extension DetailClubReactor {
         
         return .just(.setClub(
             .init(
-                id: 1,
-                bannerUrl: "https://avatars.githubusercontent.com/u/74440939?s=70&v=4",
-                name: "with권",
-                description: "대충설명대충설명대충설명대충설명\n대충설명\n\n대충설명대충설명",
-                activities: [
-                    "https://avatars.githubusercontent.com/u/95753750?s=200&v=4",
-                    "https://avatars.githubusercontent.com/u/82383294?s=70&v=4",
-                    "https://avatars.githubusercontent.com/u/82383983?s=70&v=4"
-                ],
-                members: [
+                type: .editorial,
+                bannerUrl: "https://avatars.githubusercontent.com/u/81547954?s=40&v=4",
+                title: "title",
+                description: "desc",
+                contact: "연",
+                head: .init(
+                    userId: "asdf",
+                    profileImageUrl: "https://avatars.githubusercontent.com/u/12152522?s=60&v=4",
+                    name: "dan",
+                    grade: 1,
+                    class: 2,
+                    number: 3,
+                    joinedMajorClub: nil,
+                    joinedFreedomClub: nil,
+                    joinedEditorialClub: nil
+                ),
+                relatedLink: [],
+                scope: .default,
+                isApplied: falㅣse,
+                isOpen: false,
+                activities: [],
+                member: [
                     .init(
-                        userId: "gs",
-                        profileImageUrl: "",
-                        name: "https://avatars.githubusercontent.com/u/95753750?s=200&v=4",
-                        grade: 1, class: 1, number: 1, joinedMajorClub: nil, joinedFreedomClub: nil, joinedEditorialClub: nil)
+                        userId: "s2103",
+                        profileImageUrl: "https://camo.githubusercontent.com/89a9989573e7036f8fea68e8e31fd546f10f31dc6b9126c855913a1c70c0ff0c/68747470733a2f2f74656368737461636b2d67656e657261746f722e76657263656c2e6170702f73776966742d69636f6e2e737667",
+                        name: "ㅇㅈ",
+                        grade: 2,
+                        class: 2,
+                        number: 2,
+                        joinedMajorClub: nil,
+                        joinedFreedomClub: nil,
+                        joinedEditorialClub: nil
+                    )
                 ],
-                head: "누구였지?",
-                teacher: "강권",
-                contact: "AAAA#1234",
-                isDeadline: false,
-                isHead: false,
-                isApplied: false
+                teacher: nil
             )
         ))
     }

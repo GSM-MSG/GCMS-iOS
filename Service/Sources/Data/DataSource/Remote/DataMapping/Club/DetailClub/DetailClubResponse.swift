@@ -27,6 +27,19 @@ extension DetailClubResponse {
             isApplied: isApplied,
             isOpen: isOpen,
             activities: activities,
+            member: [
+                .init(
+                    userId: "s2103",
+                    profileImageUrl: "https://avatars.githubusercontent.com/u/12152522?s=60&v=4",
+                    name: "ASDF",
+                    grade: 2,
+                    class: 3,
+                    number: 4,
+                    joinedMajorClub: nil,
+                    joinedFreedomClub: nil,
+                    joinedEditorialClub: nil
+                )
+            ],
             teacher: teacher
         )
     }
