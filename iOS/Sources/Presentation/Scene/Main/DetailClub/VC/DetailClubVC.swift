@@ -171,17 +171,17 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                         $0.height.equalTo(owner.bound.width-32)
                     }
                 }
-                owner.headView.setName(name: item.head)
-                if !item.teacher.isEmpty {
+                owner.headView.bind(user: item.head)
+                if let teacher = item.teacher {
                     owner.teacherHeaderLabel.isHidden = false
                     owner.teacherView.isHidden = false
-                    owner.teacherView.setName(name: item.teacher)
+                    owner.teacherView.setName(name: teacher)
                 } else {
                     owner.teacherHeaderLabel.isHidden = true
                     owner.teacherView.isHidden = true
                 }
                 owner.contactDescriptionLabel.text = item.contact
-                owner.navigationItem.configTitle(title: item.name)
+                owner.navigationItem.configTitle(title: item.title)
             }
             .disposed(by: disposeBag)
         
@@ -192,7 +192,8 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         }
         
         sharedState
-            .map(\.clubDetail?.members)
+            .map(\.clubDetail)
+            .map(\.?.member)
             .compactMap { $0 }
             .map { [MemberSection(header: "", items: $0)] }
             .bind(to: memberCollectionView.rx.items(dataSource: ds))
