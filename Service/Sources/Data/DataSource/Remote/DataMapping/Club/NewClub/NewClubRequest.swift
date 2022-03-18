@@ -1,13 +1,10 @@
-import Foundation
-
 public struct NewClubRequest: Encodable {
-    public let picture: String
-    public let type: ClubType
-    public let name: String
-    public let description: String
-    public let teacher: String
-    public let head: String
-    public let discord: String
-    public let clubPicture: [String]
-    public let clubMember: [Int]
+    let title: String
+    let description: String
+    let bannerUrl: String
+    let contact: String
+    let relatedLink: [RelatedLink]
+    let teacher: String?
+    let activities: [String]
+    let member: [String]
 }

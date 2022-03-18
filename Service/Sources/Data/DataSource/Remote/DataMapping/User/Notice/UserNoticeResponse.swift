@@ -5,7 +5,4 @@ struct UserNoticeResponse: Codable {
 }
 
 extension UserNoticeResponse {
-    func toDomain() -> [Notice] {
-        return self.list.map { $0.toDomain() }
-    }
 }

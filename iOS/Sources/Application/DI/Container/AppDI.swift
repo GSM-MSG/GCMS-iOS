@@ -15,9 +15,6 @@ extension Container{
         self.register(HomeVC.self) { r in
             return HomeVC(reactor: r.resolve(HomeReactor.self))
         }
-        self.register(AlarmVC.self) { r in
-            return AlarmVC(reactor: r.resolve(AlarmReactor.self))
-        }
         self.register(MyPageVC.self) { r in
             return MyPageVC(reactor: r.resolve(MyPageReactor.self))
         }
@@ -34,22 +31,17 @@ extension Container{
         }
         self.register(HomeReactor.self) { r in
             return HomeReactor(
-                fetchClubListUseCase: r.resolve(FetchClubListUseCase.self)!
+                
             )
         }
         self.register(ManagementReactor.self) { r in
             return ManagementReactor(
-                fetchManagementClubUseCase: r.resolve(FetchManagementClubUseCase.self)!
-            )
-        }
-        self.register(AlarmReactor.self) { r in
-            return AlarmReactor(
-                fetchNoticeListUseCase: r.resolve(FetchNoticeListUseCase.self)!
+                
             )
         }
         self.register(MyPageReactor.self) { r in
             return MyPageReactor(
-                fetchUserInfoUseCase: r.resolve(FetchUserInfoUseCase.self)!
+                
             )
         }
     }

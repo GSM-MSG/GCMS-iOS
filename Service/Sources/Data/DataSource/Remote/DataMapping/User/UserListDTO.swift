@@ -1,9 +1,8 @@
-
-struct ClubMembersResponse: Codable {
+struct UserListDTO: Codable {
     let list: [UserDTO]
 }
 
-extension ClubMembersResponse {
+extension UserListDTO {
     func toDomain() -> [User] {
         return list.map { $0.toDomain() }
     }

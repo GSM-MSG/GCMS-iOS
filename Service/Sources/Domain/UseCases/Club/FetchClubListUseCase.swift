@@ -1,13 +1,13 @@
 import RxSwift
 
-public final class FetchClubListUseCase {
-    internal init(clubRepository: ClubRepository) {
-        self.repository = clubRepository
+public final class FetchClubLiseUseCase {
+    public init(clubRepository: ClubRepository) {
+        self.clubRepository = clubRepository
     }
     
-    private let repository: ClubRepository
+    private let clubRepository: ClubRepository
     
-    func execute(type: ClubType, isTest: Bool = false) -> Single<[ClubList]> {
-        return repository.fetchClubList(type: type, isTest: isTest)
+    public func execute(type: ClubType, isTest: Bool = false) -> Single<[ClubList]> {
+        clubRepository.fetchClubList(type: type, isTest: isTest)
     }
 }

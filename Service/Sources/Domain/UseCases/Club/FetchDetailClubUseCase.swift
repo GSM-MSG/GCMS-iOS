@@ -2,12 +2,12 @@ import RxSwift
 
 public final class FetchDetailClubUseCase {
     public init(clubRepository: ClubRepository) {
-        self.repository = clubRepository
+        self.clubRepository = clubRepository
     }
     
-    private let repository: ClubRepository
+    private let clubRepository: ClubRepository
     
-    func execute(name: String, type: ClubType, isTest: Bool = false) -> Single<DetailClub> {
-        repository.fetchDetailClub(name: name, type: type, isTest: isTest)
+    public func execute(query: ClubRequestComponent, isTest: Bool = false) -> Single<Club> {
+        clubRepository.fetchDetailClub(query: query, isTest: isTest)
     }
 }

@@ -36,9 +36,13 @@ final class MemberCell: BaseCollectionViewCell<User> {
     }
     
     override func bind(_ model: User) {
-        profileImageView.kf.setImage(with: URL(string: model.picture) ?? .none,
-                                     placeholder: UIImage(),
-                                     options: [])
+        if let url = model.profileImageUrl {
+            profileImageView.kf.setImage(with: URL(string: url) ?? .none,
+                                         placeholder: UIImage(),
+                                         options: [])
+        } else {
+            profileImageView.image = .init(systemName: "person.crop.circle")
+        }
         nameLabel.text = model.name
         
     }

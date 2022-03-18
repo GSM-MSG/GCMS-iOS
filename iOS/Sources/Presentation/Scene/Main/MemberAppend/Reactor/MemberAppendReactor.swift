@@ -34,12 +34,11 @@ final class MemberAppendReactor: Reactor, Stepper {
     }
     private let closure: (([User]) -> Void)
     let initialState: State
-    private let searchUserUseCase: SearchUserUseCase
     
     // MARK: - Init
     init(
-        closure: @escaping (([User]) -> Void),
-        searchUserUseCase: SearchUserUseCase
+        closure: @escaping (([User]) -> Void)
+
     ) {
         initialState = State(   
             query: "",
@@ -47,7 +46,7 @@ final class MemberAppendReactor: Reactor, Stepper {
             addedUsers: [],
             isLoading: false
         )
-        self.searchUserUseCase = searchUserUseCase
+        
         self.closure = closure
     }
     
@@ -101,10 +100,6 @@ extension MemberAppendReactor {
 private extension MemberAppendReactor {
     func updateQuery(query: String) -> Observable<Mutation> {
         let users: [User] = [
-            .init(id: 0, picture: "https://camo.githubusercontent.com/9ed64b042a76b8a97016e877cbaee0d6df224a148034afef658d841cf0cd1791/68747470733a2f2f63756c746f667468657061727479706172726f742e636f6d2f706172726f74732f68642f6c6170746f705f706172726f742e676966", name: "김김김", grade: 2, class: 3, number: 1),
-            .init(id: 1, picture: "https://camo.githubusercontent.com/9ed64b042a76b8a97016e877cbaee0d6df224a148034afef658d841cf0cd1791/68747470733a2f2f63756c746f667468657061727479706172726f742e636f6d2f706172726f74732f68642f6c6170746f705f706172726f742e676966", name: "민민민", grade: 2, class: 3, number: 1),
-            .init(id: 2, picture: "https://camo.githubusercontent.com/9ed64b042a76b8a97016e877cbaee0d6df224a148034afef658d841cf0cd1791/68747470733a2f2f63756c746f667468657061727479706172726f742e636f6d2f706172726f74732f68642f6c6170746f705f706172726f742e676966", name: "곽곽곽", grade: 2, class: 3, number: 1),
-            .init(id: 3, picture: "https://camo.githubusercontent.com/9ed64b042a76b8a97016e877cbaee0d6df224a148034afef658d841cf0cd1791/68747470733a2f2f63756c746f667468657061727479706172726f742e636f6d2f706172726f74732f68642f6c6170746f705f706172726f742e676966", name: "백백백", grade: 2, class: 3, number: 1)
         ].filter { $0.name.contains(query) }
         return .concat([
             .just(.setQuery(query)),

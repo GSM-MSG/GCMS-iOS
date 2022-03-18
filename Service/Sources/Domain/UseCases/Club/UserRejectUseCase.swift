@@ -7,12 +7,7 @@ public final class UserRejectUseCase {
     
     private let clubRepository: ClubRepository
     
-    public func execute(
-        userId: Int,
-        name: String,
-        type: ClubType,
-        isTest: Bool = false
-    ) -> Completable {
-        clubRepository.userReject(userId: userId, name: name, type: type, isTest: isTest)
+    public func execute(query: ClubRequestComponent, userId: String, isTest: Bool = false) -> Completable{
+        clubRepository.userReject(query: query, userId: userId, isTest: isTest)
     }
 }

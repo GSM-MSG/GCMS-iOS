@@ -8,7 +8,6 @@ struct ManagementClubResponseDTO: Codable {
 extension ManagementClubResponseDTO {
     func toDomain() -> ClubList {
         return .init(
-            id: self.id,
             bannerUrl: self.picture,
             title: self.name,
             type: self.type

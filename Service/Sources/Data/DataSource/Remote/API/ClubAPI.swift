@@ -1,17 +1,18 @@
 import Moya
 
 enum ClubAPI {
-    case newClub(req: NewClubRequest)
-    case managementList
     case clubList(type: ClubType)
-    case detailClub(name: String, type: ClubType)
-    case join(name: String, type: ClubType)
-    case members(name: String, type: ClubType)
-    case userAccept(userId: Int, name: String, type: ClubType)
-    case userReject(userId: Int, name: String, type: ClubType)
-    case waitList(name: String, type: ClubType)
-    case end(name: String, type: ClubType)
-    case notification(name: String, type: ClubType, req: NotificationRequest)
+    case clubDetail(query: ClubRequestComponent)
+    case createNewClub(req: NewClubRequest)
+    case updateClub(query: ClubRequestComponent, req: NewClubRequest)
+    case deleteClub(query: ClubRequestComponent)
+    case clubMember(query: ClubRequestComponent)
+    case clubApplicant(query: ClubRequestComponent)
+    case userAccept(query: ClubRequestComponent, userId: String)
+    case userReject(query: ClubRequestComponent, userId: String)
+    case clubOpen(query: ClubRequestComponent)
+    case clubClose(query: ClubRequestComponent)
+    case userKick(query: ClubRequestComponent, userId: String)
 }
 
 extension ClubAPI: GCMSAPI {
@@ -20,95 +21,80 @@ extension ClubAPI: GCMSAPI {
     }
     var urlPath: String {
         switch self {
-        case .newClub:
-            return "/write"
-        case .managementList:
-            return "/list/manage"
         case .clubList:
             return "/list"
-        case .detailClub:
-            return "/detailPage"
-        case .join:
-            return "/join"
-        case .members:
+        case .clubDetail:
+            return "/detail"
+        case .createNewClub, .updateClub, .deleteClub:
+            return "/"
+        case .clubMember:
             return "/members"
+        case .clubApplicant:
+            return "/applicant"
         case .userAccept:
-            return "accept"
+            return "/accept"
         case .userReject:
-            return "reject"
-        case .waitList:
-            return "/waitlist"
-        case .end:
-            return "/end"
-        case let .notification(name, type, _):
-            return "/notification?q=\(name)&type=\(type.rawValue)"
+            return "/reject"
+        case .clubOpen:
+            return "/open"
+        case .clubClose:
+            return "/close"
+        case .userKick:
+            return "/kick"
         }
     }
     var method: Method {
         switch self {
-        case .newClub, .join, .userAccept, .userReject, .end, .notification:
-            return .post
-        case .managementList, .clubList, .detailClub, .members, .waitList:
+        case .clubList, .clubDetail, .createNewClub, .clubMember, .clubApplicant:
             return .get
+        case .userAccept, .userReject:
+            return .post
+        case .updateClub, .clubOpen, .clubClose:
+            return .put
+        case .deleteClub, .userKick:
+            return .delete
         }
     }
     var task: Task {
         switch self {
-        case let .newClub(req):
-            return .requestJSONEncodable(req)
         case let .clubList(type):
             return .requestParameters(parameters: [
                 "type": type.rawValue
             ], encoding: URLEncoding.queryString)
-        case let .detailClub(name, type):
+        case let .clubDetail(q), let .clubMember(q), let .clubApplicant(q):
             return .requestParameters(parameters: [
-                "q": name,
-                "type": type.rawValue
+                "q": q.name,
+                "type": q.type
             ], encoding: URLEncoding.queryString)
-        case let .join(name, type):
-            return .requestParameters(parameters: [
-                "q": name,
-                "type": type.rawValue
-            ], encoding: URLEncoding.queryString)
-        case let .members(name, type):
-            return .requestParameters(parameters: [
-                "q": name,
-                "type": type.rawValue
-            ], encoding: URLEncoding.queryString)
-        case let .userAccept(userId, name, type):
-            return .requestParameters(parameters: [
-                "q": name,
-                "type": type.rawValue,
-                "user": userId
-            ], encoding: URLEncoding.queryString)
-        case let .userReject(userId, name, type):
-            return .requestParameters(parameters: [
-                "q": name,
-                "type": type.rawValue,
-                "user": userId
-            ], encoding: URLEncoding.queryString)
-        case let .waitList(name, type):
-            return .requestParameters(parameters: [
-                "q": name,
-                "type": type.rawValue
-            ], encoding: URLEncoding.queryString)
-        case let .end(name, type):
-            return .requestParameters(parameters: [
-                "q": name,
-                "type": type.rawValue
-            ], encoding: URLEncoding.queryString)
-        case let .notification(_, _, req):
+        case let .createNewClub(req):
             return .requestJSONEncodable(req)
-        default:
-            return .requestPlain
+        case let .deleteClub(query), let .clubOpen(query), let .clubClose(query):
+            return .requestJSONEncodable(query)
+        case let .userAccept(query, userId), let .userReject(query, userId), let .userKick(query, userId):
+            return .requestParameters(parameters: [
+                "q": query.name,
+                "type": query.type.rawValue,
+                "userId": userId
+            ], encoding: JSONEncoding.default)
+        case let .updateClub(query, req):
+            return .requestParameters(parameters: [
+                "q": query.name,
+                "type": query.type.rawValue,
+                "title": req.title,
+                "description": req.description,
+                "bannerUrl": req.bannerUrl,
+                "contact": req.contact,
+                "relatedLink": req.relatedLink,
+                "teacher": req.teacher,
+                "activities": req.activities,
+                "member": req.member
+            ], encoding: JSONEncoding.default)
         }
     }
     var jwtTokenType: JWTTokenType? {
         switch self {
-        case .newClub, .managementList:
-            return .accessToken
         default:
-            return JWTTokenType.none
+            return .accessToken
         }
     }
 }

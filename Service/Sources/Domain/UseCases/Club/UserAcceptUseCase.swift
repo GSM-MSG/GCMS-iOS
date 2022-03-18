@@ -1,6 +1,5 @@
 import RxSwift
 
-
 public final class UserAcceptUseCase {
     public init(clubRepository: ClubRepository) {
         self.clubRepository = clubRepository
@@ -8,12 +7,7 @@ public final class UserAcceptUseCase {
     
     private let clubRepository: ClubRepository
     
-    public func execute(
-        userId: Int,
-        name: String,
-        type: ClubType,
-        isTest: Bool = false
-    ) -> Completable {
-        clubRepository.userAccept(userId: userId, name: name, type: type, isTest: isTest)
+    public func execute(query: ClubRequestComponent, userId: String, isTest: Bool = false) -> Completable{
+        clubRepository.userAccept(query: query, userId: userId, isTest: isTest)
     }
 }

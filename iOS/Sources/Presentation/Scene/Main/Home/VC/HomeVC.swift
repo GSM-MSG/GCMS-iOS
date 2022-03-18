@@ -94,11 +94,6 @@ final class HomeVC: BaseVC<HomeReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        clubListCollectionView.rx.modelSelected(ClubList.self)
-            .map(\.id)
-            .map(Reactor.Action.clubDidTap)
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
     }
 }
 

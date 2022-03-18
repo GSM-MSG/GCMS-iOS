@@ -1,21 +1,32 @@
 struct UserDTO: Codable {
-    let id: Int
+    let userId: String
     let name: String
-    let picture: String
+    let profileImageUrl: String?
     let grade: Int
     let `class`: Int
     let number: Int
+    let joinedMajorClub: ClubListDTO?
+    let joinedFreedomClub: ClubListDTO?
+    let joinedEditorialClub: [ClubListDTO]
+    
+    enum CodingKeys: String, CodingKey {
+        case userId, name, grade, `class`, number, joinedMajorClub, joinedFreedomClub, joinedEditorialClub
+        case profileImageUrl = "userImg"
+    }
 }
 
 extension UserDTO {
     func toDomain() -> User {
         return .init(
-            id: self.id,
-            picture: self.picture,
-            name: self.name,
-            grade: self.grade,
-            class: self.class,
-            number: self.number
+            userId: userId,
+            profileImageUrl: profileImageUrl,
+            name: name,
+            grade: grade,
+            class: `class`,
+            number: number,
+            joinedMajorClub: joinedMajorClub?.toDomain(),
+            joinedFreedomClub: joinedFreedomClub?.toDomain(),
+            joinedEditorialClub: joinedEditorialClub.map { $0.toDomain() }
         )
     }
 }
