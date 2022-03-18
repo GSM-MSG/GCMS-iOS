@@ -48,8 +48,6 @@ final class MainFlow: Flow{
             return navigateToManagement()
         case let .clubJoinerListIsRequired(id):
             return navigateToJoinerList(id: id)
-        case let .notgificationIsRequired(id):
-            return navigateToNotificationList(id: id)
         default:
             return .none
         }
@@ -106,13 +104,6 @@ private extension MainFlow{
     func navigateToJoinerList(id : Int) -> FlowContributors {
         let reactor = AcceptReactor(id: id)
         let vc = AcceptVC(reactor: reactor)
-        self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
-    }
-    
-    func navigateToNotificationList(id : Int) -> FlowContributors {
-        let reactor = NoticeReactor(id: id)
-        let vc = NoticeVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
