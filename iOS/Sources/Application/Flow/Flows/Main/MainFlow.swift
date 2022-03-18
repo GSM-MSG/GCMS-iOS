@@ -36,8 +36,6 @@ final class MainFlow: Flow{
             return navigateToDetailClub(id: id)
         case .myPageIsRequired:
             return navigateToMyPage()
-        case .alarmListIsRequired:
-            return navigateToAlarm()
         case let .alert(title, message, style, actions):
             return presentToAlert(title: title, message: message, style: style, actions: actions)
         case let .memberAppendIsRequired(closure):
@@ -50,7 +48,7 @@ final class MainFlow: Flow{
             return navigateToManagement()
         case let .clubJoinerListIsRequired(id):
             return navigateToJoinerList(id: id)
-        case let .notificationIsRequired(id):
+        case let .notgificationIsRequired(id):
             return navigateToNotificationList(id: id)
         default:
             return .none
@@ -81,11 +79,6 @@ private extension MainFlow{
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
-    func navigateToAlarm() -> FlowContributors {
-        let vc = AppDelegate.container.resolve(AlarmVC.self)!
-        self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
-    }
     func presentToAlert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction]) -> FlowContributors {
         let alert = UIAlertController(title: title, message: message, preferredStyle: style)
         actions.forEach { alert.addAction($0) }
@@ -94,8 +87,7 @@ private extension MainFlow{
     }
     func presentToMemberAppend(closure: @escaping (([User]) -> Void)) -> FlowContributors {
         let reactor = MemberAppendReactor(
-            closure: closure,
-            searchUserUseCase: AppDelegate.container.resolve(SearchUserUseCase.self)!
+            closure: closure
         )
         let vc = MemberAppendVC(reactor: reactor)
         self.rootVC.visibleViewController?.presentPanModal(vc)

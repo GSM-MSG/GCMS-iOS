@@ -40,37 +40,7 @@ public extension Container {
             )
         }
         // MARK: User
-        self.register(AcceptClubUseCase.self) { r in
-            return AcceptClubUseCase(
-                userRepository: r.resolve(UserRepository.self)!
-            )
-        }
-        self.register(RejectClubUseCase.self) { r in
-            return RejectClubUseCase(
-                userRepository: r.resolve(UserRepository.self)!
-            )
-        }
-        self.register(EditProfileUseCase.self) { r in
-            return EditProfileUseCase(
-                userRepository: r.resolve(UserRepository.self)!,
-                imageRepository: r.resolve(ImageRepository.self)!
-            )
-        }
-        self.register(FetchNoticeListUseCase.self) { r in
-            return FetchNoticeListUseCase(
-                userRepository: r.resolve(UserRepository.self)!
-            )
-        }
-        self.register(FetchUserInfoUseCase.self) { r in
-            return FetchUserInfoUseCase(
-                userRepository: r.resolve(UserRepository.self)!
-            )
-        }
-        self.register(SearchUserUseCase.self) { r in
-            return SearchUserUseCase(
-                userRepository: r.resolve(UserRepository.self)!
-            )
-        }
+        
         // MARK: Club
     }
 }

@@ -45,9 +45,13 @@ final class StudentCell: BaseTableViewCell<User> {
         contentView.backgroundColor = .clear
     }
     override func bind(_ model: User) {
-        profileImageView.kf.setImage(with: URL(string: model.picture) ?? .none,
-                                     placeholder: UIImage(),
-                                     options: [])
+        if let url = model.profileImageUrl {
+            profileImageView.kf.setImage(with: URL(string: url) ?? .none,
+                                         placeholder: UIImage(),
+                                         options: [])
+        } else {
+            profileImageView.image = .init(systemName: "person.crop.circle")
+        }
         nameLabel.text = model.name
         classLabel.text = "\(model.grade)학년 \(model.class)반 \(model.number)번"
     }

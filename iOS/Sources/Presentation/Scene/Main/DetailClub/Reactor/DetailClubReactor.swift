@@ -84,13 +84,10 @@ private extension DetailClubReactor {
                 ],
                 members: [
                     .init(
-                        id: 1,
-                        picture: "https://avatars.githubusercontent.com/u/82383983?s=70&v=4",
-                        name: "현빈리",
-                        grade: 2,
-                        class: 1,
-                        number: 14
-                    )
+                        userId: "gs",
+                        profileImageUrl: "",
+                        name: "https://avatars.githubusercontent.com/u/95753750?s=200&v=4",
+                        grade: 1, class: 1, number: 1, joinedMajorClub: nil, joinedFreedomClub: nil, joinedEditorialClub: nil)
                 ],
                 head: "누구였지?",
                 teacher: "강권",
