@@ -91,7 +91,7 @@ private extension DetailClubReactor {
                 ),
                 relatedLink: [],
                 scope: .default,
-                isApplied: falㅣse,
+                isApplied: false,
                 isOpen: false,
                 activities: [],
                 member: [
