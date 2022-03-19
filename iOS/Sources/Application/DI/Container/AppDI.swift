@@ -18,9 +18,6 @@ extension Container{
         self.register(MyPageVC.self) { r in
             return MyPageVC(reactor: r.resolve(MyPageReactor.self))
         }
-        self.register(ManagementVC.self) { r in
-            return ManagementVC(reactor: r.resolve(ManagementReactor.self))
-        }
         self.register(LoginVC.self) { r in
             return LoginVC(reactor: r.resolve(LoginReactor.self))
         }
@@ -34,11 +31,6 @@ extension Container{
         }
         self.register(HomeReactor.self) { r in
             return HomeReactor(
-                
-            )
-        }
-        self.register(ManagementReactor.self) { r in
-            return ManagementReactor(
                 
             )
         }

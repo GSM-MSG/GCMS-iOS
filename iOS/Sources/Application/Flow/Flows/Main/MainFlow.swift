@@ -32,8 +32,8 @@ final class MainFlow: Flow{
         switch step{
         case .clubListIsRequired:
             return coordinateToClubList()
-        case let .clubDetailIsRequired(id):
-            return navigateToDetailClub(id: id)
+        case let .clubDetailIsRequired(query):
+            return navigateToDetailClub(query: query)
         case .myPageIsRequired:
             return navigateToMyPage()
         case let .alert(title, message, style, actions):
@@ -44,10 +44,8 @@ final class MainFlow: Flow{
             return dismiss()
         case let .newClubIsRequired(category):
             return navigateToNewClub(category: category)
-        case .clubManagementIsRequired:
-            return navigateToManagement()
-        case let .clubJoinerListIsRequired(id):
-            return navigateToJoinerList(id: id)
+        case let .clubJoinerListIsRequired(query):
+            return navigateToJoinerList(query: query)
         default:
             return .none
         }
@@ -61,16 +59,11 @@ private extension MainFlow{
         self.rootVC.setViewControllers([vc], animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
-    func navigateToDetailClub(id: Int) -> FlowContributors {
+    func navigateToDetailClub(query: ClubRequestComponent) -> FlowContributors {
         let reactor = DetailClubReactor()
         let vc = DetailClubVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
-    }
-    func navigateToManagement() -> FlowContributors {
-        let vc = AppDelegate.container.resolve(ManagementVC.self)!
-        self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
     func navigateToMyPage() -> FlowContributors {
         let vc = AppDelegate.container.resolve(MyPageVC.self)!
@@ -101,8 +94,8 @@ private extension MainFlow{
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
-    func navigateToJoinerList(id : Int) -> FlowContributors {
-        let reactor = AcceptReactor(id: id)
+    func navigateToJoinerList(query: ClubRequestComponent) -> FlowContributors {
+        let reactor = AcceptReactor(query: query)
         let vc = AcceptVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))

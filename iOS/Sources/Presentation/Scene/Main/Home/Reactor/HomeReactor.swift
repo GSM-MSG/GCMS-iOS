@@ -13,7 +13,6 @@ final class HomeReactor: Reactor, Stepper {
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
-        case clubDidTap(Int)
         case segmentDidTap(ClubType)
         case myPageButtonDidTap
         case alarmButtonDidTap
@@ -51,8 +50,6 @@ extension HomeReactor {
         switch action {
         case .viewDidLoad:
             return viewDidLoad()
-        case let .clubDidTap(id):
-            steps.accept(GCMSStep.clubDetailIsRequired(id: id))
         case .myPageButtonDidTap:
             steps.accept(GCMSStep.myPageIsRequired)
         case .alarmButtonDidTap:

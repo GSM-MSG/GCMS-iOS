@@ -14,7 +14,6 @@ final class AcceptReactor: Reactor, Stepper {
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
-        case noticeButtonDidTap
         case deadlineButtonDidTap
         case approveButtonDidTap(User)
         case refuseButtonDidTap(User)
@@ -25,14 +24,14 @@ final class AcceptReactor: Reactor, Stepper {
     struct State {
         var acceptUser: [User]
     }
-    private let id: Int
+    private let query: ClubRequestComponent
     let initialState: State
     
     // MARK: - Init
     init(
-        id: Int
+        query: ClubRequestComponent
     ) {
-        self.id = id
+        self.query = query
         initialState = State(acceptUser: [])
     }
     
@@ -45,8 +44,6 @@ extension AcceptReactor {
             
         case .viewDidLoad:
             return viewDidLoad()
-        case .noticeButtonDidTap:
-            steps.accept(GCMSStep.notificationIsRequired(id: id))
         case .deadlineButtonDidTap:
             return deadlineButtonDidTap()
         case let .approveButtonDidTap(user):
