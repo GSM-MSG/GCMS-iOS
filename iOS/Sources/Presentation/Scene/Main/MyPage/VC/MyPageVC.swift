@@ -54,7 +54,7 @@ final class MyPageVC: BaseVC<MyPageReactor> {
     override func addView() {
         view.addSubViews(scrollView)
         scrollView.addSubViews(containerView)
-        containerView.addSubViews(userProfileImageView, usernameLabel, classLabel, managementButton, editorialLabel, editorialCollectionView, majorLabel, majorClubView, freedomLabel, freedomClubView)
+        containerView.addSubViews(userProfileImageView, usernameLabel, classLabel, editorialLabel, editorialCollectionView, majorLabel, majorClubView, freedomLabel, freedomClubView)
     }
     override func setLayout() {
         scrollView.snp.makeConstraints {
@@ -77,14 +77,8 @@ final class MyPageVC: BaseVC<MyPageReactor> {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(usernameLabel.snp.bottom)
         }
-        managementButton.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(classLabel.snp.bottom).offset(15)
-            $0.width.equalTo(113)
-            $0.height.equalTo(30)
-        }
         editorialLabel.snp.makeConstraints {
-            $0.top.equalTo(managementButton.snp.bottom).offset(45)
+            $0.top.equalTo(classLabel.snp.bottom).offset(45)
             $0.leading.equalToSuperview().offset(15)
         }
         editorialCollectionView.snp.makeConstraints {
@@ -171,10 +165,7 @@ final class MyPageVC: BaseVC<MyPageReactor> {
             .disposed(by: disposeBag)
     }
     override func bindView(reactor: MyPageReactor) {
-        managementButton.rx.tap
-            .map { Reactor.Action.clubManageButtonDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
+        
     }
 }
 

@@ -12,15 +12,13 @@ enum GCMSStep: Step {
     
     // MARK: Main
     case clubListIsRequired
-    case clubDetailIsRequired(id: Int)
+    case clubDetailIsRequired(query: ClubRequestComponent)
     case newClubIsRequired(category: ClubType)
     case memberAppendIsRequired((([User]) -> Void))
     
     // MARK: Administrator
     case myPageIsRequired
-    case clubManagementIsRequired
-    case clubJoinerListIsRequired(id: Int)
-    case notificationIsRequired(id: Int)
+    case clubJoinerListIsRequired(query: ClubRequestComponent)
     
     // MARK: Alarm
     case alarmListIsRequired
