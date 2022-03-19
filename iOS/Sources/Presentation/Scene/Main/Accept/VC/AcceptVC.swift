@@ -118,11 +118,6 @@ class AcceptVC : BaseVC<AcceptReactor> {
     }
         
     override func bindView(reactor: AcceptReactor) {
-        megaphoneButton.rx.tap
-            .map { Reactor.Action.noticeButtonDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
         deadlineButton.rx.tap
             .map { Reactor.Action.deadlineButtonDidTap }
             .bind(to: reactor.action)

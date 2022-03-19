@@ -13,7 +13,6 @@ final class MyPageReactor: Reactor, Stepper {
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
-        case clubManageButtonDidTap
         case updateLoading(Bool)
     }
     enum Mutation {
@@ -51,9 +50,6 @@ extension MyPageReactor {
         switch action {
         case .viewDidLoad:
             return viewDidLoad()
-        case .clubManageButtonDidTap:
-            steps.accept(GCMSStep.clubManagementIsRequired)
-//            return clubManageButtonDidTap()
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
         }
