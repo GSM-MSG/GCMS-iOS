@@ -21,4 +21,11 @@ final class KeychainLocal {
         return try keychain.load(type: .refreshToken)
     }
     
+    func saveExpiredAt(_ date: String) {
+        keychain.save(type: .expiredAt, value: date)
+    }
+    
+    func fetchExpiredAt() throws -> String {
+        return try keychain.load(type: .expiredAt)
+    }
 }
