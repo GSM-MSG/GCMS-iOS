@@ -6,10 +6,9 @@ protocol JWTTokenAuthorizable {
 }
 
 enum JWTTokenType {
-    case none
-    
     case accessToken
     case refreshToken
+    case none
 }
 
 final class JWTPlugin: PluginType {
