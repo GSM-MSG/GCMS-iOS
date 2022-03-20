@@ -19,7 +19,7 @@ class BaseRemote<API: GCMSAPI> {
     func request(_ api: API, isTest: Bool = false) -> Single<Response> {
         return .create { single in
             var disposables: [Disposable] = []
-            if self.apiNeedsAccessToken(api) {
+            if self.isApiNeedsAccessToken(api) {
                 disposables.append(
                     self.requestWithAccessToken(api, isTest: isTest)
                         .subscribe(
@@ -58,7 +58,7 @@ private extension BaseRemote {
         return .create { single in
             var disposables: [Disposable] = []
             do {
-                if try self.checkTokenExist() {
+                if try self.checkTokenIsValid() {
                     disposables.append(
                         self.defaultRequest(api, isTest: isTest)
                             .subscribe(
@@ -84,12 +84,13 @@ private extension BaseRemote {
         }
     }
     
-    func apiNeedsAccessToken(_ api: API) -> Bool {
+    func isApiNeedsAccessToken(_ api: API) -> Bool {
         return api.jwtTokenType == .accessToken
     }
-    func checkTokenExist() throws -> Bool {
+    func checkTokenIsValid() throws -> Bool {
         do {
-            return try !KeychainLocal.shared.fetchAccessToken().isEmpty
+            let expired = try KeychainLocal.shared.fetchExpiredAt().toDateWithISO8601()
+            return Date().todayWithGMT() > expired
         } catch {
             throw TokenError.noData
         }
