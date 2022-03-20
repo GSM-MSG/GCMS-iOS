@@ -3,6 +3,7 @@ import Foundation
 enum KeychainAccountType: String {
     case accessToken = "ACCESS-TOKEN"
     case refreshToken = "REFRESH-TOKEN"
+    case expiredAt = "EXPIRED-AT"
 }
 final class Keychain {
     static let shared = Keychain()

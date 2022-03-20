@@ -8,6 +8,7 @@ final class DefaultAuthRepository: AuthRepository {
             .do(onSuccess: { [weak self] token in
                 self?.keychainLocal.saveAccessToken(token.accessToken)
                 self?.keychainLocal.saveRefreshToken(token.refreshToken)
+                self?.keychainLocal.saveExpiredAt(token.expiredAt)
             }).asCompletable()
     }
     func register(req: RegisterReqeust, isTest: Bool = false) -> Completable {
