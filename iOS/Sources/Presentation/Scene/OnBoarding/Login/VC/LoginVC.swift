@@ -50,7 +50,7 @@ final class LoginVC : BaseVC<LoginReactor> {
         $0.layer.cornerRadius = 7
         $0.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
         $0.leftSpace(13)
-        $0.isSecureTextEntry = false
+        $0.isSecureTextEntry = true
     }
     
     private let emailText = UILabel().then {
@@ -124,9 +124,27 @@ final class LoginVC : BaseVC<LoginReactor> {
     }
     
     // MARK: - Reactor
+    
+    override func bindState(reactor: LoginReactor) {
+        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        
+        sharedState
+            .map(\.passwordVisible)
+            .subscribe(with: self){ owner, item in
+                owner.passwordVisibleButton.setImage(UIImage(systemName: item ? "eye.slash.fill" : "eye.fill"), for: .normal)
+                owner.passwordTextfield.isSecureTextEntry = item
+            }
+            .disposed(by: disposeBag)
+    }
+    
     override func bindView(reactor: LoginReactor) {
         loginButton.rx.tap
             .map { Reactor.Action.loginButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        passwordVisibleButton.rx.tap
+            .map { Reactor.Action.passwordVisibleButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }

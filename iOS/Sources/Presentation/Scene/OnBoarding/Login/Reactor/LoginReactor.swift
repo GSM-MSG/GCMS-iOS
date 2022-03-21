@@ -17,6 +17,7 @@ final class LoginReactor: Reactor, Stepper {
         case updateLoading(Bool)
     }
     enum Mutation {
+        case setVisiable(Bool)
         case setIsLoading(Bool)
     }
     struct State {
@@ -28,7 +29,7 @@ final class LoginReactor: Reactor, Stepper {
     // MARK: - Init
     init(
     ) {
-        initialState = State(isLoading: false, passwordVisible: false)
+        initialState = State(isLoading: false, passwordVisible: true)
     }
     
 }
@@ -42,7 +43,7 @@ extension LoginReactor {
         case .loginButtonDidTap:
             steps.accept(GCMSStep.clubListIsRequired)
         case .passwordVisibleButtonDidTap:
-            return passwordVisibleButtonDidTap()
+            return .just(.setVisiable(!currentState.passwordVisible))
         }
         return .empty()
     }
@@ -54,6 +55,8 @@ extension LoginReactor {
         var newState = state
         
         switch mutation {
+        case let .setVisiable(visible):
+            newState.passwordVisible = visible
         case let .setIsLoading(load):
             newState.isLoading = load
         }
@@ -64,7 +67,5 @@ extension LoginReactor {
 
 // MARK: - Method
 private extension LoginReactor {
-    func passwordVisibleButtonDidTap() -> Observable<Mutation> {
-        return .empty()
-    }
+
 }
