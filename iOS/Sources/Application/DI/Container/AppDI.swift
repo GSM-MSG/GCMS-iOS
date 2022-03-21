@@ -57,7 +57,6 @@ extension Container{
         }
         self.register(LoginReactor.self) { r in
             return LoginReactor(
-                
             )
         }
     }

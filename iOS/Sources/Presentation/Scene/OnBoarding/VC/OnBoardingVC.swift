@@ -47,7 +47,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     override func setLayout() {
         logoImageView.snp.makeConstraints {
             $0.centerX.equalToSuperview().offset(-10)
-            $0.top.equalToSuperview().offset(bound.height*0.23)
+            $0.top.equalToSuperview().offset(bound.height*0.21)
             $0.width.equalTo(145)
             $0.height.equalTo(145)
         }
