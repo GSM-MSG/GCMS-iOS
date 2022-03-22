@@ -75,7 +75,6 @@ private extension JWTPlugin {
     }
     
     func setToken(token: TokenDTO) {
-        print("ASDF")
         KeychainLocal.shared.saveAccessToken(token.accessToken)
         KeychainLocal.shared.saveRefreshToken(token.refreshToken)
     }

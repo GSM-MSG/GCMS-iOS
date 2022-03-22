@@ -4,7 +4,7 @@ import RxSwift
 import RxMoya
 
 class BaseRemote<API: GCMSAPI> {
-    private lazy var provider = MoyaProvider<API>(plugins: [NetworkLoggerPlugin(), JWTPlugin()])
+    private lazy var provider = MoyaProvider<API>(plugins: [JWTPlugin()])
     private let testingEndpoint = { (target: TargetType) -> Endpoint in
         return Endpoint(
             url: target.baseURL.absoluteString + target.path,
