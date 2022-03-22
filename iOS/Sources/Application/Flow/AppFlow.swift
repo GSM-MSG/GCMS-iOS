@@ -23,19 +23,16 @@ final class AppFlow: Flow{
     
     // MARK: - Properties
     var root: Presentable{
-        return self.rootWindow
+        return self.rootVC
     }
     
-    private let rootWindow: UIWindow
+    private lazy var rootVC: UIViewController = {
+        let launchScreenStoryboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
+        let launchScreen = launchScreenStoryboard.instantiateViewController(withIdentifier: "LaunchScreen")
+        return launchScreen
+    }()
     
-    // MARK: - Init
-    
-    init(
-        with window: UIWindow
-    ){
-        self.rootWindow = window
-    }
-    
+    // MARK: - Init    
     deinit{
         print("\(type(of: self)): \(#function)")
     }
@@ -65,9 +62,17 @@ private extension AppFlow{
             flow,
             when: .created
         ) { [unowned self] root in
-            self.rootWindow.rootViewController = root
+            root.modalPresentationStyle = .fullScreen
+            root.modalTransitionStyle = .crossDissolve
+            DispatchQueue.main.async {
+                self.rootVC.dismiss(animated: false)
+                self.rootVC.present(root, animated: true)
+            }
         }
-        return .one(flowContributor: .contribute(withNextPresentable: flow, withNextStepper: flow.stepper))
+        return .one(flowContributor: .contribute(
+            withNextPresentable: flow,
+            withNextStepper: OneStepper(withSingleStep: GCMSStep.onBoardingIsRequired)
+        ))
     }
     func coordinateToClubList() -> FlowContributors {
         let flow = MainFlow()
@@ -75,8 +80,17 @@ private extension AppFlow{
             flow,
             when: .created
         ) { [unowned self] root in
-            self.rootWindow.rootViewController = root
+            root.modalPresentationStyle = .fullScreen
+            root.modalTransitionStyle = .crossDissolve
+            DispatchQueue.main.async {
+                self.rootVC.dismiss(animated: false)
+                self.rootVC.present(root, animated: true)
+            }
         }
-        return .one(flowContributor: .contribute(withNextPresentable: flow, withNextStepper: flow.stepper))
+        return .one(
+            flowContributor: .contribute(
+                withNextPresentable: flow,
+                withNextStepper: OneStepper(withSingleStep: GCMSStep.clubListIsRequired)
+            ))
     }
 }
