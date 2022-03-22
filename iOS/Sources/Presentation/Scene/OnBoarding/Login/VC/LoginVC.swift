@@ -135,6 +135,9 @@ final class LoginVC : BaseVC<LoginReactor> {
                 owner.passwordTextfield.isSecureTextEntry = item
             }
             .disposed(by: disposeBag)
+        
+        
+        
     }
     
     override func bindView(reactor: LoginReactor) {
@@ -145,6 +148,16 @@ final class LoginVC : BaseVC<LoginReactor> {
         
         passwordVisibleButton.rx.tap
             .map { Reactor.Action.passwordVisibleButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        emailTextfield.rx.text.orEmpty
+            .map(Reactor.Action.updateEmail)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        passwordTextfield.rx.text.orEmpty
+            .map(Reactor.Action.updatePassword)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }

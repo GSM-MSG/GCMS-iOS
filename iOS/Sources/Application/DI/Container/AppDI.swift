@@ -57,6 +57,7 @@ extension Container{
         }
         self.register(LoginReactor.self) { r in
             return LoginReactor(
+                loginUseCase: r.resolve(LoginUseCase.self)!
             )
         }
     }
