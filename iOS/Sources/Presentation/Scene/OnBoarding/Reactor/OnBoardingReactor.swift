@@ -16,8 +16,7 @@ final class OnBoardingReactor: Reactor, Stepper {
     
     // MARK: - Reactor
     enum Action {
-        case googleSigninButtonDidTap(UIViewController)
-        case googleSigninTokenReceived(String)
+        case loginButtonDidTap
         case updateLoading(Bool)
     }
     enum Mutation {
@@ -44,15 +43,12 @@ final class OnBoardingReactor: Reactor, Stepper {
 extension OnBoardingReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case let .googleSigninButtonDidTap(vc):
-            steps.accept(GCMSStep.clubListIsRequired)
-            return .empty()
-            return googleSigninButtonDidTap(vc: vc)
-        case let .googleSigninTokenReceived(token):
-            return googleSigninTokenReceived(token: token)
+        case .loginButtonDidTap:
+            steps.accept(GCMSStep.loginIsRequired)
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
         }
+    return .empty()
     }
 }
 
@@ -71,24 +67,5 @@ extension OnBoardingReactor {
 
 // MARK: - Method
 private extension OnBoardingReactor {
-    func googleSigninButtonDidTap(vc: UIViewController) -> Observable<Mutation> {
-        let config = GIDConfiguration(clientID: FirebaseApp.app()?.options.clientID ?? "")
-        GIDSignIn.sharedInstance.signIn(with: config, presenting: vc) {[weak self] user, err in
-            if let err = err {
-                print(err.localizedDescription)
-                print("Goolge Signin Failure")
-                return
-            }
-            
-            user?.authentication.do({ auth in
-                UserDefaultsLocal.shared.isApple = false
-                self?.action.onNext(.googleSigninTokenReceived(auth.idToken ?? ""))
-            })
-        }
-        return .empty()
-    }
-    func googleSigninTokenReceived(token: String) -> Observable<Mutation> {
-        steps.accept(GCMSStep.clubListIsRequired)
-        return .empty()
-    }
+ 
 }

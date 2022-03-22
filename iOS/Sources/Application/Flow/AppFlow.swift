@@ -9,13 +9,27 @@ import RxFlow
 import RxRelay
 import RxSwift
 import UIKit
+import Service
 
 struct AppStepper: Stepper{
     let steps: PublishRelay<Step> = .init()
     private let disposeBag: DisposeBag = .init()
     
+    private let checkIsLoginedUseCase: CheckIsLoginedUseCase
+    
     func readyToEmitSteps() {
-        steps.accept(GCMSStep.onBoardingIsRequired)
+        checkIsLoginedUseCase.execute()
+            .andThen(Single.just(GCMSStep.clubListIsRequired))
+            .asObservable()
+            .catchAndReturn(GCMSStep.onBoardingIsRequired)
+            .bind(to: steps)
+            .disposed(by: disposeBag)
+    }
+    
+    init(
+        checkIsLoginedUseCase: CheckIsLoginedUseCase = AppDelegate.container.resolve(CheckIsLoginedUseCase.self)!
+    ) {
+        self.checkIsLoginedUseCase = checkIsLoginedUseCase
     }
 }
 

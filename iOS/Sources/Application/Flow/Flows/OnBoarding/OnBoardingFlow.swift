@@ -31,6 +31,8 @@ final class OnBoardingFlow: Flow{
         switch step{
         case .onBoardingIsRequired:
             return coordinateToOnBoarding()
+        case .loginIsRequired:
+            return navigateToLogin()
         case .clubListIsRequired:
             return .end(forwardToParentFlowWithStep: GCMSStep.clubListIsRequired)
         default:
@@ -44,6 +46,11 @@ private extension OnBoardingFlow{
     func coordinateToOnBoarding() -> FlowContributors {
         let vc = AppDelegate.container.resolve(OnBoardingVC.self)!
         self.rootVC.setViewControllers([vc], animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
+    func navigateToLogin() -> FlowContributors {
+        let vc = AppDelegate.container.resolve(LoginVC.self)!
+        self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
 }

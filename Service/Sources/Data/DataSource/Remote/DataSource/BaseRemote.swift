@@ -45,7 +45,7 @@ private extension BaseRemote {
     func defaultRequest(_ api: API, isTest: Bool = false) -> Single<Response> {
         return (isTest ? testingProvider : provider).rx
             .request(api)
-            .timeout(.seconds(10), scheduler: MainScheduler.asyncInstance)
+            .timeout(.seconds(120), scheduler: MainScheduler.asyncInstance)
             .catch { error in
                 guard let moyaErr = error as? MoyaError else {
                     return .error(error)

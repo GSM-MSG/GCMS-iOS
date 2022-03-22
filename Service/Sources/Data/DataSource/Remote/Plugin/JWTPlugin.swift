@@ -16,18 +16,17 @@ final class JWTPlugin: PluginType {
     func prepare(
         _ request: URLRequest,
         target: TargetType
-    ) throws -> URLRequest {
+    ) -> URLRequest {
         guard let authorizable = target as? JWTTokenAuthorizable,
               let tokenType = authorizable.jwtTokenType,
               tokenType != .none
         else { return request }
         
-        var request = request
-        
+        var req = request
         
         let token = "Bearer \(getToken(type: tokenType))"
-        request.addValue(token, forHTTPHeaderField: "Authorization")
-        return request
+        req.addValue(token, forHTTPHeaderField: "Authorization")
+        return req
     }
     
     func didReceive(

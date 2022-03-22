@@ -18,6 +18,9 @@ extension Container{
         self.register(MyPageVC.self) { r in
             return MyPageVC(reactor: r.resolve(MyPageReactor.self))
         }
+        self.register(LoginVC.self) { r in
+            return LoginVC(reactor: r.resolve(LoginReactor.self))
+        }
     }
     
     private func registerReactor() {
@@ -34,6 +37,11 @@ extension Container{
         self.register(MyPageReactor.self) { r in
             return MyPageReactor(
                 
+            )
+        }
+        self.register(LoginReactor.self) { r in
+            return LoginReactor(
+                loginUseCase: r.resolve(LoginUseCase.self)!
             )
         }
     }
