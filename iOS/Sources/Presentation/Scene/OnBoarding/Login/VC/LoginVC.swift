@@ -12,7 +12,7 @@ final class LoginVC : BaseVC<LoginReactor> {
         $0.image = GCMSAsset.Images.gcmsgLogo.image.withRenderingMode(.alwaysOriginal)
     }
     private let signUpLabel = UILabel().then {
-        $0.text = "Sign Up"
+        $0.text = "Sign In"
         $0.font = .systemFont(ofSize: 24, weight: .semibold)
     }
     
@@ -53,7 +53,7 @@ final class LoginVC : BaseVC<LoginReactor> {
         $0.isSecureTextEntry = true
     }
     
-    private let emailText = UILabel().then {
+    private let emailLabel = UILabel().then {
         $0.text = "@gsm.hs.kr"
         $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 13)
         $0.layer.borderWidth = 1
@@ -69,7 +69,7 @@ final class LoginVC : BaseVC<LoginReactor> {
     
     // MARK: - UI
     override func addView() {
-        view.addSubViews(logoImageView, signUpLabel, loginButton,findPasswordButton, emailTextfield, emailText, passwordTextfield, passwordVisibleButton)
+        view.addSubViews(logoImageView, signUpLabel, loginButton,findPasswordButton, emailTextfield, emailLabel, passwordTextfield, passwordVisibleButton)
     }
     
     override func setLayout() {
@@ -111,11 +111,11 @@ final class LoginVC : BaseVC<LoginReactor> {
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(51)
         }
-        emailText.snp.makeConstraints {
+        emailLabel.snp.makeConstraints {
             $0.trailing.equalTo(emailTextfield.snp.trailing)
             $0.bottom.equalTo(emailTextfield.snp.bottom)
             $0.height.equalTo(emailTextfield.snp.height)
-            $0.width.equalTo(emailText.snp.height).multipliedBy(2)
+            $0.width.equalTo(emailLabel.snp.height).multipliedBy(2)
         }
     }
     
@@ -140,7 +140,7 @@ final class LoginVC : BaseVC<LoginReactor> {
             .map(\.isLoginFailure)
             .subscribe(with: self){ owner, item in
                 owner.emailTextfield.layer.borderColor = item ? UIColor(red: 255/255, green: 129/255, blue: 129/255, alpha: 1).cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
-                owner.emailText.layer.borderColor = item ? UIColor(red: 255/255, green: 129/255, blue: 129/255, alpha: 1).cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.emailLabel.layer.borderColor = item ? UIColor(red: 255/255, green: 129/255, blue: 129/255, alpha: 1).cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
                 owner.passwordTextfield.layer.borderColor = item ? UIColor(red: 255/255, green: 129/255, blue: 129/255, alpha: 1).cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
             }
             .disposed(by: disposeBag)
