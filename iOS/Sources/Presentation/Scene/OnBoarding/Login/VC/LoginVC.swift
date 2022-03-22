@@ -151,7 +151,6 @@ final class LoginVC : BaseVC<LoginReactor> {
                 load ? owner.startIndicator() : owner.stopIndicator()
             }
             .disposed(by: disposeBag)
-        
     }
     
     override func bindView(reactor: LoginReactor) {
