@@ -21,6 +21,7 @@ extension Container{
         self.register(LoginVC.self) { r in
             return LoginVC(reactor: r.resolve(LoginReactor.self))
         }
+      
     }
     
     private func registerReactor() {
