@@ -126,7 +126,7 @@ final class LoginVC : BaseVC<LoginReactor> {
     // MARK: - Reactor
     
     override func bindState(reactor: LoginReactor) {
-        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 3).observe(on: MainScheduler.asyncInstance)
         
         sharedState
             .map(\.passwordVisible)
@@ -136,27 +136,41 @@ final class LoginVC : BaseVC<LoginReactor> {
             }
             .disposed(by: disposeBag)
         
+        sharedState
+            .map(\.isLoginFailure)
+            .subscribe(with: self){ owner, item in
+                owner.emailTextfield.layer.borderColor = item ? UIColor(red: 255/255, green: 129/255, blue: 129/255, alpha: 1).cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.emailText.layer.borderColor = item ? UIColor(red: 255/255, green: 129/255, blue: 129/255, alpha: 1).cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.passwordTextfield.layer.borderColor = item ? UIColor(red: 255/255, green: 129/255, blue: 129/255, alpha: 1).cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+            }
+            .disposed(by: disposeBag)
         
+        sharedState
+            .map(\.isLoading)
+            .bind(with: self) { owner, load in
+                load ? owner.startIndicator() : owner.stopIndicator()
+            }
+            .disposed(by: disposeBag)
         
     }
     
     override func bindView(reactor: LoginReactor) {
-        loginButton.rx.tap
+        loginButton.rx.tap.observe(on: MainScheduler.asyncInstance)
             .map { Reactor.Action.loginButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        passwordVisibleButton.rx.tap
+        passwordVisibleButton.rx.tap.observe(on: MainScheduler.asyncInstance)
             .map { Reactor.Action.passwordVisibleButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        emailTextfield.rx.text.orEmpty
+        emailTextfield.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
             .map(Reactor.Action.updateEmail)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        passwordTextfield.rx.text.orEmpty
+        passwordTextfield.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
             .map(Reactor.Action.updatePassword)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)

@@ -4,7 +4,7 @@ import RxSwift
 import RxMoya
 
 class BaseRemote<API: GCMSAPI> {
-    private lazy var provider = MoyaProvider<API>(plugins: [JWTPlugin(), NetworkLoggerPlugin()])
+    private lazy var provider = MoyaProvider<API>(plugins: [NetworkLoggerPlugin(), JWTPlugin()])
     private let testingEndpoint = { (target: TargetType) -> Endpoint in
         return Endpoint(
             url: target.baseURL.absoluteString + target.path,
@@ -45,7 +45,7 @@ private extension BaseRemote {
     func defaultRequest(_ api: API, isTest: Bool = false) -> Single<Response> {
         return (isTest ? testingProvider : provider).rx
             .request(api)
-            .timeout(.seconds(10), scheduler: MainScheduler.asyncInstance)
+            .timeout(.seconds(120), scheduler: MainScheduler.asyncInstance)
             .catch { error in
                 guard let moyaErr = error as? MoyaError else {
                     return .error(error)

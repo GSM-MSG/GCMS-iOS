@@ -17,6 +17,7 @@ final class LoginReactor: Reactor, Stepper {
         case updateLoading(Bool)
         case updateEmail(String)
         case updatePassword(String)
+        case loginDidFailed
     }
     enum Mutation {
         case setVisiable(Bool)
@@ -65,6 +66,8 @@ extension LoginReactor {
             return .just(.setEmail(email))
         case let .updatePassword(pwd):
             return .just(.setPassword(pwd))
+        case .loginDidFailed:
+            return .just(.setIsLoginFailure(true))
         }
         return .empty()
     }
@@ -84,8 +87,10 @@ extension LoginReactor {
             newState.isLoginFailure = success
         case let .setEmail(email):
             newState.email = email
+            newState.isLoginFailure = false
         case let .setPassword(password):
             newState.password = password
+            newState.isLoginFailure = false
         }
         
         return newState
@@ -95,9 +100,19 @@ extension LoginReactor {
 // MARK: - Method
 private extension LoginReactor {
     func loginButtonDidTap() -> Observable<Mutation> {
-        return loginUseCase.execute(req: LoginRequest(email: currentState.email, password: currentState.password))
-            .do(onCompleted: { [weak self] in
+        
+        let startLoading = Observable.just(Mutation.setIsLoading(true))
+        let login = loginUseCase.execute(req: LoginRequest(email: currentState.email, password: currentState.password))
+            .asObservable()
+            .do(onError: { [weak self] _ in
+                self?.action.onNext(.loginDidFailed)
+            }, onCompleted: { [weak self] in
                 self?.steps.accept(GCMSStep.clubListIsRequired)
-            }).andThen(Observable.just(.setPassword("")))
+            }).flatMap { _ in
+                Observable.concat([
+                    .just(.setIsLoginFailure(true)),
+                    Observable.just(Mutation.setIsLoading(false))
+                ])}
+        return .concat([startLoading, login])
     }
 }
