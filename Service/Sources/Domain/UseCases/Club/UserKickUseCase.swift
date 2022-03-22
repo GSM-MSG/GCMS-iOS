@@ -8,7 +8,7 @@ public final class UserKickUseCase {
     private let clubRepository: ClubRepository
     
     public func execute(
-        query: ClubRequestComponent,
+        query: ClubRequestQuery,
         userId: String,
         isTest: Bool = false
     ) -> Completable{

@@ -8,7 +8,7 @@ public final class UpdateClubUseCase {
     private let clubRepository: ClubRepository
     
     public func execute(
-        query: ClubRequestComponent,
+        query: ClubRequestQuery,
         req: NewClubRequest,
         isTest: Bool = false
     ) -> Completable{
