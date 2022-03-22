@@ -2,17 +2,17 @@ import Moya
 
 enum ClubAPI {
     case clubList(type: ClubType)
-    case clubDetail(query: ClubRequestComponent)
+    case clubDetail(query: ClubRequestQuery)
     case createNewClub(req: NewClubRequest)
-    case updateClub(query: ClubRequestComponent, req: NewClubRequest)
-    case deleteClub(query: ClubRequestComponent)
-    case clubMember(query: ClubRequestComponent)
-    case clubApplicant(query: ClubRequestComponent)
-    case userAccept(query: ClubRequestComponent, userId: String)
-    case userReject(query: ClubRequestComponent, userId: String)
-    case clubOpen(query: ClubRequestComponent)
-    case clubClose(query: ClubRequestComponent)
-    case userKick(query: ClubRequestComponent, userId: String)
+    case updateClub(query: ClubRequestQuery, req: NewClubRequest)
+    case deleteClub(query: ClubRequestQuery)
+    case clubMember(query: ClubRequestQuery)
+    case clubApplicant(query: ClubRequestQuery)
+    case userAccept(query: ClubRequestQuery, userId: String)
+    case userReject(query: ClubRequestQuery, userId: String)
+    case clubOpen(query: ClubRequestQuery)
+    case clubClose(query: ClubRequestQuery)
+    case userKick(query: ClubRequestQuery, userId: String)
 }
 
 extension ClubAPI: GCMSAPI {

@@ -17,6 +17,7 @@ final class HomeReactor: Reactor, Stepper {
         case myPageButtonDidTap
         case alarmButtonDidTap
         case updateLoading(Bool)
+        case clubDidTap(ClubRequestQuery)
     }
     enum Mutation {
         case setClubList([ClubList])
@@ -58,6 +59,8 @@ extension HomeReactor {
             return .just(.setIsLoading(load))
         case let .segmentDidTap(type):
             return .just(.setClubType(type))
+        case let .clubDidTap(query):
+            steps.accept(GCMSStep.clubDetailIsRequired(query: query))
         }
         return .empty()
     }

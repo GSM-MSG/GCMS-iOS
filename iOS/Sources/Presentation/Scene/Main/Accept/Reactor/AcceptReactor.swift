@@ -24,12 +24,12 @@ final class AcceptReactor: Reactor, Stepper {
     struct State {
         var acceptUser: [User]
     }
-    private let query: ClubRequestComponent
+    private let query: ClubRequestQuery
     let initialState: State
     
     // MARK: - Init
     init(
-        query: ClubRequestComponent
+        query: ClubRequestQuery
     ) {
         self.query = query
         initialState = State(acceptUser: [])
