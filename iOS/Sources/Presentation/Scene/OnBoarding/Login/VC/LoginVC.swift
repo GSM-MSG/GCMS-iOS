@@ -25,7 +25,11 @@ final class LoginVC : BaseVC<LoginReactor> {
     
     private let findPasswordButton = UIButton().then {
         let attributedString = NSMutableAttributedString(string: "계정을 잊으셨나요? ID찾기 또는 비밀번호 찾기")
-        attributedString.setColorForText(textToFind: "비밀번호 찾기", withColor: UIColor(red: 82/255, green: 196/255, blue: 255/255, alpha: 1))
+        attributedString.setColorForText(textToFind: "비밀번호 찾기",
+                                         withColor: UIColor(red: 82/255,
+                                                            green: 196/255,
+                                                            blue: 255/255,
+                                                            alpha: 1))
         $0.setAttributedTitle(attributedString, for: .normal)
         $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.regular, size: 11)
     }
@@ -63,7 +67,6 @@ final class LoginVC : BaseVC<LoginReactor> {
     }
     
     private let passwordVisibleButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "eye.slash.fill"), for: .normal)
         $0.tintColor = GCMSAsset.Colors.gcmsGray4.color
     }
     
@@ -139,9 +142,18 @@ final class LoginVC : BaseVC<LoginReactor> {
         sharedState
             .map(\.isLoginFailure)
             .subscribe(with: self){ owner, item in
-                owner.emailTextfield.layer.borderColor = item ? UIColor(red: 255/255, green: 129/255, blue: 129/255, alpha: 1).cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
-                owner.emailLabel.layer.borderColor = item ? UIColor(red: 255/255, green: 129/255, blue: 129/255, alpha: 1).cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
-                owner.passwordTextfield.layer.borderColor = item ? UIColor(red: 255/255, green: 129/255, blue: 129/255, alpha: 1).cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.emailTextfield.layer.borderColor = item ? UIColor(red: 255/255,
+                                                                        green: 129/255,
+                                                                        blue: 129/255,
+                                                                        alpha: 1).cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.emailLabel.layer.borderColor = item ? UIColor(red: 255/255,
+                                                                    green: 129/255,
+                                                                    blue: 129/255,
+                                                                    alpha: 1).cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.passwordTextfield.layer.borderColor = item ? UIColor(red: 255/255,
+                                                                           green: 129/255,
+                                                                           blue: 129/255,
+                                                                           alpha: 1).cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
             }
             .disposed(by: disposeBag)
         
