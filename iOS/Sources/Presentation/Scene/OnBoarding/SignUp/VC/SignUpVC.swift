@@ -44,7 +44,14 @@ final class SignUpVC : BaseVC<SignUpReactor> {
     }
     
     private let certificationButton = UIButton().then {
-        $0.setTitle("인증하기", for: .normal)
+        $0.setTitle("인증", for: .normal)
+        $0.layer.cornerRadius = 9
+        $0.backgroundColor = GCMSAsset.Colors.gcmsOnBoardingMainColor.color
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 12)
+    }
+    
+    private let completeButton = UIButton().then {
+        $0.setTitle("완료", for: .normal)
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 18)
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
@@ -54,7 +61,7 @@ final class SignUpVC : BaseVC<SignUpReactor> {
     
     // MARK: - UI
     override func addView() {
-        view.addSubViews(emailTextfield, passwordTextfield, retryPasswordTextfield, certificationButton)
+        view.addSubViews(emailTextfield, passwordTextfield, retryPasswordTextfield, certificationButton, completeButton)
     }
     
     override func setLayout() {
@@ -77,6 +84,12 @@ final class SignUpVC : BaseVC<SignUpReactor> {
             $0.height.equalTo(51)
         }
         certificationButton.snp.makeConstraints {
+            $0.trailing.equalTo(emailTextfield.snp.trailing).offset(-9)
+            $0.top.equalTo(emailTextfield.snp.top).offset(10)
+            $0.height.equalTo(31)
+            $0.width.equalTo(61)
+        }
+        completeButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.height.equalTo(51)
             $0.bottom.equalToSuperview().offset(-bound.height*0.1)
