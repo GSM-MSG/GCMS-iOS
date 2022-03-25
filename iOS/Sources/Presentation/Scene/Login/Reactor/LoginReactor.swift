@@ -103,16 +103,15 @@ private extension LoginReactor {
         
         let startLoading = Observable.just(Mutation.setIsLoading(true))
         let login = loginUseCase.execute(req: LoginRequest(email: currentState.email, password: currentState.password))
-            .asObservable()
             .do(onError: { [weak self] _ in
                 self?.action.onNext(.loginDidFailed)
-            }, onCompleted: { [weak self] in
-                self?.steps.accept(GCMSStep.clubListIsRequired)
-            }).flatMap { _ in
-                Observable.concat([
-                    .just(.setIsLoginFailure(true)),
-                    Observable.just(Mutation.setIsLoading(false))
-                ])}
+            }, onCompleted: {
+                self.steps.accept(GCMSStep.clubListIsRequired)
+            })
+            .andThen(Single.just(Mutation.setIsLoginFailure(true)))
+            .asObservable()
+            .catchAndReturn(.setIsLoading(false))
+            
         return .concat([startLoading, login])
     }
 }
