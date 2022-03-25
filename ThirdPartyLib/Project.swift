@@ -19,8 +19,9 @@ let project = Project.dynamicFramework(
         .Reusable,
         .BTImageView,
         .RxGesture,
-        .PanModal,
         .DPOTPView
+        .PanModal,
+        .ViewAnimator
     ],
     deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
     dependencies: [
@@ -41,6 +42,7 @@ let project = Project.dynamicFramework(
         .SPM.BTImageView,
         .SPM.RxGesture,
         .SPM.PanModal,
+        .SPM.ViewAnimator
         .SPM.DPOTPView
     ]
 )
