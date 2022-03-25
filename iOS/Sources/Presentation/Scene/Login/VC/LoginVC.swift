@@ -2,9 +2,10 @@ import UIKit
 import Then
 import SnapKit
 import RxCocoa
-import AuthenticationServices
+import IQKeyboardManagerSwift
 import Service
 import RxSwift
+import ViewAnimator
 
 final class LoginVC : BaseVC<LoginReactor> {
     // MARK: - Properties
@@ -12,7 +13,7 @@ final class LoginVC : BaseVC<LoginReactor> {
         $0.image = GCMSAsset.Images.gcmsgLogo.image.withRenderingMode(.alwaysOriginal)
     }
     private let signUpLabel = UILabel().then {
-        $0.text = "Sign In"
+        $0.text = "Login"
         $0.font = .systemFont(ofSize: 24, weight: .semibold)
     }
     
@@ -76,18 +77,46 @@ final class LoginVC : BaseVC<LoginReactor> {
         $0.preferredColor = UIColor(red: 0.415, green: 0.439, blue: 1, alpha: 0.9)
     }
     private let secondaryWaveView = WaveView().then {
-        $0.preferredColor = UIColor(red: 0.568, green: 0.584, blue: 1, alpha: 1)
+        $0.preferredColor = UIColor(red: 0.568, green: 0.584, blue: 1, alpha: 0.9)
+    }
+    private let thirdWaveView = WaveView().then {
+        $0.preferredColor = UIColor(red: 0.414, green: 0.438, blue: 0.9, alpha: 0.8)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        primaryWaveView.animationStart(direction: .left, speed: 0.8)
-        self.secondaryWaveView.animationStart(direction: .right, speed: 0.8)
-        
+        primaryWaveView.animationStart(direction: .left, speed: 0.65)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) { [weak self] in
+            self?.secondaryWaveView.animationStart(direction: .right, speed: 0.65)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
+            self?.thirdWaveView.animationStart(direction: .left, speed: 0.65)
+        }
+        UIView.animate(views: [
+            primaryWaveView, secondaryWaveView, thirdWaveView
+        ], animations: [
+            AnimationType.from(direction: .top, offset: 300),
+        ], duration: 1.6)
+        UIView.animate(views: [
+            logoImageView, signUpLabel
+        ], animations: [
+            AnimationType.zoom(scale: 0.5)
+        ], delay: 1.4, duration: 1.2)
+        UIView.animate(views: [
+            emailTextfield, emailLabel, passwordTextfield, passwordVisibleButton, findPasswordButton
+        ], animations: [
+            AnimationType.from(direction: .bottom, offset: 3)
+        ], delay: 1.4, duration: 1.2)
+        UIView.animate(views: [
+            loginButton
+        ], animations: [
+            AnimationType.zoom(scale:0.1)
+        ], delay: 1.4, duration: 1.2)
     }
+    
     // MARK: - UI
     override func addView() {
-        view.addSubViews(secondaryWaveView, primaryWaveView, logoImageView, signUpLabel, loginButton,findPasswordButton, invalidLabel, emailTextfield, emailLabel, passwordTextfield, passwordVisibleButton)
+        view.addSubViews(thirdWaveView, secondaryWaveView, primaryWaveView, logoImageView, signUpLabel, loginButton,findPasswordButton, invalidLabel, emailTextfield, emailLabel, passwordTextfield, passwordVisibleButton)
     }
     
     override func setLayout() {
@@ -97,8 +126,11 @@ final class LoginVC : BaseVC<LoginReactor> {
         }
         secondaryWaveView.snp.makeConstraints {
             $0.centerX.width.top.equalToSuperview()
-            $0.width.equalToSuperview()
             $0.height.equalTo(bound.height*0.46)
+        }
+        thirdWaveView.snp.makeConstraints {
+            $0.centerX.width.top.equalToSuperview()
+            $0.height.equalTo(bound.height*0.45)
         }
         logoImageView.snp.makeConstraints {
             $0.centerX.equalToSuperview().offset(-10)

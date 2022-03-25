@@ -11,9 +11,9 @@ final class WaveView: UIView {
     var customLayer = CAShapeLayer()
     
     var speed: Double = 10
-    var frequency = 27.0
-    var parameterA = 1.5
-    var parameterB = 13.5
+    var frequency: Double = 37.0
+    var parameterA: Double = 4.5
+    var parameterB: Double = 18.5
     var phase = 0.0
     
     var preferredColor = UIColor.cyan
@@ -29,17 +29,17 @@ final class WaveView: UIView {
         
         let waveLength = width / self.frequency
         let waveHeightCoef = Double(self.frequency)
-        path.move(to: CGPoint(x: 0, y: frame.minY))
+        path.move(to: CGPoint(x: 0, y: frame.minY - 100))
         path.addLine(to: CGPoint(x: 0, y: mid))
         
-        for x in stride(from: 0, through: width, by: width/7) {
+        for x in stride(from: 0, through: width, by: width/9) { // -sin(A*x) * cos(x/B)
             let actualX = x/waveLength
             let since = -cos(self.parameterA*(actualX + self.phase)) * sin((actualX + self.phase)/self.parameterB)
             let y = waveHeightCoef * since + mid
             path.addLine(to: CGPoint(x: x, y: y))
         }
         path.addLine(to: CGPoint(x: CGFloat(width), y: self.frame.minY))
-        path.addLine(to: CGPoint(x: 0, y: self.frame.minY))
+        path.addLine(to: CGPoint(x: 0, y: self.frame.minY - 100))
         
         customLayer.path = path.cgPath
         customLayer.fillColor = preferredColor.cgColor

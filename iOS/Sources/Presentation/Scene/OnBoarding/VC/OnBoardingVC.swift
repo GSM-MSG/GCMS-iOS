@@ -5,6 +5,7 @@ import RxCocoa
 import AuthenticationServices
 import Service
 import RxSwift
+import ViewAnimator
 
 final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     // MARK: - Properties
@@ -81,6 +82,21 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     override func configureNavigation() {
         self.navigationController?.navigationBar.setClear()
         self.navigationItem.configBack()
+        UIView.animate(views: [
+            logoImageView, headerLabel
+        ], animations: [
+            AnimationType.from(direction: .top, offset: 100)
+        ], initialAlpha: 0, finalAlpha: 1, delay: 0.3, duration: 1.25)
+        UIView.animate(views: [
+            signUpLabel, nowLabel
+        ], animations: [
+            
+        ], initialAlpha: 0, finalAlpha: 1, delay: 1.05, duration: 0.75)
+        UIView.animate(views: [
+            signUpButton, loginButton
+        ], animations: [
+            AnimationType.from(direction: .left, offset: 100)
+        ], delay: 1.8, duration: 1)
     }
     
     // MARK: - Reactor
