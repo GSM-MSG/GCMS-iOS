@@ -13,7 +13,7 @@ extension UINavigationItem {
     }
     func configTitleImage() {
         let iv = UIImageView()
-        iv.image = GCMSAsset.Images.gcmsWhaleLogo.image.withRenderingMode(.alwaysOriginal)
+        iv.image = GCMSAsset.Images.gcmsgLogo.image.withRenderingMode(.alwaysOriginal).downSample(size: .init(width: 10, height: 10))
         iv.contentMode = .scaleAspectFit
         self.titleView = iv
     }

@@ -93,10 +93,10 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             
         ], initialAlpha: 0, finalAlpha: 1, delay: 1.05, duration: 0.75)
         UIView.animate(views: [
-            signUpButton, loginButton
+            loginButton, signUpButton
         ], animations: [
-            AnimationType.from(direction: .left, offset: 100)
-        ], delay: 1.8, duration: 1)
+            AnimationType.from(direction: .left, offset: 200)
+        ], delay: 1.8, duration: 1, usingSpringWithDamping: 1, initialSpringVelocity: 0.7, options: .curveEaseInOut)
     }
     
     // MARK: - Reactor
