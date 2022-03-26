@@ -49,17 +49,16 @@ fileprivate extension ClubTypeSegmentedControl {
         titles.forEach { title in
             let button = UIButton()
             button.setTitle(title, for: .normal)
-            button.setTitleColor(.gray, for: .normal) // TODO: Color asset pull
-            button.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 11)
+            button.setTitleColor(GCMSAsset.Colors.gcmsGray3.color, for: .normal)
+            button.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 14)
             button.backgroundColor = .clear
             button.layer.cornerRadius = 11.5
             button.layer.masksToBounds = true
             button.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
             self.buttons.append(button)
         }
-        buttons[0].backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
-        buttons[0].titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 11)
-        buttons[0].setTitleColor(.white, for: .normal)
+        buttons[0].setTitleColor(.init(red: 0, green: 0.65, blue: 1, alpha: 0.99), for: .normal)
+        buttons[0].setUnderline()
     }
     func configStack() {
         let stack = UIStackView(arrangedSubviews: buttons)
@@ -75,15 +74,32 @@ fileprivate extension ClubTypeSegmentedControl {
     @objc func buttonDidTap(_ sender: UIButton) {
         buttons.enumerated().forEach { index, button in
             button.backgroundColor = .clear
-            button.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 11)
-            button.setTitleColor(.gray, for: .normal)
+            button.setTitleColor(GCMSAsset.Colors.gcmsGray3.color, for: .normal)
+            button.clearUnderline()
             if button == sender {
-                button.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
-                button.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 11)
-                button.setTitleColor(.white, for: .normal)
+                button.setTitleColor(.init(red: 0, green: 0.65, blue: 1, alpha: 0.99), for: .normal)
+                button.setUnderline()
                 self.selectedIndex = index
                 self.delegate?.segmentValueChanged(to: index)
             }
         }
+    }
+}
+
+
+extension UIButton {
+    func setUnderline() {
+        guard let title = title(for: .normal) else { return }
+        let attributedString = NSMutableAttributedString(string: title)
+        attributedString.addAttribute(.underlineStyle,
+                                      value: NSUnderlineStyle.single.rawValue,
+                                      range: NSRange(location: 0, length: title.count)
+        )
+        setAttributedTitle(attributedString, for: .normal)
+    }
+    func clearUnderline() {
+        guard let title = title(for: .normal) else { return }
+        let attributedString = NSMutableAttributedString(string: title)
+        setAttributedTitle(attributedString, for: .normal)
     }
 }

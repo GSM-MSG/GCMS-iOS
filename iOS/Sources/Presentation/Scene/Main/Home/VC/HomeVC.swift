@@ -17,7 +17,7 @@ final class HomeVC: BaseVC<HomeReactor> {
                                                style: .plain,
                                                target: nil,
                                                action: nil)
-    private let alarmButton = UIBarButtonItem(image: .init(systemName: "bell")?.tintColor(GCMSAsset.Colors.gcmsGray4.color),
+    private let alarmButton = UIBarButtonItem(image: .init(systemName: "plus.app")?.tintColor(GCMSAsset.Colors.gcmsGray4.color),
                                               style: .plain,
                                               target: nil,
                                               action: nil)
@@ -39,7 +39,7 @@ final class HomeVC: BaseVC<HomeReactor> {
             $0.leading.trailing.equalToSuperview().inset(bound.width*0.24)
         }
         clubListCollectionView.snp.makeConstraints {
-            $0.top.equalTo(clubTypeSegmentedControl.snp.bottom)
+            $0.top.equalTo(clubTypeSegmentedControl.snp.bottom).offset(5)
             $0.leading.trailing.equalToSuperview().inset(10)
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
