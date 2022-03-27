@@ -22,6 +22,7 @@ public extension TargetDependency.SPM{
     static let RxGesture = TargetDependency.package(product: "RxGesture")
     static let PanModal = TargetDependency.package(product: "PanModal")
     static let Lottie = TargetDependency.package(product: "Lottie")
+    static let DPOTPView = TargetDependency.package(product: "DPOTPView")
 }
 
 public extension Package {
@@ -88,5 +89,9 @@ public extension Package {
     static let Lottie = Package.remote(
         url: "https://github.com/airbnb/lottie-ios.git",
         requirement: .upToNextMajor(from: "3.2.1")
+    )
+    static let DPOTPView = Package.remote(
+        url: "https://github.com/Datt1994/DPOTPView.git",
+        requirement: .upToNextMajor(from: "1.0.0")
     )
 }
