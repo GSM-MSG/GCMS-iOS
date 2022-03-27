@@ -33,13 +33,20 @@ final class CertificationVC: BaseVC<CertificationReactor> {
         $0.tintColor = .white
     }
     
+    private let completeButton = UIButton().then {
+        $0.setTitle("확인", for: .normal)
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 18)
+        $0.layer.cornerRadius = 9
+        $0.backgroundColor = GCMSAsset.Colors.gcmsOnBoardingMainColor.color
+    }
+    
     // MARK: - UI
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
     
     override func addView() {
-        view.addSubViews(mailImage,sendMessageLabel, textfield, dismissButton)
+        view.addSubViews(mailImage,sendMessageLabel, textfield, dismissButton, completeButton)
     }
     
     override func setLayout() {
@@ -62,13 +69,18 @@ final class CertificationVC: BaseVC<CertificationReactor> {
             $0.trailing.equalTo(0)
             $0.width.height.equalTo(50)
         }
+        completeButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(51)
+            $0.bottom.equalToSuperview().offset(-bound.height*0.1)
+            $0.leading.trailing.equalToSuperview().inset(15)
+        }
     }
     
     // MARK: - UI
     
     override func configureNavigation() {
         self.navigationController?.navigationBar.setClear()
-        self.navigationItem.title = "안녕하세요"
     }
     
 }
