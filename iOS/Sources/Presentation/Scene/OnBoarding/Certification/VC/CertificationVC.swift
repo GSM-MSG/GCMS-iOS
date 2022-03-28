@@ -52,7 +52,7 @@ final class CertificationVC: BaseVC<CertificationReactor> {
     override func setLayout() {
         mailImage.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview().offset(bound.height*0.2893)
+            $0.top.equalToSuperview().offset(bound.height*0.1)
         }
         sendMessageLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
