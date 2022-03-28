@@ -9,9 +9,8 @@ public final class UserKickUseCase {
     
     public func execute(
         query: ClubRequestQuery,
-        userId: String,
-        isTest: Bool = false
+        userId: String
     ) -> Completable{
-        clubRepository.userKick(query: query, userId: userId, isTest: isTest)
+        clubRepository.userKick(query: query, userId: userId)
     }
 }

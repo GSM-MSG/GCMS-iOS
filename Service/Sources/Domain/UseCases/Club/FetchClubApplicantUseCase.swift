@@ -7,7 +7,7 @@ public final class FetchClubApplicantUseCase {
     
     private let clubRepository: ClubRepository
     
-    public func execute(query: ClubRequestQuery, isTest: Bool = false) -> Single<[User]> {
-        clubRepository.fetchClubApplicant(query: query, isTest: isTest)
+    public func execute(query: ClubRequestQuery) -> Single<[User]> {
+        clubRepository.fetchClubApplicant(query: query)
     }
 }

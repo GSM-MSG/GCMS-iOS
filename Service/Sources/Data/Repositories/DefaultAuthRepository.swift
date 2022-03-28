@@ -4,20 +4,20 @@ final class DefaultAuthRepository: AuthRepository {
     private let authRemote = AuthRemote.shared
     private let keychainLocal = KeychainLocal.shared
     func login(req: LoginRequest) -> Completable {
-        return authRemote.login(req: req, isTest: false)
+        return authRemote.login(req: req)
             .asCompletable()
     }
     func register(req: RegisterReqeust) -> Completable {
-        return authRemote.register(req: req, isTest: false)
+        return authRemote.register(req: req)
     }
     func refresh() -> Completable {
-        return authRemote.refresh(isTest: false)
+        return authRemote.refresh()
     }
     func sendVerify(email: String) -> Completable {
-        return authRemote.sendVerify(email: email, isTest: false)
+        return authRemote.sendVerify(email: email)
     }
     func isVerified(email: String) -> Completable {
-        return authRemote.isVerified(email: email, isTest: false)
+        return authRemote.isVerified(email: email)
     }
 }
 
