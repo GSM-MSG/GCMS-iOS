@@ -19,9 +19,8 @@ let project = Project.dynamicFramework(
         .Reusable,
         .BTImageView,
         .RxGesture,
-        .DPOTPView
-        .PanModal,
         .ViewAnimator,
+        .PanModal,
         .DPOTPView
     ],
     deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
