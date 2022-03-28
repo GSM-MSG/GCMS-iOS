@@ -36,6 +36,8 @@ extension Project{
                     infoPlist: .default,
                     sources: ["Tests/**"],
                     dependencies: [
+                        .SPM.Quick,
+                        .SPM.Nimble,
                         .target(name: name)
                     ]
                 )
