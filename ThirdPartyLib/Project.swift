@@ -19,7 +19,6 @@ let project = Project.dynamicFramework(
         .Reusable,
         .BTImageView,
         .RxGesture,
-        .ViewAnimator,
         .PanModal,
         .ViewAnimator
         .DPOTPView
