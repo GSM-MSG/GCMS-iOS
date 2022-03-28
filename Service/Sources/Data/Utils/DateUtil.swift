@@ -7,9 +7,3 @@ extension String {
         return formatter.date(from: self) ?? .init()
     }
 }
-
-extension Date {
-    func todayWithGMT() -> Date {
-        return Date(timeInterval: TimeInterval(Calendar.current.timeZone.secondsFromGMT()), since: self)
-    }
-}

@@ -7,20 +7,20 @@ class BaseRemote<API: GCMSAPI> {
     public var testStatus = false
     public var successStatus = true
     private let provider = MoyaProvider<API>(plugins: [JWTPlugin()])
-    private let successTestEndpoint = { (target: TargetType) -> Endpoint in
+    private let successTestEndpoint = { (target: API) -> Endpoint in
         return Endpoint(
-            url: target.baseURL.absoluteString + target.path,
+            url: URL(target: target).absoluteString,
             sampleResponseClosure: { .networkResponse(201, target.sampleData) },
             method: target.method,
             task: target.task,
             httpHeaderFields: target.headers
         )
     }
-    private let failureTestEndPoint = { (target: TargetType) -> Endpoint in
+    private let failureTestEndPoint = { (target: API) -> Endpoint in
         return Endpoint(
-            url: target.baseURL.absoluteString + target.path,
-            sampleResponseClosure: { .networkResponse(401, .init())}
-            , method: target.method,
+            url: URL(target: target).absoluteString,
+            sampleResponseClosure: { .networkResponse(401, Data())},
+            method: target.method,
             task: target.task,
             httpHeaderFields: target.headers)
     }
@@ -104,7 +104,7 @@ private extension BaseRemote {
     func checkTokenIsValid() throws -> Bool {
         do {
             let expired = try KeychainLocal.shared.fetchExpiredAt().toDateWithISO8601()
-            return Date().todayWithGMT() > expired
+            return Date() > expired
         } catch {
             throw TokenError.noData
         }
