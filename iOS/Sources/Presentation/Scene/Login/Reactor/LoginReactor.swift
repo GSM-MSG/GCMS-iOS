@@ -42,7 +42,7 @@ final class LoginReactor: Reactor, Stepper {
     ) {
         initialState = State(
             isLoading: false,
-            passwordVisible: true,
+            passwordVisible: false,
             isLoginFailure: false,
             password: "",
             email: ""

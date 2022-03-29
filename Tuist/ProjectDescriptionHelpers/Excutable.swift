@@ -38,6 +38,7 @@ extension Project{
                     dependencies: [
                         .SPM.Quick,
                         .SPM.Nimble,
+                        .SPM.ReactorKit,
                         .target(name: name)
                     ]
                 )
