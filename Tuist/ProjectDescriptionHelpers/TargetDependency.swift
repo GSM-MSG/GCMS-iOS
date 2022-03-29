@@ -25,6 +25,7 @@ public extension TargetDependency.SPM{
     static let ViewAnimator = TargetDependency.package(product: "ViewAnimator")
     static let Quick = TargetDependency.package(product: "Quick")
     static let Nimble = TargetDependency.package(product: "Nimble")
+    static let DPOTPView = TargetDependency.package(product: "DPOTPView")
 }
 
 public extension Package {
@@ -103,5 +104,9 @@ public extension Package {
     static let Nimble = Package.remote(
         url: "https://github.com/Quick/Nimble.git",
         requirement: .upToNextMajor(from: "9.0.0")
+    )
+    static let DPOTPView = Package.remote(
+        url: "https://github.com/Datt1994/DPOTPView.git",
+        requirement: .upToNextMajor(from: "1.0.0")
     )
 }

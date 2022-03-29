@@ -55,6 +55,15 @@
       }
     },
     {
+      "identity" : "dpotpview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Datt1994/DPOTPView.git",
+      "state" : {
+        "revision" : "950ecde0feef20f96abdd20a7442aa0ac2461626",
+        "version" : "1.5.12"
+      }
+    },
+    {
       "identity" : "firebase-ios-sdk",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk.git",

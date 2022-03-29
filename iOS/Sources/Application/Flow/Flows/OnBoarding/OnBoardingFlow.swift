@@ -35,6 +35,8 @@ final class OnBoardingFlow: Flow{
             return navigateToLogin()
         case .clubListIsRequired:
             return .end(forwardToParentFlowWithStep: GCMSStep.clubListIsRequired)
+        case .certificationIsRequired:
+            return navigateCertification()
         default:
             return .none
         }
@@ -51,6 +53,11 @@ private extension OnBoardingFlow{
     func navigateToLogin() -> FlowContributors {
         let vc = AppDelegate.container.resolve(LoginVC.self)!
         self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
+    func navigateCertification() -> FlowContributors {
+        let vc = AppDelegate.container.resolve(CertificationVC.self)!
+        self.rootVC.present(UINavigationController(rootViewController: vc), animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
 }

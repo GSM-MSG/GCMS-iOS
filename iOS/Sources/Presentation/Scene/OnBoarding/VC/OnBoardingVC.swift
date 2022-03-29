@@ -117,5 +117,9 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             .map { Reactor.Action.loginButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        signUpButton.rx.tap
+            .map { Reactor.Action.signUpButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
