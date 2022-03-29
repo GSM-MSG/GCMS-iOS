@@ -7,6 +7,7 @@ import RxGesture
 import RxSwift
 import Reusable
 import RxDataSources
+import IQKeyboardManagerSwift
 
 final class CertificationVC: BaseVC<CertificationReactor> {
     // MARK: - Properties
@@ -25,17 +26,18 @@ final class CertificationVC: BaseVC<CertificationReactor> {
     private let textfield = DPOTPView().then {
         $0.isCursorHidden = true
         $0.count = 4
-        $0.spacing = 30
+        $0.spacing = 25
         $0.cornerRadiusTextField = 5
         $0.dismissOnLastEntry = true
-        $0.fontTextField = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 19.0)!
+        $0.keyboardType = .numberPad
+        $0.fontTextField = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 30.0)!
         $0.backGroundColorTextField = UIColor(red: 55/255, green: 55/255, blue: 58/255, alpha: 1)
         $0.textColorTextField = .white
     }
     
     private let backView = UIView().then {
         $0.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
-        $0.layer.cornerRadius = 20
+        $0.layer.cornerRadius = 26
     }
     
     private let completeButton = UIButton().then {
@@ -45,9 +47,21 @@ final class CertificationVC: BaseVC<CertificationReactor> {
         $0.backgroundColor = GCMSAsset.Colors.gcmsOnBoardingMainColor.color
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        IQKeyboardManager.shared.enableAutoToolbar = false
+        IQKeyboardManager.shared.enable = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        IQKeyboardManager.shared.enableAutoToolbar = true
+        IQKeyboardManager.shared.enable = true
+    }
+    
     // MARK: - UI
     override func configureVC() {
-        view.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.3)
+        view.backgroundColor = .black.withAlphaComponent(0.3)
     }
     
     override func addView() {
@@ -73,13 +87,13 @@ final class CertificationVC: BaseVC<CertificationReactor> {
         textfield.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(sendMessageLabel.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview().inset(42)
+            $0.leading.trailing.equalToSuperview().inset(bound.width*0.1066)
             $0.height.equalTo(66)
         }
         completeButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.height.equalTo(51)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(10)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-10)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
     }
