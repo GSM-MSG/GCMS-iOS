@@ -14,7 +14,7 @@ final class LoginVC : BaseVC<LoginReactor> {
     }
     private let signUpLabel = UILabel().then {
         $0.text = "Login"
-        $0.font = .systemFont(ofSize: 24, weight: .semibold)
+        $0.font = .systemFont(ofSize: 32, weight: .semibold)
     }
     
     private let loginButton = UIButton().then {
@@ -85,12 +85,12 @@ final class LoginVC : BaseVC<LoginReactor> {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        primaryWaveView.animationStart(direction: .left, speed: 0.65)
+        primaryWaveView.animationStart(direction: .left, speed: 0.5)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) { [weak self] in
-            self?.secondaryWaveView.animationStart(direction: .right, speed: 0.65)
+            self?.secondaryWaveView.animationStart(direction: .right, speed: 0.5)
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
-            self?.thirdWaveView.animationStart(direction: .left, speed: 0.65)
+            self?.thirdWaveView.animationStart(direction: .left, speed: 0.5)
         }
         UIView.animate(views: [
             primaryWaveView, secondaryWaveView, thirdWaveView

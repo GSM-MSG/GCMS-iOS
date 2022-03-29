@@ -8,7 +8,7 @@ protocol GCMSAPI: TargetType, JWTTokenAuthorizable {
 
 extension GCMSAPI {
     var baseURL: URL {
-        return URL(string: "https://dashboard.n-e.kr")!
+        return URL(string: "http://gsm.o-r.kr:4000")!
     }
     var path: String {
         return domain.url + urlPath

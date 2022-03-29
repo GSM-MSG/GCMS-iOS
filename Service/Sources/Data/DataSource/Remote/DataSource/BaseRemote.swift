@@ -4,24 +4,34 @@ import RxSwift
 import RxMoya
 
 class BaseRemote<API: GCMSAPI> {
-    private lazy var provider = MoyaProvider<API>(plugins: [JWTPlugin()])
-    private let testingEndpoint = { (target: TargetType) -> Endpoint in
+    public var testStatus = false
+    public var successStatus = true
+    private let provider = MoyaProvider<API>(plugins: [JWTPlugin()])
+    private let successTestEndpoint = { (target: API) -> Endpoint in
         return Endpoint(
-            url: target.baseURL.absoluteString + target.path,
+            url: URL(target: target).absoluteString,
             sampleResponseClosure: { .networkResponse(201, target.sampleData) },
             method: target.method,
             task: target.task,
             httpHeaderFields: target.headers
         )
     }
-    private lazy var testingProvider = MoyaProvider<API>(endpointClosure: testingEndpoint, plugins: [JWTPlugin()])
+    private let failureTestEndPoint = { (target: API) -> Endpoint in
+        return Endpoint(
+            url: URL(target: target).absoluteString,
+            sampleResponseClosure: { .networkResponse(401, Data())},
+            method: target.method,
+            task: target.task,
+            httpHeaderFields: target.headers)
+    }
+    private var testingProvider: MoyaProvider<API>!
     
-    func request(_ api: API, isTest: Bool = false) -> Single<Response> {
+    func request(_ api: API) -> Single<Response> {
         return .create { single in
             var disposables: [Disposable] = []
             if self.isApiNeedsAccessToken(api) {
                 disposables.append(
-                    self.requestWithAccessToken(api, isTest: isTest)
+                    self.requestWithAccessToken(api)
                         .subscribe(
                             onSuccess: { single(.success($0)) },
                             onFailure: { single(.failure($0)) }
@@ -29,7 +39,7 @@ class BaseRemote<API: GCMSAPI> {
                 )
             } else {
                 disposables.append(
-                    self.defaultRequest(api, isTest: isTest)
+                    self.defaultRequest(api)
                         .subscribe(
                             onSuccess: { single(.success($0)) },
                             onFailure: { single(.failure($0)) }
@@ -42,8 +52,12 @@ class BaseRemote<API: GCMSAPI> {
 }
 
 private extension BaseRemote {
-    func defaultRequest(_ api: API, isTest: Bool = false) -> Single<Response> {
-        return (isTest ? testingProvider : provider).rx
+    func defaultRequest(_ api: API) -> Single<Response> {
+        if testStatus {
+            testingProvider = MoyaProvider<API>(endpointClosure: successStatus ? successTestEndpoint : failureTestEndPoint, stubClosure: MoyaProvider.delayedStub(1.5))
+        }
+        
+        return (testStatus ? testingProvider : provider).rx
             .request(api)
             .timeout(.seconds(120), scheduler: MainScheduler.asyncInstance)
             .catch { error in
@@ -54,13 +68,13 @@ private extension BaseRemote {
             }
     }
     
-    func requestWithAccessToken(_ api: API, isTest: Bool = false) -> Single<Response> {
+    func requestWithAccessToken(_ api: API) -> Single<Response> {
         return .create { single in
             var disposables: [Disposable] = []
             do {
                 if try self.checkTokenIsValid() {
                     disposables.append(
-                        self.defaultRequest(api, isTest: isTest)
+                        self.defaultRequest(api)
                             .subscribe(
                                 onSuccess: { single(.success($0)) },
                                 onFailure: { single(.failure($0)) }
@@ -90,7 +104,7 @@ private extension BaseRemote {
     func checkTokenIsValid() throws -> Bool {
         do {
             let expired = try KeychainLocal.shared.fetchExpiredAt().toDateWithISO8601()
-            return Date().todayWithGMT() > expired
+            return Date() > expired
         } catch {
             throw TokenError.noData
         }

@@ -3,51 +3,51 @@ import RxSwift
 final class DefaultClubRepository: ClubRepository {
     private let clubRemote = ClubRemote.shared
     
-    func fetchClubList(type: ClubType, isTest: Bool) -> Single<[ClubList]> {
-        clubRemote.fetchClubList(type: type, isTest: isTest)
+    func fetchClubList(type: ClubType) -> Single<[ClubList]> {
+        clubRemote.fetchClubList(type: type)
     }
     
-    func fetchDetailClub(query: ClubRequestQuery, isTest: Bool) -> Single<Club> {
-        clubRemote.fetchDetailClub(query: query, isTest: isTest)
+    func fetchDetailClub(query: ClubRequestQuery) -> Single<Club> {
+        clubRemote.fetchDetailClub(query: query)
     }
     
-    func createNewClub(req: NewClubRequest, isTest: Bool) -> Completable {
-        clubRemote.createNewClub(req: req, isTest: isTest)
+    func createNewClub(req: NewClubRequest) -> Completable {
+        clubRemote.createNewClub(req: req)
     }
     
-    func updateClub(query: ClubRequestQuery, req: NewClubRequest, isTest: Bool) -> Completable {
-        clubRemote.updateClub(query: query, req: req, isTest: isTest)
+    func updateClub(query: ClubRequestQuery, req: NewClubRequest) -> Completable {
+        clubRemote.updateClub(query: query, req: req)
     }
     
-    func deleteClub(query: ClubRequestQuery, isTest: Bool) -> Completable {
-        clubRemote.deleteClub(query: query, isTest: isTest)
+    func deleteClub(query: ClubRequestQuery) -> Completable {
+        clubRemote.deleteClub(query: query)
     }
     
-    func fetchClubMember(query: ClubRequestQuery, isTest: Bool) -> Single<[User]> {
-        clubRemote.fetchClubMember(query: query, isTest: isTest)
+    func fetchClubMember(query: ClubRequestQuery) -> Single<[User]> {
+        clubRemote.fetchClubMember(query: query)
     }
     
-    func fetchClubApplicant(query: ClubRequestQuery, isTest: Bool) -> Single<[User]> {
-        clubRemote.fetchClubApplicant(query: query, isTest: isTest)
+    func fetchClubApplicant(query: ClubRequestQuery) -> Single<[User]> {
+        clubRemote.fetchClubApplicant(query: query)
     }
     
-    func userAccept(query: ClubRequestQuery, userId: String, isTest: Bool) -> Completable {
-        clubRemote.userAccept(query: query, userId: userId, isTest: isTest)
+    func userAccept(query: ClubRequestQuery, userId: String) -> Completable {
+        clubRemote.userAccept(query: query, userId: userId)
     }
     
-    func userReject(query: ClubRequestQuery, userId: String, isTest: Bool) -> Completable {
-        clubRemote.userReject(query: query, userId: userId, isTest: isTest)
+    func userReject(query: ClubRequestQuery, userId: String) -> Completable {
+        clubRemote.userReject(query: query, userId: userId)
     }
     
-    func clubOpen(query: ClubRequestQuery, isTest: Bool) -> Completable {
-        clubRemote.clubOpen(query: query, isTest: isTest)
+    func clubOpen(query: ClubRequestQuery) -> Completable {
+        clubRemote.clubOpen(query: query)
     }
     
-    func clubClose(query: ClubRequestQuery, isTest: Bool) -> Completable {
-        clubRemote.clubClose(query: query, isTest: isTest)
+    func clubClose(query: ClubRequestQuery) -> Completable {
+        clubRemote.clubClose(query: query)
     }
     
-    func userKick(query: ClubRequestQuery, userId: String, isTest: Bool) -> Completable {
-        clubRemote.userKick(query: query, userId: userId, isTest: isTest)
+    func userKick(query: ClubRequestQuery, userId: String) -> Completable {
+        clubRemote.userKick(query: query, userId: userId)
     }
 }

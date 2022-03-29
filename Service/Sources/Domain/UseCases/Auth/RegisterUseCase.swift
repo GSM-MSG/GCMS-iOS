@@ -7,7 +7,7 @@ public final class RegisterUseCase {
     
     private let authRepository: AuthRepository
     
-    public func execute(req: RegisterReqeust, isTest: Bool = false) -> Completable {
-        authRepository.register(req: req, isTest: isTest)
+    public func execute(req: RegisterReqeust) -> Completable {
+        authRepository.register(req: req)
     }
 }

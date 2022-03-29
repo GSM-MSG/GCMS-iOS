@@ -21,6 +21,8 @@ let project = Project.dynamicFramework(
         .RxGesture,
         .PanModal,
         .ViewAnimator,
+        .Quick,
+        .Nimble
         .DPOTPView
     ],
     deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),

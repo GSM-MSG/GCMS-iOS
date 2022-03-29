@@ -7,7 +7,7 @@ public final class ClubCloseUseCase {
     
     private let clubRepository: ClubRepository
     
-    func execute(query: ClubRequestQuery, isTest: Bool = false) -> Completable{
-        clubRepository.clubClose(query: query, isTest: isTest)
+    func execute(query: ClubRequestQuery) -> Completable{
+        clubRepository.clubClose(query: query)
     }
 }

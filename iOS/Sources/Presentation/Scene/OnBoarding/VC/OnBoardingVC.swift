@@ -14,6 +14,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         $0.textColor = .white
         $0.numberOfLines = 0
         $0.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 34)
+        $0.textAlignment = .center
     }
     private let logoImageView = UIImageView().then {
         $0.image = GCMSAsset.Images.gcmsgLogo.image.withRenderingMode(.alwaysOriginal)

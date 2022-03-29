@@ -7,7 +7,7 @@ public final class CheckIsVerifiedUseCase {
     
     private let authRepository: AuthRepository
     
-    public func execute(email: String, isTest: Bool = false) -> Completable {
-        authRepository.isVerified(email: email, isTest: isTest)
+    public func execute(email: String) -> Completable {
+        authRepository.isVerified(email: email)
     }
 }
