@@ -36,6 +36,9 @@ extension Project{
                     infoPlist: .default,
                     sources: ["Tests/**"],
                     dependencies: [
+                        .SPM.Quick,
+                        .SPM.Nimble,
+                        .SPM.ReactorKit,
                         .target(name: name)
                     ]
                 )

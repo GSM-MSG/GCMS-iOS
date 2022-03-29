@@ -7,7 +7,7 @@ public final class LoginUseCase {
     
     private let repository: AuthRepository
     
-    public func execute(req: LoginRequest, isTest: Bool = false) -> Completable {
-        repository.login(req: req, isTest: isTest)
+    public func execute(req: LoginRequest) -> Completable {
+        repository.login(req: req)
     }
 }

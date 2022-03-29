@@ -20,7 +20,9 @@ let project = Project.dynamicFramework(
         .BTImageView,
         .RxGesture,
         .PanModal,
-        .ViewAnimator
+        .ViewAnimator,
+        .Quick,
+        .Nimble
     ],
     deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
     dependencies: [

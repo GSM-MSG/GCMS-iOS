@@ -7,7 +7,7 @@ public final class DeleteClubUseCase {
     
     private let clubRepository: ClubRepository
     
-    public func execute(query: ClubRequestQuery, isTest: Bool = false) -> Completable{
-        clubRepository.deleteClub(query: query, isTest: isTest)
+    public func execute(query: ClubRequestQuery) -> Completable{
+        clubRepository.deleteClub(query: query)
     }
 }
