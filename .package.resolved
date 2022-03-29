@@ -8,11 +8,6 @@
         "revision" : "fffc3c2729be5747390ad02d5100291a0d9ad26a",
         "version" : "0.20200225.4"
       }
-<<<<<<< HEAD
-    ]
-  },
-  "version": 1
-=======
     },
     {
       "identity" : "alamofire",
@@ -39,6 +34,24 @@
       "state" : {
         "revision" : "2832eebaeea8667bca62f911962932be1438d5cb",
         "version" : "1.1.5"
+      }
+    },
+    {
+      "identity" : "cwlcatchexception",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mattgallagher/CwlCatchException.git",
+      "state" : {
+        "revision" : "35f9e770f54ce62dd8526470f14c6e137cef3eea",
+        "version" : "2.1.1"
+      }
+    },
+    {
+      "identity" : "cwlpreconditiontesting",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mattgallagher/CwlPreconditionTesting.git",
+      "state" : {
+        "revision" : "c21f7bab5ca8eee0a9998bbd17ca1d0eb45d4688",
+        "version" : "2.1.0"
       }
     },
     {
@@ -159,6 +172,15 @@
       }
     },
     {
+      "identity" : "nimble",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Quick/Nimble.git",
+      "state" : {
+        "revision" : "c93f16c25af5770f0d3e6af27c9634640946b068",
+        "version" : "9.2.1"
+      }
+    },
+    {
       "identity" : "panmodal",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/slackhq/PanModal.git",
@@ -174,6 +196,15 @@
       "state" : {
         "revision" : "611337c330350c9c1823ad6d671e7f936af5ee13",
         "version" : "2.0.0"
+      }
+    },
+    {
+      "identity" : "quick",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Quick/Quick.git",
+      "state" : {
+        "revision" : "bd86ca0141e3cfb333546de5a11ede63f0c4a0e6",
+        "version" : "4.0.0"
       }
     },
     {
@@ -295,5 +326,4 @@
     }
   ],
   "version" : 2
->>>>>>> 2ca7d24 (:lipstick: CertificationVC Image)
 }

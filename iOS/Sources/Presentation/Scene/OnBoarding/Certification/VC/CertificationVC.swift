@@ -2,6 +2,11 @@ import UIKit
 import SnapKit
 import Then
 import DPOTPView
+import RxCocoa
+import RxGesture
+import RxSwift
+import Reusable
+import RxDataSources
 
 final class CertificationVC: BaseVC<CertificationReactor> {
     // MARK: - Properties
@@ -28,9 +33,9 @@ final class CertificationVC: BaseVC<CertificationReactor> {
         $0.textColorTextField = .white
     }
     
-    private let dismissButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "xmark"), for: .normal)
-        $0.tintColor = .white
+    private let backView = UIView().then {
+        $0.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
+        $0.layer.cornerRadius = 20
     }
     
     private let completeButton = UIButton().then {
@@ -42,21 +47,28 @@ final class CertificationVC: BaseVC<CertificationReactor> {
     
     // MARK: - UI
     override func configureVC() {
-        view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
+        view.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.3)
     }
     
     override func addView() {
-        view.addSubViews(mailImage,sendMessageLabel, textfield, dismissButton, completeButton)
+        view.addSubViews(backView, mailImage)
+        backView.addSubViews(sendMessageLabel, textfield, completeButton)
     }
     
     override func setLayout() {
         mailImage.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview().offset(bound.height*0.1)
+            $0.centerY.equalTo(backView.snp.top).offset(-20)
+        }
+        backView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(bound.height*0.65)
+            $0.leading.trailing.equalToSuperview().inset(10)
         }
         sendMessageLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalTo(mailImage.snp.bottom).offset(22)
+            $0.top.equalTo(mailImage.snp.bottom).offset(12)
         }
         textfield.snp.makeConstraints {
             $0.centerX.equalToSuperview()
@@ -64,15 +76,10 @@ final class CertificationVC: BaseVC<CertificationReactor> {
             $0.leading.trailing.equalToSuperview().inset(42)
             $0.height.equalTo(66)
         }
-        dismissButton.snp.makeConstraints {
-            $0.top.equalTo(1)
-            $0.trailing.equalTo(0)
-            $0.width.height.equalTo(50)
-        }
         completeButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.height.equalTo(51)
-            $0.bottom.equalToSuperview().offset(-bound.height*0.1)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(10)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
     }
