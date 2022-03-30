@@ -82,13 +82,14 @@ private extension MyPageReactor {
     func viewDidLoad() -> Observable<Mutation> {
         return .concat([
             .just(.setEditorialClubList([
-                .init(bannerUrl: "https://avatars.githubusercontent.com/u/74440939?v=4", title: "asdf", type: .editorial),
-                .init(bannerUrl: "https://avatars.githubusercontent.com/u/67373938?v=4", title: "대충 타이틀", type: .editorial),
-                .init(bannerUrl: "https://avatars.githubusercontent.com/u/74440939?v=4", title: "ㅁㄴㅇ", type: .editorial),
-                .init(bannerUrl: "https://avatars.githubusercontent.com/u/74440939?v=4", title: "ㅍ", type: .editorial)
+                .dummy
             ])),
-            .just(.setMajorClub(.init(bannerUrl: "https://avatars.githubusercontent.com/u/80966659?v=4", title: "MAJOR", type: .major))),
-            .just(.setFreedomClub(.init(bannerUrl: "https://camo.githubusercontent.com/9ed64b042a76b8a97016e877cbaee0d6df224a148034afef658d841cf0cd1791/68747470733a2f2f63756c746f667468657061727479706172726f742e636f6d2f706172726f74732f68642f6c6170746f705f706172726f742e676966", title: "FREEDOM", type: .freedom)))
+            .just(.setMajorClub(
+                .dummy
+            )),
+            .just(.setFreedomClub(
+                .dummy
+            ))
         ])
     }
     
