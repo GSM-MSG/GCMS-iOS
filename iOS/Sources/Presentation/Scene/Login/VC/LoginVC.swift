@@ -2,9 +2,10 @@ import UIKit
 import Then
 import SnapKit
 import RxCocoa
-import AuthenticationServices
+import IQKeyboardManagerSwift
 import Service
 import RxSwift
+import ViewAnimator
 
 final class LoginVC : BaseVC<LoginReactor> {
     // MARK: - Properties
@@ -12,8 +13,8 @@ final class LoginVC : BaseVC<LoginReactor> {
         $0.image = GCMSAsset.Images.gcmsgLogo.image.withRenderingMode(.alwaysOriginal)
     }
     private let signUpLabel = UILabel().then {
-        $0.text = "Sign In"
-        $0.font = .systemFont(ofSize: 24, weight: .semibold)
+        $0.text = "Login"
+        $0.font = .systemFont(ofSize: 32, weight: .semibold)
     }
     
     private let loginButton = UIButton().then {
@@ -33,7 +34,12 @@ final class LoginVC : BaseVC<LoginReactor> {
         $0.setAttributedTitle(attributedString, for: .normal)
         $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.regular, size: 11)
     }
-    
+    private let invalidLabel = UILabel().then {
+        $0.text = "입력하신 비밀번호 또는 이메일이 틀리셨습니다"
+        $0.textColor = GCMSAsset.Colors.gcmsThemeColor.color
+        $0.font = UIFont(font: GCMSFontFamily.Inter.regular, size: 11)
+        $0.isHidden = true
+    }
     private let emailTextfield = UITextField().then {
         $0.attributedPlaceholder = NSAttributedString(string: "학교 이메일을 입력해주세요", attributes: [
             .foregroundColor: GCMSAsset.Colors.gcmsGray4.color,
@@ -70,17 +76,69 @@ final class LoginVC : BaseVC<LoginReactor> {
         $0.tintColor = GCMSAsset.Colors.gcmsGray4.color
     }
     
+    private let primaryWaveView = WaveView().then {
+        $0.preferredColor = UIColor(red: 0.415, green: 0.439, blue: 1, alpha: 0.9)
+    }
+    private let secondaryWaveView = WaveView().then {
+        $0.preferredColor = UIColor(red: 0.568, green: 0.584, blue: 1, alpha: 0.9)
+    }
+    private let thirdWaveView = WaveView().then {
+        $0.preferredColor = UIColor(red: 0.414, green: 0.438, blue: 0.9, alpha: 0.8)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        primaryWaveView.animationStart(direction: .left, speed: 0.5)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) { [weak self] in
+            self?.secondaryWaveView.animationStart(direction: .right, speed: 0.5)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
+            self?.thirdWaveView.animationStart(direction: .left, speed: 0.5)
+        }
+        UIView.animate(views: [
+            primaryWaveView, secondaryWaveView, thirdWaveView
+        ], animations: [
+            AnimationType.from(direction: .top, offset: 300),
+        ], duration: 1.6)
+        UIView.animate(views: [
+            logoImageView, signUpLabel
+        ], animations: [
+            AnimationType.zoom(scale: 0.5)
+        ], delay: 1.4, duration: 1.2)
+        UIView.animate(views: [
+            emailTextfield, emailLabel, passwordTextfield, passwordVisibleButton, findPasswordButton
+        ], animations: [
+            AnimationType.from(direction: .bottom, offset: 3)
+        ], delay: 1.4, duration: 1.2)
+        UIView.animate(views: [
+            loginButton
+        ], animations: [
+            AnimationType.zoom(scale:0.1)
+        ], delay: 1.4, duration: 1.2)
+    }
+    
     // MARK: - UI
     override func addView() {
-        view.addSubViews(logoImageView, signUpLabel, loginButton,findPasswordButton, emailTextfield, emailLabel, passwordTextfield, passwordVisibleButton)
+        view.addSubViews(thirdWaveView, secondaryWaveView, primaryWaveView, logoImageView, signUpLabel, loginButton,findPasswordButton, invalidLabel, emailTextfield, emailLabel, passwordTextfield, passwordVisibleButton)
     }
     
     override func setLayout() {
+        primaryWaveView.snp.makeConstraints {
+            $0.centerX.width.top.equalToSuperview()
+            $0.height.equalTo(bound.height*0.45)
+        }
+        secondaryWaveView.snp.makeConstraints {
+            $0.centerX.width.top.equalToSuperview()
+            $0.height.equalTo(bound.height*0.46)
+        }
+        thirdWaveView.snp.makeConstraints {
+            $0.centerX.width.top.equalToSuperview()
+            $0.height.equalTo(bound.height*0.45)
+        }
         logoImageView.snp.makeConstraints {
             $0.centerX.equalToSuperview().offset(-10)
-            $0.top.equalToSuperview().offset(bound.height*0.28)
-            $0.width.equalTo(111)
-            $0.height.equalTo(111)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(bound.height*0.05)
+            $0.size.equalTo(109)
         }
         signUpLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
@@ -89,7 +147,7 @@ final class LoginVC : BaseVC<LoginReactor> {
         loginButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.height.equalTo(51)
-            $0.bottom.equalToSuperview().offset(-bound.height*0.1)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(30)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
         passwordTextfield.snp.makeConstraints {
@@ -101,6 +159,10 @@ final class LoginVC : BaseVC<LoginReactor> {
         findPasswordButton.snp.makeConstraints {
             $0.bottom.equalTo(loginButton.snp.top).offset(-49)
             $0.leading.equalTo(passwordTextfield.snp.leading).offset(3)
+        }
+        invalidLabel.snp.makeConstraints {
+            $0.centerY.equalTo(findPasswordButton)
+            $0.centerX.equalToSuperview()
         }
         passwordVisibleButton.snp.makeConstraints {
             $0.trailing.equalTo(passwordTextfield.snp.trailing).offset(-10)
@@ -142,18 +204,11 @@ final class LoginVC : BaseVC<LoginReactor> {
         sharedState
             .map(\.isLoginFailure)
             .subscribe(with: self){ owner, item in
-                owner.emailTextfield.layer.borderColor = item ? UIColor(red: 255/255,
-                                                                        green: 129/255,
-                                                                        blue: 129/255,
-                                                                        alpha: 1).cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
-                owner.emailLabel.layer.borderColor = item ? UIColor(red: 255/255,
-                                                                    green: 129/255,
-                                                                    blue: 129/255,
-                                                                    alpha: 1).cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
-                owner.passwordTextfield.layer.borderColor = item ? UIColor(red: 255/255,
-                                                                           green: 129/255,
-                                                                           blue: 129/255,
-                                                                           alpha: 1).cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.emailTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.emailLabel.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.passwordTextfield.layer.borderColor = item ?GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.findPasswordButton.isHidden = item
+                owner.invalidLabel.isHidden = !item
             }
             .disposed(by: disposeBag)
         

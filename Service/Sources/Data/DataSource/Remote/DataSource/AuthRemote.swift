@@ -4,24 +4,24 @@ final class AuthRemote: BaseRemote<AuthAPI> {
     static let shared = AuthRemote()
     private override init() {}
     
-    func login(req: LoginRequest, isTest: Bool = false) -> Single<TokenDTO> {
-        return request(.login(req: req), isTest: isTest)
+    func login(req: LoginRequest) -> Single<TokenDTO> {
+        return request(.login(req: req))
             .map(TokenDTO.self)
     }
-    func register(req: RegisterReqeust, isTest: Bool = false) -> Completable {
-        return request(.register(req: req), isTest: isTest)
+    func register(req: RegisterReqeust) -> Completable {
+        return request(.register(req: req))
             .asCompletable()
     }
-    func refresh(isTest: Bool = false) -> Completable {
-        return request(.refresh, isTest: isTest)
+    func refresh() -> Completable {
+        return request(.refresh)
             .asCompletable()
     }
-    func sendVerify(email: String, isTest: Bool = false) -> Completable {
-        return request(.verify(email: email), isTest: isTest)
+    func sendVerify(email: String, code: String) -> Completable {
+        return request(.verify(email: email, code: code))
             .asCompletable()
     }
-    func isVerified(email: String, isTest: Bool = false) -> Completable {
-        return request(.isVerified(email: email), isTest: isTest)
+    func isVerified(email: String, code: String) -> Completable {
+        return request(.isVerified(email: email, code: code))
             .asCompletable()
     }
 }

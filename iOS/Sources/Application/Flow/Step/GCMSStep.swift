@@ -11,6 +11,7 @@ enum GCMSStep: Step {
     case onBoardingIsRequired
     case loginIsRequired
     case signUpIsRequired
+    case certificationIsRequired
     
     // MARK: Main
     case clubListIsRequired

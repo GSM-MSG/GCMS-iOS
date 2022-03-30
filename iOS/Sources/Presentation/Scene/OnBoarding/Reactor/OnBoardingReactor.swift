@@ -16,7 +16,7 @@ final class OnBoardingReactor: Reactor, Stepper {
     // MARK: - Reactor
     enum Action {
         case loginButtonDidTap
-        case signUpDidTap
+        case signUpButtonDidTap
         case updateLoading(Bool)
     }
     enum Mutation {
@@ -45,8 +45,8 @@ extension OnBoardingReactor {
         switch action {
         case .loginButtonDidTap:
             steps.accept(GCMSStep.loginIsRequired)
-        case .signUpDidTap:
-            steps.accept(GCMSStep.signUpIsRequired)
+        case .signUpButtonDidTap:
+            steps.accept(GCMSStep.certificationIsRequired)
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
         }

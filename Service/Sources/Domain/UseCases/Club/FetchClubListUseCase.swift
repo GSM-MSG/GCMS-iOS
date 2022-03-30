@@ -7,7 +7,7 @@ public final class FetchClubLiseUseCase {
     
     private let clubRepository: ClubRepository
     
-    public func execute(type: ClubType, isTest: Bool = false) -> Single<[ClubList]> {
-        clubRepository.fetchClubList(type: type, isTest: isTest)
+    public func execute(type: ClubType) -> Single<[ClubList]> {
+        clubRepository.fetchClubList(type: type)
     }
 }

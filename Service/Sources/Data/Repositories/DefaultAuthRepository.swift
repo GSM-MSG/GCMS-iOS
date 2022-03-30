@@ -1,27 +1,24 @@
 import RxSwift
 import FirebaseMessaging
+
 final class DefaultAuthRepository: AuthRepository {
     private let authRemote = AuthRemote.shared
     private let keychainLocal = KeychainLocal.shared
-    func login(req: LoginRequest, isTest: Bool = false) -> Completable {
-        return authRemote.login(req: req, isTest: isTest)
-            .do(onSuccess: { [weak self] token in
-                self?.keychainLocal.saveAccessToken(token.accessToken)
-                self?.keychainLocal.saveRefreshToken(token.refreshToken)
-                self?.keychainLocal.saveExpiredAt(token.expiredAt)
-            }).asCompletable()
+    func login(req: LoginRequest) -> Completable {
+        return authRemote.login(req: req)
+            .asCompletable()
     }
-    func register(req: RegisterReqeust, isTest: Bool = false) -> Completable {
-        return authRemote.register(req: req, isTest: isTest)
+    func register(req: RegisterReqeust) -> Completable {
+        return authRemote.register(req: req)
     }
-    func refresh(isTest: Bool = false) -> Completable {
-        return authRemote.refresh(isTest: isTest)
+    func refresh() -> Completable {
+        return authRemote.refresh()
     }
-    func sendVerify(email: String, isTest: Bool = false) -> Completable {
-        return authRemote.sendVerify(email: email, isTest: isTest)
+    func sendVerify(email: String, code: String) -> Completable {
+        return authRemote.sendVerify(email: email, code: code)
     }
-    func isVerified(email: String, isTest: Bool) -> Completable {
-        return authRemote.isVerified(email: email, isTest: isTest)
+    func isVerified(email: String, code: String) -> Completable {
+        return authRemote.isVerified(email: email, code: code)
     }
 }
 

@@ -21,6 +21,7 @@ public enum GCMSAsset {
     public static let gcmsBackgroundColor = GCMSColors(name: "GCMS_BackgroundColor")
     public static let gcmsMainColor = GCMSColors(name: "GCMS_MainColor")
     public static let gcmsOnBoardingMainColor = GCMSColors(name: "GCMS_OnBoardingMainColor")
+    public static let gcmsThemeColor = GCMSColors(name: "GCMS_ThemeColor")
     public static let gcmsGray1 = GCMSColors(name: "GCMS_Gray1")
     public static let gcmsGray2 = GCMSColors(name: "GCMS_Gray2")
     public static let gcmsGray3 = GCMSColors(name: "GCMS_Gray3")
@@ -30,6 +31,7 @@ public enum GCMSAsset {
   }
   public enum Images {
     public static let gcmsgLogo = GCMSImages(name: "GCMS_GLogo")
+    public static let gcmsMail = GCMSImages(name: "GCMS_Mail")
     public static let gcmsNewClubPlaceholder = GCMSImages(name: "GCMS_NewClubPlaceholder")
     public static let gcmsWhaleLogo = GCMSImages(name: "GCMS_WhaleLogo")
   }

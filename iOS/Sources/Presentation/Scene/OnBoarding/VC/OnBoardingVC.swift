@@ -5,6 +5,7 @@ import RxCocoa
 import AuthenticationServices
 import Service
 import RxSwift
+import ViewAnimator
 
 final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     // MARK: - Properties
@@ -13,6 +14,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         $0.textColor = .white
         $0.numberOfLines = 0
         $0.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 34)
+        $0.textAlignment = .center
     }
     private let logoImageView = UIImageView().then {
         $0.image = GCMSAsset.Images.gcmsgLogo.image.withRenderingMode(.alwaysOriginal)
@@ -81,6 +83,21 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     override func configureNavigation() {
         self.navigationController?.navigationBar.setClear()
         self.navigationItem.configBack()
+        UIView.animate(views: [
+            logoImageView, headerLabel
+        ], animations: [
+            AnimationType.from(direction: .top, offset: 100)
+        ], initialAlpha: 0, finalAlpha: 1, delay: 0.3, duration: 1.25)
+        UIView.animate(views: [
+            signUpLabel, nowLabel
+        ], animations: [
+            
+        ], initialAlpha: 0, finalAlpha: 1, delay: 1.05, duration: 0.75)
+        UIView.animate(views: [
+            loginButton, signUpButton
+        ], animations: [
+            AnimationType.from(direction: .left, offset: 200)
+        ], delay: 1.8, duration: 1, usingSpringWithDamping: 1, initialSpringVelocity: 0.7, options: .curveEaseInOut)
     }
     
     // MARK: - Reactor
@@ -100,9 +117,8 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             .map { Reactor.Action.loginButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
         signUpButton.rx.tap
-            .map { Reactor.Action.signUpDidTap }
+            .map { Reactor.Action.signUpButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
