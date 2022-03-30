@@ -39,6 +39,8 @@ final class OnBoardingFlow: Flow{
             return navigateToSignUp()
         case .certificationIsRequired:
             return navigateCertification()
+        case .dismiss:
+            return dismissVC()
         default:
             return .none
         }
@@ -64,7 +66,12 @@ private extension OnBoardingFlow{
     }
     func navigateCertification() -> FlowContributors {
         let vc = AppDelegate.container.resolve(CertificationVC.self)!
-        self.rootVC.present(UINavigationController(rootViewController: vc), animated: true)
+        vc.modalPresentationStyle = .overFullScreen
+        self.rootVC.visibleViewController?.present(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
+    func dismissVC() -> FlowContributors {
+        self.rootVC.visibleViewController?.dismiss(animated: true)
+        return .none
     }
 }

@@ -104,4 +104,12 @@ final class CertificationVC: BaseVC<CertificationReactor> {
         self.navigationController?.navigationBar.setClear()
     }
     
+    override func bindView(reactor: CertificationReactor) {
+        view.rx.anyGesture(.tap(), .swipe(direction: .down))
+            .when(.recognized)
+            .map { _ in Reactor.Action.dismiss }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
 }

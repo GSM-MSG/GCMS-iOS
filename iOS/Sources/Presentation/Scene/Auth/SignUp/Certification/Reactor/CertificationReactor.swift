@@ -13,6 +13,7 @@ final class CertificationReactor: Reactor, Stepper {
     // MARK: - Reactor
     enum Action {
         case updateLoading(Bool)
+        case dismiss
     }
     enum Mutation {
         case setIsLoading(Bool)
@@ -36,6 +37,8 @@ extension CertificationReactor {
         switch action {
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
+        case .dismiss:
+            steps.accept(GCMSStep.dismiss)
         }
         return .empty()
     }

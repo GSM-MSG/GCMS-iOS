@@ -13,6 +13,7 @@ final class SignUpReactor: Reactor, Stepper {
     // MARK: - Reactor
     enum Action {
         case updateLoading(Bool)
+        case certificationButtonDidTap
     }
     enum Mutation {
         case setIsLoading(Bool)
@@ -36,6 +37,8 @@ extension SignUpReactor {
         switch action {
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
+        case .certificationButtonDidTap:
+            steps.accept(GCMSStep.certificationIsRequired)
         }
         return .empty()
     }

@@ -199,7 +199,10 @@ final class SignUpVC : BaseVC<SignUpReactor> {
     }
     
     override func bindView(reactor: SignUpReactor) {
-        
+        certificationButton.rx.tap
+            .map { Reactor.Action.certificationButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
 }
