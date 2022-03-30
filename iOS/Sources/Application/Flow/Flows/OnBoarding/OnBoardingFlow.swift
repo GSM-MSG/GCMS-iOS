@@ -35,10 +35,10 @@ final class OnBoardingFlow: Flow{
             return navigateToLogin()
         case .clubListIsRequired:
             return .end(forwardToParentFlowWithStep: GCMSStep.clubListIsRequired)
-        case .certificationIsRequired:
-            return navigateCertification()
         case .signUpIsRequired:
             return navigateToSignUp()
+        case .certificationIsRequired:
+            return navigateCertification()
         default:
             return .none
         }
@@ -57,14 +57,14 @@ private extension OnBoardingFlow{
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
-    func navigateCertification() -> FlowContributors {
-        let vc = AppDelegate.container.resolve(CertificationVC.self)!
-        self.rootVC.present(UINavigationController(rootViewController: vc), animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
-    }
     func navigateToSignUp() -> FlowContributors {
         let vc = AppDelegate.container.resolve(SignUpVC.self)!
         self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
+    func navigateCertification() -> FlowContributors {
+        let vc = AppDelegate.container.resolve(CertificationVC.self)!
+        self.rootVC.present(UINavigationController(rootViewController: vc), animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
 }

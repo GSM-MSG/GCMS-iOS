@@ -46,7 +46,7 @@ extension OnBoardingReactor {
         case .loginButtonDidTap:
             steps.accept(GCMSStep.loginIsRequired)
         case .signUpButtonDidTap:
-            steps.accept(GCMSStep.certificationIsRequired)
+            steps.accept(GCMSStep.signUpIsRequired)
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
         }
