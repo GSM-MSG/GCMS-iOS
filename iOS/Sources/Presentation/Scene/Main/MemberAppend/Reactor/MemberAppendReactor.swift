@@ -100,6 +100,8 @@ extension MemberAppendReactor {
 private extension MemberAppendReactor {
     func updateQuery(query: String) -> Observable<Mutation> {
         let users: [User] = [
+            .dummy,
+            .dummy
         ].filter { $0.name.contains(query) }
         return .concat([
             .just(.setQuery(query)),

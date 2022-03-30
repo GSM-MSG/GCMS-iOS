@@ -14,3 +14,11 @@ public struct ClubList {
         self.type = type
     }
 }
+
+public extension ClubList {
+    static let dummy = ClubList(
+        bannerUrl: "https://avatars.githubusercontent.com/u/95753750?s=64&v=4",
+        title: "GCMS",
+        type: .freedom
+    )
+}
