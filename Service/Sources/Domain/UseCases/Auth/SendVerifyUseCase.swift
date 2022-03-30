@@ -7,7 +7,7 @@ public final class SendVerifyUseCase {
     
     private let authRepository: AuthRepository
     
-    public func execute(email: String) -> Completable {
-        authRepository.sendVerify(email: email)
+    public func execute(email: String, code: String) -> Completable {
+        authRepository.sendVerify(email: email, code: code)
     }
 }

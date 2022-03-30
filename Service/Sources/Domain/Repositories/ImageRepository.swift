@@ -2,5 +2,5 @@ import RxSwift
 import Foundation
 
 public protocol ImageRepository {
-    func uploadPictures(datas: [Data], isTest: Bool) -> Single<[String]>
+    func uploadPictures(datas: [Data]) -> Single<[String]>
 }

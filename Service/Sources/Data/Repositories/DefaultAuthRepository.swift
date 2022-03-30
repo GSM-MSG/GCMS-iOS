@@ -1,5 +1,6 @@
 import RxSwift
 import FirebaseMessaging
+
 final class DefaultAuthRepository: AuthRepository {
     private let authRemote = AuthRemote.shared
     private let keychainLocal = KeychainLocal.shared
@@ -13,11 +14,11 @@ final class DefaultAuthRepository: AuthRepository {
     func refresh() -> Completable {
         return authRemote.refresh()
     }
-    func sendVerify(email: String) -> Completable {
-        return authRemote.sendVerify(email: email)
+    func sendVerify(email: String, code: String) -> Completable {
+        return authRemote.sendVerify(email: email, code: code)
     }
-    func isVerified(email: String) -> Completable {
-        return authRemote.isVerified(email: email)
+    func isVerified(email: String, code: String) -> Completable {
+        return authRemote.isVerified(email: email, code: code)
     }
 }
 
