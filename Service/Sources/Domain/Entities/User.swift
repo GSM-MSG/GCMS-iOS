@@ -27,3 +27,17 @@ public struct User: Equatable {
     public let joinedFreedomClub: ClubList?
     public let joinedEditorialClub: [ClubList]?
 }
+
+public extension User {
+    static let dummy = User(
+        userId: "s21073",
+        profileImageUrl: "https://avatars.githubusercontent.com/u/74440939?v=4",
+        name: "Baekteun",
+        grade: 2,
+        class: 1,
+        number: 18,
+        joinedMajorClub: .dummy,
+        joinedFreedomClub: .dummy,
+        joinedEditorialClub: [.dummy, .dummy]
+    )
+}

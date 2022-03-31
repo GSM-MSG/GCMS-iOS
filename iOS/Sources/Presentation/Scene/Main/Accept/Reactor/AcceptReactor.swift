@@ -75,7 +75,8 @@ private extension AcceptReactor {
     
     func viewDidLoad() -> Observable<Mutation> {
         return .just(.setUser([
-            
+            .dummy,
+            .dummy
         ]))
     }
     
