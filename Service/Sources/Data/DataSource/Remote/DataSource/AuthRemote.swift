@@ -16,8 +16,8 @@ final class AuthRemote: BaseRemote<AuthAPI> {
         return request(.refresh)
             .asCompletable()
     }
-    func sendVerify(email: String, code: String) -> Completable {
-        return request(.verify(email: email, code: code))
+    func sendVerify(email: String) -> Completable {
+        return request(.verify(email: email))
             .asCompletable()
     }
     func isVerified(email: String, code: String) -> Completable {
