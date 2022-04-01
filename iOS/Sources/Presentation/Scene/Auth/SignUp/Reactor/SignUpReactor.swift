@@ -13,6 +13,7 @@ final class SignUpReactor: Reactor, Stepper {
     // MARK: - Reactor
     enum Action {
         case updateLoading(Bool)
+        case updateEmail(String)
         case certificationButtonDidTap
         case emailNotFound
     }
@@ -50,6 +51,8 @@ extension SignUpReactor {
             return .just(.setIsLoading(load))
         case .certificationButtonDidTap:
             return certificationButton()
+        case let .updateEmail(email):
+            return .just(.setEmail(email))
         case .emailNotFound:
             return .just(.setIsEmailNotFound(true))
         }
@@ -79,10 +82,10 @@ extension SignUpReactor {
 private extension SignUpReactor {
     func certificationButton() -> Observable<Mutation> {
         
-        let startLoding = Observable.just(Mutation.setIsLoading(true))
+//        let startLoding = Observable.just(Mutation.setIsLoading(true))
         let signUp = sendVerifyUseCase.execute(email: currentState.email)
-            .do(onError: { [weak self] _ in
-                print("asdf")
+            .do(onError: { [weak self] err in
+                print(err.localizedDescription)
                 self?.action.onNext(.emailNotFound)
             }, onCompleted: {
                 print("asdfasdfasfs")
@@ -90,8 +93,8 @@ private extension SignUpReactor {
             })
             .andThen(Single.just(Mutation.setIsLoading(false)))
             .asObservable()
-            .catchAndReturn(.setIsLoading(true))
+            .catchAndReturn(.setIsLoading(false))
         
-        return .concat([startLoding, signUp])
+        return .concat(signUp)
     }
 }

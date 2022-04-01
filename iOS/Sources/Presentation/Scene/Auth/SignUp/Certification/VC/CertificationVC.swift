@@ -11,7 +11,9 @@ import IQKeyboardManagerSwift
 
 final class CertificationVC: BaseVC<CertificationReactor> {
     // MARK: - Properties
-    
+    private let backgroundView = UIView().then {
+        $0.backgroundColor = .black.withAlphaComponent(0.3)
+    }
     private let mailImage = UIImageView().then {
         $0.image = UIImage(named: "GCMS_Mail.svg")
     }
@@ -35,7 +37,7 @@ final class CertificationVC: BaseVC<CertificationReactor> {
         $0.textColorTextField = .white
     }
     
-    private let backView = UIView().then {
+    private let rootView = UIView().then {
         $0.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
         $0.layer.cornerRadius = 26
     }
@@ -60,21 +62,21 @@ final class CertificationVC: BaseVC<CertificationReactor> {
     }
     
     // MARK: - UI
-    override func configureVC() {
-        view.backgroundColor = .black.withAlphaComponent(0.3)
-    }
     
     override func addView() {
-        view.addSubViews(backView, mailImage)
-        backView.addSubViews(sendMessageLabel, textfield, completeButton)
+        view.addSubViews(backgroundView, rootView, mailImage)
+        rootView.addSubViews(sendMessageLabel, textfield, completeButton)
     }
     
     override func setLayout() {
+        backgroundView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
         mailImage.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.centerY.equalTo(backView.snp.top).offset(-20)
+            $0.centerY.equalTo(rootView.snp.top).offset(-20)
         }
-        backView.snp.makeConstraints {
+        rootView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.bottom.equalToSuperview()
             $0.height.equalTo(bound.height*0.65)
@@ -97,15 +99,17 @@ final class CertificationVC: BaseVC<CertificationReactor> {
             $0.leading.trailing.equalToSuperview().inset(15)
         }
     }
-    
-    // MARK: - UI
-    
-    override func configureNavigation() {
-        self.navigationController?.navigationBar.setClear()
+    override func configureVC() {
+        view.backgroundColor = .clear
     }
+        override func configureNavigation() {
+            self.navigationController?.navigationBar.setClear()
+        }
     
+    // MARK: - Reactor
+
     override func bindView(reactor: CertificationReactor) {
-        view.rx.anyGesture(.tap(), .swipe(direction: .down))
+        backgroundView.rx.anyGesture(.tap(), .swipe(direction: .down))
             .when(.recognized)
             .map { _ in Reactor.Action.dismiss }
             .bind(to: reactor.action)

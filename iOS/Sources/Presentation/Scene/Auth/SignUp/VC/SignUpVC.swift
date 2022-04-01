@@ -190,16 +190,16 @@ final class SignUpVC : BaseVC<SignUpReactor> {
         let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
         
         sharedState
-            .map(\.isLoading)
-            .bind(with: self) { owner, load in
-                load ? owner.startIndicator() : owner.stopIndicator()
+            .map(\.isEmailNotFound)
+            .bind(with: self) { owner, item in
+                owner.emailTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
             }
             .disposed(by: disposeBag)
         
         sharedState
-            .map(\.isEmailNotFound)
-            .bind(with: self) { owner, item in
-                owner.emailTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+            .map(\.isLoading)
+            .bind(with: self) { owner, load in
+                load ? owner.startIndicator() : owner.stopIndicator()
             }
             .disposed(by: disposeBag)
     }
@@ -207,6 +207,11 @@ final class SignUpVC : BaseVC<SignUpReactor> {
     override func bindView(reactor: SignUpReactor) {
         certificationButton.rx.tap
             .map { Reactor.Action.certificationButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        emailTextfield.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
+            .map(Reactor.Action.updateEmail)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }

@@ -43,7 +43,7 @@ extension AuthAPI: GCMSAPI {
         case let .verify(email):
             return .requestParameters(parameters: [
                 "email": email
-            ], encoding: URLEncoding.queryString)
+            ], encoding: JSONEncoding.default)
         case let .isVerified(email, code):
             return .requestParameters(parameters: [
                 "email": email,
