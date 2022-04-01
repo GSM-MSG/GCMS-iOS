@@ -4,7 +4,7 @@ enum AuthAPI {
     case login(req: LoginRequest)
     case register(req: RegisterReqeust)
     case refresh
-    case verify(email: String, code: String)
+    case verify(email: String)
     case isVerified(email: String, code: String)
 }
 
@@ -40,10 +40,9 @@ extension AuthAPI: GCMSAPI {
             return .requestJSONEncodable(req)
         case .refresh:
             return .requestPlain
-        case let .verify(email, code):
+        case let .verify(email):
             return .requestParameters(parameters: [
-                "email": email,
-                "code": code
+                "email": email
             ], encoding: URLEncoding.queryString)
         case let .isVerified(email, code):
             return .requestParameters(parameters: [

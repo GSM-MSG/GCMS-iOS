@@ -2,9 +2,8 @@ import ReactorKit
 import RxFlow
 import RxSwift
 import RxRelay
-import Service
 
-final class NoticeReactor: Reactor, Stepper {
+final class ClubStatusReactor: Reactor, Stepper {
     // MARK: - Properties
     var steps: PublishRelay<Step> = .init()
     
@@ -21,20 +20,18 @@ final class NoticeReactor: Reactor, Stepper {
         var isLoading: Bool
     }
     let initialState: State
-    private let id: Int
     
     // MARK: - Init
-    init(
-        id: Int
-    ) {
-        self.id = id
-        initialState = State(isLoading: false)
+    init() {
+        initialState = State(
+            isLoading: false
+        )
     }
     
 }
 
 // MARK: - Mutate
-extension NoticeReactor {
+extension ClubStatusReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case let .updateLoading(load):
@@ -45,7 +42,7 @@ extension NoticeReactor {
 }
 
 // MARK: - Reduce
-extension NoticeReactor {
+extension ClubStatusReactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         
@@ -59,6 +56,6 @@ extension NoticeReactor {
 }
 
 // MARK: - Method
-private extension NoticeReactor {
+private extension ClubStatusReactor {
     
 }

@@ -14,8 +14,8 @@ final class DefaultAuthRepository: AuthRepository {
     func refresh() -> Completable {
         return authRemote.refresh()
     }
-    func sendVerify(email: String, code: String) -> Completable {
-        return authRemote.sendVerify(email: email, code: code)
+    func sendVerify(email: String) -> Completable {
+        return authRemote.sendVerify(email: email)
     }
     func isVerified(email: String, code: String) -> Completable {
         return authRemote.isVerified(email: email, code: code)
