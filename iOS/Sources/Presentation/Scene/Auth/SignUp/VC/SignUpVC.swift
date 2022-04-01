@@ -152,19 +152,19 @@ final class SignUpVC : BaseVC<SignUpReactor> {
             $0.leading.trailing.equalToSuperview().inset(15)
         }
         retryPasswordTextfield.snp.makeConstraints {
-            $0.centerX.equalToSuperview().offset(-10)
+            $0.centerX.equalToSuperview()
             $0.bottom.equalTo(completeButton.snp.top).offset(-49)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(51)
         }
         passwordTextfield.snp.makeConstraints {
-            $0.centerX.equalToSuperview().offset(-10)
+            $0.centerX.equalToSuperview()
             $0.bottom.equalTo(retryPasswordTextfield.snp.top).offset(-14)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(51)
         }
         emailTextfield.snp.makeConstraints {
-            $0.centerX.equalToSuperview().offset(-10)
+            $0.centerX.equalToSuperview()
             $0.bottom.equalTo(passwordTextfield.snp.top).offset(-14)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(51)
@@ -196,6 +196,12 @@ final class SignUpVC : BaseVC<SignUpReactor> {
             }
             .disposed(by: disposeBag)
         
+        sharedState
+            .map(\.isEmailNotFound)
+            .bind(with: self) { owner, item in
+                owner.emailTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+            }
+            .disposed(by: disposeBag)
     }
     
     override func bindView(reactor: SignUpReactor) {

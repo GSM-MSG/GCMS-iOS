@@ -52,7 +52,7 @@ extension Container{
         }
         self.register(SignUpReactor.self) { r in
             return SignUpReactor(
-                
+                sendVerifyUseCase: r.resolve(SendVerifyUseCase.self)!
             )
         }
         self.register(CertificationReactor.self) { r in
