@@ -23,8 +23,8 @@ class MockSuccessAuthRepository: AuthRepository{
         
     }
     
-    func sendVerify(email: String, code: String) -> Completable {
-        authRemote.sendVerify(email: email, code: code)
+    func sendVerify(email: String) -> Completable {
+        authRemote.sendVerify(email: email)
     }
     
     func isVerified(email: String, code: String) -> Completable {
