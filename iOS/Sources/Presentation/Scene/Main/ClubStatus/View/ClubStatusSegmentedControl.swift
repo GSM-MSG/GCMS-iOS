@@ -1,12 +1,10 @@
 import UIKit
-import SnapKit
 
-protocol ClubTypeSegmentedControlDelegate: AnyObject {
+protocol ClubStatusSegmentedControlDelegate: AnyObject {
     func segmentValueChanged(to index: Int)
 }
-
-final class ClubTypeSegmentedControl: UIView {
-    weak var delegate: ClubTypeSegmentedControlDelegate?
+final class ClubStatusSegmentedControl: UIView {
+    weak var delegate: ClubStatusSegmentedControlDelegate?
     private var titles: [String] = []
     private var buttons: [UIButton] = []
     
@@ -35,10 +33,9 @@ final class ClubTypeSegmentedControl: UIView {
         super.draw(rect)
         updateView()
     }
-    
 }
 
-fileprivate extension ClubTypeSegmentedControl {
+fileprivate extension ClubStatusSegmentedControl {
     func updateView() {
         setButtons()
         configStack()
@@ -57,8 +54,7 @@ fileprivate extension ClubTypeSegmentedControl {
             button.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
             self.buttons.append(button)
         }
-        buttons[0].setTitleColor(.init(red: 0, green: 0.65, blue: 1, alpha: 0.99), for: .normal)
-        buttons[0].setUnderline()
+        buttons[0].setTitleColor(.white, for: .normal)
     }
     func configStack() {
         let stack = UIStackView(arrangedSubviews: buttons)
@@ -77,7 +73,7 @@ fileprivate extension ClubTypeSegmentedControl {
             button.setTitleColor(GCMSAsset.Colors.gcmsGray3.color, for: .normal)
             button.clearUnderline()
             if button == sender {
-                button.setTitleColor(.init(red: 0, green: 0.65, blue: 1, alpha: 0.99), for: .normal)
+                button.setTitleColor(.white, for: .normal)
                 button.setUnderline()
                 self.selectedIndex = index
                 self.delegate?.segmentValueChanged(to: index)
