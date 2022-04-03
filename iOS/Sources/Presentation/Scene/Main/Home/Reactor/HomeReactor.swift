@@ -12,20 +12,21 @@ final class HomeReactor: Reactor, Stepper {
     
     // MARK: - Reactor
     enum Action {
-        case viewDidLoad
-        case segmentDidTap(ClubType)
+        case viewDidAppear(ClubType)
         case myPageButtonDidTap
-        case alarmButtonDidTap
+        case newClubButtonDidTap
         case updateLoading(Bool)
         case clubDidTap(ClubRequestQuery)
     }
     enum Mutation {
-        case setClubList([ClubList])
+        case setClubList(ClubType, [ClubList])
         case setIsLoading(Bool)
         case setClubType(ClubType)
     }
     struct State {
-        var clubList: [ClubListSection]
+        var majorClubList: [ClubList]
+        var freedomClubList: [ClubList]
+        var editorialClubList: [ClubList]
         var clubType: ClubType
         var isLoading: Bool
     }
@@ -35,9 +36,10 @@ final class HomeReactor: Reactor, Stepper {
     init(
         
     ) {
-        
         initialState = State(
-            clubList: [],
+            majorClubList: [],
+            freedomClubList: [],
+            editorialClubList: [],
             clubType: .major,
             isLoading: false
         )
@@ -49,16 +51,14 @@ final class HomeReactor: Reactor, Stepper {
 extension HomeReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .viewDidLoad:
-            return viewDidLoad()
         case .myPageButtonDidTap:
             steps.accept(GCMSStep.myPageIsRequired)
-        case .alarmButtonDidTap:
+        case .newClubButtonDidTap:
             steps.accept(GCMSStep.alarmListIsRequired)
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
-        case let .segmentDidTap(type):
-            return .just(.setClubType(type))
+        case let .viewDidAppear(type):
+            return viewDidAppear(type: type)
         case let .clubDidTap(query):
             steps.accept(GCMSStep.clubDetailIsRequired(query: query))
         }
@@ -72,8 +72,12 @@ extension HomeReactor {
         var newState = state
         
         switch mutation {
-        case let .setClubList(lists):
-            newState.clubList = [ClubListSection(header: "", items: lists)]
+        case let .setClubList(type, lists):
+            switch type{
+            case .major: newState.majorClubList = lists
+            case .freedom: newState.freedomClubList = lists
+            case .editorial: newState.editorialClubList = lists
+            }
         case let .setIsLoading(load):
             newState.isLoading = load
         case let .setClubType(type):
@@ -86,13 +90,14 @@ extension HomeReactor {
 
 // MARK: - Method
 private extension HomeReactor {
-    func viewDidLoad() -> Observable<Mutation> {
-        
-        return .just(.setClubList([
-            .dummy,
+    func viewDidAppear(type: ClubType) -> Observable<Mutation> {
+        let start = Observable.just(Mutation.setIsLoading(true))
+        let req = Observable.just(Mutation.setClubList(type, [
             .dummy,
             .dummy,
             .dummy
-        ]))
+        ])).delay(.milliseconds(500), scheduler: MainScheduler.asyncInstance)
+        let stop = Observable.just(Mutation.setIsLoading(false))
+        return .concat([start, req, stop])
     }
 }
