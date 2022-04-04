@@ -38,17 +38,15 @@ final class NewClubReactor: Reactor, Stepper {
         var isLoading: Bool
     }
     let initialState: State
-    private let category: ClubType
     
     // MARK: - Init
-    init(category: ClubType) {
+    init() {
         initialState = State(
             isBanner: false,
             activitiesData: [],
             members: [],
             isLoading: false
         )
-        self.category = category
     }
     
 }
