@@ -126,23 +126,6 @@ private extension HomeVC {
             }
             .disposed(by: disposeBag)
     }
-    override func bindView(reactor: HomeReactor) {
-        myPageButton.rx.tap
-            .map { Reactor.Action.myPageButtonDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        newClubButton.rx.tap
-            .map { Reactor.Action.newClubButtonDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        clubListCollectionView.rx.modelSelected(ClubList.self)
-            .map { ClubRequestQuery(name: $0.title, type: $0.type) }
-            .map(Reactor.Action.clubDidTap)
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-            
     func startIndicator() {
         indicatorBackgroundView.isHidden = false
         indicator.isHidden = false
