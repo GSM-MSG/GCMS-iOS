@@ -22,7 +22,6 @@ final class HomeVC: TabmanViewController, View {
                                               target: nil,
                                               action: nil)
     private lazy var indicator = AnimationView(name: "GCMS-Indicator").then {
-        $0.center = view.center
         $0.contentMode = .scaleAspectFit
         $0.loopMode = .loop
         $0.stop()
@@ -91,6 +90,7 @@ private extension HomeVC {
         }
         indicator.snp.makeConstraints {
             $0.center.equalToSuperview()
+            $0.size.equalTo(150)
         }
     }
     func configNavigation(){
