@@ -74,6 +74,7 @@ final class HomeVC: TabmanViewController, View {
     }
     
     func bind(reactor: HomeReactor) {
+        bindAction(reactor: reactor)
         bindView(reactor: reactor)
         bindState(reactor: reactor)
     }
@@ -97,6 +98,12 @@ private extension HomeVC {
         self.navigationItem.setLeftBarButton(myPageButton, animated: true)
         self.navigationItem.setRightBarButton(newClubButton, animated: true)
         self.navigationItem.configBack()
+    }
+    func bindAction(reactor: HomeReactor) {
+        self.rx.viewDidLoad
+            .map { Reactor.Action.viewDidLoad }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     func bindView(reactor: HomeReactor) {
         myPageButton.rx.tap

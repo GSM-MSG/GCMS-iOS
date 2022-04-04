@@ -12,7 +12,7 @@ final class HomeReactor: Reactor, Stepper {
     
     // MARK: - Reactor
     enum Action {
-        case viewDidAppear(ClubType)
+        case viewDidLoad
         case myPageButtonDidTap
         case newClubButtonDidTap
         case updateLoading(Bool)
@@ -57,8 +57,8 @@ extension HomeReactor {
             steps.accept(GCMSStep.alarmListIsRequired)
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
-        case let .viewDidAppear(type):
-            return viewDidAppear(type: type)
+        case .viewDidLoad:
+            return viewDidLoad()
         case let .clubDidTap(query):
             steps.accept(GCMSStep.clubDetailIsRequired(query: query))
         }
@@ -90,14 +90,24 @@ extension HomeReactor {
 
 // MARK: - Method
 private extension HomeReactor {
-    func viewDidAppear(type: ClubType) -> Observable<Mutation> {
+    func viewDidLoad() -> Observable<Mutation> {
         let start = Observable.just(Mutation.setIsLoading(true))
-        let req = Observable.just(Mutation.setClubList(type, [
+        let major = Observable.just(Mutation.setClubList(.major, [
+            .dummy,
+            .dummy,
+            .dummy
+        ])).delay(.milliseconds(500), scheduler: MainScheduler.asyncInstance)
+        let freedom = Observable.just(Mutation.setClubList(.freedom, [
+            .dummy,
+            .dummy,
+            .dummy
+        ])).delay(.milliseconds(500), scheduler: MainScheduler.asyncInstance)
+        let edito = Observable.just(Mutation.setClubList(.editorial, [
             .dummy,
             .dummy,
             .dummy
         ])).delay(.milliseconds(500), scheduler: MainScheduler.asyncInstance)
         let stop = Observable.just(Mutation.setIsLoading(false))
-        return .concat([start, req, stop])
+        return .concat([start, major, freedom, edito, stop])
     }
 }
