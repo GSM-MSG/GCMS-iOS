@@ -193,8 +193,8 @@ final class LoginVC : BaseVC<LoginReactor> {
         sharedState
             .map(\.passwordVisible)
             .subscribe(with: self){ owner, item in
-                owner.passwordVisibleButton.setImage(UIImage(systemName: item ? "eye.slash.fill" : "eye.fill"), for: .normal)
-                owner.passwordTextfield.isSecureTextEntry = item
+                owner.passwordVisibleButton.setImage(UIImage(systemName: item ? "eye.fill" : "eye.slash.fill"), for: .normal)
+                owner.passwordTextfield.isSecureTextEntry = !item
             }
             .disposed(by: disposeBag)
         

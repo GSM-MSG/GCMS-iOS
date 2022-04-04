@@ -5,14 +5,14 @@ import RxCocoa
 import RxDataSources
 import Reusable
 import Service
+import Tabman
+import ReactorKit
+import Pageboy
+import Lottie
 
-final class HomeVC: BaseVC<HomeReactor> {
+final class HomeVC: TabmanViewController, View {
     // MARK: - Properties
-    private let clubTypeSegmentedControl = ClubTypeSegmentedControl(titles: ["전공", "사설", "자율"])
-    private let clubListCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
-        $0.register(cellType: ClubListCell.self)
-        $0.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
-    }
+    private var viewControllers: [UIViewController] = []
     private let myPageButton = UIBarButtonItem(image: .init(systemName: "person.circle")?.tintColor(GCMSAsset.Colors.gcmsGray4.color),
                                                style: .plain,
                                                target: nil,
@@ -21,60 +21,103 @@ final class HomeVC: BaseVC<HomeReactor> {
                                               style: .plain,
                                               target: nil,
                                               action: nil)
+    private lazy var indicator = AnimationView(name: "GCMS-Indicator").then {
+        $0.contentMode = .scaleAspectFit
+        $0.loopMode = .loop
+        $0.stop()
+        $0.isHidden = true
+    }
+    private let indicatorBackgroundView = UIView().then {
+        $0.isHidden = true
+        $0.backgroundColor = .black.withAlphaComponent(0.4)
+    }
+    var disposeBag: DisposeBag = .init()
+    
+    typealias Reactor = HomeReactor
+    
+    init(reactor: HomeReactor?) {
+        super.init(nibName: nil, bundle: nil)
+        self.reactor = reactor
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Method
+    public func setViewControllers(_ vcs: [UIViewController]) {
+        self.viewControllers = vcs
+        self.dataSource = self
+        
+        let bar = TMBar.ButtonBar()
+        bar.layout.transitionStyle = .snap
+        bar.layout.interButtonSpacing = 20
+        bar.buttons.customize {
+            $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 13) ?? .init()
+            $0.tintColor = GCMSAsset.Colors.gcmsGray3.color
+            $0.selectedFont = UIFont(font: GCMSFontFamily.Inter.bold, size: 13) ?? .init()
+            $0.selectedTintColor = UIColor(red: 0, green: 0.65, blue: 1, alpha: 0.99)
+        }
+        bar.layout.contentMode = .fit
+        bar.indicator.weight = .custom(value: 0)
+        bar.layout.alignment = .centerDistributed
+        bar.systemBar().backgroundStyle = .clear
+        addBar(bar, dataSource: self, at: .navigationItem(item: self.navigationItem))
+    }
     
     // MARK: - UI
-    override func setup() {
-        let lay = GCMSLayout()
-        lay.delegate = self
-        clubListCollectionView.collectionViewLayout = lay
-        clubTypeSegmentedControl.delegate = self
-    }
-    override func addView() {
-        view.addSubViews(clubTypeSegmentedControl, clubListCollectionView)
-    }
-    override func setLayoutSubviews() {
-        clubTypeSegmentedControl.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.height.equalTo(33)
-            $0.leading.trailing.equalToSuperview().inset(bound.width*0.24)
-        }
-        clubListCollectionView.snp.makeConstraints {
-            $0.top.equalTo(clubTypeSegmentedControl.snp.bottom).offset(5)
-            $0.leading.trailing.equalToSuperview().inset(10)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
-        }
-    }
-    override func configureVC() {
-        view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
-    }
-    override func configureNavigation() {
-        self.navigationItem.setLeftBarButton(myPageButton, animated: true)
-        self.navigationItem.setRightBarButton(newClubButton, animated: true)
-        self.navigationItem.configTitleImage()
-        self.navigationItem.configBack()
-        self.navigationController?.navigationBar.setClear()
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        addView()
+        setLayout()
+        configNavigation()
     }
     
-    // MARK: - Reactor
-    override func bindAction(reactor: HomeReactor) {
+    func bind(reactor: HomeReactor) {
+        bindAction(reactor: reactor)
+        bindView(reactor: reactor)
+        bindState(reactor: reactor)
+    }
+}
+
+// MARK: - Extension
+private extension HomeVC {
+    func addView() {
+        view.addSubViews(indicatorBackgroundView, indicator)
+    }
+    func setLayout() {
+        indicatorBackgroundView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        indicator.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.size.equalTo(150)
+        }
+    }
+    func configNavigation(){
+        self.navigationItem.setLeftBarButton(myPageButton, animated: true)
+        self.navigationItem.setRightBarButton(newClubButton, animated: true)
+        self.navigationItem.configBack()
+    }
+    func bindAction(reactor: HomeReactor) {
         self.rx.viewDidLoad
             .map { Reactor.Action.viewDidLoad }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
-    override func bindState(reactor: HomeReactor) {
-        let sharedState = reactor.state.share(replay: 2).observe(on: MainScheduler.asyncInstance)
-        
-        let ds = RxCollectionViewSectionedReloadDataSource<ClubListSection>{ _, tv, ip, item in
-            let cell = tv.dequeueReusableCell(for: ip) as ClubListCell
-            cell.model = item
-            return cell
-        }
-        
-        sharedState
-            .map(\.clubList)
-            .bind(to: clubListCollectionView.rx.items(dataSource: ds))
+    func bindView(reactor: HomeReactor) {
+        myPageButton.rx.tap
+            .map { _ in Reactor.Action.myPageButtonDidTap }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        newClubButton.rx.tap
+            .map { _ in Reactor.Action.newClubButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    func bindState(reactor: HomeReactor) {
+        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
         
         sharedState
             .map(\.isLoading)
@@ -100,29 +143,38 @@ final class HomeVC: BaseVC<HomeReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
             
+    func startIndicator() {
+        indicatorBackgroundView.isHidden = false
+        indicator.isHidden = false
+        indicator.play()
+    }
+    func stopIndicator() {
+        indicatorBackgroundView.isHidden = true
+        indicator.isHidden = true
+        indicator.stop()
     }
 }
 
-// MARK: - Extension
-extension HomeVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, GCMSLayoutDelegate {
-    func collectionView(_ collectionView: UICollectionView, heightForItemIndexAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 1 {
-            return 190
-        } else {
-            return 250
-        }
+extension HomeVC: PageboyViewControllerDataSource, TMBarDataSource {
+    func numberOfViewControllers(in pageboyViewController: PageboyViewController) -> Int {
+        return viewControllers.count
     }
-}
-
-extension HomeVC: ClubTypeSegmentedControlDelegate {
-    func segmentValueChanged(to index: Int) {
-        var type: ClubType = .major
+    
+    func viewController(for pageboyViewController: PageboyViewController, at index: PageboyViewController.PageIndex) -> UIViewController? {
+        return viewControllers[index]
+    }
+    
+    func defaultPage(for pageboyViewController: PageboyViewController) -> PageboyViewController.Page? {
+        return .first
+    }
+    func barItem(for bar: TMBar, at index: Int) -> TMBarItemable {
+        var title = ""
         switch index {
-        case 0: type = .major
-        case 1: type = .editorial
-        case 2: type = .freedom
-        default: type = .major
+        case 0: title = "전공"
+        case 1: title = "자율"
+        case 2: title = "사설"
+        default: title = "Anomaly"
         }
-        reactor?.action.onNext(.segmentDidTap(type))
+        return TMBarItem(title: title)
     }
 }
