@@ -14,19 +14,36 @@ final class CertificationReactor: Reactor, Stepper {
     enum Action {
         case updateLoading(Bool)
         case dismiss
+        case updateCode(String)
+        case completeButotnDidTap
+        case codeNotMatch
     }
     enum Mutation {
         case setIsLoading(Bool)
+        case setCode(String)
+        case setCodeNotMatch(Bool)
     }
     struct State {
         var isLoading: Bool
+        var isCodeNotMatch : Bool
+        var code : String
     }
     let initialState: State
     
+    let checkIsVerifiedUseCase : CheckIsVerifiedUseCase
+    let closure : ((Bool) -> Void)
+    let email : String
+    
     // MARK: - Init
     init(
+        checkIsVerifiedUseCase : CheckIsVerifiedUseCase,
+        email : String,
+        closure : @escaping ((Bool) -> Void)
     ) {
-        initialState = State(isLoading: false)
+        initialState = State(isLoading: false, isCodeNotMatch: false, code: "")
+        self.checkIsVerifiedUseCase = checkIsVerifiedUseCase
+        self.email = email
+        self.closure = closure
     }
     
 }
@@ -39,6 +56,12 @@ extension CertificationReactor {
             return .just(.setIsLoading(load))
         case .dismiss:
             steps.accept(GCMSStep.dismiss)
+        case let .updateCode(code):
+            return .just(.setCode(code))
+        case .completeButotnDidTap:
+            return completeButotnDidTap()
+        case .codeNotMatch:
+            return .just(.setCodeNotMatch(true))
         }
         return .empty()
     }
@@ -52,6 +75,10 @@ extension CertificationReactor {
         switch mutation {
         case let .setIsLoading(load):
             newState.isLoading = load
+        case let .setCode(code):
+            newState.code = code
+        case let .setCodeNotMatch(match):
+            newState.isCodeNotMatch = match
         }
         
         return newState
@@ -60,5 +87,19 @@ extension CertificationReactor {
 
 // MARK: - Method
 private extension CertificationReactor {
-    
+    func completeButotnDidTap() -> Observable<Mutation> {
+        print("asdsafsadf")
+        let startLoding = Observable.just(Mutation.setIsLoading(true))
+        let signUp = checkIsVerifiedUseCase.execute(email: email, code: currentState.code)
+            .do(onError: { [weak self] _ in
+                self?.action.onNext(.codeNotMatch)
+            }, onCompleted: {
+                self.steps.accept(GCMSStep.dismiss)
+            })
+            .andThen(Single.just(Mutation.setIsLoading(false)))
+            .asObservable()
+            .catchAndReturn(.setIsLoading(false))
+        
+        return .concat([startLoding, signUp])
+    }
 }

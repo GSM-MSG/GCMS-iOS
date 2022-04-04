@@ -21,12 +21,12 @@ final class SignUpReactor: Reactor, Stepper {
         case setIsLoading(Bool)
         case setIsEmailNotFound(Bool)
         case setEmail(String)
-        
     }
     struct State {
         var isLoading: Bool
         var isEmailNotFound : Bool
         var email : String
+        var isVerify : Bool
     }
     let initialState: State
     let sendVerifyUseCase: SendVerifyUseCase
@@ -37,7 +37,8 @@ final class SignUpReactor: Reactor, Stepper {
     ) {
         initialState = State(isLoading: false,
                              isEmailNotFound: false,
-                             email: "")
+                             email: "",
+                             isVerify: false)
         self.sendVerifyUseCase = sendVerifyUseCase
     }
 
@@ -82,19 +83,19 @@ extension SignUpReactor {
 private extension SignUpReactor {
     func certificationButton() -> Observable<Mutation> {
         
-//        let startLoding = Observable.just(Mutation.setIsLoading(true))
+        let startLoding = Observable.just(Mutation.setIsLoading(true))
         let signUp = sendVerifyUseCase.execute(email: currentState.email)
-            .do(onError: { [weak self] err in
-                print(err.localizedDescription)
+            .do(onError: { [weak self] _ in
                 self?.action.onNext(.emailNotFound)
-            }, onCompleted: {
-                print("asdfasdfasfs")
-                self.steps.accept(GCMSStep.certificationIsRequired)
+            }, onCompleted: { [weak self] in
+                self?.steps.accept(GCMSStep.certificationIsRequired({ item in
+                    item
+                },email: self?.currentState.email ?? ""))
             })
             .andThen(Single.just(Mutation.setIsLoading(false)))
             .asObservable()
             .catchAndReturn(.setIsLoading(false))
         
-        return .concat(signUp)
+        return .concat([startLoding, signUp])
     }
 }

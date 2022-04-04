@@ -24,9 +24,6 @@ extension Container{
         self.register(SignUpVC.self) { r in
             return SignUpVC(reactor: r.resolve(SignUpReactor.self))
         }
-        self.register(CertificationVC.self) { r in
-            return CertificationVC(reactor: r.resolve(CertificationReactor.self))
-        }
     }
     
     private func registerReactor() {
@@ -55,9 +52,11 @@ extension Container{
                 sendVerifyUseCase: r.resolve(SendVerifyUseCase.self)!
             )
         }
-        self.register(CertificationReactor.self) { r in
+        self.register(CertificationReactor.self) { r, closure, email in
             return CertificationReactor(
-            
+                checkIsVerifiedUseCase: r.resolve(CheckIsVerifiedUseCase.self)!,
+                email: email,
+                closure: closure
             )
         }
     }

@@ -102,9 +102,9 @@ final class CertificationVC: BaseVC<CertificationReactor> {
     override func configureVC() {
         view.backgroundColor = .clear
     }
-        override func configureNavigation() {
-            self.navigationController?.navigationBar.setClear()
-        }
+    override func configureNavigation() {
+        self.navigationController?.navigationBar.setClear()
+    }
     
     // MARK: - Reactor
 
@@ -112,6 +112,11 @@ final class CertificationVC: BaseVC<CertificationReactor> {
         backgroundView.rx.anyGesture(.tap(), .swipe(direction: .down))
             .when(.recognized)
             .map { _ in Reactor.Action.dismiss }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        completeButton.rx.tap
+            .map { Reactor.Action.completeButotnDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }

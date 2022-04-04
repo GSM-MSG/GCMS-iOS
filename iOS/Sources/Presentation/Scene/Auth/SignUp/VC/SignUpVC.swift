@@ -77,6 +77,13 @@ final class SignUpVC : BaseVC<SignUpReactor> {
         $0.textAlignment = .center
     }
     
+    private let invalidLabel = UILabel().then {
+        $0.text = "유효하지 않은 이메일입니다."
+        $0.textColor = GCMSAsset.Colors.gcmsThemeColor.color
+        $0.font = UIFont(font: GCMSFontFamily.Inter.regular, size: 11)
+        $0.isHidden = true
+    }
+    
     private let passwordVisibleButton = UIButton().then {
         $0.tintColor = GCMSAsset.Colors.gcmsGray4.color
     }
@@ -94,7 +101,7 @@ final class SignUpVC : BaseVC<SignUpReactor> {
  
     // MARK: - UI
     override func addView() {
-        view.addSubViews(primaryWaveView, secondaryWaveView, thirdWaveView, emailTextfield, passwordTextfield, retryPasswordTextfield, certificationButton, completeButton, logoImageView, signUpLabel)
+        view.addSubViews(primaryWaveView, secondaryWaveView, thirdWaveView, emailTextfield, passwordTextfield, retryPasswordTextfield, certificationButton, completeButton, logoImageView, signUpLabel, invalidLabel)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -151,9 +158,13 @@ final class SignUpVC : BaseVC<SignUpReactor> {
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(30)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
+        invalidLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(completeButton.snp.top).offset(-33)
+        }
         retryPasswordTextfield.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(completeButton.snp.top).offset(-49)
+            $0.bottom.equalTo(invalidLabel.snp.top).offset(-8)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(51)
         }
@@ -193,6 +204,9 @@ final class SignUpVC : BaseVC<SignUpReactor> {
             .map(\.isEmailNotFound)
             .bind(with: self) { owner, item in
                 owner.emailTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.passwordTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.retryPasswordTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.invalidLabel.isHidden = !item
             }
             .disposed(by: disposeBag)
         

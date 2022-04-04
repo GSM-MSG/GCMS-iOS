@@ -2,6 +2,7 @@ import RxFlow
 import RxRelay
 import RxSwift
 import UIKit
+import Service
 
 struct OnBoardingStepper: Stepper{
     let steps: PublishRelay<Step> = .init()
@@ -37,8 +38,8 @@ final class OnBoardingFlow: Flow{
             return .end(forwardToParentFlowWithStep: GCMSStep.clubListIsRequired)
         case .signUpIsRequired:
             return navigateToSignUp()
-        case .certificationIsRequired:
-            return navigateCertification()
+        case let .certificationIsRequired(closure, email):
+            return presentCertification(closure: closure, email: email)
         case .dismiss:
             return dismissVC()
         default:
@@ -64,8 +65,9 @@ private extension OnBoardingFlow{
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
-    func navigateCertification() -> FlowContributors {
-        let vc = AppDelegate.container.resolve(CertificationVC.self)!
+    func presentCertification(closure:  @escaping(Bool) -> Void, email: String) -> FlowContributors {
+        let reactor = AppDelegate.container.resolve(CertificationReactor.self, arguments: closure, email)
+        let vc = CertificationVC(reactor: reactor)
         vc.modalPresentationStyle = .overFullScreen
         self.rootVC.visibleViewController?.present(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
@@ -74,4 +76,5 @@ private extension OnBoardingFlow{
         self.rootVC.visibleViewController?.dismiss(animated: true)
         return .none
     }
+    
 }
