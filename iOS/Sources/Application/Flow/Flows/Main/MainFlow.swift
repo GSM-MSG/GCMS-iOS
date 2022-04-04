@@ -42,8 +42,12 @@ final class MainFlow: Flow{
             return presentToMemberAppend(closure: closure)
         case .dismiss:
             return dismiss()
-        case let .newClubIsRequired(category):
-            return navigateToNewClub(category: category)
+        case .firstNewClubIsRequired:
+            return navigateToFirstNewClub()
+        case let .secondNewClubIsRequired(reactor):
+            return navigateToSecondNewClub(reactor: reactor)
+        case let .thirdNewClubIsRequired(reactor):
+            return navigateToThirdNewClub(reactor: reactor)
         case let .clubJoinerListIsRequired(query):
             return navigateToJoinerList(query: query)
         default:
@@ -88,17 +92,25 @@ private extension MainFlow{
         self.rootVC.visibleViewController?.dismiss(animated: true)
         return .none
     }
-    func navigateToNewClub(category: ClubType) -> FlowContributors {
-        let reactor = NewClubReactor(category: category)
-        let vc = NewClubVC(reactor: reactor)
-        self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
-    }
     func navigateToJoinerList(query: ClubRequestQuery) -> FlowContributors {
         let reactor = AcceptReactor(query: query)
         let vc = AcceptVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
-    
+    func navigateToFirstNewClub() -> FlowContributors {
+        let vc = AppDelegate.container.resolve(FirstNewClubVC.self)!
+        self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
+    func navigateToSecondNewClub(reactor: NewClubReactor) -> FlowContributors {
+        let vc = AppDelegate.container.resolve(SecondNewClubVC.self, argument: reactor)!
+        self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
+    func navigateToThirdNewClub(reactor: NewClubReactor) -> FlowContributors {
+        let vc = AppDelegate.container.resolve(ThirdNewClubVC.self, argument: reactor)!
+        self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
 }
