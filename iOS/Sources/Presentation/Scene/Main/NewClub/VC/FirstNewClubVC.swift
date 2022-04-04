@@ -29,7 +29,7 @@ final class FirstNewClubVC: BaseVC<NewClubReactor> {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(progressBar.snp.bottom).offset(75)
             $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo((bound.width-40)*0.43215)
+            $0.height.equalTo((bound.width-40)*0.43125)
         }
         freedomButton.snp.makeConstraints {
             $0.leading.trailing.height.centerX.equalTo(majorButton)
