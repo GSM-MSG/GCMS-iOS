@@ -15,7 +15,7 @@ final class HomeReactor: Reactor, Stepper {
         case viewDidLoad
         case segmentDidTap(ClubType)
         case myPageButtonDidTap
-        case alarmButtonDidTap
+        case newClubButtonDidTap
         case updateLoading(Bool)
         case clubDidTap(ClubRequestQuery)
     }
@@ -53,8 +53,8 @@ extension HomeReactor {
             return viewDidLoad()
         case .myPageButtonDidTap:
             steps.accept(GCMSStep.myPageIsRequired)
-        case .alarmButtonDidTap:
-            steps.accept(GCMSStep.alarmListIsRequired)
+        case .newClubButtonDidTap:
+            steps.accept(GCMSStep.firstNewClubIsRequired)
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
         case let .segmentDidTap(type):

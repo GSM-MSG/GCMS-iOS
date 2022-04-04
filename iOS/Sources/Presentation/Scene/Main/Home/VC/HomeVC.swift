@@ -17,7 +17,7 @@ final class HomeVC: BaseVC<HomeReactor> {
                                                style: .plain,
                                                target: nil,
                                                action: nil)
-    private let alarmButton = UIBarButtonItem(image: .init(systemName: "plus.app")?.tintColor(GCMSAsset.Colors.gcmsGray4.color),
+    private let newClubButton = UIBarButtonItem(image: .init(systemName: "plus.app")?.tintColor(GCMSAsset.Colors.gcmsGray4.color),
                                               style: .plain,
                                               target: nil,
                                               action: nil)
@@ -49,7 +49,7 @@ final class HomeVC: BaseVC<HomeReactor> {
     }
     override func configureNavigation() {
         self.navigationItem.setLeftBarButton(myPageButton, animated: true)
-        self.navigationItem.setRightBarButton(alarmButton, animated: true)
+        self.navigationItem.setRightBarButton(newClubButton, animated: true)
         self.navigationItem.configTitleImage()
         self.navigationItem.configBack()
         self.navigationController?.navigationBar.setClear()
@@ -89,8 +89,8 @@ final class HomeVC: BaseVC<HomeReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        alarmButton.rx.tap
-            .map { Reactor.Action.alarmButtonDidTap }
+        newClubButton.rx.tap
+            .map { Reactor.Action.newClubButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
