@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "FreedomT.svg",
+      "filename" : "Freedom.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "Freedom-1.svg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "Freedom-2.svg",
       "idiom" : "universal",
       "scale" : "3x"
     }

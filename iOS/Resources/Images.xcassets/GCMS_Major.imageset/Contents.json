@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "MajorT.svg",
+      "filename" : "Major.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "Major-1.svg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "Major-2.svg",
       "idiom" : "universal",
       "scale" : "3x"
     }
