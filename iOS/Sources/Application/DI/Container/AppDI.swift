@@ -13,7 +13,14 @@ extension Container{
             return OnBoardingVC(reactor: r.resolve(OnBoardingReactor.self))
         }
         self.register(HomeVC.self) { r in
-            return HomeVC(reactor: r.resolve(HomeReactor.self))
+            let reactor = r.resolve(HomeReactor.self)
+            let home = HomeVC(reactor: reactor)
+            home.setViewControllers([
+                MajorClubListVC(reactor: reactor),
+                FreedomClubListVC(reactor: reactor),
+                EditorialClubListVC(reactor: reactor)
+            ])
+            return home
         }
         self.register(MyPageVC.self) { r in
             return MyPageVC(reactor: r.resolve(MyPageReactor.self))

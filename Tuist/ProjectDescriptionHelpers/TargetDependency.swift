@@ -26,6 +26,7 @@ public extension TargetDependency.SPM{
     static let Quick = TargetDependency.package(product: "Quick")
     static let Nimble = TargetDependency.package(product: "Nimble")
     static let DPOTPView = TargetDependency.package(product: "DPOTPView")
+    static let Tabman = TargetDependency.package(product: "Tabman")
 }
 
 public extension Package {
@@ -108,5 +109,9 @@ public extension Package {
     static let DPOTPView = Package.remote(
         url: "https://github.com/Datt1994/DPOTPView.git",
         requirement: .upToNextMajor(from: "1.0.0")
+    )
+    static let Tabman = Package.remote(
+        url: "https://github.com/uias/Tabman.git",
+        requirement: .upToNextMajor(from: "2.12.0")
     )
 }
