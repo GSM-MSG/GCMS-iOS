@@ -13,6 +13,13 @@ final class NewClubReactor: Reactor, Stepper {
     
     // MARK: - Reactor
     enum Action {
+        case updateTitle(String)
+        case updateDescription(String)
+        case updateLinkName(String?)
+        case updateLinkUrl(String?)
+        case updateTeacher(String?)
+        case updateContact(String)
+        case clubTypeDidTap(ClubType)
         case imageDidSelect(Data)
         case bannerDidTap
         case activityAppendButtonDidTap
@@ -23,18 +30,32 @@ final class NewClubReactor: Reactor, Stepper {
         case updateLoading(Bool)
     }
     enum Mutation {
+        case setTitle(String)
+        case setDescription(String)
+        case setLinkName(String?)
+        case setLinkUrl(String?)
+        case setTeacher(String?)
+        case setContact(String)
         case setImageData(Data)
         case setIsBanner(Bool)
         case removeImageData(Int)
         case appendMember([User])
         case memberRemove(Int)
+        case setClubType(ClubType)
         case setIsLoading(Bool)
     }
     struct State {
+        var title: String
+        var description: String
+        var linkName: String?
+        var linkUrl: String?
+        var contact: String
+        var teacher: String?
         var isBanner: Bool
         var imageData: Data?
         var activitiesData: [Data]
         var members: [User]
+        var clubType: ClubType
         var isLoading: Bool
     }
     let initialState: State
@@ -42,9 +63,13 @@ final class NewClubReactor: Reactor, Stepper {
     // MARK: - Init
     init() {
         initialState = State(
+            title: "",
+            description: "",
+            contact: "",
             isBanner: false,
             activitiesData: [],
             members: [],
+            clubType: .major,
             isLoading: false
         )
     }
@@ -55,6 +80,21 @@ final class NewClubReactor: Reactor, Stepper {
 extension NewClubReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case let .updateTitle(title):
+            return .just(.setTitle(title))
+        case let .updateDescription(desc):
+            return .just(.setDescription(desc))
+        case let .updateLinkName(name):
+            return .just(.setLinkName(name))
+        case let .updateLinkUrl(url):
+            return .just(.setLinkUrl(url))
+        case let .updateContact(cont):
+            return .just(.setContact(cont))
+        case let .updateTeacher(teac):
+            return .just(.setTeacher(teac))
+        case let .clubTypeDidTap(type):
+            steps.accept(GCMSStep.secondNewClubIsRequired(reactor: self))
+            return .just(.setClubType(type))
         case let .imageDidSelect(data):
             return .just(.setImageData(data))
         case .bannerDidTap:
@@ -84,6 +124,18 @@ extension NewClubReactor {
         var newState = state
         
         switch mutation {
+        case let .setTitle(title):
+            newState.title = title
+        case let .setDescription(desc):
+            newState.description = desc
+        case let .setLinkName(name):
+            newState.linkName = name
+        case let .setLinkUrl(url):
+            newState.linkUrl = url
+        case let .setContact(cont):
+            newState.contact = cont
+        case let .setTeacher(teac):
+            newState.teacher = teac
         case let .setImageData(data):
             if currentState.isBanner {
                 newState.imageData = data
@@ -108,6 +160,8 @@ extension NewClubReactor {
             newState.members.removeDuplicates()
         case let .memberRemove(index):
             newState.members.remove(at: index)
+        case let .setClubType(type):
+            newState.clubType = type
         case let .setIsLoading(load):
             newState.isLoading = load
         }
