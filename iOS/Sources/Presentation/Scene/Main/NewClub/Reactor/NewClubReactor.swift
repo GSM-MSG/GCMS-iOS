@@ -13,14 +13,19 @@ final class NewClubReactor: Reactor, Stepper {
     
     // MARK: - Reactor
     enum Action {
+        // First
+        case clubTypeDidTap(ClubType)
+        
+        //Second
         case updateTitle(String)
         case updateDescription(String)
         case updateLinkName(String?)
         case updateLinkUrl(String?)
         case updateTeacher(String?)
         case updateContact(String)
-        case clubTypeDidTap(ClubType)
         case secondNextButtonDidTap
+        
+        // Third
         case imageDidSelect(Data)
         case bannerDidTap
         case activityAppendButtonDidTap
@@ -29,6 +34,7 @@ final class NewClubReactor: Reactor, Stepper {
         case memberDidSelected([User])
         case memberRemove(Int)
         case updateLoading(Bool)
+        case completeButtonDidTap
     }
     enum Mutation {
         case setTitle(String)
@@ -83,6 +89,8 @@ extension NewClubReactor {
         switch action {
         case let .updateTitle(title):
             return .just(.setTitle(title))
+        case .completeButtonDidTap:
+            return completeButtonDidTap()
         case let .updateDescription(desc):
             return .just(.setDescription(desc))
         case let .updateLinkName(name):
@@ -191,6 +199,19 @@ private extension NewClubReactor {
         if !errorMessage.isEmpty {
             steps.accept(GCMSStep.failureAlert(title: errorMessage, message: nil, action: nil))
         }
+        return .empty()
+    }
+    func completeButtonDidTap() -> Observable<Mutation> {
+        guard (currentState.imageData != nil)  else {
+            steps.accept(GCMSStep.failureAlert(title: "동아리 배너 이미지를 넣어주세요!", message: nil, action: nil))
+            return .empty()
+        }
+        steps.accept(GCMSStep.alert(title: "정말로 완료하시겠습니까?", message: nil, style: .alert, actions: [
+            .init(title: "예", style: .default, handler: { [weak self] _ in
+                self?.steps.accept(GCMSStep.popToRoot)
+            }),
+            .init(title: "아니요", style: .default, handler: nil)
+        ]))
         return .empty()
     }
 }
