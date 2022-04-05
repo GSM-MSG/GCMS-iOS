@@ -31,19 +31,16 @@ final class CertificationReactor: Reactor, Stepper {
     let initialState: State
     
     let checkIsVerifiedUseCase : CheckIsVerifiedUseCase
-    let closure : ((Bool) -> Void)
     var email : String
     
     // MARK: - Init
     init(
         checkIsVerifiedUseCase : CheckIsVerifiedUseCase,
-        email : String,
-        closure : @escaping ((Bool) -> Void)
+        email : String
     ) {
         initialState = State(isLoading: false, isCodeNotMatch: false, code: "")
         self.checkIsVerifiedUseCase = checkIsVerifiedUseCase
         self.email = email
-        self.closure = closure
     }
     
 }

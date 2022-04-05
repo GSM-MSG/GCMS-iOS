@@ -52,11 +52,10 @@ extension Container{
                 sendVerifyUseCase: r.resolve(SendVerifyUseCase.self)!
             )
         }
-        self.register(CertificationReactor.self) { r, closure, email in
+        self.register(CertificationReactor.self) { r, email in
             return CertificationReactor(
                 checkIsVerifiedUseCase: r.resolve(CheckIsVerifiedUseCase.self)!,
-                email: email,
-                closure: closure
+                email: email
             )
         }
     }

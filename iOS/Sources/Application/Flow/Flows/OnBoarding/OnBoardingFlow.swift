@@ -38,8 +38,8 @@ final class OnBoardingFlow: Flow{
             return .end(forwardToParentFlowWithStep: GCMSStep.clubListIsRequired)
         case .signUpIsRequired:
             return navigateToSignUp()
-        case let .certificationIsRequired(closure, email):
-            return presentCertification(closure: closure, email: email)
+        case let .certificationIsRequired(email):
+            return presentCertification(email: email)
         case .dismiss:
             return dismissVC()
         default:
@@ -65,8 +65,8 @@ private extension OnBoardingFlow{
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
-    func presentCertification(closure:  @escaping(Bool) -> Void, email: String) -> FlowContributors {
-        let reactor = AppDelegate.container.resolve(CertificationReactor.self, arguments: closure, email)
+    func presentCertification(email: String) -> FlowContributors {
+        let reactor = AppDelegate.container.resolve(CertificationReactor.self, argument: email)
         let vc = CertificationVC(reactor: reactor)
         vc.modalPresentationStyle = .overFullScreen
         self.rootVC.visibleViewController?.present(vc, animated: true)

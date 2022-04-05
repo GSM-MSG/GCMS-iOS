@@ -123,7 +123,6 @@ final class CertificationVC: BaseVC<CertificationReactor> {
             .map { Reactor.Action.completeButotnDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-
     }
     
 }

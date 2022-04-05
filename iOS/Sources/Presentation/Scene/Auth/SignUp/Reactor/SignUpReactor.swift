@@ -88,9 +88,7 @@ private extension SignUpReactor {
             .do(onError: { [weak self] _ in
                 self?.action.onNext(.emailNotFound)
             }, onCompleted: { [weak self] in
-                self?.steps.accept(GCMSStep.certificationIsRequired({ item in
-                    item
-                },email: self?.currentState.email ?? ""))
+                self?.steps.accept(GCMSStep.certificationIsRequired(email: self?.currentState.email ?? ""))
             })
             .andThen(Single.just(Mutation.setIsLoading(false)))
             .asObservable()
