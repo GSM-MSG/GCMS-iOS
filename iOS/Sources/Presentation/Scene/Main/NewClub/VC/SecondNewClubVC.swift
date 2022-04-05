@@ -9,7 +9,6 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
     enum Metric {
         static let verticalSpacing: CGFloat = 65
         static let horizontalMargin: CGFloat = 20
-        static let buttonSize: CGFloat = 30
         static let textFieldHeight: CGFloat = 45
     }
     // MARK: - Properties
@@ -121,6 +120,9 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
     }
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
+    }
+    override func configureNavigation() {
+        self.navigationItem.configBack()
     }
     
     // MARK: - Reactor
