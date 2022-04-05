@@ -32,6 +32,8 @@ final class MainFlow: Flow{
         switch step{
         case .clubListIsRequired:
             return coordinateToClubList()
+        case .popToRoot:
+            return popToRoot()
         case let .clubDetailIsRequired(query):
             return navigateToDetailClub(query: query)
         case .myPageIsRequired:
@@ -115,6 +117,10 @@ private extension MainFlow{
             alert.addAction(.init(title: "확인", style: .default))
         }
         self.rootVC.visibleViewController?.present(alert, animated: true)
+        return .none
+    }
+    func popToRoot() -> FlowContributors {
+        self.rootVC.popToRootViewController(animated: true)
         return .none
     }
 }
