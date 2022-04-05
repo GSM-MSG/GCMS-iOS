@@ -199,5 +199,10 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
             .map(Reactor.Action.updateContact)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        nextBUtton.rx.tap
+            .map { Reactor.Action.secondNextButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }

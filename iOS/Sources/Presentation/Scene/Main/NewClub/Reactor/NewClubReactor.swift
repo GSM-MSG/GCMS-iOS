@@ -20,6 +20,7 @@ final class NewClubReactor: Reactor, Stepper {
         case updateTeacher(String?)
         case updateContact(String)
         case clubTypeDidTap(ClubType)
+        case secondNextButtonDidTap
         case imageDidSelect(Data)
         case bannerDidTap
         case activityAppendButtonDidTap
@@ -92,6 +93,8 @@ extension NewClubReactor {
             return .just(.setContact(cont))
         case let .updateTeacher(teac):
             return .just(.setTeacher(teac))
+        case .secondNextButtonDidTap:
+            return secondNextButtonDidTap()
         case let .clubTypeDidTap(type):
             steps.accept(GCMSStep.secondNewClubIsRequired(reactor: self))
             return .just(.setClubType(type))
@@ -172,5 +175,22 @@ extension NewClubReactor {
 
 // MARK: - Method
 private extension NewClubReactor {
-    
+    func secondNextButtonDidTap() -> Observable<Mutation> {
+        var errorMessage = ""
+        if currentState.title.isEmpty {
+            errorMessage = "동아리 이름을 입력해주세요!"
+        }
+        else if currentState.description.isEmpty || currentState.description == "동아리 설명을 입력해주세요." {
+            errorMessage = "동아리 설명을 입력해주세요!"
+        }
+        else if currentState.contact.isEmpty {
+            errorMessage = "연락처를 입력해주세요!"
+        } else {
+            steps.accept(GCMSStep.thirdNewClubIsRequired(reactor: self))
+        }
+        if !errorMessage.isEmpty {
+            steps.accept(GCMSStep.failureAlert(title: errorMessage, message: nil, action: nil))
+        }
+        return .empty()
+    }
 }

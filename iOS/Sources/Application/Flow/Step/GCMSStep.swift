@@ -5,7 +5,7 @@ import Service
 enum GCMSStep: Step {
     // MARK: Global
     case alert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction])
-    case failureAlert(title: String?, message: String, action: UIAlertAction?)
+    case failureAlert(title: String?, message: String?, action: UIAlertAction?)
     case dismiss
     
     // MARK: OnBoading
@@ -23,6 +23,5 @@ enum GCMSStep: Step {
     
     // MARK: Administrator
     case myPageIsRequired
-    case clubJoinerListIsRequired(query: ClubRequestQuery)
     
 }
