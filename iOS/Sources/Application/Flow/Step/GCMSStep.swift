@@ -7,6 +7,7 @@ enum GCMSStep: Step {
     case alert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction])
     case failureAlert(title: String?, message: String?, action: UIAlertAction?)
     case dismiss
+    case popToRoot
     
     // MARK: OnBoading
     case onBoardingIsRequired
