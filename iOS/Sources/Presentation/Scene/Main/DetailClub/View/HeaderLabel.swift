@@ -5,7 +5,7 @@ final class HeaderLabel: UILabel {
         super.init(frame: .zero)
         self.text = title
         self.textColor = GCMSAsset.Colors.gcmsGray1.color
-        self.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 16)
+        self.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 15)
     }
     
     required init?(coder: NSCoder) {
