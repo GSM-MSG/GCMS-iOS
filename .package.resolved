@@ -271,6 +271,15 @@
       }
     },
     {
+      "identity" : "rxkeyboard",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RxSwiftCommunity/RxKeyboard.git",
+      "state" : {
+        "revision" : "085fd99d7bb4f98e671904fcfe7ff561e66574ad",
+        "version" : "2.0.0"
+      }
+    },
+    {
       "identity" : "rxswift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ReactiveX/RxSwift",
