@@ -5,6 +5,7 @@ import Service
 enum GCMSStep: Step {
     // MARK: Global
     case alert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction])
+    case failureAlert(title: String?, message: String, action: UIAlertAction?)
     case dismiss
     
     // MARK: OnBoading
