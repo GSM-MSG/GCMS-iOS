@@ -1,5 +1,8 @@
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
+import Service
 
 final class FirstNewClubVC: BaseVC<NewClubReactor> {
     // MARK: - Properties
@@ -43,5 +46,26 @@ final class FirstNewClubVC: BaseVC<NewClubReactor> {
     }
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
+    }
+    override func configureNavigation() {
+        self.navigationItem.configBack()
+    }
+    
+    // MARK: - Reactor
+    override func bindView(reactor: NewClubReactor) {
+        majorButton.rx.tap
+            .map { Reactor.Action.clubTypeDidTap(.major) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        freedomButton.rx.tap
+            .map { Reactor.Action.clubTypeDidTap(.freedom) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        editorialButton.rx.tap
+            .map { Reactor.Action.clubTypeDidTap(.editorial) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
