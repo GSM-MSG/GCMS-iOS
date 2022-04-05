@@ -1,14 +1,14 @@
 import RxDataSources
 import Service
 
-struct MemberSection: SectionModelType {
+struct ClubMemberSection: SectionModelType {
     let header: String
     var items: [User]
 }
 
-extension MemberSection {
+extension ClubMemberSection {
     typealias Item = User
-    init(original: MemberSection, items: [User]) {
+    init(original: ClubMemberSection, items: [User]) {
         self = original
         self.items = items
     }
