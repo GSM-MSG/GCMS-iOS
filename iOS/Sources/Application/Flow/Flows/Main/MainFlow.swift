@@ -103,12 +103,12 @@ private extension MainFlow{
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
-    func navigateToSecondNewClub(reactor: NewClubReactor) -> FlowContributors {
+    func navigateToSecondNewClub(reactor: NewClubReactor?) -> FlowContributors {
         let vc = AppDelegate.container.resolve(SecondNewClubVC.self, argument: reactor)!
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
-    func navigateToThirdNewClub(reactor: NewClubReactor) -> FlowContributors {
+    func navigateToThirdNewClub(reactor: NewClubReactor?) -> FlowContributors {
         let vc = AppDelegate.container.resolve(ThirdNewClubVC.self, argument: reactor)!
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
