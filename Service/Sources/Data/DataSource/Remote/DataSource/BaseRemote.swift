@@ -66,6 +66,7 @@ private extension BaseRemote {
                 }
                 return .error(GCMSError.error(errorBody: ["status": moyaErr.response?.statusCode ?? 0]))
             }
+            .debug()
     }
     
     func requestWithAccessToken(_ api: API) -> Single<Response> {

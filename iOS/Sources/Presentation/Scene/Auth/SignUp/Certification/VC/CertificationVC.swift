@@ -25,7 +25,7 @@ final class CertificationVC: BaseVC<CertificationReactor> {
         $0.textAlignment = .center
     }
     
-    private let textfield = DPOTPView().then {
+    private let OTPTextfield = DPOTPView().then {
         $0.isCursorHidden = true
         $0.count = 4
         $0.spacing = 25
@@ -62,10 +62,12 @@ final class CertificationVC: BaseVC<CertificationReactor> {
     }
     
     // MARK: - UI
-    
+    override func setup() {
+        OTPTextfield.dpOTPViewDelegate = self
+    }
     override func addView() {
         view.addSubViews(backgroundView, rootView, mailImage)
-        rootView.addSubViews(sendMessageLabel, textfield, completeButton)
+        rootView.addSubViews(sendMessageLabel, OTPTextfield, completeButton)
     }
     
     override func setLayout() {
@@ -86,7 +88,7 @@ final class CertificationVC: BaseVC<CertificationReactor> {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(mailImage.snp.bottom).offset(12)
         }
-        textfield.snp.makeConstraints {
+        OTPTextfield.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(sendMessageLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(bound.width*0.1066)
@@ -101,10 +103,12 @@ final class CertificationVC: BaseVC<CertificationReactor> {
     }
     override func configureVC() {
         view.backgroundColor = .clear
+        
     }
     override func configureNavigation() {
         self.navigationController?.navigationBar.setClear()
     }
+    
     
     // MARK: - Reactor
 
@@ -119,6 +123,24 @@ final class CertificationVC: BaseVC<CertificationReactor> {
             .map { Reactor.Action.completeButotnDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+
     }
+    
+}
+
+extension CertificationVC : DPOTPViewDelegate {
+    func dpOTPViewAddText(_ text: String, at position: Int) {
+        reactor?.action.onNext(.updateCode(text))
+    }
+    
+    func dpOTPViewRemoveText(_ text: String, at position: Int) {
+        reactor?.action.onNext(.updateCode(text))
+    }
+    
+    func dpOTPViewChangePositionAt(_ position: Int) {}
+    
+    func dpOTPViewBecomeFirstResponder() {}
+    
+    func dpOTPViewResignFirstResponder() {}
     
 }

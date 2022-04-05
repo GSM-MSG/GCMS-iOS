@@ -32,7 +32,7 @@ final class CertificationReactor: Reactor, Stepper {
     
     let checkIsVerifiedUseCase : CheckIsVerifiedUseCase
     let closure : ((Bool) -> Void)
-    let email : String
+    var email : String
     
     // MARK: - Init
     init(
@@ -88,7 +88,6 @@ extension CertificationReactor {
 // MARK: - Method
 private extension CertificationReactor {
     func completeButotnDidTap() -> Observable<Mutation> {
-        print("asdsafsadf")
         let startLoding = Observable.just(Mutation.setIsLoading(true))
         let signUp = checkIsVerifiedUseCase.execute(email: email, code: currentState.code)
             .do(onError: { [weak self] _ in
@@ -99,7 +98,6 @@ private extension CertificationReactor {
             .andThen(Single.just(Mutation.setIsLoading(false)))
             .asObservable()
             .catchAndReturn(.setIsLoading(false))
-        
         return .concat([startLoding, signUp])
     }
 }
