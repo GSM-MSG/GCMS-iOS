@@ -14,6 +14,7 @@ final class DetailClubReactor: Reactor, Stepper {
     enum Action {
         case viewDidLoad
         case updateLoading(Bool)
+        case statusButtonDidTap
     }
     enum Mutation {
         case setClub(Club)
@@ -24,16 +25,16 @@ final class DetailClubReactor: Reactor, Stepper {
         var isLoading: Bool
     }
     let initialState: State
+    private let query: ClubRequestQuery
     
     // MARK: - Init
     init(
-    
+        query: ClubRequestQuery
     ) {
-        
-        
         initialState = State(
             isLoading: false
         )
+        self.query = query
     }
     
 }
@@ -46,6 +47,8 @@ extension DetailClubReactor {
             return viewDidLoad()
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
+        case .statusButtonDidTap:
+            steps.accept(GCMSStep.clubStatusIsRequired(query: query, isHead: currentState.clubDetail?.scope == .head ?? .default))
         }
         return .empty()
     }
