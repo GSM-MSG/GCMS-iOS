@@ -2,7 +2,7 @@ import UIKit
 import Service
 import Kingfisher
 
-final class MemberCell: BaseCollectionViewCell<User> {
+final class ClubMemberCell: BaseCollectionViewCell<User> {
     // MARK: - Properties
     private let profileImageView = UIImageView().then {
         $0.layer.cornerRadius = 30.5

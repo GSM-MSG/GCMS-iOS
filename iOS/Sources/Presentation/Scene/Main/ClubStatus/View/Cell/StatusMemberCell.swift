@@ -3,7 +3,7 @@ import Service
 import SnapKit
 import Kingfisher
 
-final class ClubMemberCell: BaseCollectionViewCell<User> {
+final class StatusMemberCell: BaseCollectionViewCell<User> {
     // MARK: - Properties
     private let profileImageView = UIImageView()
     private let nameLabel = UILabel()

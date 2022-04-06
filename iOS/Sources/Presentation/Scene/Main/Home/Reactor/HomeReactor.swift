@@ -54,7 +54,7 @@ extension HomeReactor {
         case .myPageButtonDidTap:
             steps.accept(GCMSStep.myPageIsRequired)
         case .newClubButtonDidTap:
-            steps.accept(GCMSStep.alarmListIsRequired)
+            steps.accept(GCMSStep.firstNewClubIsRequired)
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
         case .viewDidLoad:

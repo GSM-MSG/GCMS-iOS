@@ -31,6 +31,15 @@ extension Container{
         self.register(CertificationVC.self) { r in
             return CertificationVC(reactor: r.resolve(CertificationReactor.self))
         }
+        self.register(FirstNewClubVC.self) { r in
+            return FirstNewClubVC(reactor: r.resolve(NewClubReactor.self))
+        }
+        self.register(SecondNewClubVC.self) { _, reactor in
+            return SecondNewClubVC(reactor: reactor)
+        }
+        self.register(ThirdNewClubVC.self) { _, reactor in
+            return ThirdNewClubVC(reactor: reactor)
+        }
     }
     
     private func registerReactor() {
@@ -58,6 +67,9 @@ extension Container{
             return CertificationReactor(
             
             )
+        }
+        self.register(NewClubReactor.self) { r in
+            return NewClubReactor()
         }
     }
 }

@@ -110,7 +110,7 @@ final class LoginVC : BaseVC<LoginReactor> {
         UIView.animate(views: [
             loginButton
         ], animations: [
-            AnimationType.zoom(scale:0.1)
+            AnimationType.from(direction: .bottom, offset: 30)
         ], delay: 1.4, duration: 1.2)
     }
     
