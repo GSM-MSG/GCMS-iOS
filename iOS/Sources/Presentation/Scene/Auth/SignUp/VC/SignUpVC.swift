@@ -228,6 +228,16 @@ final class SignUpVC : BaseVC<SignUpReactor> {
             .map(Reactor.Action.updateEmail)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        passwordTextfield.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
+            .map(Reactor.Action.updatePassword)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        completeButton.rx.tap
+            .map { Reactor.Action.completeButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
 }

@@ -2,7 +2,9 @@ import ReactorKit
 import RxFlow
 import RxSwift
 import RxRelay
+import RxMoya
 import Service
+import Foundation
 
 final class CertificationReactor: Reactor, Stepper {
     // MARK: - Properties
@@ -85,6 +87,7 @@ extension CertificationReactor {
 // MARK: - Method
 private extension CertificationReactor {
     func completeButotnDidTap() -> Observable<Mutation> {
+        
         let startLoding = Observable.just(Mutation.setIsLoading(true))
         let signUp = checkIsVerifiedUseCase.execute(email: email, code: currentState.code)
             .do(onError: { [weak self] _ in

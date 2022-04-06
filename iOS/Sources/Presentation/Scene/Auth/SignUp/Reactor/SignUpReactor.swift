@@ -14,32 +14,42 @@ final class SignUpReactor: Reactor, Stepper {
     enum Action {
         case updateLoading(Bool)
         case updateEmail(String)
+        case updatePassword(String)
         case certificationButtonDidTap
+        case completeButtonDidTap
         case emailNotFound
+        case signUpFailed
     }
     enum Mutation {
         case setIsLoading(Bool)
         case setIsEmailNotFound(Bool)
+        case setPassword(String)
         case setEmail(String)
+        case setIsSignUpFailed(Bool)
     }
     struct State {
         var isLoading: Bool
+        var isSignUpFailed: Bool
         var isEmailNotFound : Bool
         var email : String
-        var isVerify : Bool
+        var password : String
     }
     let initialState: State
     let sendVerifyUseCase: SendVerifyUseCase
+    let registerUseCase : RegisterUseCase
     
     // MARK: - Init
     init(
-        sendVerifyUseCase: SendVerifyUseCase
+        sendVerifyUseCase: SendVerifyUseCase,
+        registerUseCase : RegisterUseCase
     ) {
         initialState = State(isLoading: false,
+                             isSignUpFailed: false,
                              isEmailNotFound: false,
                              email: "",
-                             isVerify: false)
+                             password: "")
         self.sendVerifyUseCase = sendVerifyUseCase
+        self.registerUseCase = registerUseCase
     }
 
 }
@@ -56,6 +66,12 @@ extension SignUpReactor {
             return .just(.setEmail(email))
         case .emailNotFound:
             return .just(.setIsEmailNotFound(true))
+        case .completeButtonDidTap:
+            return completeButtonDidTap()
+        case .signUpFailed:
+            return .just(.setIsSignUpFailed(true))
+        case let .updatePassword(password):
+            return .just(.setPassword(password))
         }
         return .empty()
     }
@@ -73,6 +89,10 @@ extension SignUpReactor {
             newState.isEmailNotFound = success
         case let .setEmail(email):
             newState.email = email
+        case let .setIsSignUpFailed(success):
+            newState.isSignUpFailed = success
+        case let .setPassword(password):
+            newState.password = password
         }
         
         return newState
@@ -84,7 +104,7 @@ private extension SignUpReactor {
     func certificationButton() -> Observable<Mutation> {
         
         let startLoding = Observable.just(Mutation.setIsLoading(true))
-        let signUp = sendVerifyUseCase.execute(email: currentState.email)
+        let emailVerify = sendVerifyUseCase.execute(email: currentState.email)
             .do(onError: { [weak self] _ in
                 self?.action.onNext(.emailNotFound)
             }, onCompleted: { [weak self] in
@@ -94,6 +114,23 @@ private extension SignUpReactor {
             .asObservable()
             .catchAndReturn(.setIsLoading(false))
         
+        return .concat([startLoding, emailVerify])
+    }
+    
+    func completeButtonDidTap() -> Observable<Mutation> {
+        
+        let startLoding = Observable.just(Mutation.setIsLoading(true))
+        let signUp = registerUseCase.execute(req: RegisterReqeust(email: currentState.email, password: currentState.password))
+            .do(onError: { [weak self] _ in
+                self?.action.onNext(.emailNotFound)
+            }, onCompleted: { [weak self] in
+                self?.steps.accept(GCMSStep.clubListIsRequired)
+            })
+            .andThen(Single.just(Mutation.setIsLoading(false)))
+            .asObservable()
+            .catchAndReturn(.setIsLoading(false))
+            
+            
         return .concat([startLoding, signUp])
     }
 }
