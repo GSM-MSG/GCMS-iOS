@@ -7,6 +7,7 @@ final class EditorialClubListVC: BaseVC<HomeReactor> {
     // MARK: - Properties
     private let clubListCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
         $0.register(cellType: ClubListCell.self)
+        $0.backgroundColor = .clear
     }
     
     // MARK: - UI
