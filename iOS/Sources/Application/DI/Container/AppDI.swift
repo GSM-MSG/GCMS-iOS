@@ -69,7 +69,14 @@ extension Container{
             )
         }
         self.register(NewClubReactor.self) { r in
-            return NewClubReactor()
+            return NewClubReactor(
+            
+            )
+        }
+        self.register(ClubStatusReactor.self) { r, query in
+            return ClubStatusReactor(
+                query: query
+            )
         }
     }
 }
