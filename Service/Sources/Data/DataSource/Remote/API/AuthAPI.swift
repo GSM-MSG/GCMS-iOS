@@ -59,5 +59,11 @@ extension AuthAPI: GCMSAPI {
             return JWTTokenType.none
         }
     }
+    var errorMapper: [Int: GCMSError]?{
+        return [
+            403: .Forbidden,
+            409: .conflict
+        ]
+    }
     
 }

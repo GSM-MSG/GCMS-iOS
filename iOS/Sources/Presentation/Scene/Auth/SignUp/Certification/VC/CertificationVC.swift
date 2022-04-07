@@ -25,6 +25,14 @@ final class CertificationVC: BaseVC<CertificationReactor> {
         $0.textAlignment = .center
     }
     
+    /// 디자이너의 요청에따라 다시 생길 가능성이 있어서 지우지 않음
+//    private let codeNotMatchLabel = UILabel().then {
+//        $0.text = "인증번호가 다릅니다!"
+//        $0.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 18)
+//        $0.tintColor = GCMSAsset.Colors.gcmsThemeColor.color
+//        $0.textAlignment = .center
+//    }
+    
     private let OTPTextfield = DPOTPView().then {
         $0.isCursorHidden = true
         $0.count = 4
@@ -103,14 +111,30 @@ final class CertificationVC: BaseVC<CertificationReactor> {
     }
     override func configureVC() {
         view.backgroundColor = .clear
-        
     }
     override func configureNavigation() {
         self.navigationController?.navigationBar.setClear()
     }
     
-    
     // MARK: - Reactor
+    
+    override func bindState(reactor: CertificationReactor) {
+        let sharedState = reactor.state.share(replay: 2).observe(on: MainScheduler.asyncInstance)
+        
+        sharedState
+            .map(\.isCodeNotMatch)
+            .bind(with: self) { owner, item in
+                
+            }
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.isLoading)
+            .bind(with: self) { owner, load in
+                load ? owner.startIndicator() : owner.stopIndicator()
+            }
+            .disposed(by: disposeBag)
+    }
 
     override func bindView(reactor: CertificationReactor) {
         backgroundView.rx.anyGesture(.tap(), .swipe(direction: .down))
@@ -123,8 +147,8 @@ final class CertificationVC: BaseVC<CertificationReactor> {
             .map { Reactor.Action.completeButotnDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
     }
-    
 }
 
 extension CertificationVC : DPOTPViewDelegate {

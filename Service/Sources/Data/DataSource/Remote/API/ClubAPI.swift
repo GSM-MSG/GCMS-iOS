@@ -97,4 +97,10 @@ extension ClubAPI: GCMSAPI {
             return .accessToken
         }
     }
+    var errorMapper: [Int: GCMSError]?{
+        return [
+            403: .Forbidden,
+            409: .conflict
+        ]
+    }
 }

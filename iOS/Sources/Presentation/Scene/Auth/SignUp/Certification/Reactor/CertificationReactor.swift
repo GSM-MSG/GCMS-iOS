@@ -76,6 +76,7 @@ extension CertificationReactor {
             newState.isLoading = load
         case let .setCode(code):
             newState.code = code
+            newState.isCodeNotMatch = false
         case let .setCodeNotMatch(match):
             newState.isCodeNotMatch = match
         }
@@ -100,4 +101,5 @@ private extension CertificationReactor {
             .catchAndReturn(.setIsLoading(false))
         return .concat([startLoding, signUp])
     }
+    
 }

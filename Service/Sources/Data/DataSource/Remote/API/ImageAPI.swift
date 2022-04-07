@@ -6,6 +6,7 @@ enum ImageAPI {
 }
 
 extension ImageAPI: GCMSAPI {
+    
     var domain: GCMSDomain {
         return .image
     }
@@ -42,5 +43,12 @@ extension ImageAPI: GCMSAPI {
         default:
             return JWTTokenType.none
         }
+    }
+    
+    var errorMapper: [Int: GCMSError]?{
+        return [
+            403: .Forbidden,
+            409: .conflict
+        ]
     }
 }
