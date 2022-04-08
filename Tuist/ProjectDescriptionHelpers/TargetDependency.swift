@@ -115,7 +115,6 @@ public extension Package {
         url: "https://github.com/uias/Tabman.git",
         requirement: .upToNextMajor(from: "2.12.0")
     )
-    
     static let Loaf = Package.remote(
         url: "https://github.com/schmidyy/Loaf",
         requirement: .upToNextMinor(from: "0.7.0")

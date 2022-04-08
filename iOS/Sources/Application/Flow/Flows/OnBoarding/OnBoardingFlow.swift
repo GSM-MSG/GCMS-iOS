@@ -3,6 +3,7 @@ import RxRelay
 import RxSwift
 import UIKit
 import Service
+import Loaf
 
 struct OnBoardingStepper: Stepper{
     let steps: PublishRelay<Step> = .init()
@@ -42,6 +43,8 @@ final class OnBoardingFlow: Flow{
             return presentCertification(email: email)
         case .dismiss:
             return dismissVC()
+        case let .loaf(message, state: state, location: location):
+            return showLoaf(message, state: state, location: location)
         default:
             return .none
         }
@@ -74,6 +77,15 @@ private extension OnBoardingFlow{
     }
     func dismissVC() -> FlowContributors {
         self.rootVC.visibleViewController?.dismiss(animated: true)
+        return .none
+    }
+
+    func showLoaf(
+        _ message: String,
+        state: Loaf.State,
+        location: Loaf.Location
+    ) -> FlowContributors {
+        Loaf(message, state: state, location: location, sender: self.rootVC.visibleViewController ?? .init()).show()
         return .none
     }
     

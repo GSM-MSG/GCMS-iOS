@@ -1,9 +1,11 @@
 import RxFlow
 import UIKit
 import Service
+import Loaf
 
 enum GCMSStep: Step {
     // MARK: Global
+    case loaf(_ message: String, state: Loaf.State, location: Loaf.Location)
     case alert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction])
     case dismiss
     

@@ -58,6 +58,7 @@ extension CertificationReactor {
         case let .updateCode(code):
             return .just(.setCode(code))
         case .completeButotnDidTap:
+//            steps.accept(GCMSStep.loaf("asdfghj", state: .error, location: .bottom))
             return completeButotnDidTap()
         case .codeNotMatch:
             return .just(.setCodeNotMatch(true))
@@ -92,7 +93,7 @@ private extension CertificationReactor {
         let startLoding = Observable.just(Mutation.setIsLoading(true))
         let signUp = checkIsVerifiedUseCase.execute(email: email, code: currentState.code)
             .do(onError: { [weak self] _ in
-                self?.action.onNext(.codeNotMatch)
+                self?.steps.accept(GCMSStep.loaf("인증코드가 다릅니다!", state: .error, location: .top))
             }, onCompleted: {
                 self.steps.accept(GCMSStep.dismiss)
             })

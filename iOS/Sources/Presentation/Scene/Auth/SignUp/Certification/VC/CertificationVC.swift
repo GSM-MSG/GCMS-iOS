@@ -25,14 +25,6 @@ final class CertificationVC: BaseVC<CertificationReactor> {
         $0.textAlignment = .center
     }
     
-    /// 디자이너의 요청에따라 다시 생길 가능성이 있어서 지우지 않음
-//    private let codeNotMatchLabel = UILabel().then {
-//        $0.text = "인증번호가 다릅니다!"
-//        $0.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 18)
-//        $0.tintColor = GCMSAsset.Colors.gcmsThemeColor.color
-//        $0.textAlignment = .center
-//    }
-    
     private let OTPTextfield = DPOTPView().then {
         $0.isCursorHidden = true
         $0.count = 4
@@ -43,6 +35,9 @@ final class CertificationVC: BaseVC<CertificationReactor> {
         $0.fontTextField = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 30.0)!
         $0.backGroundColorTextField = UIColor(red: 55/255, green: 55/255, blue: 58/255, alpha: 1)
         $0.textColorTextField = .white
+        $0.borderWidthTextField = 0
+        $0.selectedBorderColorTextField = GCMSAsset.Colors.gcmsMainColor.color
+        $0.selectedBorderWidthTextField = 1
     }
     
     private let rootView = UIView().then {
