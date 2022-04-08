@@ -31,6 +31,15 @@ extension Container{
         self.register(SignUpVC.self) { r in
             return SignUpVC(reactor: r.resolve(SignUpReactor.self))
         }
+        self.register(FirstNewClubVC.self) { r in
+            return FirstNewClubVC(reactor: r.resolve(NewClubReactor.self))
+        }
+        self.register(SecondNewClubVC.self) { _, reactor in
+            return SecondNewClubVC(reactor: reactor)
+        }
+        self.register(ThirdNewClubVC.self) { _, reactor in
+            return ThirdNewClubVC(reactor: reactor)
+        }
     }
     
     private func registerReactor() {
@@ -64,6 +73,9 @@ extension Container{
                 checkIsVerifiedUseCase: r.resolve(CheckIsVerifiedUseCase.self)!,
                 email: email
             )
+        }
+        self.register(NewClubReactor.self) { r in
+            return NewClubReactor()
         }
     }
 }

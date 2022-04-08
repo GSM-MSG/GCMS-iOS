@@ -13,7 +13,7 @@ final class ClubStatusVC: BaseVC<ClubStatusReactor> {
     private let clubMemberCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
         let flowLayout = UICollectionViewFlowLayout()
         $0.collectionViewLayout = flowLayout
-        $0.register(cellType: ClubMemberCell.self)
+        $0.register(cellType: StatusMemberCell.self)
     }
     private let openButton = UIButton()
     

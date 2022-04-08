@@ -25,7 +25,7 @@ let project = Project.dynamicFramework(
         .Nimble,
         .DPOTPView,
         .Tabman,
-        .Loaf
+        .RxKeyboard
     ],
     deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
     dependencies: [
@@ -49,6 +49,7 @@ let project = Project.dynamicFramework(
         .SPM.ViewAnimator,
         .SPM.DPOTPView,
         .SPM.Tabman,
+        .SPM.RxKeyboard
         .SPM.Loaf
     ]
 )

@@ -38,7 +38,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         layout.scrollDirection = .horizontal
         layout.itemSize = .init(width: 61, height: 82)
         $0.collectionViewLayout = layout
-        $0.register(cellType: MemberCell.self)
+        $0.register(cellType: ClubMemberCell.self)
         $0.backgroundColor = .clear
     }
     private let headHeaderLabel = HeaderLabel(title: "부장")
@@ -185,8 +185,8 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             }
             .disposed(by: disposeBag)
         
-        let ds = RxCollectionViewSectionedReloadDataSource<MemberSection> { _, tv, ip, item in
-            let cell = tv.dequeueReusableCell(for: ip) as MemberCell
+        let ds = RxCollectionViewSectionedReloadDataSource<ClubMemberSection> { _, tv, ip, item in
+            let cell = tv.dequeueReusableCell(for: ip) as ClubMemberCell
             cell.model = item
             return cell
         }
@@ -195,7 +195,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             .map(\.clubDetail)
             .map(\.?.member)
             .compactMap { $0 }
-            .map { [MemberSection(header: "", items: $0)] }
+            .map { [ClubMemberSection(header: "", items: $0)] }
             .bind(to: memberCollectionView.rx.items(dataSource: ds))
             .disposed(by: disposeBag)
             
