@@ -3,7 +3,7 @@ import Service
 import SnapKit
 import Kingfisher
 
-final class ApplicantCell: BaseCollectionViewCell<User> {
+final class ApplicantCell: BaseTableViewCell<User> {
     // MARK: - Properties
     private let profileImageView = UIImageView()
     private let nameLabel = UILabel()
@@ -30,7 +30,7 @@ final class ApplicantCell: BaseCollectionViewCell<User> {
             $0.leading.equalTo(nameLabel)
         }
         acceptButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-15)
+            $0.trailing.equalToSuperview().inset(15)
             $0.centerY.equalToSuperview()
         }
         rejectButton.snp.makeConstraints {
