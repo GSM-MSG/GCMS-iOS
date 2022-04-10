@@ -3,7 +3,7 @@ import Service
 import SnapKit
 import Kingfisher
 
-final class StatusMemberCell: BaseCollectionViewCell<User> {
+final class StatusMemberCell: BaseTableViewCell<User> {
     // MARK: - Properties
     private let profileImageView = UIImageView()
     private let nameLabel = UILabel()
@@ -32,7 +32,7 @@ final class StatusMemberCell: BaseCollectionViewCell<User> {
         }
         kickButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().offset(-15)
+            $0.trailing.equalToSuperview().inset(15)
         }
         delegationButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()

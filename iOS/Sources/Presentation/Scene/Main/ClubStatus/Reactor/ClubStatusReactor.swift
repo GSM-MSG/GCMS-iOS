@@ -2,6 +2,7 @@ import ReactorKit
 import RxFlow
 import RxSwift
 import RxRelay
+import Service
 
 final class ClubStatusReactor: Reactor, Stepper {
     // MARK: - Properties
@@ -20,12 +21,16 @@ final class ClubStatusReactor: Reactor, Stepper {
         var isLoading: Bool
     }
     let initialState: State
+    private let query: ClubRequestQuery
     
     // MARK: - Init
-    init() {
+    init(
+        query: ClubRequestQuery
+    ) {
         initialState = State(
             isLoading: false
         )
+        self.query = query
     }
     
 }
