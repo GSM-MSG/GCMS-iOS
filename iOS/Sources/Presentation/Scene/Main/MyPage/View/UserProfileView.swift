@@ -60,7 +60,7 @@ final class UserProfileView: UIView {
     }
     
     // MARK: - Method
-    public func setUser(_ user: User) {
+    public func setUser(_ user: UserProfile) {
         if let url = user.profileImageUrl {
             userProfileImageView.kf.setImage(with: URL(string: url) ?? .none,
                                              placeholder: UIImage())

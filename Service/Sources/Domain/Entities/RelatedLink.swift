@@ -1,5 +1,5 @@
 
-public struct RelatedLink: Codable {
+public struct RelatedLink: Equatable {
     public let name: String
     public let url: String
 }

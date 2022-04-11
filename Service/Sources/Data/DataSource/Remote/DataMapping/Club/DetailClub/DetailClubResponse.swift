@@ -5,7 +5,8 @@ struct DetailClubResponse: Codable {
     let description: String
     let contact: String
     let head: UserDTO
-    let relatedLink: [RelatedLink]
+    let relatedLink: RelatedLinkDTO
+    let member: [UserDTO]
     let scope: MemberScope
     let isApplied: Bool
     let isOpen: Bool
@@ -22,24 +23,12 @@ extension DetailClubResponse {
             description: description,
             contact: contact,
             head: head.toDomain(),
-            relatedLink: relatedLink,
+            relatedLink: relatedLink.toDomain(),
             scope: scope,
             isApplied: isApplied,
             isOpen: isOpen,
             activities: activities,
-            member: [
-                .init(
-                    userId: "s2103",
-                    profileImageUrl: "https://avatars.githubusercontent.com/u/12152522?s=60&v=4",
-                    name: "ASDF",
-                    grade: 2,
-                    class: 3,
-                    number: 4,
-                    joinedMajorClub: nil,
-                    joinedFreedomClub: nil,
-                    joinedEditorialClub: nil
-                )
-            ],
+            member: member.map { $0.toDomain() },
             teacher: teacher
         )
     }

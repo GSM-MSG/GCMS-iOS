@@ -109,22 +109,22 @@ final class MyPageVC: BaseVC<MyPageReactor> {
         }
         
         sharedState
-            .map(\.user)
-            .compactMap { $0 }
+            .compactMap { $0.user }
             .bind(with: self) { owner, user in
                 owner.userProfileView.setUser(user)
             }
             .disposed(by: disposeBag)
         
         sharedState
-            .map(\.editorialClubList)
+            .compactMap { $0.user }
+            .compactMap { $0.joinedEditorialClub }
             .map { [ClubListSection.init(header: "", items: $0)] }
             .bind(to: editorialCollectionView.rx.items(dataSource: ds))
             .disposed(by: disposeBag)
         
         sharedState
-            .map(\.majorClub)
-            .compactMap { $0 }
+            .compactMap { $0.user }
+            .compactMap { $0.joinedMajorClub }
             .bind(with: self) { owner, major in
                 owner.majorClubView.setImage(url: major.bannerUrl)
                 owner.majorClubView.setName(name: major.title)
@@ -132,8 +132,8 @@ final class MyPageVC: BaseVC<MyPageReactor> {
             .disposed(by: disposeBag)
         
         sharedState
-            .map(\.freedomClub)
-            .compactMap { $0 }
+            .compactMap { $0.user }
+            .compactMap { $0.joinedFreedomClub }
             .bind(with: self) { owner, free in
                 owner.freedomClubView.setImage(url: free.bannerUrl)
                 owner.freedomClubView.setName(name: free.title)

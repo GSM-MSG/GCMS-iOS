@@ -6,7 +6,7 @@ public protocol ClubRepository {
     func createNewClub(req: NewClubRequest) -> Completable
     func updateClub(query: ClubRequestQuery, req: NewClubRequest) -> Completable
     func deleteClub(query: ClubRequestQuery) -> Completable
-    func fetchClubMember(query: ClubRequestQuery) -> Single<[User]>
+    func fetchClubMember(query: ClubRequestQuery) -> Single<[Member]>
     func fetchClubApplicant(query: ClubRequestQuery) -> Single<[User]>
     func userAccept(query: ClubRequestQuery, userId: String) -> Completable
     func userReject(query: ClubRequestQuery, userId: String) -> Completable
