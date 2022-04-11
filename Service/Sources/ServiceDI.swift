@@ -39,6 +39,11 @@ public extension Container {
                 authRepository: r.resolve(AuthRepository.self)!
             )
         }
+        self.register(LogoutUseCase.self) { r in
+            return LogoutUseCase(
+                authRepository: r.resolve(AuthRepository.self)!
+            )
+        }
         // MARK: User
         
         // MARK: Club

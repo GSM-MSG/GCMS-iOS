@@ -20,6 +20,15 @@ final class DefaultAuthRepository: AuthRepository {
     func isVerified(email: String, code: String) -> Completable {
         return authRemote.isVerified(email: email, code: code)
     }
+    func logout() -> Completable {
+        keychainLocal.deleteAccessToken()
+        keychainLocal.deleteRefreshToken()
+        keychainLocal.deleteExpiredAt()
+        return Completable.create { completable in            
+            completable(.completed)
+            return Disposables.create()
+        }
+    }
 }
 
 private extension DefaultAuthRepository {

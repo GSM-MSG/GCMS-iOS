@@ -55,7 +55,7 @@ extension Container{
         }
         self.register(MyPageReactor.self) { r in
             return MyPageReactor(
-                
+                logoutUseCase: r.resolve(LogoutUseCase.self)!
             )
         }
         self.register(LoginReactor.self) { r in
