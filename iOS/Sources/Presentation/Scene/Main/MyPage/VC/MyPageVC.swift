@@ -9,23 +9,7 @@ final class MyPageVC: BaseVC<MyPageReactor> {
     // MARK: - Properties
     private let scrollView = UIScrollView()
     private let containerView = UIView()
-    private let userProfileImageView = UIImageView().then {
-        $0.layer.cornerRadius = 85/2
-        $0.clipsToBounds = true
-        $0.backgroundColor = .gray
-    }
-    private let usernameLabel = UILabel().then {
-        $0.text = "ASDF"
-        $0.textColor = GCMSAsset.Colors.gcmsGray1.color
-        $0.textAlignment = .center
-        $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 14)
-    }
-    private let classLabel = UILabel().then {
-        $0.text = "ASDFASDF"
-        $0.textColor = GCMSAsset.Colors.gcmsGray4.color
-        $0.textAlignment = .center
-        $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 12)
-    }
+    private let userProfileView = UserProfileView()
     private let managementButton = UIButton().then {
         $0.setTitle("동아리 관리하기", for: .normal)
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
@@ -53,32 +37,20 @@ final class MyPageVC: BaseVC<MyPageReactor> {
     // MARK: - UI
     override func addView() {
         view.addSubViews(scrollView)
-        scrollView.addSubViews(containerView)
-        containerView.addSubViews(userProfileImageView, usernameLabel, classLabel, editorialLabel, editorialCollectionView, majorLabel, majorClubView, freedomLabel, freedomClubView)
+        scrollView.addSubViews(userProfileView, editorialLabel, editorialCollectionView, majorLabel, majorClubView, freedomLabel, freedomClubView)
     }
     override func setLayout() {
         scrollView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalToSuperview()
+            $0.top.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
         }
-        containerView.snp.makeConstraints {
-            $0.width.equalToSuperview()
-            $0.centerX.top.bottom.equalToSuperview()
-        }
-        userProfileImageView.snp.makeConstraints {
+        userProfileView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.width.height.equalTo(85)
-            $0.top.equalToSuperview()
-        }
-        usernameLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(userProfileImageView.snp.bottom).offset(6)
-        }
-        classLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(usernameLabel.snp.bottom)
+            $0.top.equalToSuperview().offset(30)
+            $0.height.equalTo(75)
+            $0.leading.trailing.equalToSuperview().inset(15)
         }
         editorialLabel.snp.makeConstraints {
-            $0.top.equalTo(classLabel.snp.bottom).offset(45)
+            $0.top.equalTo(userProfileView.snp.bottom).offset(45)
             $0.leading.equalToSuperview().offset(15)
         }
         editorialCollectionView.snp.makeConstraints {
@@ -125,13 +97,21 @@ final class MyPageVC: BaseVC<MyPageReactor> {
             .disposed(by: disposeBag)
     }
     override func bindState(reactor: MyPageReactor) {
-        let sharedState = reactor.state.share(replay: 4).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 5).observe(on: MainScheduler.asyncInstance)
         
         let ds = RxCollectionViewSectionedReloadDataSource<ClubListSection> { _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip) as ClubListCell
             cell.model = item
             return cell
         }
+        
+        sharedState
+            .map(\.user)
+            .compactMap { $0 }
+            .bind(with: self) { owner, user in
+                owner.userProfileView.setUser(user)
+            }
+            .disposed(by: disposeBag)
         
         sharedState
             .map(\.editorialClubList)

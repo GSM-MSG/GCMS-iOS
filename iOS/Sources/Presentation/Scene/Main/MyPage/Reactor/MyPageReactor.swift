@@ -19,6 +19,7 @@ final class MyPageReactor: Reactor, Stepper {
         case setEditorialClubList([ClubList])
         case setMajorClub(ClubList)
         case setFreedomClub(ClubList)
+        case setUser(User)
         case setIsLoading(Bool)
     }
     struct State {
@@ -26,6 +27,7 @@ final class MyPageReactor: Reactor, Stepper {
         var majorClub: ClubList?
         var freedomClub: ClubList?
         var isLoading: Bool
+        var user: User?
     }
     let initialState: State
     
@@ -71,6 +73,8 @@ extension MyPageReactor {
             newState.freedomClub = club
         case let .setIsLoading(load):
             newState.isLoading = load
+        case let .setUser(user):
+            newState.user = user
         }
         
         return newState
@@ -88,6 +92,9 @@ private extension MyPageReactor {
                 .dummy
             )),
             .just(.setFreedomClub(
+                .dummy
+            )),
+            .just(.setUser(
                 .dummy
             ))
         ])
