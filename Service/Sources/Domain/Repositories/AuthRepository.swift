@@ -6,4 +6,5 @@ public protocol AuthRepository {
     func refresh() -> Completable
     func sendVerify(email: String) -> Completable
     func isVerified(email: String, code: String) -> Completable
+    func logout() -> Completable
 }

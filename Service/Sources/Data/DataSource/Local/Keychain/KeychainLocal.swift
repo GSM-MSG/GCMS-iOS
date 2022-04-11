@@ -13,6 +13,10 @@ final class KeychainLocal {
         return try keychain.load(type: .accessToken)
     }
     
+    func deleteAccessToken() {
+        keychain.delete(type: .accessToken)
+    }
+    
     func saveRefreshToken(_ token: String) {
         keychain.save(type: .refreshToken, value: token)
     }
@@ -21,11 +25,19 @@ final class KeychainLocal {
         return try keychain.load(type: .refreshToken)
     }
     
+    func deleteRefreshToken() {
+        keychain.delete(type: .refreshToken)
+    }
+    
     func saveExpiredAt(_ date: String) {
         keychain.save(type: .expiredAt, value: date)
     }
     
     func fetchExpiredAt() throws -> String {
         return try keychain.load(type: .expiredAt)
+    }
+    
+    func deleteExpiredAt() {
+        keychain.delete(type: .expiredAt)
     }
 }

@@ -10,15 +10,19 @@ final class MyPageReactor: Reactor, Stepper {
     
     private let disposeBag: DisposeBag = .init()
     
+    private let logoutUseCase: LogoutUseCase
+    
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
+        case logoutButtonDidTap
         case updateLoading(Bool)
     }
     enum Mutation {
         case setEditorialClubList([ClubList])
         case setMajorClub(ClubList)
         case setFreedomClub(ClubList)
+        case setUser(User)
         case setIsLoading(Bool)
     }
     struct State {
@@ -26,20 +30,20 @@ final class MyPageReactor: Reactor, Stepper {
         var majorClub: ClubList?
         var freedomClub: ClubList?
         var isLoading: Bool
+        var user: User?
     }
     let initialState: State
     
     
     // MARK: - Init
     init(
-        
+        logoutUseCase: LogoutUseCase
     ) {
         initialState = State(
             editorialClubList: [],
             isLoading: false
         )
-        
-        
+        self.logoutUseCase = logoutUseCase
     }
     
 }
@@ -52,6 +56,8 @@ extension MyPageReactor {
             return viewDidLoad()
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
+        case .logoutButtonDidTap:
+            logoutButtonDidTap()
         }
         return .empty()
     }
@@ -71,6 +77,8 @@ extension MyPageReactor {
             newState.freedomClub = club
         case let .setIsLoading(load):
             newState.isLoading = load
+        case let .setUser(user):
+            newState.user = user
         }
         
         return newState
@@ -89,8 +97,22 @@ private extension MyPageReactor {
             )),
             .just(.setFreedomClub(
                 .dummy
+            )),
+            .just(.setUser(
+                .dummy
             ))
         ])
     }
-    
+    func logoutButtonDidTap() {
+        logoutUseCase.execute()
+            .subscribe(with: self, onCompleted: { owner in
+                owner.steps.accept(GCMSStep.alert(title: "로그아웃 하시겠습니까?", message: nil, style: .alert, actions: [
+                    .init(title: "확인", style: .default, handler: { _ in
+                        owner.steps.accept(GCMSStep.onBoardingIsRequired)
+                    }),
+                    .init(title: "취소", style: .cancel)
+                ]))
+            })
+            .disposed(by: disposeBag)
+    }
 }
