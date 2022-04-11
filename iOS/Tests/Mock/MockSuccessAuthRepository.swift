@@ -30,4 +30,11 @@ class MockSuccessAuthRepository: AuthRepository{
     func isVerified(email: String, code: String) -> Completable {
         authRemote.isVerified(email: email, code: code)
     }
+    
+    func logout() -> Completable {
+        .create { comp in
+            comp(.completed)
+            return Disposables.create()
+        }
+    }
 }
