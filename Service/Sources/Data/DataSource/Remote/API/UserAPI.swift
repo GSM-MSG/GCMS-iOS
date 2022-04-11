@@ -74,7 +74,7 @@ extension UserAPI: GCMSAPI {
     
     var errorMapper: [Int: GCMSError]?{
         return [
-            403: .Forbidden,
+            403: .forbidden,
             409: .conflict
         ]
     }

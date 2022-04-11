@@ -5,5 +5,5 @@ public enum GCMSError: Error {
     
     case noInternet
     case conflict
-    case Forbidden
+    case forbidden
 }

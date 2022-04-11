@@ -84,10 +84,6 @@ final class SignUpVC : BaseVC<SignUpReactor> {
         $0.isHidden = true
     }
     
-    private let passwordVisibleButton = UIButton().then {
-        $0.tintColor = GCMSAsset.Colors.gcmsGray4.color
-    }
-    
     private let primaryWaveView = WaveView().then {
         $0.preferredColor = UIColor(red: 0.415, green: 0.439, blue: 1, alpha: 0.9)
     }
@@ -100,6 +96,11 @@ final class SignUpVC : BaseVC<SignUpReactor> {
     
  
     // MARK: - UI
+    
+    override func setup() {
+        passwordTextfield.delegate = self
+    }
+
     override func addView() {
         view.addSubViews(primaryWaveView, secondaryWaveView, thirdWaveView, emailTextfield, passwordTextfield, retryPasswordTextfield, certificationButton, completeButton, logoImageView, signUpLabel, invalidLabel)
     }
@@ -240,4 +241,20 @@ final class SignUpVC : BaseVC<SignUpReactor> {
             .disposed(by: disposeBag)
     }
     
+}
+
+
+extension SignUpVC : UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let char = string.cString(using: String.Encoding.utf8) {
+            let isBackSpace = strcmp(char, "\\b")
+            if isBackSpace == -92 {
+                return true
+            }
+        }
+        guard textField.text!.count < 20 else { return false }
+        return true
+    }
+
 }

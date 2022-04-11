@@ -89,10 +89,14 @@ extension SignUpReactor {
             newState.isEmailNotFound = success
         case let .setEmail(email):
             newState.email = email
+            newState.isSignUpFailed = false
+            newState.isEmailNotFound = false
         case let .setIsSignUpFailed(success):
             newState.isSignUpFailed = success
         case let .setPassword(password):
             newState.password = password
+            newState.isSignUpFailed = false
+            newState.isEmailNotFound = false
         }
         
         return newState
@@ -120,17 +124,29 @@ private extension SignUpReactor {
     func completeButtonDidTap() -> Observable<Mutation> {
         
         let startLoding = Observable.just(Mutation.setIsLoading(true))
-        let signUp = registerUseCase.execute(req: RegisterReqeust(email: currentState.email, password: currentState.password))
-            .do(onError: { [weak self] _ in
-                self?.action.onNext(.emailNotFound)
-            }, onCompleted: { [weak self] in
-                self?.steps.accept(GCMSStep.clubListIsRequired)
-            })
-            .andThen(Single.just(Mutation.setIsLoading(false)))
-            .asObservable()
-            .catchAndReturn(.setIsLoading(false))
-            
-            
-        return .concat([startLoding, signUp])
+        
+        if currentState.password.count <= 8 {
+            return .empty()
+        }
+        else {
+            let signUp = registerUseCase.execute(req: RegisterReqeust(email: currentState.email, password: currentState.password))
+                .do(onError: { [weak self] error in
+                    guard let error = error as? GCMSError else { return }
+                    if case GCMSError.conflict = error {
+                        self?.action.onNext(.emailNotFound)
+                    }
+                    else if case GCMSError.forbidden = error {
+                        self?.action.onNext(.signUpFailed)
+                    }
+    //                self?.action.onNext(.emailNotFound)
+                }, onCompleted: { [weak self] in
+                    self?.steps.accept(GCMSStep.clubListIsRequired)
+                })
+                .andThen(Single.just(Mutation.setIsLoading(false)))
+                .asObservable()
+                .catchAndReturn(.setIsLoading(false))
+                
+            return .concat([startLoding, signUp])
+        }
     }
 }

@@ -58,7 +58,6 @@ extension CertificationReactor {
         case let .updateCode(code):
             return .just(.setCode(code))
         case .completeButotnDidTap:
-//            steps.accept(GCMSStep.loaf("asdfghj", state: .error, location: .bottom))
             return completeButotnDidTap()
         case .codeNotMatch:
             return .just(.setCodeNotMatch(true))
