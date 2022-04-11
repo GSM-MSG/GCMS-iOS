@@ -112,8 +112,6 @@ private extension MyPageReactor {
                     }),
                     .init(title: "취소", style: .cancel)
                 ]))
-            }, onError: { owner, _ in
-                owner.steps.accept(GCMSStep.failureAlert(title: "로그아웃에 실패했습니다!", message: nil, action: nil))
             })
             .disposed(by: disposeBag)
     }
