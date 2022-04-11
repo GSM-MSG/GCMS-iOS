@@ -35,6 +35,9 @@ final class MyPageVC: BaseVC<MyPageReactor> {
     private let freedomClubView = ClubView()
     
     // MARK: - UI
+    override func setup() {
+        userProfileView.delegate = self
+    }
     override func addView() {
         view.addSubViews(scrollView)
         scrollView.addSubViews(userProfileView, editorialLabel, editorialCollectionView, majorLabel, majorClubView, freedomLabel, freedomClubView)
@@ -149,3 +152,9 @@ final class MyPageVC: BaseVC<MyPageReactor> {
     }
 }
 
+// MARK: - UserProfileViewDelegate
+extension MyPageVC: UserProfileViewDelegate {
+    func logoutButtonDidTap() {
+        reactor?.action.onNext(.logoutButtonDidTap)
+    }
+}

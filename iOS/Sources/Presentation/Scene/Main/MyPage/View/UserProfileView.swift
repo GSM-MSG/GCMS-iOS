@@ -3,9 +3,16 @@ import Service
 import SnapKit
 import Kingfisher
 import Then
+import RxSwift
+import RxCocoa
+
+protocol UserProfileViewDelegate: AnyObject {
+    func logoutButtonDidTap()
+}
 
 final class UserProfileView: UIView {
     // MARK: - Properties
+    weak var delegate: UserProfileViewDelegate?
     private let decorator1 = UIView().then {
         $0.backgroundColor = UIColor(red: 0.298, green: 0.326, blue: 1, alpha: 1)
         $0.layer.cornerRadius = 9
@@ -37,6 +44,7 @@ final class UserProfileView: UIView {
         $0.setImage(.init(systemName: "rectangle.portrait.and.arrow.right"), for: .normal)
         $0.tintColor = .black
     }
+    private let disposeBag = DisposeBag()
     
     // MARK: - Init
     init() {
@@ -44,6 +52,7 @@ final class UserProfileView: UIView {
         addView()
         setLayout()
         configureUI()
+        bindView()
     }
     
     required init?(coder: NSCoder) {
@@ -60,7 +69,6 @@ final class UserProfileView: UIView {
         }
         userNameLabel.text = user.name
         userInfoLabel.text = "\(user.grade)학년 \(user.class)반 \(user.number)번"
-        
     }
 }
 
@@ -109,5 +117,13 @@ private extension UserProfileView {
     func configureUI() {
         self.backgroundColor = .white
         self.layer.cornerRadius = 10
+    }
+    
+    func bindView() {
+        logoutButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.delegate?.logoutButtonDidTap()
+            }
+            .disposed(by: disposeBag)
     }
 }

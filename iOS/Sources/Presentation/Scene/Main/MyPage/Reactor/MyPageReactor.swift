@@ -10,9 +10,12 @@ final class MyPageReactor: Reactor, Stepper {
     
     private let disposeBag: DisposeBag = .init()
     
+    private let logoutUseCase: LogoutUseCase
+    
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
+        case logoutButtonDidTap
         case updateLoading(Bool)
     }
     enum Mutation {
@@ -34,14 +37,13 @@ final class MyPageReactor: Reactor, Stepper {
     
     // MARK: - Init
     init(
-        
+        logoutUseCase: LogoutUseCase
     ) {
         initialState = State(
             editorialClubList: [],
             isLoading: false
         )
-        
-        
+        self.logoutUseCase = logoutUseCase
     }
     
 }
@@ -54,6 +56,8 @@ extension MyPageReactor {
             return viewDidLoad()
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
+        case .logoutButtonDidTap:
+            logoutButtonDidTap()
         }
         return .empty()
     }
@@ -99,5 +103,13 @@ private extension MyPageReactor {
             ))
         ])
     }
-    
+    func logoutButtonDidTap() {
+        logoutUseCase.execute()
+            .subscribe(with: self, onCompleted: { owner in
+                owner.steps.accept(GCMSStep.onBoardingIsRequired)
+            }, onError: { owner, _ in
+                owner.steps.accept(GCMSStep.failureAlert(title: "로그아웃에 실패했습니다!", message: nil, action: nil))
+            })
+            .disposed(by: disposeBag)
+    }
 }
