@@ -106,7 +106,12 @@ private extension MyPageReactor {
     func logoutButtonDidTap() {
         logoutUseCase.execute()
             .subscribe(with: self, onCompleted: { owner in
-                owner.steps.accept(GCMSStep.onBoardingIsRequired)
+                owner.steps.accept(GCMSStep.alert(title: "로그아웃 하시겠습니까?", message: nil, style: .alert, actions: [
+                    .init(title: "확인", style: .default, handler: { _ in
+                        owner.steps.accept(GCMSStep.onBoardingIsRequired)
+                    }),
+                    .init(title: "취소", style: .cancel)
+                ]))
             }, onError: { owner, _ in
                 owner.steps.accept(GCMSStep.failureAlert(title: "로그아웃에 실패했습니다!", message: nil, action: nil))
             })
