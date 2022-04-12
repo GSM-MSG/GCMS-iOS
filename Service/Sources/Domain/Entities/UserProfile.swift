@@ -1,17 +1,16 @@
 import Foundation
 
 public struct UserProfile: Equatable {
-    public init(userId: String, profileImageUrl: String?, name: String, grade: Int, class: Int, number: Int, joinedMajorClub: ClubList?, joinedFreedomClub: ClubList?, joinedEditorialClub: [ClubList]) {
+    public init(userId: String, profileImageUrl: String?, name: String, grade: Int, class: Int, number: Int, joinedClub: [ClubList]) {
         self.userId = userId
         self.profileImageUrl = profileImageUrl
         self.name = name
         self.grade = grade
         self.class = `class`
         self.number = number
-        self.joinedMajorClub = joinedMajorClub
-        self.joinedFreedomClub = joinedFreedomClub
-        self.joinedEditorialClub = joinedEditorialClub
+        self.joinedClub = joinedClub
     }
+    
     
     public static func == (lhs: UserProfile, rhs: UserProfile) -> Bool {
         return lhs.userId == rhs.userId
@@ -23,9 +22,7 @@ public struct UserProfile: Equatable {
     public let grade: Int
     public let `class`: Int
     public let number: Int
-    public let joinedMajorClub: ClubList?
-    public let joinedFreedomClub: ClubList?
-    public let joinedEditorialClub: [ClubList]
+    public let joinedClub: [ClubList]
 }
 
 public extension UserProfile {
@@ -36,8 +33,6 @@ public extension UserProfile {
         grade: 2,
         class: 1,
         number: 18,
-        joinedMajorClub: .dummy,
-        joinedFreedomClub: .dummy,
-        joinedEditorialClub: [.dummy, .dummy]
+        joinedClub: [.dummy, .dummy]
     )
 }

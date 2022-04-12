@@ -117,14 +117,14 @@ final class MyPageVC: BaseVC<MyPageReactor> {
         
         sharedState
             .compactMap { $0.user }
-            .compactMap { $0.joinedEditorialClub }
+            .compactMap { $0.joinedClub.filter { $0.type == .editorial } }
             .map { [ClubListSection.init(header: "", items: $0)] }
             .bind(to: editorialCollectionView.rx.items(dataSource: ds))
             .disposed(by: disposeBag)
         
         sharedState
             .compactMap { $0.user }
-            .compactMap { $0.joinedMajorClub }
+            .compactMap { $0.joinedClub.first(where: { $0.type == .major } ) }
             .bind(with: self) { owner, major in
                 owner.majorClubView.setImage(url: major.bannerUrl)
                 owner.majorClubView.setName(name: major.title)
@@ -133,7 +133,7 @@ final class MyPageVC: BaseVC<MyPageReactor> {
         
         sharedState
             .compactMap { $0.user }
-            .compactMap { $0.joinedFreedomClub }
+            .compactMap { $0.joinedClub.first(where: { $0.type == .freedom } ) }
             .bind(with: self) { owner, free in
                 owner.freedomClubView.setImage(url: free.bannerUrl)
                 owner.freedomClubView.setName(name: free.title)
