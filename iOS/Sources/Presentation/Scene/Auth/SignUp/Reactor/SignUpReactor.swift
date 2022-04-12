@@ -106,13 +106,13 @@ extension SignUpReactor {
 // MARK: - Method
 private extension SignUpReactor {
     func certificationButton() -> Observable<Mutation> {
-        
+        let email = String(currentState.email.split(separator: "@").first ?? .init())
         let startLoding = Observable.just(Mutation.setIsLoading(true))
-        let emailVerify = sendVerifyUseCase.execute(email: currentState.email)
+        let emailVerify = sendVerifyUseCase.execute(email: email)
             .do(onError: { [weak self] _ in
                 self?.action.onNext(.emailNotFound)
             }, onCompleted: { [weak self] in
-                self?.steps.accept(GCMSStep.certificationIsRequired(email: self?.currentState.email ?? ""))
+                self?.steps.accept(GCMSStep.certificationIsRequired(email: email))
             })
             .andThen(Single.just(Mutation.setIsLoading(false)))
             .asObservable()
@@ -125,11 +125,14 @@ private extension SignUpReactor {
         
         let startLoding = Observable.just(Mutation.setIsLoading(true))
         
-        if currentState.password.count <= 8 {
+        let email = currentState.email.replacingOccurrences(of: "@gsm.hs.kr", with: "")
+        
+        if currentState.password.count < 8 {
+            let _ = Mutation.setIsLoading(false)
             return .empty()
         }
         else {
-            let signUp = registerUseCase.execute(req: RegisterReqeust(email: currentState.email, password: currentState.password))
+            let signUp = registerUseCase.execute(req: RegisterReqeust(email: email, password: currentState.password))
                 .do(onError: { [weak self] error in
                     guard let error = error as? GCMSError else { return }
                     if case GCMSError.conflict = error {

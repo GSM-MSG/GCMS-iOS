@@ -5,6 +5,7 @@ import ReactorKit
 import RxFlow
 import Service
 import ViewAnimator
+import IQKeyboardManagerSwift
 
 final class SignUpVC : BaseVC<SignUpReactor> {
     // MARK: - Properties
@@ -221,6 +222,9 @@ final class SignUpVC : BaseVC<SignUpReactor> {
     
     override func bindView(reactor: SignUpReactor) {
         certificationButton.rx.tap
+            .do(onNext: {
+                IQKeyboardManager.shared.resignFirstResponder()
+            })
             .map { Reactor.Action.certificationButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -229,7 +233,7 @@ final class SignUpVC : BaseVC<SignUpReactor> {
             .map(Reactor.Action.updateEmail)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+                
         passwordTextfield.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
             .map(Reactor.Action.updatePassword)
             .bind(to: reactor.action)
@@ -242,7 +246,6 @@ final class SignUpVC : BaseVC<SignUpReactor> {
     }
     
 }
-
 
 extension SignUpVC : UITextFieldDelegate {
     
