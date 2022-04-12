@@ -6,5 +6,5 @@ struct MemberDTO: Codable {
     let grade: Int
     let `class`: Int
     let num: Int
-    let userImg: String
+    let userImg: String?
 }

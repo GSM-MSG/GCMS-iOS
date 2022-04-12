@@ -1,7 +1,7 @@
 import UIKit
 
 public struct Member: Equatable {
-    public init(email: String, name: String, grade: Int, class: Int, number: Int, scope: MemberScope, profileImageUrl: String) {
+    public init(email: String, name: String, grade: Int, class: Int, number: Int, scope: MemberScope, profileImageUrl: String?) {
         self.email = email
         self.name = name
         self.grade = grade
@@ -17,7 +17,7 @@ public struct Member: Equatable {
     public let `class`: Int
     public let number: Int
     public let scope: MemberScope
-    public let profileImageUrl: String
+    public let profileImageUrl: String?
 }
 
 public extension Member {

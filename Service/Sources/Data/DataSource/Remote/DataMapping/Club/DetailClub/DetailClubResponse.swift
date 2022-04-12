@@ -5,10 +5,9 @@ struct DetailClubResponse: Codable {
     let scope: MemberScope
     let isApplied: Bool
     let activities: [String]
-    let teacher: String?
     
     enum CodingKeys: String, CodingKey {
-        case club, head, member, scope, isApplied, teacher
+        case club, head, member, scope, isApplied
         case activities = "activityUrls"
     }
 }
@@ -28,7 +27,7 @@ extension DetailClubResponse {
             isOpen: club.isOpend,
             activities: activities,
             member: member.map { $0.toDomain() },
-            teacher: teacher
+            teacher: club.teacher
         )
     }
 }

@@ -6,8 +6,8 @@ final class ClubRemote: BaseRemote<ClubAPI> {
     
     func fetchClubList(type: ClubType) -> Single<[ClubList]> {
         request(.clubList(type: type))
-            .map(ClubListResponse.self)
-            .map { $0.toDomain() }
+            .map([ClubListDTO].self)
+            .map { $0.map { $0.toDomain() } }
     }
     func fetchDetailClub(query: ClubRequestQuery) -> Single<Club> {
         request(.clubDetail(query: query))
