@@ -28,8 +28,7 @@ final class CertificationReactor: Reactor, Stepper {
         var code : String
     }
     let initialState: State
-    
-    let checkIsVerifiedUseCase : CheckIsVerifiedUseCase
+    private let checkIsVerifiedUseCase : CheckIsVerifiedUseCase
     private var email : String
     
     // MARK: - Init

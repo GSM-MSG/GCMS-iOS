@@ -39,8 +39,8 @@ final class SignUpReactor: Reactor, Stepper {
         var password : String
     }
     let initialState: State
-    let sendVerifyUseCase: SendVerifyUseCase
-    let registerUseCase : RegisterUseCase
+    private let sendVerifyUseCase: SendVerifyUseCase
+    private let registerUseCase : RegisterUseCase
     
     // MARK: - Init
     init(
