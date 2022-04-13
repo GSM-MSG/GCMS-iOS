@@ -264,9 +264,9 @@ final class SignUpVC : BaseVC<SignUpReactor> {
 
 private extension SignUpVC {
     func errorMessage(message: String, success: Bool) {
-        emailTextfield.layer.borderColor = success ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
-        passwordTextfield.layer.borderColor = success ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
-        retryPasswordTextfield.layer.borderColor = success ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+        [emailTextfield, passwordTextfield, retryPasswordTextfield].forEach {
+            $0.layer.borderColor = success ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+        }
         invalidLabel.text = message
         invalidLabel.isHidden = !success
     }

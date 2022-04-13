@@ -47,16 +47,18 @@ final class SignUpReactor: Reactor, Stepper {
         sendVerifyUseCase: SendVerifyUseCase,
         registerUseCase : RegisterUseCase
     ) {
-        initialState = State(isLoading: false,
-                             isSignUpFailed: false,
-                             isEmailNotFound: false,
-                             isInvalidPassword: false,
-                             email: "",
-                             password: "")
+        initialState = State(
+            isLoading: false,
+            isSignUpFailed: false,
+            isEmailNotFound: false,
+            isInvalidPassword: false,
+            email: "",
+            password: ""
+        )
         self.sendVerifyUseCase = sendVerifyUseCase
         self.registerUseCase = registerUseCase
     }
-
+    
 }
 
 // MARK: - Mutate
@@ -66,7 +68,7 @@ extension SignUpReactor {
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
         case .certificationButtonDidTap:
-            return certificationButton()
+            return certificationButtonDidTap()
         case let .updateEmail(email):
             return .just(.setEmail(email))
         case .emailNotFound:
@@ -116,7 +118,7 @@ extension SignUpReactor {
 
 // MARK: - Method
 private extension SignUpReactor {
-    func certificationButton() -> Observable<Mutation> {
+    func certificationButtonDidTap() -> Observable<Mutation> {
         let email = String(currentState.email.split(separator: "@").first ?? .init())
 
         let startLoding = Observable.just(Mutation.setIsLoading(true))

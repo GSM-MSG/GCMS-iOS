@@ -65,7 +65,8 @@ extension Container{
         }
         self.register(SignUpReactor.self) { r in
             return SignUpReactor(
-                sendVerifyUseCase: r.resolve(SendVerifyUseCase.self)!, registerUseCase: r.resolve(RegisterUseCase.self)!
+                sendVerifyUseCase: r.resolve(SendVerifyUseCase.self)!,
+                registerUseCase: r.resolve(RegisterUseCase.self)!
             )
         }
         self.register(CertificationReactor.self) { r, email in

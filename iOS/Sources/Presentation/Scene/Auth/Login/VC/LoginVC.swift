@@ -27,9 +27,9 @@ final class LoginVC : BaseVC<LoginReactor> {
     private let findPasswordButton = UIButton().then {
         let attributedString = NSMutableAttributedString(string: "계정을 잊으셨나요? ID찾기 또는 비밀번호 찾기")
         attributedString.setColorForText(textToFind: "비밀번호 찾기",
-                                         withColor: UIColor(red: 82/255,
-                                                            green: 196/255,
-                                                            blue: 255/255,
+                                         withColor: UIColor(red: 0.3215,
+                                                            green: 0.7686,
+                                                            blue: 1,
                                                             alpha: 1))
         $0.setAttributedTitle(attributedString, for: .normal)
         $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.regular, size: 11)

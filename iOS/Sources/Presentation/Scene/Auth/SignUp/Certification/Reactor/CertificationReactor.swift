@@ -18,29 +18,26 @@ final class CertificationReactor: Reactor, Stepper {
         case dismiss
         case updateCode(String)
         case completeButotnDidTap
-        case codeNotMatch
     }
     enum Mutation {
         case setIsLoading(Bool)
         case setCode(String)
-        case setCodeNotMatch(Bool)
     }
     struct State {
         var isLoading: Bool
-        var isCodeNotMatch : Bool
         var code : String
     }
     let initialState: State
     
     let checkIsVerifiedUseCase : CheckIsVerifiedUseCase
-    var email : String
+    private var email : String
     
     // MARK: - Init
     init(
         checkIsVerifiedUseCase : CheckIsVerifiedUseCase,
         email : String
     ) {
-        initialState = State(isLoading: false, isCodeNotMatch: false, code: "")
+        initialState = State(isLoading: false, code: "")
         self.checkIsVerifiedUseCase = checkIsVerifiedUseCase
         self.email = email
     }
@@ -58,9 +55,7 @@ extension CertificationReactor {
         case let .updateCode(code):
             return .just(.setCode(code))
         case .completeButotnDidTap:
-            return completeButotnDidTap()
-        case .codeNotMatch:
-            return .just(.setCodeNotMatch(true))
+            return completeButtonDidTap()
         }
         return .empty()
     }
@@ -76,25 +71,21 @@ extension CertificationReactor {
             newState.isLoading = load
         case let .setCode(code):
             newState.code = code
-            newState.isCodeNotMatch = false
-        case let .setCodeNotMatch(match):
-            newState.isCodeNotMatch = match
         }
-        
         return newState
     }
 }
 
 // MARK: - Method
 private extension CertificationReactor {
-    func completeButotnDidTap() -> Observable<Mutation> {
+    func completeButtonDidTap() -> Observable<Mutation> {
         
         let startLoding = Observable.just(Mutation.setIsLoading(true))
         let signUp = checkIsVerifiedUseCase.execute(email: email, code: currentState.code)
             .do(onError: { [weak self] _ in
                 self?.steps.accept(GCMSStep.loaf("인증코드가 다릅니다!", state: .error, location: .top))
-            }, onCompleted: {
-                self.steps.accept(GCMSStep.dismiss)
+            }, onCompleted: { [weak self] in
+                self?.steps.accept(GCMSStep.dismiss)
             })
             .andThen(Single.just(Mutation.setIsLoading(false)))
             .asObservable()
