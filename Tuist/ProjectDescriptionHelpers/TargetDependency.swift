@@ -28,6 +28,7 @@ public extension TargetDependency.SPM{
     static let DPOTPView = TargetDependency.package(product: "DPOTPView")
     static let Tabman = TargetDependency.package(product: "Tabman")
     static let RxKeyboard = TargetDependency.package(product: "RxKeyboard")
+    static let Loaf = TargetDependency.package(product: "Loaf")
 }
 
 public extension Package {
@@ -118,5 +119,9 @@ public extension Package {
     static let RxKeyboard = Package.remote(
         url: "https://github.com/RxSwiftCommunity/RxKeyboard.git",
         requirement: .upToNextMajor(from: "2.0.0")
+    )
+    static let Loaf = Package.remote(
+        url: "https://github.com/schmidyy/Loaf",
+        requirement: .upToNextMinor(from: "0.7.0")
     )
 }

@@ -1,9 +1,11 @@
 import RxFlow
 import UIKit
 import Service
+import Loaf
 
 enum GCMSStep: Step {
     // MARK: Global
+    case loaf(_ message: String, state: Loaf.State, location: Loaf.Location)
     case alert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction])
     case failureAlert(title: String?, message: String?, action: UIAlertAction?)
     case dismiss
@@ -12,7 +14,9 @@ enum GCMSStep: Step {
     // MARK: OnBoading
     case onBoardingIsRequired
     case loginIsRequired
-    case certificationIsRequired
+    case signUpIsRequired
+    case certificationIsRequired(email: String)
+    case signUpIsCompleted
     
     // MARK: Main
     case clubListIsRequired

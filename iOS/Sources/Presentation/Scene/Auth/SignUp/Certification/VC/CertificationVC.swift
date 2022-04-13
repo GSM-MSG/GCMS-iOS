@@ -11,7 +11,9 @@ import IQKeyboardManagerSwift
 
 final class CertificationVC: BaseVC<CertificationReactor> {
     // MARK: - Properties
-    
+    private let backgroundView = UIView().then {
+        $0.backgroundColor = .black.withAlphaComponent(0.3)
+    }
     private let mailImage = UIImageView().then {
         $0.image = UIImage(named: "GCMS_Mail.svg")
     }
@@ -23,7 +25,7 @@ final class CertificationVC: BaseVC<CertificationReactor> {
         $0.textAlignment = .center
     }
     
-    private let textfield = DPOTPView().then {
+    private let codeOTPTextField = DPOTPView().then {
         $0.isCursorHidden = true
         $0.count = 4
         $0.spacing = 25
@@ -33,9 +35,12 @@ final class CertificationVC: BaseVC<CertificationReactor> {
         $0.fontTextField = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 30.0)!
         $0.backGroundColorTextField = UIColor(red: 55/255, green: 55/255, blue: 58/255, alpha: 1)
         $0.textColorTextField = .white
+        $0.borderWidthTextField = 0
+        $0.selectedBorderColorTextField = GCMSAsset.Colors.gcmsMainColor.color
+        $0.selectedBorderWidthTextField = 1
     }
     
-    private let backView = UIView().then {
+    private let rootView = UIView().then {
         $0.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
         $0.layer.cornerRadius = 26
     }
@@ -60,21 +65,23 @@ final class CertificationVC: BaseVC<CertificationReactor> {
     }
     
     // MARK: - UI
-    override func configureVC() {
-        view.backgroundColor = .black.withAlphaComponent(0.3)
+    override func setup() {
+        codeOTPTextField.dpOTPViewDelegate = self
     }
-    
     override func addView() {
-        view.addSubViews(backView, mailImage)
-        backView.addSubViews(sendMessageLabel, textfield, completeButton)
+        view.addSubViews(backgroundView, rootView, mailImage)
+        rootView.addSubViews(sendMessageLabel, codeOTPTextField, completeButton)
     }
     
     override func setLayout() {
+        backgroundView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
         mailImage.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.centerY.equalTo(backView.snp.top).offset(-20)
+            $0.centerY.equalTo(rootView.snp.top).offset(-20)
         }
-        backView.snp.makeConstraints {
+        rootView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.bottom.equalToSuperview()
             $0.height.equalTo(bound.height*0.65)
@@ -84,7 +91,7 @@ final class CertificationVC: BaseVC<CertificationReactor> {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(mailImage.snp.bottom).offset(12)
         }
-        textfield.snp.makeConstraints {
+        codeOTPTextField.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(sendMessageLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(bound.width*0.1066)
@@ -97,11 +104,54 @@ final class CertificationVC: BaseVC<CertificationReactor> {
             $0.leading.trailing.equalToSuperview().inset(15)
         }
     }
-    
-    // MARK: - UI
-    
+    override func configureVC() {
+        view.backgroundColor = .clear
+    }
     override func configureNavigation() {
         self.navigationController?.navigationBar.setClear()
     }
+    
+    // MARK: - Reactor
+    
+    override func bindState(reactor: CertificationReactor) {
+        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        
+        sharedState
+            .map(\.isLoading)
+            .bind(with: self) { owner, load in
+                load ? owner.startIndicator() : owner.stopIndicator()
+            }
+            .disposed(by: disposeBag)
+    }
+
+    override func bindView(reactor: CertificationReactor) {
+        backgroundView.rx.anyGesture(.tap(), .swipe(direction: .down))
+            .when(.recognized)
+            .map { _ in Reactor.Action.dismiss }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        completeButton.rx.tap
+            .map { Reactor.Action.completeButotnDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+    }
+}
+
+extension CertificationVC : DPOTPViewDelegate {
+    func dpOTPViewAddText(_ text: String, at position: Int) {
+        reactor?.action.onNext(.updateCode(text))
+    }
+    
+    func dpOTPViewRemoveText(_ text: String, at position: Int) {
+        reactor?.action.onNext(.updateCode(text))
+    }
+    
+    func dpOTPViewChangePositionAt(_ position: Int) {}
+    
+    func dpOTPViewBecomeFirstResponder() {}
+    
+    func dpOTPViewResignFirstResponder() {}
     
 }

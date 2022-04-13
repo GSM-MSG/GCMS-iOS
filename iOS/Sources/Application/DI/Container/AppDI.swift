@@ -28,8 +28,8 @@ extension Container{
         self.register(LoginVC.self) { r in
             return LoginVC(reactor: r.resolve(LoginReactor.self))
         }
-        self.register(CertificationVC.self) { r in
-            return CertificationVC(reactor: r.resolve(CertificationReactor.self))
+        self.register(SignUpVC.self) { r in
+            return SignUpVC(reactor: r.resolve(SignUpReactor.self))
         }
         self.register(FirstNewClubVC.self) { r in
             return FirstNewClubVC(reactor: r.resolve(NewClubReactor.self))
@@ -63,9 +63,16 @@ extension Container{
                 loginUseCase: r.resolve(LoginUseCase.self)!
             )
         }
-        self.register(CertificationReactor.self) { r in
+        self.register(SignUpReactor.self) { r in
+            return SignUpReactor(
+                sendVerifyUseCase: r.resolve(SendVerifyUseCase.self)!,
+                registerUseCase: r.resolve(RegisterUseCase.self)!
+            )
+        }
+        self.register(CertificationReactor.self) { r, email in
             return CertificationReactor(
-            
+                checkIsVerifiedUseCase: r.resolve(CheckIsVerifiedUseCase.self)!,
+                email: email
             )
         }
         self.register(NewClubReactor.self) { r in

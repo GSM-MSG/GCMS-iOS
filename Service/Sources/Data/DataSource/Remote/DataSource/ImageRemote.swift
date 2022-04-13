@@ -1,5 +1,5 @@
 import RxSwift
- import Foundation
+import Foundation
 
  final class ImageRemote: BaseRemote<ImageAPI> {
      static let shared = ImageRemote()

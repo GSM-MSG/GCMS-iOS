@@ -2,6 +2,8 @@ import RxFlow
 import RxRelay
 import RxSwift
 import UIKit
+import Service
+import Loaf
 
 struct OnBoardingStepper: Stepper{
     let steps: PublishRelay<Step> = .init()
@@ -35,8 +37,16 @@ final class OnBoardingFlow: Flow{
             return navigateToLogin()
         case .clubListIsRequired:
             return .end(forwardToParentFlowWithStep: GCMSStep.clubListIsRequired)
-        case .certificationIsRequired:
-            return navigateCertification()
+        case .signUpIsRequired:
+            return navigateToSignUp()
+        case .signUpIsCompleted:
+            return signUpIsCompleted()
+        case let .certificationIsRequired(email):
+            return presentCertification(email: email)
+        case .dismiss:
+            return dismissVC()
+        case let .loaf(message, state: state, location: location):
+            return showLoaf(message, state: state, location: location)
         default:
             return .none
         }
@@ -55,9 +65,34 @@ private extension OnBoardingFlow{
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
-    func navigateCertification() -> FlowContributors {
-        let vc = AppDelegate.container.resolve(CertificationVC.self)!
-        self.rootVC.present(UINavigationController(rootViewController: vc), animated: true)
+    func navigateToSignUp() -> FlowContributors {
+        let vc = AppDelegate.container.resolve(SignUpVC.self)!
+        self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
+    func presentCertification(email: String) -> FlowContributors {
+        let reactor = AppDelegate.container.resolve(CertificationReactor.self, argument: email)
+        let vc = CertificationVC(reactor: reactor)
+        vc.modalPresentationStyle = .overFullScreen
+        self.rootVC.visibleViewController?.present(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
+    func dismissVC() -> FlowContributors {
+        self.rootVC.visibleViewController?.dismiss(animated: true)
+        return .none
+    }
+    func signUpIsCompleted() -> FlowContributors {
+        self.rootVC.popViewController(animated: true)
+        return .none
+    }
+
+    func showLoaf(
+        _ message: String,
+        state: Loaf.State,
+        location: Loaf.Location
+    ) -> FlowContributors {
+        Loaf(message, state: state, location: location, sender: self.rootVC.visibleViewController ?? .init()).show()
+        return .none
+    }
+    
 }

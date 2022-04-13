@@ -12,7 +12,7 @@ final class LoginVC : BaseVC<LoginReactor> {
     private let logoImageView = UIImageView().then {
         $0.image = GCMSAsset.Images.gcmsgLogo.image.withRenderingMode(.alwaysOriginal)
     }
-    private let signUpLabel = UILabel().then {
+    private let loginLabel = UILabel().then {
         $0.text = "Login"
         $0.font = .systemFont(ofSize: 32, weight: .semibold)
     }
@@ -26,7 +26,11 @@ final class LoginVC : BaseVC<LoginReactor> {
     
     private let findPasswordButton = UIButton().then {
         let attributedString = NSMutableAttributedString(string: "계정을 잊으셨나요? ID찾기 또는 비밀번호 찾기")
-        attributedString.setColorForText(textToFind: "비밀번호 찾기", withColor: UIColor(red: 82/255, green: 196/255, blue: 255/255, alpha: 1))
+        attributedString.setColorForText(textToFind: "비밀번호 찾기",
+                                         withColor: UIColor(red: 0.3215,
+                                                            green: 0.7686,
+                                                            blue: 1,
+                                                            alpha: 1))
         $0.setAttributedTitle(attributedString, for: .normal)
         $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.regular, size: 11)
     }
@@ -69,7 +73,6 @@ final class LoginVC : BaseVC<LoginReactor> {
     }
     
     private let passwordVisibleButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "eye.slash.fill"), for: .normal)
         $0.tintColor = GCMSAsset.Colors.gcmsGray4.color
     }
     
@@ -93,15 +96,10 @@ final class LoginVC : BaseVC<LoginReactor> {
             self?.thirdWaveView.animationStart(direction: .left, speed: 0.5)
         }
         UIView.animate(views: [
-            primaryWaveView, secondaryWaveView, thirdWaveView
+            primaryWaveView, secondaryWaveView, thirdWaveView, logoImageView, loginLabel
         ], animations: [
             AnimationType.from(direction: .top, offset: 300),
         ], duration: 1.6)
-        UIView.animate(views: [
-            logoImageView, signUpLabel
-        ], animations: [
-            AnimationType.zoom(scale: 0.5)
-        ], delay: 1.4, duration: 1.2)
         UIView.animate(views: [
             emailTextfield, emailLabel, passwordTextfield, passwordVisibleButton, findPasswordButton
         ], animations: [
@@ -116,7 +114,7 @@ final class LoginVC : BaseVC<LoginReactor> {
     
     // MARK: - UI
     override func addView() {
-        view.addSubViews(thirdWaveView, secondaryWaveView, primaryWaveView, logoImageView, signUpLabel, loginButton,findPasswordButton, invalidLabel, emailTextfield, emailLabel, passwordTextfield, passwordVisibleButton)
+        view.addSubViews(thirdWaveView, secondaryWaveView, primaryWaveView, logoImageView, loginLabel, loginButton,findPasswordButton, invalidLabel, emailTextfield, emailLabel, passwordTextfield, passwordVisibleButton)
     }
     
     override func setLayout() {
@@ -137,7 +135,7 @@ final class LoginVC : BaseVC<LoginReactor> {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(bound.height*0.05)
             $0.size.equalTo(109)
         }
-        signUpLabel.snp.makeConstraints {
+        loginLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(logoImageView.snp.bottom).offset(9)
         }

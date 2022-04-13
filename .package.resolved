@@ -145,6 +145,15 @@
       }
     },
     {
+      "identity" : "loaf",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/schmidyy/Loaf",
+      "state" : {
+        "revision" : "5f78a659666fd1025579ded60960452a4c60eda6",
+        "version" : "0.7.0"
+      }
+    },
+    {
       "identity" : "lottie-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/airbnb/lottie-ios.git",

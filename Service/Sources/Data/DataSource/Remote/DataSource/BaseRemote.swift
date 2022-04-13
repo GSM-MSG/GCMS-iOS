@@ -2,11 +2,12 @@ import Moya
 import Foundation
 import RxSwift
 import RxMoya
+import AVFoundation
 
 class BaseRemote<API: GCMSAPI> {
     public var testStatus = false
     public var successStatus = true
-    private let provider = MoyaProvider<API>(plugins: [JWTPlugin()])
+    private let provider = MoyaProvider<API>(plugins: [JWTPlugin(), NetworkLoggerPlugin()])
     private let successTestEndpoint = { (target: API) -> Endpoint in
         return Endpoint(
             url: URL(target: target).absoluteString,
@@ -64,7 +65,8 @@ private extension BaseRemote {
                 guard let moyaErr = error as? MoyaError else {
                     return .error(error)
                 }
-                return .error(GCMSError.error(errorBody: ["status": moyaErr.response?.statusCode ?? 0]))
+                
+                return .error(api.errorMapper?[moyaErr.response?.statusCode ?? 400] ?? error)
             }
     }
     
