@@ -70,15 +70,6 @@ final class SignUpVC : BaseVC<SignUpReactor> {
         $0.backgroundColor = GCMSAsset.Colors.gcmsOnBoardingMainColor.color
     }
     
-    private let emailLabel = UILabel().then {
-        $0.text = "@gsm.hs.kr"
-        $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 13)
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 7
-        $0.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
-        $0.textAlignment = .center
-    }
-    
     private let invalidLabel = UILabel().then {
         $0.text = "유효하지 않은 이메일입니다."
         $0.textColor = GCMSAsset.Colors.gcmsThemeColor.color
@@ -99,8 +90,9 @@ final class SignUpVC : BaseVC<SignUpReactor> {
     // MARK: - UI
     
     override func setup() {
-        passwordTextfield.delegate = self
-        retryPasswordTextfield.delegate = self
+        [passwordTextfield, retryPasswordTextfield].forEach {
+            $0.delegate = self
+        }
     }
 
     override func addView() {
