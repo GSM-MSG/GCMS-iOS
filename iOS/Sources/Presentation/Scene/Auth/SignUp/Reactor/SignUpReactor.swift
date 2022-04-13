@@ -117,6 +117,7 @@ extension SignUpReactor {
 private extension SignUpReactor {
     func certificationButton() -> Observable<Mutation> {
         let email = String(currentState.email.split(separator: "@").first ?? .init())
+        print(email)
         let startLoding = Observable.just(Mutation.setIsLoading(true))
         let emailVerify = sendVerifyUseCase.execute(email: email)
             .do(onError: { [weak self] _ in

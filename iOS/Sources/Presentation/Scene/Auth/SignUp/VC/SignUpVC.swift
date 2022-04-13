@@ -200,7 +200,7 @@ final class SignUpVC : BaseVC<SignUpReactor> {
     // MARK: - Reactor
     
     override func bindState(reactor: SignUpReactor) {
-        let sharedState = reactor.state.share(replay: 2).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 3).observe(on: MainScheduler.asyncInstance)
         
         sharedState
             .map(\.isEmailNotFound)
