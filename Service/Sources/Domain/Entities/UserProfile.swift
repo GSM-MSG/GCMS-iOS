@@ -33,6 +33,6 @@ public extension UserProfile {
         grade: 2,
         class: 1,
         number: 18,
-        joinedClub: [.dummy, .dummy]
+        joinedClub: [.dummy]
     )
 }

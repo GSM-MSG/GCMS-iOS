@@ -17,6 +17,7 @@ final class MyPageReactor: Reactor, Stepper {
         case viewDidLoad
         case logoutButtonDidTap
         case updateLoading(Bool)
+        case clubDidTap(ClubRequestQuery)
     }
     enum Mutation {
         case setUser(UserProfile)
@@ -51,6 +52,8 @@ extension MyPageReactor {
             return .just(.setIsLoading(load))
         case .logoutButtonDidTap:
             logoutButtonDidTap()
+        case let .clubDidTap(q):
+            steps.accept(GCMSStep.clubDetailIsRequired(query: q))
         }
         return .empty()
     }

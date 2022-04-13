@@ -4,6 +4,8 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import RxGesture
+import Service
 
 final class MyPageVC: BaseVC<MyPageReactor> {
     // MARK: - Properties
@@ -124,19 +126,17 @@ final class MyPageVC: BaseVC<MyPageReactor> {
         
         sharedState
             .compactMap { $0.user }
-            .compactMap { $0.joinedClub.first(where: { $0.type == .major } ) }
+            .map { $0.joinedClub.first(where: { $0.type == .major } ) }
             .bind(with: self) { owner, major in
-                owner.majorClubView.setImage(url: major.bannerUrl)
-                owner.majorClubView.setName(name: major.title)
+                owner.majorClubView.setClub(club: major)
             }
             .disposed(by: disposeBag)
         
         sharedState
             .compactMap { $0.user }
-            .compactMap { $0.joinedClub.first(where: { $0.type == .freedom } ) }
+            .map { $0.joinedClub.first(where: { $0.type == .freedom } ) }
             .bind(with: self) { owner, free in
-                owner.freedomClubView.setImage(url: free.bannerUrl)
-                owner.freedomClubView.setName(name: free.title)
+                owner.freedomClubView.setClub(club: free)
             }
             .disposed(by: disposeBag)
         
@@ -148,7 +148,24 @@ final class MyPageVC: BaseVC<MyPageReactor> {
             .disposed(by: disposeBag)
     }
     override func bindView(reactor: MyPageReactor) {
+        editorialCollectionView.rx.modelSelected(ClubList.self)
+            .map { Reactor.Action.clubDidTap(.init(name: $0.title, type: $0.type) ) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
         
+        majorClubView.rx.tapGesture()
+            .when(.recognized)
+            .compactMap { [weak self] _ in self?.majorClubView.club }
+            .map { Reactor.Action.clubDidTap(.init(name: $0.title, type: $0.type) ) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        freedomClubView.rx.tapGesture()
+            .when(.recognized)
+            .compactMap { [weak self] _ in self?.freedomClubView.club }
+            .map { Reactor.Action.clubDidTap(.init(name: $0.title, type: $0.type) ) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 
