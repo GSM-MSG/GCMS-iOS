@@ -17,20 +17,15 @@ final class MyPageReactor: Reactor, Stepper {
         case viewDidLoad
         case logoutButtonDidTap
         case updateLoading(Bool)
+        case clubDidTap(ClubRequestQuery)
     }
     enum Mutation {
-        case setEditorialClubList([ClubList])
-        case setMajorClub(ClubList)
-        case setFreedomClub(ClubList)
-        case setUser(User)
+        case setUser(UserProfile)
         case setIsLoading(Bool)
     }
     struct State {
-        var editorialClubList: [ClubList]
-        var majorClub: ClubList?
-        var freedomClub: ClubList?
         var isLoading: Bool
-        var user: User?
+        var user: UserProfile?
     }
     let initialState: State
     
@@ -40,7 +35,6 @@ final class MyPageReactor: Reactor, Stepper {
         logoutUseCase: LogoutUseCase
     ) {
         initialState = State(
-            editorialClubList: [],
             isLoading: false
         )
         self.logoutUseCase = logoutUseCase
@@ -58,6 +52,8 @@ extension MyPageReactor {
             return .just(.setIsLoading(load))
         case .logoutButtonDidTap:
             logoutButtonDidTap()
+        case let .clubDidTap(q):
+            steps.accept(GCMSStep.clubDetailIsRequired(query: q))
         }
         return .empty()
     }
@@ -69,12 +65,6 @@ extension MyPageReactor {
         var newState = state
         
         switch mutation {
-        case let .setEditorialClubList(list):
-            newState.editorialClubList = list
-        case let .setMajorClub(club):
-            newState.majorClub = club
-        case let .setFreedomClub(club):
-            newState.freedomClub = club
         case let .setIsLoading(load):
             newState.isLoading = load
         case let .setUser(user):
@@ -89,15 +79,6 @@ extension MyPageReactor {
 private extension MyPageReactor {
     func viewDidLoad() -> Observable<Mutation> {
         return .concat([
-            .just(.setEditorialClubList([
-                .dummy
-            ])),
-            .just(.setMajorClub(
-                .dummy
-            )),
-            .just(.setFreedomClub(
-                .dummy
-            )),
             .just(.setUser(
                 .dummy
             ))

@@ -43,7 +43,7 @@ public extension Club {
         description: "대충 설명 대충 설명 대\n충 설명",
         contact: "대충 연락처",
         head: .dummy,
-        relatedLink: [.dummy, .dummy],
+        relatedLink: [.dummy],
         scope: .default,
         isApplied: .random(),
         isOpen: .random(),

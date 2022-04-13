@@ -23,7 +23,7 @@ final class DefaultClubRepository: ClubRepository {
         clubRemote.deleteClub(query: query)
     }
     
-    func fetchClubMember(query: ClubRequestQuery) -> Single<[User]> {
+    func fetchClubMember(query: ClubRequestQuery) -> Single<[Member]> {
         clubRemote.fetchClubMember(query: query)
     }
     

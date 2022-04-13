@@ -20,7 +20,6 @@ final class ClubListCell: BaseCollectionViewCell<ClubList> {
         }
     }
     override func bind(_ model: ClubList) {
-        clubView.setImage(url: model.bannerUrl)
-        clubView.setName(name: model.title)
+        clubView.setClub(club: model)
     }
 }
