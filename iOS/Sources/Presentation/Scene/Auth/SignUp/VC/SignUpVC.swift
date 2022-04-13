@@ -2,6 +2,7 @@ import UIKit
 import Then
 import SnapKit
 import ReactorKit
+import RxSwift
 import RxFlow
 import Service
 import ViewAnimator
@@ -200,27 +201,29 @@ final class SignUpVC : BaseVC<SignUpReactor> {
     // MARK: - Reactor
     
     override func bindState(reactor: SignUpReactor) {
-        let sharedState = reactor.state.share(replay: 3).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 4).observe(on: MainScheduler.asyncInstance)
         
         sharedState
             .map(\.isEmailNotFound)
+            .distinctUntilChanged()
             .bind(with: self) { owner, item in
-                owner.emailTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
-                owner.passwordTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
-                owner.retryPasswordTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
-                owner.invalidLabel.text = "이메일을 다시 입력해주세요"
-                owner.invalidLabel.isHidden = !item
+                owner.errorMessage(message: "이메일을 다시 입력해주세요", success: item)
+            }
+            .disposed(by: disposeBag)
+            
+        sharedState
+            .map(\.isInvalidPassword)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, item in
+                owner.errorMessage(message: "비밀번호를 다시 입력해주세요", success: item)
             }
             .disposed(by: disposeBag)
         
         sharedState
-            .map(\.isInvalidPassword)
+            .map(\.isSignUpFailed)
+            .distinctUntilChanged()
             .bind(with: self) { owner, item in
-                owner.emailTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
-                owner.passwordTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
-                owner.retryPasswordTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
-                owner.invalidLabel.text = "비밀번호를 다시 입력해주세요"
-                owner.invalidLabel.isHidden = !item
+                owner.errorMessage(message: "이메일 인증을 확인해주세요", success: item)
             }
             .disposed(by: disposeBag)
         
@@ -259,7 +262,17 @@ final class SignUpVC : BaseVC<SignUpReactor> {
     
 }
 
-extension SignUpVC : UITextFieldDelegate {
+private extension SignUpVC {
+    func errorMessage(message: String, success: Bool) {
+        emailTextfield.layer.borderColor = success ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+        passwordTextfield.layer.borderColor = success ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+        retryPasswordTextfield.layer.borderColor = success ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+        invalidLabel.text = message
+        invalidLabel.isHidden = !success
+    }
+}
+
+extension SignUpVC: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let char = string.cString(using: String.Encoding.utf8) {

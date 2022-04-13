@@ -39,6 +39,8 @@ final class OnBoardingFlow: Flow{
             return .end(forwardToParentFlowWithStep: GCMSStep.clubListIsRequired)
         case .signUpIsRequired:
             return navigateToSignUp()
+        case .signUpIsCompleted:
+            return signUpIsCompleted()
         case let .certificationIsRequired(email):
             return presentCertification(email: email)
         case .dismiss:
@@ -77,6 +79,10 @@ private extension OnBoardingFlow{
     }
     func dismissVC() -> FlowContributors {
         self.rootVC.visibleViewController?.dismiss(animated: true)
+        return .none
+    }
+    func signUpIsCompleted() -> FlowContributors {
+        self.rootVC.popViewController(animated: true)
         return .none
     }
 

@@ -3,6 +3,7 @@ import RxFlow
 import RxSwift
 import RxRelay
 import Service
+import UIKit
 
 final class SignUpReactor: Reactor, Stepper {
     // MARK: - Properties
@@ -117,7 +118,7 @@ extension SignUpReactor {
 private extension SignUpReactor {
     func certificationButton() -> Observable<Mutation> {
         let email = String(currentState.email.split(separator: "@").first ?? .init())
-        print(email)
+
         let startLoding = Observable.just(Mutation.setIsLoading(true))
         let emailVerify = sendVerifyUseCase.execute(email: email)
             .do(onError: { [weak self] _ in
@@ -133,35 +134,34 @@ private extension SignUpReactor {
     }
     
     func completeButtonDidTap() -> Observable<Mutation> {
-        
+
         let startLoding = Observable.just(Mutation.setIsLoading(true))
-        
-        let email = currentState.email.replacingOccurrences(of: "@gsm.hs.kr", with: "")
+
+        let email = String(currentState.email.split(separator: "@").first ?? .init())
         
         if currentState.password.count < 8 {
-            let _ = Mutation.setIsLoading(false)
-            action.onNext(.invalidPassword)
+            Observable.just(Action.invalidPassword)
+                .observe(on: MainScheduler.asyncInstance)
+                .bind(to: action)
+                .disposed(by: disposeBag)
             return .empty()
         }
-        else {
-            let signUp = registerUseCase.execute(req: RegisterReqeust(email: email, password: currentState.password))
-                .do(onError: { [weak self] error in
-                    guard let error = error as? GCMSError else { return }
-                    if case GCMSError.conflict = error {
-                        self?.action.onNext(.emailNotFound)
-                    }
-                    else if case GCMSError.forbidden = error {
-                        self?.action.onNext(.signUpFailed)
-                    }
-    //                self?.action.onNext(.emailNotFound)
-                }, onCompleted: { [weak self] in
-                    self?.steps.accept(GCMSStep.clubListIsRequired)
-                })
-                .andThen(Single.just(Mutation.setIsLoading(false)))
-                .asObservable()
-                .catchAndReturn(.setIsLoading(false))
-                
-            return .concat([startLoding, signUp])
-        }
+        let signUp = registerUseCase.execute(req: RegisterReqeust(email: email, password: currentState.password))
+            .do(onError: { [weak self] error in
+                guard let error = error as? GCMSError else { return }
+                if case GCMSError.conflict = error {
+                    self?.action.onNext(.emailNotFound)
+                }
+                else if case GCMSError.forbidden = error {
+                    self?.action.onNext(.signUpFailed)
+                }
+            }, onCompleted: { [weak self] in
+                self?.steps.accept(GCMSStep.signUpIsCompleted)
+            })
+            .andThen(Single.just(Mutation.setIsLoading(false)))
+            .asObservable()
+            .catchAndReturn(.setIsLoading(false))
+
+        return .concat([startLoding, signUp])
     }
 }
