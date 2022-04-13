@@ -25,7 +25,7 @@ final class CertificationVC: BaseVC<CertificationReactor> {
         $0.textAlignment = .center
     }
     
-    private let codeOTPTextfield = DPOTPView().then {
+    private let codeOTPTextField = DPOTPView().then {
         $0.isCursorHidden = true
         $0.count = 4
         $0.spacing = 25
@@ -66,11 +66,11 @@ final class CertificationVC: BaseVC<CertificationReactor> {
     
     // MARK: - UI
     override func setup() {
-        codeOTPTextfield.dpOTPViewDelegate = self
+        codeOTPTextField.dpOTPViewDelegate = self
     }
     override func addView() {
         view.addSubViews(backgroundView, rootView, mailImage)
-        rootView.addSubViews(sendMessageLabel, codeOTPTextfield, completeButton)
+        rootView.addSubViews(sendMessageLabel, codeOTPTextField, completeButton)
     }
     
     override func setLayout() {
@@ -91,7 +91,7 @@ final class CertificationVC: BaseVC<CertificationReactor> {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(mailImage.snp.bottom).offset(12)
         }
-        codeOTPTextfield.snp.makeConstraints {
+        codeOTPTextField.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(sendMessageLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(bound.width*0.1066)
