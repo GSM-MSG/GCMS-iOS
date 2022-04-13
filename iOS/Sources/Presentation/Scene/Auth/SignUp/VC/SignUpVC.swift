@@ -30,7 +30,7 @@ final class SignUpVC : BaseVC<SignUpReactor> {
     }
     
     private let passwordTextfield = UITextField().then {
-        $0.attributedPlaceholder = NSAttributedString(string: "비밀번호를 입력해주세요", attributes: [
+        $0.attributedPlaceholder = NSAttributedString(string: "8~20자의 비밀번호를 입력해주세요", attributes: [
             .foregroundColor: GCMSAsset.Colors.gcmsGray4.color,
             .font: UIFont(font: GCMSFontFamily.Inter.medium, size: 13)!
         ])
@@ -95,11 +95,11 @@ final class SignUpVC : BaseVC<SignUpReactor> {
         $0.preferredColor = UIColor(red: 0.414, green: 0.438, blue: 0.9, alpha: 0.8)
     }
     
- 
     // MARK: - UI
     
     override func setup() {
         passwordTextfield.delegate = self
+        retryPasswordTextfield.delegate = self
     }
 
     override func addView() {
@@ -128,7 +128,7 @@ final class SignUpVC : BaseVC<SignUpReactor> {
         UIView.animate(views: [
             completeButton
         ], animations: [
-            AnimationType.zoom(scale:0.1)
+            AnimationType.from(direction: .bottom, offset: 30)
         ], delay: 1.4, duration: 1.2)
     }
     
@@ -208,6 +208,18 @@ final class SignUpVC : BaseVC<SignUpReactor> {
                 owner.emailTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
                 owner.passwordTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
                 owner.retryPasswordTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.invalidLabel.text = "이메일을 다시 입력해주세요"
+                owner.invalidLabel.isHidden = !item
+            }
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.isInvalidPassword)
+            .bind(with: self) { owner, item in
+                owner.emailTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.passwordTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.retryPasswordTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
+                owner.invalidLabel.text = "비밀번호를 다시 입력해주세요"
                 owner.invalidLabel.isHidden = !item
             }
             .disposed(by: disposeBag)
@@ -233,7 +245,7 @@ final class SignUpVC : BaseVC<SignUpReactor> {
             .map(Reactor.Action.updateEmail)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-                
+        
         passwordTextfield.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
             .map(Reactor.Action.updatePassword)
             .bind(to: reactor.action)

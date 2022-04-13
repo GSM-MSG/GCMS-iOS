@@ -18,11 +18,13 @@ final class SignUpReactor: Reactor, Stepper {
         case certificationButtonDidTap
         case completeButtonDidTap
         case emailNotFound
+        case invalidPassword
         case signUpFailed
     }
     enum Mutation {
         case setIsLoading(Bool)
         case setIsEmailNotFound(Bool)
+        case setInvalidPassword(Bool)
         case setPassword(String)
         case setEmail(String)
         case setIsSignUpFailed(Bool)
@@ -31,6 +33,7 @@ final class SignUpReactor: Reactor, Stepper {
         var isLoading: Bool
         var isSignUpFailed: Bool
         var isEmailNotFound : Bool
+        var isInvalidPassword : Bool
         var email : String
         var password : String
     }
@@ -46,6 +49,7 @@ final class SignUpReactor: Reactor, Stepper {
         initialState = State(isLoading: false,
                              isSignUpFailed: false,
                              isEmailNotFound: false,
+                             isInvalidPassword: false,
                              email: "",
                              password: "")
         self.sendVerifyUseCase = sendVerifyUseCase
@@ -72,6 +76,8 @@ extension SignUpReactor {
             return .just(.setIsSignUpFailed(true))
         case let .updatePassword(password):
             return .just(.setPassword(password))
+        case .invalidPassword:
+            return .just(.setInvalidPassword(true))
         }
         return .empty()
     }
@@ -91,12 +97,16 @@ extension SignUpReactor {
             newState.email = email
             newState.isSignUpFailed = false
             newState.isEmailNotFound = false
+            newState.isInvalidPassword = false
         case let .setIsSignUpFailed(success):
             newState.isSignUpFailed = success
         case let .setPassword(password):
             newState.password = password
             newState.isSignUpFailed = false
             newState.isEmailNotFound = false
+            newState.isInvalidPassword = false
+        case let .setInvalidPassword(success):
+            newState.isInvalidPassword = success
         }
         
         return newState
@@ -129,6 +139,7 @@ private extension SignUpReactor {
         
         if currentState.password.count < 8 {
             let _ = Mutation.setIsLoading(false)
+            action.onNext(.invalidPassword)
             return .empty()
         }
         else {
