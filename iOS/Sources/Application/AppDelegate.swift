@@ -8,14 +8,19 @@ import IQKeyboardManagerSwift
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     static let container = Container()
+    var assembler: Assembler!
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
 //        FirebaseApp.configure()
 //        setFCM(application)
-        AppDelegate.container.registerServiceDependencies()
-        AppDelegate.container.registerDependencies()
+        assembler = Assembler([
+            VCAssembly(),
+            ReactorAssembly(),
+            RepositoryAssembly(),
+            UseCaseAssembly()
+        ], container: AppDelegate.container)
         
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.enableAutoToolbar = true
