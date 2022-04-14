@@ -37,7 +37,7 @@ extension UserAPI: GCMSAPI {
         switch self {
         case let .editProfile(url):
             return .requestParameters(parameters: [
-                "pictureUrll": url
+                "url": url
             ], encoding: JSONEncoding.default)
         case let .search(name, type):
             return .requestParameters(parameters: [

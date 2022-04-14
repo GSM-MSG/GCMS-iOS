@@ -5,7 +5,6 @@ struct UserProfileResponse: Codable {
     let `class`: Int
     let num: Int
     let userImg: String?
-    let requestJoin: [JoinedClubResponse]
 }
 
 extension UserProfileResponse {
@@ -16,8 +15,7 @@ extension UserProfileResponse {
             name: name,
             grade: grade,
             class: `class`,
-            number: num,
-            joinedClub: requestJoin.map { $0.toDomain() }
+            number: num
         )
     }
 }
