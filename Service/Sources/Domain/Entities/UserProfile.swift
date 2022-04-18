@@ -1,13 +1,14 @@
 import Foundation
 
 public struct UserProfile: Equatable {
-    public init(userId: String, profileImageUrl: String?, name: String, grade: Int, class: Int, number: Int) {
+    public init(userId: String, profileImageUrl: String?, name: String, grade: Int, class: Int, number: Int, joinedClub: [ClubList]) {
         self.userId = userId
         self.profileImageUrl = profileImageUrl
         self.name = name
         self.grade = grade
         self.class = `class`
         self.number = number
+        self.joinedClub = joinedClub
     }
     
     
@@ -21,6 +22,7 @@ public struct UserProfile: Equatable {
     public let grade: Int
     public let `class`: Int
     public let number: Int
+    public let joinedClub: [ClubList]
 }
 
 public extension UserProfile {
@@ -30,6 +32,7 @@ public extension UserProfile {
         name: "Baekteun",
         grade: 2,
         class: 1,
-        number: 18
+        number: 18,
+        joinedClub: [.dummy]
     )
 }

@@ -118,6 +118,29 @@ final class MyPageVC: BaseVC<MyPageReactor> {
             .disposed(by: disposeBag)
         
         sharedState
+            .compactMap { $0.user }
+            .compactMap { $0.joinedClub.filter { $0.type == .editorial } }
+            .map { [ClubListSection.init(header: "", items: $0)] }
+            .bind(to: editorialCollectionView.rx.items(dataSource: ds))
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .compactMap { $0.user }
+            .map { $0.joinedClub.first(where: { $0.type == .major } ) }
+            .bind(with: self) { owner, major in
+                owner.majorClubView.setClub(club: major)
+            }
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .compactMap { $0.user }
+            .map { $0.joinedClub.first(where: { $0.type == .freedom } ) }
+            .bind(with: self) { owner, free in
+                owner.freedomClubView.setClub(club: free)
+            }
+            .disposed(by: disposeBag)
+        
+        sharedState
             .map(\.isLoading)
             .bind(with: self) { owner, load in
                 load ? owner.startIndicator() : owner.stopIndicator()
