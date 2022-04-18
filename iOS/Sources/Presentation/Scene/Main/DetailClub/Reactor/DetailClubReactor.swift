@@ -26,15 +26,21 @@ final class DetailClubReactor: Reactor, Stepper {
     }
     let initialState: State
     private let query: ClubRequestQuery
+    private let deleteClubUseCase: DeleteClubUseCase
+    private let fetchDetailClubUseCase: FetchDetailClubUseCase
     
     // MARK: - Init
     init(
-        query: ClubRequestQuery
+        query: ClubRequestQuery,
+        deleteClubUseCase: DeleteClubUseCase,
+        fetchDetailClubUseCase: FetchDetailClubUseCase
     ) {
         initialState = State(
             isLoading: false
         )
         self.query = query
+        self.deleteClubUseCase = deleteClubUseCase
+        self.fetchDetailClubUseCase = fetchDetailClubUseCase
     }
     
 }
@@ -48,7 +54,7 @@ extension DetailClubReactor {
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
         case .statusButtonDidTap:
-            steps.accept(GCMSStep.clubStatusIsRequired(query: query, isHead: currentState.clubDetail?.scope == .head ?? .default))
+            return statusButtonDidTap()
         }
         return .empty()
     }
@@ -73,9 +79,22 @@ extension DetailClubReactor {
 // MARK: - Method
 private extension DetailClubReactor {
     func viewDidLoad() -> Observable<Mutation> {
-        
         return .just(.setClub(
             .dummy
         ))
+    }
+    func statusButtonDidTap() -> Observable<Mutation> {
+        let isHead = (currentState.clubDetail?.scope ?? .member) == .head
+        steps.accept(GCMSStep.alert(title: nil, message: nil, style: .actionSheet, actions: [
+            .init(title: "동아리 멤버 관리", style: .default, handler: { [weak self] _ in
+                guard let self = self else { return }
+                self.steps.accept(GCMSStep.clubStatusIsRequired(query: self.query , isHead: isHead))
+            }),
+            .init(title: "동아리 절명하기", style: .destructive, handler: { [weak self] _ in
+                
+            }),
+            .init(title: "취소", style: .cancel, handler: nil)
+        ]))
+        return .empty()
     }
 }

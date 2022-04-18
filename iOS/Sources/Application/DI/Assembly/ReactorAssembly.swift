@@ -19,7 +19,8 @@ final class ReactorAssembly: Assembly {
         container.register(DetailClubReactor.self) { r, query in
             return DetailClubReactor(
                 query: query,
-                deleteClubUseCase: r.resolve(DeleteClubUseCase.self)!
+                deleteClubUseCase: r.resolve(DeleteClubUseCase.self)!,
+                fetchDetailClubUseCase: r.resolve(FetchDetailClubUseCase.self)!
             )
         }.inObjectScope(.container)
         
