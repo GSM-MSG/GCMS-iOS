@@ -16,6 +16,13 @@ final class ReactorAssembly: Assembly {
             )
         }.inObjectScope(.container)
         
+        container.register(DetailClubReactor.self) { r, query in
+            return DetailClubReactor(
+                query: query,
+                deleteClubUseCase: r.resolve(DeleteClubUseCase.self)!
+            )
+        }.inObjectScope(.container)
+        
         container.register(MyPageReactor.self) { r in
             return MyPageReactor(
                 logoutUseCase: r.resolve(LogoutUseCase.self)!
@@ -42,8 +49,22 @@ final class ReactorAssembly: Assembly {
             )
         }.inObjectScope(.container)
         
-        container.register(NewClubReactor.self) { r in
+        container.register(NewClubReactor.self) { _ in
             return NewClubReactor()
+        }.inObjectScope(.container)
+        
+        container.register(MemberAppendReactor.self) { _, closure in
+            return MemberAppendReactor(closure: closure)
+        }.inObjectScope(.container)
+        
+        container.register(ClubStatusReactor.self) { r, query in
+            return ClubStatusReactor(
+                query: query,
+                clubOpenUseCase: r.resolve(ClubOpenUseCase.self)!,
+                clubCloseUseCase: r.resolve(ClubCloseUseCase.self)!,
+                fetchClubMemberUseCase: r.resolve(FetchClubMemberUseCase.self)!,
+                fetchClubApplicantUseCase: r.resolve(FetchClubApplicantUseCase.self)!
+            )
         }.inObjectScope(.container)
     }
 }
