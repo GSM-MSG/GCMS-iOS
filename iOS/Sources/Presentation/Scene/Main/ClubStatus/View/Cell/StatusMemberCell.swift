@@ -3,13 +3,42 @@ import Service
 import SnapKit
 import Kingfisher
 
-final class StatusMemberCell: BaseTableViewCell<User> {
+final class StatusMemberCell: BaseTableViewCell<Member> {
     // MARK: - Properties
-    private let profileImageView = UIImageView()
-    private let nameLabel = UILabel()
-    private let infoLabel = UILabel()
-    private let delegationButton = UIButton()
-    private let kickButton = UIButton()
+    private let profileImageView = UIImageView().then {
+        $0.layer.cornerRadius = 20
+        $0.clipsToBounds = true
+    }
+    private let nameLabel = UILabel().then {
+        $0.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 13)
+        $0.textColor = .white
+    }
+    private let infoLabel = UILabel().then {
+        $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 11)
+        $0.textColor = GCMSAsset.Colors.gcmsGray3.color
+    }
+    private let delegationButton = UIButton().then {
+        $0.setTitle("위임", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 10)
+        $0.layer.borderColor = UIColor.white.cgColor
+        $0.layer.borderWidth = 0.5
+        $0.layer.cornerRadius = 4
+    }
+    private let kickButton = UIButton().then {
+        $0.setTitle("강퇴", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 10)
+        $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
+        $0.layer.cornerRadius = 4
+    }
+    public var isHead: Bool = false{
+        didSet {
+            [delegationButton, kickButton].forEach {
+                $0.isHidden = !isHead
+            }
+        }
+    }
     
     // MARK: - UI
     override func addView() {
@@ -21,6 +50,7 @@ final class StatusMemberCell: BaseTableViewCell<User> {
             $0.size.equalTo(40)
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(15)
+            $0.top.bottom.equalToSuperview()
         }
         nameLabel.snp.makeConstraints {
             $0.bottom.equalTo(contentView.snp.centerY)
@@ -33,15 +63,19 @@ final class StatusMemberCell: BaseTableViewCell<User> {
         kickButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(15)
+            $0.height.equalTo(25)
+            $0.width.equalTo(42)
         }
         delegationButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalTo(kickButton.snp.leading).offset(-10)
+            $0.height.equalTo(25)
+            $0.width.equalTo(42)
         }
         
     }
     
-    override func bind(_ model: User) {
+    override func bind(_ model: Member) {
         if let url = model.profileImageUrl, !url.isEmpty {
             profileImageView.kf.setImage(with: URL(string: url) ?? .none,
                                          placeholder: UIImage(),

@@ -97,6 +97,9 @@ private extension ClubStatusVC {
         
     }
     func bindAction(reactor: ClubStatusReactor) {
-        
+        self.rx.viewDidLoad
+            .map { Reactor.Action.viewDidLoad }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }

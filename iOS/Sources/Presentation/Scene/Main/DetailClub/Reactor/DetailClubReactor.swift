@@ -85,12 +85,13 @@ private extension DetailClubReactor {
     }
     func statusButtonDidTap() -> Observable<Mutation> {
         let isHead = (currentState.clubDetail?.scope ?? .member) == .head
+        let title = isHead ? "동아리 절명하기" : "동아리 탈퇴하기"
         steps.accept(GCMSStep.alert(title: nil, message: nil, style: .actionSheet, actions: [
             .init(title: "동아리 멤버 관리", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
-                self.steps.accept(GCMSStep.clubStatusIsRequired(query: self.query , isHead: isHead))
+                self.steps.accept(GCMSStep.clubStatusIsRequired(query: self.query , isHead: false))
             }),
-            .init(title: "동아리 절명하기", style: .destructive, handler: { [weak self] _ in
+            .init(title: title, style: .destructive, handler: { [weak self] _ in
                 
             }),
             .init(title: "취소", style: .cancel, handler: nil)
