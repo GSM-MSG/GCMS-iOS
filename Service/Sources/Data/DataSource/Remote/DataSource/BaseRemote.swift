@@ -2,6 +2,7 @@ import Moya
 import Foundation
 import RxSwift
 import RxMoya
+import AVFoundation
 
 class BaseRemote<API: GCMSAPI> {
     public var testStatus = false
@@ -64,7 +65,8 @@ private extension BaseRemote {
                 guard let moyaErr = error as? MoyaError else {
                     return .error(error)
                 }
-                return .error(GCMSError.error(errorBody: ["status": moyaErr.response?.statusCode ?? 0]))
+                
+                return .error(api.errorMapper?[moyaErr.response?.statusCode ?? 400] ?? error)
             }
     }
     

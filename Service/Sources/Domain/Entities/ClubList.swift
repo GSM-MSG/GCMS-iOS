@@ -1,5 +1,5 @@
 
-public struct ClubList {
+public struct ClubList: Equatable {
     public let bannerUrl: String
     public let title: String
     public let type: ClubType

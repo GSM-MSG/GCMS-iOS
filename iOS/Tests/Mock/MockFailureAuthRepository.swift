@@ -20,7 +20,6 @@ class MockFailureAuthRepository: AuthRepository{
     
     func refresh() -> Completable {
         authRemote.refresh()
-        
     }
     
     func sendVerify(email: String) -> Completable {
@@ -29,5 +28,11 @@ class MockFailureAuthRepository: AuthRepository{
     
     func isVerified(email: String, code: String) -> Completable {
         authRemote.isVerified(email: email, code: code)
+    }
+    func logout() -> Completable {
+        .create { comp in
+            comp(.completed)
+            return Disposables.create()
+        }
     }
 }

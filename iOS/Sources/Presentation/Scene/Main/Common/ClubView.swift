@@ -2,6 +2,7 @@ import UIKit
 import SnapKit
 import Then
 import Kingfisher
+import Service
 
 final class ClubView: UIView {
     // MARK: - Properties
@@ -18,6 +19,7 @@ final class ClubView: UIView {
         $0.clipsToBounds = true
         $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
     }
+    public private(set) var club: ClubList?
     
     // MARK: - UI
     init() {
@@ -32,15 +34,17 @@ final class ClubView: UIView {
     }
     
     // MARK: - Method
-    public func setImage(url: String) {
-        clubBannerView.kf.setImage(with: URL(string: url) ?? .none,
+    public func setClub(club: ClubList?) {
+        guard let club = club else {
+            self.isHidden = true
+            return
+        }
+        self.isHidden = false
+        self.club = club
+        clubBannerView.kf.setImage(with: URL(string: club.bannerUrl) ?? .none,
                                    placeholder: UIImage(),
                                    options: [])
-        clubBannerView.layer.cornerRadius = 10
-        clubBannerView.clipsToBounds = true
-    }
-    public func setName(name: String) {
-        self.nameLabel.text = name
+        nameLabel.text = club.title
     }
 }
 

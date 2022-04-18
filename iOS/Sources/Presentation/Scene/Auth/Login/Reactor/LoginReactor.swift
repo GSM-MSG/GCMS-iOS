@@ -59,8 +59,7 @@ extension LoginReactor {
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
         case .loginButtonDidTap:
-            steps.accept(GCMSStep.clubListIsRequired)
-//            return loginButtonDidTap()
+            return loginButtonDidTap()
         case .passwordVisibleButtonDidTap:
             return .just(.setVisiable(!currentState.passwordVisible))
         case let .updateEmail(email):

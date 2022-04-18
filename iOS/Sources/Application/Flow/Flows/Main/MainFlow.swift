@@ -30,6 +30,8 @@ final class MainFlow: Flow{
     func navigate(to step: Step) -> FlowContributors {
         guard let step = step.asGCMSStep else { return .none }
         switch step{
+        case .onBoardingIsRequired:
+            return .end(forwardToParentFlowWithStep: GCMSStep.onBoardingIsRequired)
         case .clubListIsRequired:
             return coordinateToClubList()
         case .popToRoot:

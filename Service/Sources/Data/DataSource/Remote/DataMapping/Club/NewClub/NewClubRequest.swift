@@ -3,7 +3,7 @@ public struct NewClubRequest: Encodable {
     let description: String
     let bannerUrl: String
     let contact: String
-    let relatedLink: [RelatedLink]
+    let relatedLink: [RelatedLinkDTO]
     let teacher: String?
     let activities: [String]
     let member: [String]

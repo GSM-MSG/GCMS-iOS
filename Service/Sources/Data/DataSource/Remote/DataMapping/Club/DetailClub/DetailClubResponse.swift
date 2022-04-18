@@ -1,46 +1,33 @@
 struct DetailClubResponse: Codable {
-    let type: ClubType
-    let bannerUrl: String
-    let title: String
-    let description: String
-    let contact: String
+    let club: DetailClubDTO
     let head: UserDTO
-    let relatedLink: [RelatedLink]
+    let member: [UserDTO]
     let scope: MemberScope
     let isApplied: Bool
-    let isOpen: Bool
     let activities: [String]
-    let teacher: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case club, head, member, scope, isApplied
+        case activities = "activityUrls"
+    }
 }
 
 extension DetailClubResponse {
     func toDomain() -> Club {
         return .init(
-            type: type,
-            bannerUrl: bannerUrl,
-            title: title,
-            description: description,
-            contact: contact,
+            type: club.type,
+            bannerUrl: club.bannerUrl,
+            title: club.title,
+            description: club.description,
+            contact: club.contact,
             head: head.toDomain(),
-            relatedLink: relatedLink,
+            relatedLink: club.relatedLink.map { $0.toDomain() },
             scope: scope,
             isApplied: isApplied,
-            isOpen: isOpen,
+            isOpen: club.isOpend,
             activities: activities,
-            member: [
-                .init(
-                    userId: "s2103",
-                    profileImageUrl: "https://avatars.githubusercontent.com/u/12152522?s=60&v=4",
-                    name: "ASDF",
-                    grade: 2,
-                    class: 3,
-                    number: 4,
-                    joinedMajorClub: nil,
-                    joinedFreedomClub: nil,
-                    joinedEditorialClub: nil
-                )
-            ],
-            teacher: teacher
+            member: member.map { $0.toDomain() },
+            teacher: club.teacher
         )
     }
 }
