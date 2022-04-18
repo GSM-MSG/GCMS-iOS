@@ -7,7 +7,6 @@ import Pageboy
 
 final class ClubStatusVC: TabmanViewController, View {
     // MARK: - Properties
-    private let isHead: Bool
     private var viewControllers: [UIViewController] = []
     private let tabView = UIView()
     
@@ -15,8 +14,7 @@ final class ClubStatusVC: TabmanViewController, View {
     
     typealias Reactor = ClubStatusReactor
     
-    init(reactor: ClubStatusReactor?, isHead: Bool) {
-        self.isHead = isHead
+    init(reactor: ClubStatusReactor?) {
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
     }
