@@ -11,6 +11,8 @@ final class ClubMemberVC: BaseVC<ClubStatusReactor> {
     private let clubMemberTableView = UITableView().then {
         $0.register(cellType: StatusMemberCell.self)
         $0.backgroundColor = .clear
+        $0.rowHeight = 60
+        $0.separatorStyle = .none
     }
     
     // MARK: - Init

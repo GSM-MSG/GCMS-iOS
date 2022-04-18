@@ -47,10 +47,9 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
     
     override func setLayout() {
         profileImageView.snp.makeConstraints {
-            $0.size.equalTo(40)
             $0.centerY.equalToSuperview()
+            $0.size.equalTo(40)
             $0.leading.equalToSuperview().offset(15)
-            $0.top.bottom.equalToSuperview()
         }
         nameLabel.snp.makeConstraints {
             $0.bottom.equalTo(contentView.snp.centerY)
