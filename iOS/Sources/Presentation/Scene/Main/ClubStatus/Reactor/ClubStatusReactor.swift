@@ -22,15 +22,27 @@ final class ClubStatusReactor: Reactor, Stepper {
     }
     let initialState: State
     private let query: ClubRequestQuery
+    private let clubOpenUseCase: ClubOpenUseCase
+    private let clubCloseUseCase: ClubCloseUseCase
+    private let fetchClubMemberUseCase: FetchClubMemberUseCase
+    private let fetchClubApplicantUseCase: FetchClubApplicantUseCase
     
     // MARK: - Init
     init(
-        query: ClubRequestQuery
+        query: ClubRequestQuery,
+        clubOpenUseCase: ClubOpenUseCase,
+        clubCloseUseCase: ClubCloseUseCase,
+        fetchClubMemberUseCase: FetchClubMemberUseCase,
+        fetchClubApplicantUseCase: FetchClubApplicantUseCase
     ) {
         initialState = State(
             isLoading: false
         )
         self.query = query
+        self.clubOpenUseCase = clubOpenUseCase
+        self.clubCloseUseCase = clubCloseUseCase
+        self.fetchClubMemberUseCase = fetchClubMemberUseCase
+        self.fetchClubApplicantUseCase = fetchClubApplicantUseCase
     }
     
 }
