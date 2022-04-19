@@ -45,5 +45,7 @@ final class ReactorAssembly: Assembly {
         container.register(NewClubReactor.self) { r in
             return NewClubReactor()
         }.inObjectScope(.container)
+        
+        
     }
 }

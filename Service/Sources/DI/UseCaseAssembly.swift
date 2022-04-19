@@ -38,5 +38,29 @@ public final class UseCaseAssembly: Assembly {
                 authRepository: r.resolve(AuthRepository.self)!
             )
         }.inObjectScope(.container)
+        
+        container.register(FetchProfileUseCase.self) { r in
+            return FetchProfileUseCase(
+                userRepository: r.resolve(UserRepository.self)!
+            )
+        }.inObjectScope(.container)
+        
+        container.register(UpdateProfileImageUseCase.self) { r in
+            return UpdateProfileImageUseCase(
+                userRepository: r.resolve(UserRepository.self)!
+            )
+        }.inObjectScope(.container)
+        
+        container.register(FetchSearchUserUseCase.self) { r in
+            return FetchSearchUserUseCase(
+                userRepository: r.resolve(UserRepository.self)!
+            )
+        }
+        
+        container.register(ClubExitUseCase.self) { r in
+            return ClubExitUseCase(userRepository: r.resolve(
+                UserRepository.self)!
+            )
+        }
     }
 }
