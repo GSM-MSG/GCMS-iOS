@@ -4,6 +4,7 @@ import Then
 import SnapKit
 import RxSwift
 import RxDataSources
+import Service
 
 final class ClubApplicantsVC: BaseVC<ClubStatusReactor> {
     // MARK: - Properties
@@ -47,6 +48,7 @@ final class ClubApplicantsVC: BaseVC<ClubStatusReactor> {
             let cell = tv.dequeueReusableCell(for: ip, cellType: ApplicantCell.self)
             cell.model = item
             cell.isHead = self?.isHead ?? false
+            cell.delegate = self
             return cell
         }
         
@@ -62,5 +64,14 @@ final class ClubApplicantsVC: BaseVC<ClubStatusReactor> {
                 item ? owner.startIndicator() : owner.stopIndicator()
             }
             .disposed(by: disposeBag)
+    }
+}
+
+extension ClubApplicantsVC: ApplicantCellDelegate {
+    func acceptButtonDidTap(user: User) {
+        
+    }
+    func rejectButtonDidTap(user: User) {
+        
     }
 }

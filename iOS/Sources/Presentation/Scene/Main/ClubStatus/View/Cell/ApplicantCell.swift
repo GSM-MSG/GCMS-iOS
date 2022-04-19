@@ -2,9 +2,17 @@ import UIKit
 import Service
 import SnapKit
 import Kingfisher
+import RxSwift
+
+protocol ApplicantCellDelegate: AnyObject {
+    func acceptButtonDidTap(user: User)
+    func rejectButtonDidTap(user: User)
+}
 
 final class ApplicantCell: BaseTableViewCell<User> {
     // MARK: - Properties
+    weak var delegate: ApplicantCellDelegate?
+    
     private let profileImageView = UIImageView().then {
         $0.layer.cornerRadius = 20
         $0.clipsToBounds = true
@@ -70,6 +78,12 @@ final class ApplicantCell: BaseTableViewCell<User> {
             $0.height.equalTo(24)
             $0.width.equalTo(42)
         }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        model = nil
+        disposeBag = DisposeBag()
     }
     
     override func bind(_ model: User) {

@@ -2,9 +2,17 @@ import UIKit
 import Service
 import SnapKit
 import Kingfisher
+import RxSwift
+
+protocol StatusMemberCellDelegate: AnyObject {
+    func kicktButtonDidTap(user: Member)
+    func delegationButtonDidTap(user: Member)
+}
 
 final class StatusMemberCell: BaseTableViewCell<Member> {
     // MARK: - Properties
+    weak var delegate: StatusMemberCellDelegate?
+    
     private let profileImageView = UIImageView().then {
         $0.layer.cornerRadius = 20
         $0.clipsToBounds = true
@@ -72,6 +80,27 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
             $0.width.equalTo(42)
         }
         
+    }
+    override func configureCell() {
+        delegationButton.rx.tap
+            .compactMap { [weak self] in self?.model }
+            .bind(with: self) { owner, model in
+                owner.delegate?.delegationButtonDidTap(user: model)
+            }
+            .disposed(by: disposeBag)
+        
+        kickButton.rx.tap
+            .compactMap { [weak self] in self?.model }
+            .bind(with: self) { owner, model in
+                owner.delegate?.kicktButtonDidTap(user: model)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        model = nil
+        disposeBag = DisposeBag()
     }
     
     override func bind(_ model: Member) {

@@ -14,6 +14,10 @@ final class ClubStatusReactor: Reactor, Stepper {
     enum Action {
         case updateLoading(Bool)
         case viewDidLoad
+        case acceptButtonDidTap(User)
+        case rejectButtonDidTap(User)
+        case kickButtonDidTap(Member)
+        case delegationButtonDidTap(Member)
     }
     enum Mutation {
         case setIsLoading(Bool)
@@ -62,6 +66,14 @@ extension ClubStatusReactor {
             return .just(.setIsLoading(load))
         case .viewDidLoad:
             return viewDidLoad()
+        case let .acceptButtonDidTap(_): break
+            
+        case let .rejectButtonDidTap(_): break
+            
+        case let .kickButtonDidTap(_): break
+            
+        case let .delegationButtonDidTap(_): break
+            
         }
         return .empty()
     }
