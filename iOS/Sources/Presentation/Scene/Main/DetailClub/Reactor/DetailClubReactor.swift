@@ -89,7 +89,7 @@ private extension DetailClubReactor {
         steps.accept(GCMSStep.alert(title: nil, message: nil, style: .actionSheet, actions: [
             .init(title: "동아리 멤버 관리", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
-                self.steps.accept(GCMSStep.clubStatusIsRequired(query: self.query , isHead: false))
+                self.steps.accept(GCMSStep.clubStatusIsRequired(query: self.query , isHead: isHead))
             }),
             .init(title: title, style: .destructive, handler: { [weak self] _ in
                 

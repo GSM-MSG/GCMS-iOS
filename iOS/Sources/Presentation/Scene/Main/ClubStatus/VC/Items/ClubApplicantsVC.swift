@@ -41,7 +41,7 @@ final class ClubApplicantsVC: BaseVC<ClubStatusReactor> {
     
     // MARK: - Reactor
     override func bindState(reactor: ClubStatusReactor) {
-        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 2).observe(on: MainScheduler.asyncInstance)
         
         let applicantDS = RxTableViewSectionedReloadDataSource<ApplicantSection> { [weak self] _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip, cellType: ApplicantCell.self)
@@ -54,6 +54,13 @@ final class ClubApplicantsVC: BaseVC<ClubStatusReactor> {
             .map(\.applicants)
             .map { [ApplicantSection.init(items: $0)] }
             .bind(to: applicantTableView.rx.items(dataSource: applicantDS))
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.isLoading)
+            .bind(with: self) { owner, item in
+                item ? owner.startIndicator() : owner.stopIndicator()
+            }
             .disposed(by: disposeBag)
     }
 }
