@@ -54,6 +54,8 @@ final class MainFlow: Flow{
             return navigateToThirdNewClub(reactor: reactor)
         case let .failureAlert(title, message, action):
             return presentToFailureAlert(title: title, message: message, action: action)
+        case let .clubStatusIsRequired(query, isHead):
+            return presentToClubStatus(query: query, isHead: isHead)
         default:
             return .none
         }
@@ -68,7 +70,7 @@ private extension MainFlow{
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
     func navigateToDetailClub(query: ClubRequestQuery) -> FlowContributors {
-        let reactor = DetailClubReactor()
+        let reactor = AppDelegate.container.resolve(DetailClubReactor.self, argument: query)!
         let vc = DetailClubVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
@@ -85,9 +87,7 @@ private extension MainFlow{
         return .none
     }
     func presentToMemberAppend(closure: @escaping (([User]) -> Void)) -> FlowContributors {
-        let reactor = MemberAppendReactor(
-            closure: closure
-        )
+        let reactor = AppDelegate.container.resolve(MemberAppendReactor.self, argument: closure)!
         let vc = MemberAppendVC(reactor: reactor)
         self.rootVC.visibleViewController?.presentPanModal(vc)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
@@ -120,6 +120,16 @@ private extension MainFlow{
         }
         self.rootVC.visibleViewController?.present(alert, animated: true)
         return .none
+    }
+    func presentToClubStatus(query: ClubRequestQuery, isHead: Bool) -> FlowContributors {
+        let reactor = AppDelegate.container.resolve(ClubStatusReactor.self, argument: query)!
+        let vc = ClubStatusVC(reactor: reactor)
+        vc.setViewControllers([
+            ClubApplicantsVC(reactor: reactor, isHead: isHead),
+            ClubMemberVC(reactor: reactor, isHead: isHead)
+        ])
+        self.rootVC.visibleViewController?.present(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
     func popToRoot() -> FlowContributors {
         self.rootVC.popToRootViewController(animated: true)
