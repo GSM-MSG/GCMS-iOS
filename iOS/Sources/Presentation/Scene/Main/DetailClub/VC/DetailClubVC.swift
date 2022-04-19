@@ -56,6 +56,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         $0.setTitle("신청하기", for: .normal)
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
     }
+    private let statusButton = UIBarButtonItem(image: .init(systemName: "gearshape")?.tintColor(.white), style: .plain, target: nil, action: nil)
     
     // MARK: - UI
     override func addView() {
@@ -141,11 +142,17 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
     override func configureNavigation() {
-//        self.navigationController?.navigationBar.setClear()
+        self.navigationItem.setRightBarButton(statusButton, animated: true)
         bannerImageView.kf.setImage(with: URL(string: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4") ?? .none)
     }
     
     // MARK: - Reactor
+    override func bindView(reactor: DetailClubReactor) {
+        statusButton.rx.tap
+            .map { Reactor.Action.statusButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
     override func bindAction(reactor: DetailClubReactor) {
         self.rx.viewDidLoad
             .map { Reactor.Action.viewDidLoad }

@@ -2,14 +2,51 @@ import UIKit
 import Service
 import SnapKit
 import Kingfisher
+import RxSwift
 
-final class ApplicantCell: BaseCollectionViewCell<User> {
+protocol ApplicantCellDelegate: AnyObject {
+    func acceptButtonDidTap(user: User)
+    func rejectButtonDidTap(user: User)
+}
+
+final class ApplicantCell: BaseTableViewCell<User> {
     // MARK: - Properties
-    private let profileImageView = UIImageView()
-    private let nameLabel = UILabel()
-    private let infoLabel = UILabel()
-    private let acceptButton = UIButton()
-    private let rejectButton = UIButton()
+    weak var delegate: ApplicantCellDelegate?
+    
+    private let profileImageView = UIImageView().then {
+        $0.layer.cornerRadius = 20
+        $0.clipsToBounds = true
+    }
+    private let nameLabel = UILabel().then {
+        $0.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 13)
+        $0.textColor = .white
+    }
+    private let infoLabel = UILabel().then {
+        $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 11)
+        $0.textColor = GCMSAsset.Colors.gcmsGray3.color
+    }
+    private let acceptButton = UIButton().then {
+        $0.setTitle("거절", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 10)
+        $0.layer.borderColor = UIColor.white.cgColor
+        $0.layer.borderWidth = 0.5
+        $0.layer.cornerRadius = 4
+    }
+    private let rejectButton = UIButton().then {
+        $0.setTitle("강퇴", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 10)
+        $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
+        $0.layer.cornerRadius = 4
+    }
+    public var isHead: Bool = false {
+        didSet {
+            [acceptButton, rejectButton].forEach {
+                $0.isHidden = !isHead
+            }
+        }
+    }
     
     // MARK: - UI
     override func addView() {
@@ -30,13 +67,23 @@ final class ApplicantCell: BaseCollectionViewCell<User> {
             $0.leading.equalTo(nameLabel)
         }
         acceptButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-15)
+            $0.trailing.equalToSuperview().inset(15)
             $0.centerY.equalToSuperview()
+            $0.height.equalTo(25)
+            $0.width.equalTo(42)
         }
         rejectButton.snp.makeConstraints {
             $0.trailing.equalTo(acceptButton.snp.leading).offset(-10)
             $0.centerY.equalToSuperview()
+            $0.height.equalTo(24)
+            $0.width.equalTo(42)
         }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        model = nil
+        disposeBag = DisposeBag()
     }
     
     override func bind(_ model: User) {
