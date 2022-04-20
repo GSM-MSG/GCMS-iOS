@@ -107,6 +107,7 @@ public final class UseCaseAssembly: Assembly {
             )
         }.inObjectScope(.container)
         
+        // MARK: - User
         container.register(FetchProfileUseCase.self) { r in
             return FetchProfileUseCase(
                 userRepository: r.resolve(UserRepository.self)!
