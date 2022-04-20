@@ -2,11 +2,9 @@ import Moya
 
 enum UserAPI {
     case userInfo
-    case editPicture(url: String)
-    case search(String)
-    case notice
-    case accept(name: String, type: ClubType)
-    case reject(name: String, type: ClubType)
+    case editProfile(url: String)
+    case search(name: String, type: ClubType)
+    case exit(ClubRequestQuery)
 }
 
 extension UserAPI: GCMSAPI {
@@ -16,56 +14,49 @@ extension UserAPI: GCMSAPI {
     var urlPath: String {
         switch self {
         case .userInfo:
-            return "/"
-        case .editPicture:
-            return "/edit/picture"
+            return "/my"
+        case .editProfile:
+            return "/profile"
         case .search:
             return "/search"
-        case .notice:
-            return "/notice"
-        case let .accept(clubId):
-            return "/invite/accept"
-        case let .reject(clubId):
-            return "/invite/reject"
+        case .exit:
+            return "/exit"
         }
     }
     var method: Method {
         switch self {
-        case .userInfo, .search, .notice:
+        case .userInfo, .search:
             return .get
-        case .editPicture, .accept:
+        case .editProfile:
             return .put
-        case .reject:
+        case .exit:
             return .delete
         }
     }
     var task: Task {
         switch self {
-        case let .editPicture(url):
+        case let .editProfile(url):
             return .requestParameters(parameters: [
-                "pictureUrll": url
+                "url": url
             ], encoding: JSONEncoding.default)
-        case let .search(q):
-            return .requestParameters(parameters: [
-                "q": q
-            ], encoding: URLEncoding.queryString)
-        case let .accept(name, type):
+        case let .search(name, type):
             return .requestParameters(parameters: [
                 "q": name,
                 "type": type.rawValue
             ], encoding: URLEncoding.queryString)
-        case let .reject(name, type):
+
+        case let .exit(query):
             return .requestParameters(parameters: [
-                "q": name,
-                "type": type.rawValue
-            ], encoding: URLEncoding.queryString)
+                "q": query.name,
+                "type": query.type.rawValue
+            ], encoding: JSONEncoding.default)
         default:
             return .requestPlain
         }
     }
     var jwtTokenType: JWTTokenType? {
         switch self {
-        case .userInfo, .editPicture, .search, .notice, .accept, .reject:
+        case .userInfo, .editProfile, .search, .exit:
             return .accessToken
         default:
             return JWTTokenType.none
