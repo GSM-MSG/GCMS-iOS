@@ -12,7 +12,7 @@ final class ReactorAssembly: Assembly {
         
         container.register(HomeReactor.self) { r in
             return HomeReactor(
-                
+                fetchClubListsUseCase: r.resolve(FetchClubListUseCase.self)!
             )
         }.inObjectScope(.container)
         

@@ -1,6 +1,6 @@
 import RxSwift
 
-public final class FetchClubLiseUseCase {
+public final class FetchClubListUseCase {
     public init(clubRepository: ClubRepository) {
         self.clubRepository = clubRepository
     }

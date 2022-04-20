@@ -10,6 +10,8 @@ final class HomeReactor: Reactor, Stepper {
     
     private let disposeBag: DisposeBag = .init()
     
+    private let fetchClubListsUseCase: FetchClubListUseCase
+    
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
@@ -34,7 +36,7 @@ final class HomeReactor: Reactor, Stepper {
     
     // MARK: - Init
     init(
-        
+        fetchClubListsUseCase: FetchClubListUseCase
     ) {
         initialState = State(
             majorClubList: [],
@@ -43,6 +45,7 @@ final class HomeReactor: Reactor, Stepper {
             clubType: .major,
             isLoading: false
         )
+        self.fetchClubListsUseCase = fetchClubListsUseCase
     }
     
 }
@@ -92,22 +95,18 @@ extension HomeReactor {
 private extension HomeReactor {
     func viewDidLoad() -> Observable<Mutation> {
         let start = Observable.just(Mutation.setIsLoading(true))
-        let major = Observable.just(Mutation.setClubList(.major, [
-            .dummy,
-            .dummy,
-            .dummy
-        ])).delay(.milliseconds(500), scheduler: MainScheduler.asyncInstance)
-        let freedom = Observable.just(Mutation.setClubList(.freedom, [
-            .dummy,
-            .dummy,
-            .dummy
-        ])).delay(.milliseconds(500), scheduler: MainScheduler.asyncInstance)
-        let edito = Observable.just(Mutation.setClubList(.editorial, [
-            .dummy,
-            .dummy,
-            .dummy
-        ])).delay(.milliseconds(500), scheduler: MainScheduler.asyncInstance)
-        let stop = Observable.just(Mutation.setIsLoading(false))
-        return .concat([start, major, freedom, edito, stop])
+        let clubs = Observable.zip(
+            fetchClubListsUseCase.execute(type: .major).asObservable(),
+            fetchClubListsUseCase.execute(type: .editorial).asObservable(),
+            fetchClubListsUseCase.execute(type: .freedom).asObservable()
+        ).flatMap { major, editorial, freedom in
+            return Observable.concat([
+                .just(Mutation.setClubList(.major, major)),
+                .just(.setClubList(.editorial, editorial)),
+                .just(.setClubList(.freedom, freedom)),
+                .just(.setIsLoading(false))
+            ])
+        }.catchAndReturn(Mutation.setIsLoading(false))
+        return .concat([start, clubs])
     }
 }

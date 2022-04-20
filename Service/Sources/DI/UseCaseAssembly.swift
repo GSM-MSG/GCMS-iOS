@@ -65,8 +65,8 @@ public final class UseCaseAssembly: Assembly {
             )
         }.inObjectScope(.container)
         
-        container.register(FetchClubLiseUseCase.self) { r in
-            return FetchClubLiseUseCase(
+        container.register(FetchClubListUseCase.self) { r in
+            return FetchClubListUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }.inObjectScope(.container)
