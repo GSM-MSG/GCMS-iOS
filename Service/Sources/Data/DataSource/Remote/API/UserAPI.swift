@@ -3,7 +3,7 @@ import Moya
 enum UserAPI {
     case userInfo
     case editProfile(url: String)
-    case search(ClubRequestQuery)
+    case search(name: String, type: ClubType)
     case exit(ClubRequestQuery)
 }
 
@@ -39,10 +39,10 @@ extension UserAPI: GCMSAPI {
             return .requestParameters(parameters: [
                 "url": url
             ], encoding: JSONEncoding.default)
-        case let .search(query):
+        case let .search(name, type):
             return .requestParameters(parameters: [
-                "q": query.name,
-                "type": query.type.rawValue
+                "q": name,
+                "type": type.rawValue
             ], encoding: URLEncoding.queryString)
 
         case let .exit(query):

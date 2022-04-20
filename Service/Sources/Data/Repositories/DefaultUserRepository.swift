@@ -5,7 +5,7 @@ final class DefaultUserRepository: UserRepository {
     private let userRemote = UserRemote.shared
     
     func fetchMyProfile() -> Single<UserProfile> {
-        userRemote.fetchMyProfile()
+        userRemote.fetchProfile()
     }
     
     func updateProfileImage(imageUrl: String) -> Completable {
