@@ -5,7 +5,7 @@ public final class SearchUserUseCase {
         self.userRepository = userRepository
     }
     
-    public let userRepository: UserRepository
+    private let userRepository: UserRepository
     
     public func execute(query: ClubRequestQuery) -> Single<[User]> {
         userRepository.fetchSearchUser(query: query)

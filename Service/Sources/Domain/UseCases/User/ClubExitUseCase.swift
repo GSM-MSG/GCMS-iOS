@@ -5,7 +5,7 @@ public final class ClubExitUseCase {
         self.userRepository = userRepository
     }
     
-    public let userRepository: UserRepository
+    private let userRepository: UserRepository
     
     public func execute(query: ClubRequestQuery) -> Completable {
         userRepository.clubExit(query: query)

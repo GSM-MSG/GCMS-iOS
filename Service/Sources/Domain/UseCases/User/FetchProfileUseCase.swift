@@ -5,7 +5,7 @@ public final class FetchProfileUseCase {
         self.userRepository = userRepository
     }
     
-    public let userRepository: UserRepository
+    private let userRepository: UserRepository
     
     public func execute() -> Single<UserProfile> {
         userRepository.fetchMyProfile()
