@@ -3,8 +3,8 @@ import Moya
 enum UserAPI {
     case userInfo
     case editProfile(url: String)
-    case search(name: String, type: ClubType)
-    case secession(name: String, type: ClubType)
+    case search(ClubRequestQuery)
+    case exit(ClubRequestQuery)
 }
 
 extension UserAPI: GCMSAPI {
@@ -19,7 +19,7 @@ extension UserAPI: GCMSAPI {
             return "/profile"
         case .search:
             return "/search"
-        case .secession:
+        case .exit:
             return "/exit"
         }
     }
@@ -29,7 +29,7 @@ extension UserAPI: GCMSAPI {
             return .get
         case .editProfile:
             return .put
-        case .secession:
+        case .exit:
             return .delete
         }
     }
@@ -39,24 +39,24 @@ extension UserAPI: GCMSAPI {
             return .requestParameters(parameters: [
                 "url": url
             ], encoding: JSONEncoding.default)
-        case let .search(name, type):
+        case let .search(query):
             return .requestParameters(parameters: [
-                "q": name,
-                "type": type.rawValue
+                "q": query.name,
+                "type": query.type.rawValue
             ], encoding: URLEncoding.queryString)
 
-        case let .secession(name, type):
+        case let .exit(query):
             return .requestParameters(parameters: [
-                "q": name,
-                "type": type.rawValue
-            ], encoding: URLEncoding.default)
+                "q": query.name,
+                "type": query.type.rawValue
+            ], encoding: JSONEncoding.default)
         default:
             return .requestPlain
         }
     }
     var jwtTokenType: JWTTokenType? {
         switch self {
-        case .userInfo, .editProfile, .search, .secession:
+        case .userInfo, .editProfile, .search, .exit:
             return .accessToken
         default:
             return JWTTokenType.none

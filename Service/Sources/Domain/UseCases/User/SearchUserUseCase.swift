@@ -1,6 +1,6 @@
 import RxSwift
 
-public final class FetchSearchUserUseCase {
+public final class SearchUserUseCase {
     public init(userRepository: UserRepository) {
         self.userRepository = userRepository
     }

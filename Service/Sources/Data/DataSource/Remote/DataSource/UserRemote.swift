@@ -4,9 +4,9 @@ final class UserRemote: BaseRemote<UserAPI> {
     static let shared = UserRemote()
     private override init() {}
     
-    func fetchProfile() -> Single<UserProfile> {
+    func fetchMyProfile() -> Single<UserProfile> {
         request(.userInfo)
-            .map(UserProfileResponse.self)
+            .map(UserMyProfileResponse.self)
             .map { $0.toDomain() }
     }
     
@@ -16,13 +16,13 @@ final class UserRemote: BaseRemote<UserAPI> {
     }
     
     func fetchSearchUser(query: ClubRequestQuery) -> Single<[User]> {
-        request(.search(name: query.name, type: query.type))
+        request(.search(query))
             .map(UserSearchResponse.self)
             .map { $0.toDomain() }
     }
     
     func clubExit(query: ClubRequestQuery) -> Completable {
-        request(.secession(name: query.name, type: query.type))
+        request(.exit(query))
             .asCompletable()
     }
     

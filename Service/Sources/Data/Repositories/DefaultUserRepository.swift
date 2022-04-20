@@ -4,8 +4,8 @@ import Foundation
 final class DefaultUserRepository: UserRepository {
     private let userRemote = UserRemote.shared
     
-    func fetchProfile() -> Single<UserProfile> {
-        userRemote.fetchProfile()
+    func fetchMyProfile() -> Single<UserProfile> {
+        userRemote.fetchMyProfile()
     }
     
     func updateProfileImage(imageUrl: String) -> Completable {

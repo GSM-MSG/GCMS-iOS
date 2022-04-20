@@ -8,6 +8,6 @@ public final class FetchProfileUseCase {
     public let userRepository: UserRepository
     
     public func execute() -> Single<UserProfile> {
-        userRepository.fetchProfile()
+        userRepository.fetchMyProfile()
     }
 }

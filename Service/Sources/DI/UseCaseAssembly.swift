@@ -120,15 +120,15 @@ public final class UseCaseAssembly: Assembly {
             )
         }.inObjectScope(.container)
         
-        container.register(FetchSearchUserUseCase.self) { r in
-            return FetchSearchUserUseCase(
+        container.register(SearchUserUseCase.self) { r in
+            return SearchUserUseCase(
                 userRepository: r.resolve(UserRepository.self)!
             )
         }
         
         container.register(ClubExitUseCase.self) { r in
-            return ClubExitUseCase(userRepository: r.resolve(
-                UserRepository.self)!
+            return ClubExitUseCase(
+                userRepository: r.resolve(UserRepository.self)!
             )
         }
     }

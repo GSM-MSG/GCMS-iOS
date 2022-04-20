@@ -1,9 +1,9 @@
-struct UserProfileResponse: Codable {
+struct UserMyProfileResponse: Codable {
     let userData: UserDTO
     let clubs: [ClubListDTO]
 }
 
-extension UserProfileResponse {
+extension UserMyProfileResponse {
     func toDomain() -> UserProfile {
         return .init(
             userId: userData.email,
