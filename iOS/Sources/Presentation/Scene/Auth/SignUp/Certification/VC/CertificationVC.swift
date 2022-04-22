@@ -62,6 +62,7 @@ final class CertificationVC: BaseVC<CertificationReactor> {
         super.viewWillDisappear(animated)
         IQKeyboardManager.shared.enableAutoToolbar = true
         IQKeyboardManager.shared.enable = true
+        codeOTPTextField.dpOTPViewDelegate = nil
     }
     
     // MARK: - UI
