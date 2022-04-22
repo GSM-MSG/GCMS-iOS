@@ -6,15 +6,15 @@ final class ClubTypeCardButton: UIButton {
     // MARK: - Properties
     
     // MARK: - Init
-    init(type: ClubType) {
+    init(type: ClubType, isGray: Bool = false) {
         super.init(frame: .zero)
         switch type {
         case .major:
-            setImage(GCMSAsset.Images.gcmsMajor.image, for: .normal)
+            setImage(isGray ? GCMSAsset.Images.gcmsMajorGray.image : GCMSAsset.Images.gcmsMajor.image , for: .normal)
         case .freedom:
-            setImage(GCMSAsset.Images.gcmsFreedom.image, for: .normal)
+            setImage(isGray ? GCMSAsset.Images.gcmsFreedomGray.image : GCMSAsset.Images.gcmsFreedom.image, for: .normal)
         case .editorial:
-            setImage(GCMSAsset.Images.gcmsEditorial.image, for: .normal)
+            setImage(isGray ? GCMSAsset.Images.gcmsEditorialGray.image : GCMSAsset.Images.gcmsEditorial.image, for: .normal)
         }
     }
     

@@ -3,6 +3,7 @@ import RxFlow
 import RxSwift
 import RxRelay
 import Service
+import UIKit
 
 final class DetailClubReactor: Reactor, Stepper {
     // MARK: - Properties
@@ -90,6 +91,11 @@ private extension DetailClubReactor {
             .init(title: "동아리 멤버 관리", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
                 self.steps.accept(GCMSStep.clubStatusIsRequired(query: self.query , isHead: isHead))
+            }),
+            .init(title: "동아리 수정하기", style: .default, handler: { [weak self] _ in
+                guard let self = self else { return }
+                guard let club = self.currentState.clubDetail else { return }
+                self.steps.accept(GCMSStep.firstUpdateClubIsRequired(club: club))
             }),
             .init(title: title, style: .destructive, handler: { [weak self] _ in
                 
