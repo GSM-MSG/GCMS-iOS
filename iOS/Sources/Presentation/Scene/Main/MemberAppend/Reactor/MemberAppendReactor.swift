@@ -32,13 +32,14 @@ final class MemberAppendReactor: Reactor, Stepper {
         var addedUsers: [User]
         var isLoading: Bool
     }
-    private let closure: (([User]) -> Void)
     let initialState: State
+    private let closure: (([User]) -> Void)
+    private let clubType: ClubType
     
     // MARK: - Init
     init(
-        closure: @escaping (([User]) -> Void)
-
+        closure: @escaping (([User]) -> Void),
+        clubType: ClubType
     ) {
         initialState = State(   
             query: "",
@@ -46,8 +47,8 @@ final class MemberAppendReactor: Reactor, Stepper {
             addedUsers: [],
             isLoading: false
         )
-        
         self.closure = closure
+        self.clubType = clubType
     }
     
 }

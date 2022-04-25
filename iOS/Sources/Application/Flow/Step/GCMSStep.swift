@@ -32,7 +32,7 @@ enum GCMSStep: Step {
     case secondUpdateClubIsRequired(reactor: UpdateClubReactor)
     case thirdUpdateClubIsRequired(reactor: UpdateClubReactor)
     
-    case memberAppendIsRequired((([User]) -> Void))
+    case memberAppendIsRequired(closue: (([User]) -> Void), clubType: ClubType)
     case clubStatusIsRequired(query: ClubRequestQuery, isHead: Bool)
     
     // MARK: Administrator
