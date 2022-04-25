@@ -4,7 +4,7 @@ enum ClubAPI {
     case clubList(type: ClubType)
     case clubDetail(query: ClubRequestQuery)
     case createNewClub(req: NewClubRequest)
-    case updateClub(query: ClubRequestQuery, req: NewClubRequest)
+    case updateClub(req: UpdateClubRequest)
     case deleteClub(query: ClubRequestQuery)
     case clubMember(query: ClubRequestQuery)
     case clubApplicant(query: ClubRequestQuery)
@@ -76,19 +76,8 @@ extension ClubAPI: GCMSAPI {
                 "type": query.type.rawValue,
                 "userId": userId
             ], encoding: JSONEncoding.default)
-        case let .updateClub(query, req):
-            return .requestParameters(parameters: [
-                "q": query.name,
-                "type": query.type.rawValue,
-                "title": req.title,
-                "description": req.description,
-                "bannerUrl": req.bannerUrl,
-                "contact": req.contact,
-                "relatedLink": req.relatedLink,
-                "teacher": req.teacher,
-                "activities": req.activities,
-                "member": req.member
-            ], encoding: JSONEncoding.default)
+        case let .updateClub(req):
+            return .requestJSONEncodable(req)
         }
     }
     var jwtTokenType: JWTTokenType? {

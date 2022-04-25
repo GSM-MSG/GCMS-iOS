@@ -8,9 +8,8 @@ public final class UpdateClubUseCase {
     private let clubRepository: ClubRepository
     
     public func execute(
-        query: ClubRequestQuery,
-        req: NewClubRequest
+        req: UpdateClubRequest
     ) -> Completable{
-        clubRepository.updateClub(query: query, req: req)
+        clubRepository.updateClub(req: req)
     }
 }

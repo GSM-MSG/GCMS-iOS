@@ -15,8 +15,8 @@ final class DefaultClubRepository: ClubRepository {
         clubRemote.createNewClub(req: req)
     }
     
-    func updateClub(query: ClubRequestQuery, req: NewClubRequest) -> Completable {
-        clubRemote.updateClub(query: query, req: req)
+    func updateClub(req: UpdateClubRequest) -> Completable {
+        clubRemote.updateClub(req: req)
     }
     
     func deleteClub(query: ClubRequestQuery) -> Completable {

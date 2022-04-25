@@ -1,10 +1,21 @@
 public struct NewClubRequest: Encodable {
-    let title: String
-    let description: String
-    let bannerUrl: String
-    let contact: String
-    let relatedLink: [RelatedLinkDTO]
-    let teacher: String?
-    let activities: [String]
-    let member: [String]
+    public init(title: String, description: String, bannerUrl: String, contact: String, relatedLink: RelatedLinkDTO, teacher: String?, activities: [String], member: [String]) {
+        self.title = title
+        self.description = description
+        self.bannerUrl = bannerUrl
+        self.contact = contact
+        self.relatedLink = relatedLink
+        self.teacher = teacher
+        self.activities = activities
+        self.member = member
+    }
+    
+    public let title: String
+    public let description: String
+    public let bannerUrl: String
+    public let contact: String
+    public let relatedLink: RelatedLinkDTO
+    public let teacher: String?
+    public let activities: [String]
+    public let member: [String]
 }
