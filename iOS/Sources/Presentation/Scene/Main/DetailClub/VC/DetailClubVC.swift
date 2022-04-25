@@ -80,7 +80,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         }
         applyButton.snp.makeConstraints {
             $0.bottom.leading.trailing.equalToSuperview()
-            $0.height.equalTo(50)
+            $0.height.equalTo(view.safeAreaInsets.bottom + 56)
         }
         descriptionHeaderLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(30)
@@ -143,6 +143,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
     }
     override func configureNavigation() {
         self.navigationItem.setRightBarButton(statusButton, animated: true)
+        self.navigationItem.configBack()
         bannerImageView.kf.setImage(with: URL(string: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4") ?? .none)
     }
     

@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Major.svg",
+      "filename" : "GCMS_Major.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Major-1.svg",
+      "filename" : "GCMS_Major-1.svg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Major-2.svg",
+      "filename" : "GCMS_Major-2.svg",
       "idiom" : "universal",
       "scale" : "3x"
     }

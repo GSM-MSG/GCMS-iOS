@@ -31,10 +31,13 @@ public enum GCMSAsset {
   }
   public enum Images {
     public static let gcmsEditorial = GCMSImages(name: "GCMS_Editorial")
+    public static let gcmsEditorialGray = GCMSImages(name: "GCMS_Editorial_Gray")
     public static let gcmsFreedom = GCMSImages(name: "GCMS_Freedom")
+    public static let gcmsFreedomGray = GCMSImages(name: "GCMS_Freedom_gray")
     public static let gcmsgLogo = GCMSImages(name: "GCMS_GLogo")
     public static let gcmsMail = GCMSImages(name: "GCMS_Mail")
     public static let gcmsMajor = GCMSImages(name: "GCMS_Major")
+    public static let gcmsMajorGray = GCMSImages(name: "GCMS_Major_Gray")
     public static let gcmsNewClubPlaceholder = GCMSImages(name: "GCMS_NewClubPlaceholder")
     public static let gcmsWhaleLogo = GCMSImages(name: "GCMS_WhaleLogo")
   }
