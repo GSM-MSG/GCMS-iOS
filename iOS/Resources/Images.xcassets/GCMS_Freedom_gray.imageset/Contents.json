@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "GCMS_Freedom_Gray.svg",
+      "filename" : "GCMS_Freedom_gray.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "GCMS_Freedom_Gray-1.svg",
+      "filename" : "GCMS_Freedom_gray-1.svg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "GCMS_Freedom_Gray-2.svg",
+      "filename" : "GCMS_Freedom_gray-2.svg",
       "idiom" : "universal",
       "scale" : "3x"
     }

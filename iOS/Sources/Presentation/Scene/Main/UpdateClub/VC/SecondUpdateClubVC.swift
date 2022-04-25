@@ -41,7 +41,7 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
     private let teacherTextField = NewClubTextField(placeholder: "담당 선생님 성함을 입력해주세요.").then {
         $0.addHeaderSelectionLabel(title: "담당 선생님")
     }
-    private let nextBUtton = UIButton().then {
+    private let nextButton = UIButton().then {
         $0.setTitle("다음", for: .normal)
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
         $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
@@ -58,7 +58,7 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
     
     // MARK: - UI
     override func addView() {
-        view.addSubViews(scrollView, nextBUtton)
+        view.addSubViews(scrollView, nextButton)
         scrollView.addSubViews(progressBar, clubNameTextField, clubDescriptionHeaderLabel, clubDescriptionTextView, contactTextField, relatedLinkHeaderLabel, linkNameTextField, linkUrlTextField, teacherTextField)
     }
     override func setLayout() {
@@ -113,7 +113,7 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
             $0.height.equalTo(Metric.textFieldHeight)
             $0.bottom.equalToSuperview().offset(-71)
         }
-        nextBUtton.snp.makeConstraints {
+        nextButton.snp.makeConstraints {
             $0.bottom.leading.trailing.equalToSuperview()
             $0.height.equalTo(view.safeAreaInsets.bottom + 56)
         }
@@ -131,7 +131,7 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
             .skip(1)
             .drive(with: self) { owner, height in
                 UIView.animate(withDuration: 0) {
-                    owner.nextBUtton.snp.updateConstraints {
+                    owner.nextButton.snp.updateConstraints {
                         $0.bottom.equalToSuperview().offset(-height)
                     }
                 }
@@ -202,9 +202,20 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        nextBUtton.rx.tap
+        nextButton.rx.tap
             .map { Reactor.Action.secondNextButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+    }
+    override func bindState(reactor: UpdateClubReactor) {
+        let initialState = reactor.initialState
+        
+        clubNameTextField.text = initialState.title
+        clubDescriptionTextView.text = initialState.description
+        clubDescriptionTextView.textColor = GCMSAsset.Colors.gcmsGray1.color
+        contactTextField.text = initialState.contact
+        linkNameTextField.text = initialState.linkName
+        linkUrlTextField.text = initialState.linkUrl
+        teacherTextField.text = initialState.teacher
     }
 }

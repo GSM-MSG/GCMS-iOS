@@ -143,6 +143,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
     }
     override func configureNavigation() {
         self.navigationItem.setRightBarButton(statusButton, animated: true)
+        self.navigationItem.configBack()
         bannerImageView.kf.setImage(with: URL(string: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4") ?? .none)
     }
     

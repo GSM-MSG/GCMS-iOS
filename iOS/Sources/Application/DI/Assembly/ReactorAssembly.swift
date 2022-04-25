@@ -67,5 +67,11 @@ final class ReactorAssembly: Assembly {
                 fetchClubApplicantUseCase: r.resolve(FetchClubApplicantUseCase.self)!
             )
         }
+        
+        container.register(UpdateClubReactor.self) { r, club in
+            return UpdateClubReactor(
+                club: club
+            )
+        }
     }
 }

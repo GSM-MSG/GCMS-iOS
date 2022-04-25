@@ -73,5 +73,22 @@ final class FirstUpdateClubVC: BaseVC<UpdateClubReactor> {
         
         sharedState
             .map(\.clubType)
+            .bind(with: self) { owner, type in
+                switch type {
+                case .major:
+                    owner.majorButton.setImageState(isGray: false)
+                    owner.freedomButton.setImageState(isGray: true)
+                    owner.editorialButton.setImageState(isGray: true)
+                case .freedom:
+                    owner.majorButton.setImageState(isGray: true)
+                    owner.freedomButton.setImageState(isGray: false)
+                    owner.editorialButton.setImageState(isGray: true)
+                case .editorial:
+                    owner.majorButton.setImageState(isGray: true)
+                    owner.freedomButton.setImageState(isGray: true)
+                    owner.editorialButton.setImageState(isGray: false)
+                }
+            }
+            .disposed(by: disposeBag)
     }
 }

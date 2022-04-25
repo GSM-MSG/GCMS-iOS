@@ -216,13 +216,13 @@ extension UpdateClubReactor {
 private extension UpdateClubReactor {
     func secondNextButtonDidTap() -> Observable<Mutation> {
         var errorMessage = ""
-        if currentState.title.isEmpty {
+        if currentState.title.isEmpty && initialState.title.isEmpty {
             errorMessage = "동아리 이름을 입력해주세요!"
         }
         else if currentState.description.isEmpty || currentState.description == "동아리 설명을 입력해주세요." {
             errorMessage = "동아리 설명을 입력해주세요!"
         }
-        else if currentState.contact.isEmpty {
+        else if currentState.contact.isEmpty && initialState.contact.isEmpty {
             errorMessage = "연락처를 입력해주세요!"
         } else {
             steps.accept(GCMSStep.thirdUpdateClubIsRequired(reactor: self))
