@@ -10,7 +10,6 @@ final class MyPageReactor: Reactor, Stepper {
     
     private let disposeBag: DisposeBag = .init()
     
-    private let logoutUseCase: LogoutUseCase
     
     // MARK: - Reactor
     enum Action {
@@ -27,16 +26,20 @@ final class MyPageReactor: Reactor, Stepper {
         var isLoading: Bool
         var user: UserProfile?
     }
+    private let fetchProfileUseCase: FetchProfileUseCase
+    private let logoutUseCase: LogoutUseCase
     let initialState: State
     
     
     // MARK: - Init
     init(
-        logoutUseCase: LogoutUseCase
+        logoutUseCase: LogoutUseCase,
+        fetchProfileUseCase: FetchProfileUseCase
     ) {
         initialState = State(
             isLoading: false
         )
+        self.fetchProfileUseCase = fetchProfileUseCase
         self.logoutUseCase = logoutUseCase
     }
     

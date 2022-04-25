@@ -26,7 +26,8 @@ final class ReactorAssembly: Assembly {
         
         container.register(MyPageReactor.self) { r in
             return MyPageReactor(
-                logoutUseCase: r.resolve(LogoutUseCase.self)!
+                logoutUseCase: r.resolve(LogoutUseCase.self)!,
+                fetchProfileUseCase: r.resolve(FetchProfileUseCase.self)!
             )
         }
         
@@ -50,8 +51,10 @@ final class ReactorAssembly: Assembly {
             )
         }
         
-        container.register(NewClubReactor.self) { _ in
-            return NewClubReactor()
+        container.register(NewClubReactor.self) { r in
+            return NewClubReactor(
+                createNewClubUseCase: r.resolve(CreateNewClubUseCase.self)!
+            )
         }
         
         container.register(MemberAppendReactor.self) { r, closure, clubType in

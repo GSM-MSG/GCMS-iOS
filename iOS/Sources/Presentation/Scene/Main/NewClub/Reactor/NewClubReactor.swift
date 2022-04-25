@@ -65,10 +65,13 @@ final class NewClubReactor: Reactor, Stepper {
         var clubType: ClubType
         var isLoading: Bool
     }
+    private let createNewClubUseCase: CreateNewClubUseCase
     let initialState: State
     
     // MARK: - Init
-    init() {
+    init(
+        createNewClubUseCase: CreateNewClubUseCase
+    ) {
         initialState = State(
             title: "",
             description: "",
@@ -79,6 +82,7 @@ final class NewClubReactor: Reactor, Stepper {
             clubType: .major,
             isLoading: false
         )
+        self.createNewClubUseCase = createNewClubUseCase
     }
     
 }
