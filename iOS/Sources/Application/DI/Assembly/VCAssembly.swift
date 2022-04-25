@@ -18,27 +18,27 @@ final class VCAssembly: Assembly {
         }
         
         container.register(MyPageVC.self) { r in
-            return MyPageVC(reactor: r.resolve(MyPageReactor.self))
+            MyPageVC(reactor: r.resolve(MyPageReactor.self))
         }
         
         container.register(LoginVC.self) { r in
-            return LoginVC(reactor: r.resolve(LoginReactor.self))
+            LoginVC(reactor: r.resolve(LoginReactor.self))
         }
         
         container.register(SignUpVC.self) { r in
-            return SignUpVC(reactor: r.resolve(SignUpReactor.self))
+            SignUpVC(reactor: r.resolve(SignUpReactor.self))
         }
         
         container.register(FirstNewClubVC.self) { r in
-            return FirstNewClubVC(reactor: r.resolve(NewClubReactor.self))
+            FirstNewClubVC(reactor: r.resolve(NewClubReactor.self))
         }
         
         container.register(SecondNewClubVC.self) { _, reactor in
-            return SecondNewClubVC(reactor: reactor)
+            SecondNewClubVC(reactor: reactor)
         }
         
         container.register(ThirdNewClubVC.self) { _, reactor in
-            return ThirdNewClubVC(reactor: reactor)
+            ThirdNewClubVC(reactor: reactor)
         }
     }
 }

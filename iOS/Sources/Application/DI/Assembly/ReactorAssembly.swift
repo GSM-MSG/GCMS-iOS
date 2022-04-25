@@ -5,19 +5,19 @@ import Service
 final class ReactorAssembly: Assembly {
     func assemble(container: Container) {
         container.register(OnBoardingReactor.self) { r in
-            return OnBoardingReactor(
+             OnBoardingReactor(
                 loginUseCase: r.resolve(LoginUseCase.self)!
             )
         }
         
         container.register(HomeReactor.self) { r in
-            return HomeReactor(
+             HomeReactor(
                 fetchClubListsUseCase: r.resolve(FetchClubListUseCase.self)!
             )
         }
         
         container.register(DetailClubReactor.self) { r, query in
-            return DetailClubReactor(
+             DetailClubReactor(
                 query: query,
                 deleteClubUseCase: r.resolve(DeleteClubUseCase.self)!,
                 fetchDetailClubUseCase: r.resolve(FetchDetailClubUseCase.self)!
@@ -25,40 +25,42 @@ final class ReactorAssembly: Assembly {
         }
         
         container.register(MyPageReactor.self) { r in
-            return MyPageReactor(
+             MyPageReactor(
                 logoutUseCase: r.resolve(LogoutUseCase.self)!,
-                fetchProfileUseCase: r.resolve(FetchProfileUseCase.self)!
+                fetchProfileUseCase: r.resolve(FetchProfileUseCase.self)!,
+                uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!
             )
         }
         
         container.register(LoginReactor.self) { r in
-            return LoginReactor(
+             LoginReactor(
                 loginUseCase: r.resolve(LoginUseCase.self)!
             )
         }
         
         container.register(SignUpReactor.self) { r in
-            return SignUpReactor(
+             SignUpReactor(
                 sendVerifyUseCase: r.resolve(SendVerifyUseCase.self)!,
                 registerUseCase: r.resolve(RegisterUseCase.self)!
             )
         }
         
         container.register(CertificationReactor.self) { r, email in
-            return CertificationReactor(
+             CertificationReactor(
                 checkIsVerifiedUseCase: r.resolve(CheckIsVerifiedUseCase.self)!,
                 email: email
             )
         }
         
         container.register(NewClubReactor.self) { r in
-            return NewClubReactor(
-                createNewClubUseCase: r.resolve(CreateNewClubUseCase.self)!
+             NewClubReactor(
+                createNewClubUseCase: r.resolve(CreateNewClubUseCase.self)!,
+                uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!
             )
         }
         
         container.register(MemberAppendReactor.self) { r, closure, clubType in
-            return MemberAppendReactor(
+             MemberAppendReactor(
                 closure: closure,
                 clubType: clubType,
                 searchUserUseCase: r.resolve(SearchUserUseCase.self)!
@@ -66,7 +68,7 @@ final class ReactorAssembly: Assembly {
         }
         
         container.register(ClubStatusReactor.self) { r, query in
-            return ClubStatusReactor(
+             ClubStatusReactor(
                 query: query,
                 clubOpenUseCase: r.resolve(ClubOpenUseCase.self)!,
                 clubCloseUseCase: r.resolve(ClubCloseUseCase.self)!,
@@ -76,9 +78,10 @@ final class ReactorAssembly: Assembly {
         }
         
         container.register(UpdateClubReactor.self) { r, club in
-            return UpdateClubReactor(
+             UpdateClubReactor(
                 club: club,
-                updateClubUseCase: r.resolve(UpdateClubUseCase.self)!
+                updateClubUseCase: r.resolve(UpdateClubUseCase.self)!,
+                uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!
             )
         }
     }

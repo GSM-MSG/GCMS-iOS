@@ -26,21 +26,23 @@ final class MyPageReactor: Reactor, Stepper {
         var isLoading: Bool
         var user: UserProfile?
     }
+    let initialState: State
     private let fetchProfileUseCase: FetchProfileUseCase
     private let logoutUseCase: LogoutUseCase
-    let initialState: State
-    
+    private let uploadImagesUseCase: UploadImagesUseCase
     
     // MARK: - Init
     init(
         logoutUseCase: LogoutUseCase,
-        fetchProfileUseCase: FetchProfileUseCase
+        fetchProfileUseCase: FetchProfileUseCase,
+        uploadImagesUseCase: UploadImagesUseCase
     ) {
         initialState = State(
             isLoading: false
         )
-        self.fetchProfileUseCase = fetchProfileUseCase
         self.logoutUseCase = logoutUseCase
+        self.fetchProfileUseCase = fetchProfileUseCase
+        self.uploadImagesUseCase = uploadImagesUseCase
     }
     
 }
