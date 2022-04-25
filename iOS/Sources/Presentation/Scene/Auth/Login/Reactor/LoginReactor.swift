@@ -105,8 +105,8 @@ private extension LoginReactor {
         let login = loginUseCase.execute(req: LoginRequest(email: currentState.email, password: currentState.password))
             .do(onError: { [weak self] _ in
                 self?.action.onNext(.loginDidFailed)
-            }, onCompleted: {
-                self.steps.accept(GCMSStep.clubListIsRequired)
+            }, onCompleted: { [weak self] in
+                self?.steps.accept(GCMSStep.clubListIsRequired)
             })
             .andThen(Single.just(Mutation.setIsLoginFailure(true)))
             .asObservable()
