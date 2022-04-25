@@ -73,9 +73,13 @@ final class UpdateClubReactor: Reactor, Stepper {
     let initialState: State
     private let legacyMember: [User]
     private let legacyImageUrl: [Data: String]
+    private let updateClubUseCase: UpdateClubUseCase
     
     // MARK: - Init
-    init(club: Club) {
+    init(
+        club: Club,
+        updateClubUseCase: UpdateClubUseCase
+    ) {
         self.legacyMember = club.member
         self.legacyImageUrl = club.activities.reduce(into: [Data:String](), { partialResult, url in
             if let data = try? Data(contentsOf: URL(string: url)!) {
@@ -100,6 +104,7 @@ final class UpdateClubReactor: Reactor, Stepper {
             removedImage: [],
             isLoading: false
         )
+        self.updateClubUseCase = updateClubUseCase
     }
     
 }
