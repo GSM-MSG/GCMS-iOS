@@ -30,6 +30,7 @@ final class DetailClubReactor: Reactor, Stepper {
     private let deleteClubUseCase: DeleteClubUseCase
     private let fetchDetailClubUseCase: FetchDetailClubUseCase
     
+    
     // MARK: - Init
     init(
         query: ClubRequestQuery,

@@ -77,7 +77,8 @@ final class ReactorAssembly: Assembly {
         
         container.register(UpdateClubReactor.self) { r, club in
             return UpdateClubReactor(
-                club: club
+                club: club,
+                updateClubUseCase: r.resolve(UpdateClubUseCase.self)!
             )
         }
     }

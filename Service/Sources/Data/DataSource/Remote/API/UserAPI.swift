@@ -47,7 +47,7 @@ extension UserAPI: GCMSAPI {
 
         case let .exit(query):
             return .requestParameters(parameters: [
-                "q": query.name,
+                "q": query.q,
                 "type": query.type.rawValue
             ], encoding: JSONEncoding.default)
         default:
