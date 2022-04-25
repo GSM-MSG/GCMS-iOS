@@ -12,7 +12,7 @@ final class ClubTypeCardButton: UIButton {
         super.init(frame: .zero)
         switch type {
         case .major:
-            setImage(isGray ? GCMSAsset.Images.gcmsMajorGray.image : GCMSAsset.Images.gcmsMajor.image , for: .normal)
+            setImage(isGray ? GCMSAsset.Images.gcmsMajorGray.image : GCMSAsset.Images.gcmsMajor.image, for: .normal)
         case .freedom:
             setImage(isGray ? GCMSAsset.Images.gcmsFreedomGray.image : GCMSAsset.Images.gcmsFreedom.image, for: .normal)
         case .editorial:
@@ -27,7 +27,7 @@ final class ClubTypeCardButton: UIButton {
     public func setImageState(isGray: Bool) {
         switch type {
         case .major:
-            setImage(isGray ? GCMSAsset.Images.gcmsMajorGray.image : GCMSAsset.Images.gcmsMajor.image , for: .normal)
+            setImage(isGray ? GCMSAsset.Images.gcmsMajorGray.image : GCMSAsset.Images.gcmsMajor.image, for: .normal)
         case .freedom:
             setImage(isGray ? GCMSAsset.Images.gcmsFreedomGray.image : GCMSAsset.Images.gcmsFreedom.image, for: .normal)
         case .editorial:
