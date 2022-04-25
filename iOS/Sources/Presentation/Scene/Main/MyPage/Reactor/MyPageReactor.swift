@@ -30,12 +30,14 @@ final class MyPageReactor: Reactor, Stepper {
     private let fetchProfileUseCase: FetchProfileUseCase
     private let logoutUseCase: LogoutUseCase
     private let uploadImagesUseCase: UploadImagesUseCase
+    private let updateProfileImageUseCase: UpdateProfileImageUseCase
     
     // MARK: - Init
     init(
         logoutUseCase: LogoutUseCase,
         fetchProfileUseCase: FetchProfileUseCase,
-        uploadImagesUseCase: UploadImagesUseCase
+        uploadImagesUseCase: UploadImagesUseCase,
+        updateProfileImageUseCase: UpdateProfileImageUseCase
     ) {
         initialState = State(
             isLoading: false
@@ -43,6 +45,7 @@ final class MyPageReactor: Reactor, Stepper {
         self.logoutUseCase = logoutUseCase
         self.fetchProfileUseCase = fetchProfileUseCase
         self.uploadImagesUseCase = uploadImagesUseCase
+        self.updateProfileImageUseCase = updateProfileImageUseCase
     }
     
 }

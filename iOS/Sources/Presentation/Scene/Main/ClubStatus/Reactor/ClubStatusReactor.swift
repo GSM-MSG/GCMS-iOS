@@ -35,6 +35,10 @@ final class ClubStatusReactor: Reactor, Stepper {
     private let clubCloseUseCase: ClubCloseUseCase
     private let fetchClubMemberUseCase: FetchClubMemberUseCase
     private let fetchClubApplicantUseCase: FetchClubApplicantUseCase
+    private let userAcceptUseCase: UserAcceptUseCase
+    private let userRejectUseCase: UserRejectUseCase
+    private let clubDelegationUseCase: ClubDelegationUseCase
+    private let userKickUseCase: UserKickUseCase
     
     // MARK: - Init
     init(
@@ -42,7 +46,11 @@ final class ClubStatusReactor: Reactor, Stepper {
         clubOpenUseCase: ClubOpenUseCase,
         clubCloseUseCase: ClubCloseUseCase,
         fetchClubMemberUseCase: FetchClubMemberUseCase,
-        fetchClubApplicantUseCase: FetchClubApplicantUseCase
+        fetchClubApplicantUseCase: FetchClubApplicantUseCase,
+        userAcceptUseCase: UserAcceptUseCase,
+        userRejectUseCase: UserRejectUseCase,
+        clubDelegationUseCase: ClubDelegationUseCase,
+        userKickUseCase: UserKickUseCase
     ) {
         initialState = State(
             isLoading: false,
@@ -54,6 +62,10 @@ final class ClubStatusReactor: Reactor, Stepper {
         self.clubCloseUseCase = clubCloseUseCase
         self.fetchClubMemberUseCase = fetchClubMemberUseCase
         self.fetchClubApplicantUseCase = fetchClubApplicantUseCase
+        self.userAcceptUseCase = userAcceptUseCase
+        self.userRejectUseCase = userRejectUseCase
+        self.clubDelegationUseCase = clubDelegationUseCase
+        self.userKickUseCase = userKickUseCase
     }
     
 }

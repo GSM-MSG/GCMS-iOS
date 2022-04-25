@@ -73,7 +73,11 @@ final class ReactorAssembly: Assembly {
                 clubOpenUseCase: r.resolve(ClubOpenUseCase.self)!,
                 clubCloseUseCase: r.resolve(ClubCloseUseCase.self)!,
                 fetchClubMemberUseCase: r.resolve(FetchClubMemberUseCase.self)!,
-                fetchClubApplicantUseCase: r.resolve(FetchClubApplicantUseCase.self)!
+                fetchClubApplicantUseCase: r.resolve(FetchClubApplicantUseCase.self)!,
+                userAcceptUseCase: r.resolve(UserAcceptUseCase.self)!,
+                userRejectUseCase: r.resolve(UserRejectUseCase.self)!,
+                clubDelegationUseCase: r.resolve(ClubDelegationUseCase.self)!,
+                userKickUseCase: r.resolve(UserKickUseCase.self)!
             )
         }
         
