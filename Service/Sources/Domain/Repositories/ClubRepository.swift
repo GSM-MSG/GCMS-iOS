@@ -13,4 +13,7 @@ public protocol ClubRepository {
     func clubOpen(query: ClubRequestQuery) -> Completable
     func clubClose(query: ClubRequestQuery) -> Completable
     func userKick(query: ClubRequestQuery, userId: String) -> Completable
+    func apply(query: ClubRequestQuery) -> Completable
+    func cancel(query: ClubRequestQuery) -> Completable
+    func delegation(query: ClubRequestQuery, userId: String) -> Completable
 }

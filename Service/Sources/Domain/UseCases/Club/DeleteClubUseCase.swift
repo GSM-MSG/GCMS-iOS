@@ -1,6 +1,6 @@
 import RxSwift
 
-public final class DeleteClubUseCase {
+public struct DeleteClubUseCase {
     public init(clubRepository: ClubRepository) {
         self.clubRepository = clubRepository
     }

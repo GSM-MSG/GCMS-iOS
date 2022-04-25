@@ -1,13 +1,13 @@
 import RxSwift
 
-public final class ClubCloseUseCase {
+public struct ClubCloseUseCase {
     public init(clubRepository: ClubRepository) {
         self.clubRepository = clubRepository
     }
     
     private let clubRepository: ClubRepository
     
-    func execute(query: ClubRequestQuery) -> Completable{
+    public func execute(query: ClubRequestQuery) -> Completable{
         clubRepository.clubClose(query: query)
     }
 }

@@ -56,4 +56,16 @@ final class ClubRemote: BaseRemote<ClubAPI> {
         request(.userKick(query: query, userId: userId))
             .asCompletable()
     }
+    func apply(query: ClubRequestQuery) -> Completable {
+        request(.apply(query: query))
+            .asCompletable()
+    }
+    func cancel(query: ClubRequestQuery) -> Completable {
+        request(.cancel(query: query))
+            .asCompletable()
+    }
+    func delegation(query: ClubRequestQuery, userId: String) -> Completable {
+        request(.delegation(query: query, userId: userId))
+            .asCompletable()
+    }
 }
