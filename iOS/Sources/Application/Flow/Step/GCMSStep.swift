@@ -21,13 +21,17 @@ enum GCMSStep: Step {
     // MARK: Main
     case clubListIsRequired
     case clubDetailIsRequired(query: ClubRequestQuery)
+    
+    // MARK: NewClub
     case firstNewClubIsRequired
     case secondNewClubIsRequired(reactor: NewClubReactor)
     case thirdNewClubIsRequired(reactor: NewClubReactor)
     
+    // MARK: updateClub
     case firstUpdateClubIsRequired(club: Club)
     case secondUpdateClubIsRequired(reactor: UpdateClubReactor)
     case thirdUpdateClubIsRequired(reactor: UpdateClubReactor)
+    
     case memberAppendIsRequired((([User]) -> Void))
     case clubStatusIsRequired(query: ClubRequestQuery, isHead: Bool)
     
