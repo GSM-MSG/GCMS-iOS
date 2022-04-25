@@ -1,6 +1,6 @@
 import RxSwift
 
-public final class SendVerifyUseCase {
+public struct SendVerifyUseCase {
     public init(authRepository: AuthRepository) {
         self.authRepository = authRepository
     }

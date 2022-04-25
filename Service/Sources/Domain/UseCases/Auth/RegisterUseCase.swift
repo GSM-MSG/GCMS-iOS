@@ -1,6 +1,6 @@
 import RxSwift
 
-public final class RegisterUseCase {
+public struct RegisterUseCase {
     public init(authRepository: AuthRepository) {
         self.authRepository = authRepository
     }
