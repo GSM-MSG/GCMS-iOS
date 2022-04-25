@@ -1,6 +1,6 @@
-struct RelatedLinkDTO: Codable {
-    let name: String
-    let url: String
+public struct RelatedLinkDTO: Codable {
+    public let name: String
+    public let url: String
 }
 
 extension RelatedLinkDTO {
