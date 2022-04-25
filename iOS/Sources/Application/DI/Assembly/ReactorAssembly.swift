@@ -54,8 +54,12 @@ final class ReactorAssembly: Assembly {
             return NewClubReactor()
         }
         
-        container.register(MemberAppendReactor.self) { _, closure, clubType in
-            return MemberAppendReactor(closure: closure, clubType: clubType)
+        container.register(MemberAppendReactor.self) { r, closure, clubType in
+            return MemberAppendReactor(
+                closure: closure,
+                clubType: clubType,
+                searchUserUseCase: r.resolve(SearchUserUseCase.self)!
+            )
         }
         
         container.register(ClubStatusReactor.self) { r, query in

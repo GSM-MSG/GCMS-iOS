@@ -35,11 +35,13 @@ final class MemberAppendReactor: Reactor, Stepper {
     let initialState: State
     private let closure: (([User]) -> Void)
     private let clubType: ClubType
+    private let searchUserUseCase: SearchUserUseCase
     
     // MARK: - Init
     init(
         closure: @escaping (([User]) -> Void),
-        clubType: ClubType
+        clubType: ClubType,
+        searchUserUseCase: SearchUserUseCase
     ) {
         initialState = State(   
             query: "",
@@ -49,6 +51,7 @@ final class MemberAppendReactor: Reactor, Stepper {
         )
         self.closure = closure
         self.clubType = clubType
+        self.searchUserUseCase = searchUserUseCase
     }
     
 }
