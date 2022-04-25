@@ -5,7 +5,7 @@ final class UserRemote: BaseRemote<UserAPI> {
     private override init() {}
     
     func fetchProfile() -> Single<UserProfile> {
-        request(.userInfo)
+        request(.myProfile)
             .map(UserMyProfileResponse.self)
             .map { $0.toDomain() }
     }
