@@ -106,6 +106,11 @@ public final class UseCaseAssembly: Assembly {
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
+        container.register(UpdateClubUseCase.self) { r in
+            UpdateClubUseCase(
+                clubRepository: r.resolve(ClubRepository.self)!
+            )
+        }
         
         // MARK: - User
         container.register(FetchProfileUseCase.self) { r in

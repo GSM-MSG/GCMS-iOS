@@ -70,7 +70,7 @@ final class ThirdUpdateClubVC: BaseVC<UpdateClubReactor> {
     private var activityPHConfiguration: PHPickerConfiguration = {
         var config = PHPickerConfiguration()
         config.filter = .images
-        config.selectionLimit = 1
+        config.selectionLimit = 4
         return config
     }()
     private lazy var activityPHPickerController = PHPickerViewController(configuration: activityPHConfiguration)
