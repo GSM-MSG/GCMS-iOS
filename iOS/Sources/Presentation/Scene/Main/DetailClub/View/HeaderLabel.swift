@@ -11,4 +11,8 @@ final class HeaderLabel: UILabel {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    public func setTitle(title: String?) {
+        self.text = title
+    }
 }

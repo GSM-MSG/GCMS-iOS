@@ -16,6 +16,7 @@ final class DetailClubReactor: Reactor, Stepper {
         case viewDidLoad
         case updateLoading(Bool)
         case statusButtonDidTap
+        case linkButtonDidTap
     }
     enum Mutation {
         case setClub(Club)
@@ -71,6 +72,8 @@ extension DetailClubReactor {
             return .just(.setIsLoading(load))
         case .statusButtonDidTap:
             return statusButtonDidTap()
+        case .linkButtonDidTap:
+            UIApplication.shared.open(URL(string: currentState.clubDetail?.relatedLink?.url ?? "")!)
         }
         return .empty()
     }

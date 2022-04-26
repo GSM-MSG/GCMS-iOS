@@ -91,8 +91,8 @@ final class UpdateClubReactor: Reactor, Stepper {
         initialState = State(
             title: club.title,
             description: club.description,
-            linkName: club.relatedLink.first?.name,
-            linkUrl: club.relatedLink.first?.url,
+            linkName: club.relatedLink?.name,
+            linkUrl: club.relatedLink?.url,
             contact: club.contact,
             teacher: club.teacher,
             isBanner: true,

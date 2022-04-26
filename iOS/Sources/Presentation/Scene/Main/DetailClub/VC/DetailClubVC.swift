@@ -27,6 +27,14 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         $0.textColor = GCMSAsset.Colors.gcmsGray1.color
         $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 13)
     }
+    private let relatedLinkHeaderLabel = HeaderLabel(title: "")
+    private let relatedLinkButton = UIButton().then {
+        $0.setTitleColor(.init(red: 0.18, green: 0.36, blue: 1, alpha: 1), for: .normal)
+        $0.backgroundColor = .white
+        $0.layer.cornerRadius = 5
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 13)
+        $0.titleLabel?.textAlignment = .left
+    }
     private let activityHeaderLabel = HeaderLabel(title: "동아리 활동")
     private let activityView = BTImageView(aligns: [2,2], axis: .horizontal).then {
         $0.spacing = 15
@@ -62,7 +70,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
     override func addView() {
         view.addSubViews(contentView, applyButton)
         contentView.addSubViews(bannerImageView, containerView)
-        containerView.addSubViews(descriptionHeaderLabel, descriptionLabel, activityHeaderLabel, activityView, memberHeaderLabel, memberCollectionView, headHeaderLabel, headView, teacherHeaderLabel, teacherView, contactHeaderLabel, contactDescriptionLabel)
+        containerView.addSubViews(descriptionHeaderLabel, descriptionLabel, relatedLinkHeaderLabel, relatedLinkButton, activityHeaderLabel, activityView, memberHeaderLabel, memberCollectionView, headHeaderLabel, headView, teacherHeaderLabel, teacherView, contactHeaderLabel, contactDescriptionLabel)
     }
     override func setLayout() {
         contentView.snp.makeConstraints {
@@ -90,8 +98,16 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             $0.top.equalTo(descriptionHeaderLabel.snp.bottom).offset(Metric.headerContentSpace)
             $0.leading.trailing.equalTo(descriptionHeaderLabel)
         }
-        activityHeaderLabel.snp.makeConstraints {
+        relatedLinkHeaderLabel.snp.makeConstraints {
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(Metric.sectionSpace)
+            $0.leading.trailing.equalTo(descriptionLabel)
+        }
+        relatedLinkButton.snp.makeConstraints {
+            $0.top.equalTo(relatedLinkHeaderLabel.snp.bottom).offset(Metric.headerContentSpace)
+            $0.leading.trailing.equalTo(relatedLinkHeaderLabel)
+        }
+        activityHeaderLabel.snp.makeConstraints {
+            $0.top.equalTo(relatedLinkButton.snp.bottom).offset(Metric.sectionSpace)
             $0.leading.trailing.equalTo(descriptionLabel)
         }
         activityView.snp.makeConstraints {
@@ -153,6 +169,11 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             .map { Reactor.Action.statusButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        relatedLinkButton.rx.tap
+            .map { Reactor.Action.linkButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     override func bindAction(reactor: DetailClubReactor) {
         self.rx.viewDidLoad
@@ -170,6 +191,13 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             .bind { owner, item in
                 owner.descriptionLabel.text = item.description
                 owner.activityView.setImages(urls: item.activities)
+                if let relatedLink = item.relatedLink {
+                    owner.relatedLinkHeaderLabel.setTitle(title: relatedLink.name)
+                    owner.relatedLinkButton.setTitle(relatedLink.url, for: .normal)
+                    owner.relatedLinkButton.isHidden = false
+                } else {
+                    owner.relatedLinkButton.isHidden = true
+                }
                 if item.activities.isEmpty {
                     owner.activityView.snp.updateConstraints {
                         $0.height.equalTo(0)
