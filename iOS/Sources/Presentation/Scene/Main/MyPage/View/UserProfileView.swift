@@ -5,9 +5,11 @@ import Kingfisher
 import Then
 import RxSwift
 import RxCocoa
+import RxGesture
 
 protocol UserProfileViewDelegate: AnyObject {
     func logoutButtonDidTap()
+    func profileImageButtonDidTap()
 }
 
 final class UserProfileView: UIView {
@@ -123,6 +125,13 @@ private extension UserProfileView {
         logoutButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.delegate?.logoutButtonDidTap()
+            }
+            .disposed(by: disposeBag)
+        
+        userProfileImageView.rx.tapGesture()
+            .when(.recognized)
+            .bind(with: self) { owner, _ in
+                owner.delegate?.profileImageButtonDidTap()
             }
             .disposed(by: disposeBag)
     }

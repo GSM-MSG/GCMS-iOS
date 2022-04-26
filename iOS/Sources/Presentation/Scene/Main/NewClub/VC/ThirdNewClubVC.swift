@@ -4,6 +4,7 @@ import Reusable
 import RxGesture
 import RxSwift
 import RxDataSources
+import PhotosUI
 
 final class ThirdNewClubVC: BaseVC<NewClubReactor> {
     // MARK: - Metric
@@ -58,14 +59,25 @@ final class ThirdNewClubVC: BaseVC<NewClubReactor> {
         $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
     }
     
-    private let imagePicker = UIImagePickerController().then {
-        $0.allowsEditing = true
-        $0.sourceType = .photoLibrary
-    }
+    private var bannerPHConfiguration: PHPickerConfiguration = {
+        var config = PHPickerConfiguration()
+        config.filter = .images
+        config.selectionLimit = 1
+        return config
+    }()
+    private lazy var bannerPHPickerController = PHPickerViewController(configuration: bannerPHConfiguration)
+    
+    private var activityPHConfiguration: PHPickerConfiguration = {
+        var config = PHPickerConfiguration()
+        config.filter = .images
+        config.selectionLimit = 1
+        return config
+    }()
+    private lazy var activityPHPickerController = PHPickerViewController(configuration: activityPHConfiguration)
     
     // MARK: - UI
     override func setup() {
-        imagePicker.delegate = self
+        [bannerPHPickerController, activityPHPickerController].forEach { $0.delegate = self }
     }
     override func addView() {
         view.addSubViews(scrollView, completeButton)
@@ -140,14 +152,14 @@ final class ThirdNewClubVC: BaseVC<NewClubReactor> {
             .when(.recognized)
             .bind(with: self) { owner, _ in
                 owner.reactor?.action.onNext(.bannerDidTap)
-                owner.present(owner.imagePicker, animated: true)
+                owner.present(owner.bannerPHPickerController, animated: true)
             }
             .disposed(by: disposeBag)
         
         clubActivityAppendButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.reactor?.action.onNext(.activityAppendButtonDidTap)
-                owner.present(owner.imagePicker, animated: true)
+                owner.present(owner.activityPHPickerController, animated: true)
             }
             .disposed(by: disposeBag)
         
@@ -218,19 +230,23 @@ final class ThirdNewClubVC: BaseVC<NewClubReactor> {
     }
 }
 
-extension ThirdNewClubVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        var imageData: Data = .init()
-        if let editedImage = info[.editedImage] as? UIImage {
-            imageData = editedImage.pngData() ?? .init()
-        } else if let image = info[.originalImage] as? UIImage {
-            imageData = image.pngData() ?? .init()
+extension ThirdUpdateClubVC: PHPickerViewControllerDelegate {
+    func picker(
+        _ picker: PHPickerViewController,
+        didFinishPicking results: [PHPickerResult]
+    ) {
+        picker.dismiss(animated: true)
+        let providers = results.compactMap { $0.itemProvider }
+        providers.forEach { provider in
+            provider.loadDataRepresentation(forTypeIdentifier: "public.image") { [weak self] data, err in
+                if let err = err {
+                    print(err.localizedDescription)
+                    return
+                }
+                if let data = data {
+                    self?.reactor?.action.onNext(.imageDidSelect(data))
+                }
+            }
         }
-        dismiss(animated: true) { [weak self] in
-            self?.reactor?.action.onNext(.imageDidSelect(imageData))
-        }
-    }
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        dismiss(animated: true)
     }
 }

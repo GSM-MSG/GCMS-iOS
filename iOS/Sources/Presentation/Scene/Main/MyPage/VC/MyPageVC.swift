@@ -6,6 +6,8 @@ import RxCocoa
 import RxDataSources
 import RxGesture
 import Service
+import PhotosUI
+import Then
 
 final class MyPageVC: BaseVC<MyPageReactor> {
     // MARK: - Properties
@@ -35,10 +37,18 @@ final class MyPageVC: BaseVC<MyPageReactor> {
     private let majorClubView = ClubView()
     private let freedomLabel = HeaderLabel(title: "내가 속한 자율 동아리")
     private let freedomClubView = ClubView()
+    private var PHConfiguration: PHPickerConfiguration = {
+        var config = PHPickerConfiguration()
+        config.filter = .images
+        config.selectionLimit = 1
+        return config
+    }()
+    private lazy var PHPickerController = PHPickerViewController(configuration: PHConfiguration)
     
     // MARK: - UI
     override func setup() {
         userProfileView.delegate = self
+        PHPickerController.delegate = self
     }
     override func addView() {
         view.addSubViews(scrollView)
@@ -173,5 +183,29 @@ final class MyPageVC: BaseVC<MyPageReactor> {
 extension MyPageVC: UserProfileViewDelegate {
     func logoutButtonDidTap() {
         reactor?.action.onNext(.logoutButtonDidTap)
+    }
+    func profileImageButtonDidTap() {
+        self.present(PHPickerController, animated: true)
+    }
+}
+
+extension MyPageVC: PHPickerViewControllerDelegate {
+    func picker(
+        _ picker: PHPickerViewController,
+        didFinishPicking results: [PHPickerResult]
+    ) {
+        let item = results.first?.itemProvider
+        
+        picker.dismiss(animated: true)
+        
+        item?.loadDataRepresentation(forTypeIdentifier: "public.image", completionHandler: { [weak self] data, err in
+            if let err = err {
+                print(err.localizedDescription)
+                return
+            }
+            if let data = data {
+                self?.reactor?.action.onNext(.profileImageDidTap(data))
+            }
+        })
     }
 }

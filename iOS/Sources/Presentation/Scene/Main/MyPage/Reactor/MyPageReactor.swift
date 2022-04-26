@@ -3,6 +3,7 @@ import RxFlow
 import RxSwift
 import RxRelay
 import Service
+import Foundation
 
 final class MyPageReactor: Reactor, Stepper {
     // MARK: - Properties
@@ -17,6 +18,7 @@ final class MyPageReactor: Reactor, Stepper {
         case logoutButtonDidTap
         case updateLoading(Bool)
         case clubDidTap(ClubRequestQuery)
+        case profileImageDidTap(Data)
     }
     enum Mutation {
         case setUser(UserProfile)
@@ -62,6 +64,8 @@ extension MyPageReactor {
             logoutButtonDidTap()
         case let .clubDidTap(q):
             steps.accept(GCMSStep.clubDetailIsRequired(query: q))
+        case let .profileImageDidTap(data):
+            break
         }
         return .empty()
     }

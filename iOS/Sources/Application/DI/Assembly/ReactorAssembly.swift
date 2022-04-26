@@ -28,7 +28,8 @@ final class ReactorAssembly: Assembly {
              MyPageReactor(
                 logoutUseCase: r.resolve(LogoutUseCase.self)!,
                 fetchProfileUseCase: r.resolve(FetchProfileUseCase.self)!,
-                uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!
+                uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!,
+                updateProfileImageUseCase: r.resolve(UpdateProfileImageUseCase.self)!
             )
         }
         
