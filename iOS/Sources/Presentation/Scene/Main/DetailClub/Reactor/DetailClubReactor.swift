@@ -29,13 +29,22 @@ final class DetailClubReactor: Reactor, Stepper {
     private let query: ClubRequestQuery
     private let deleteClubUseCase: DeleteClubUseCase
     private let fetchDetailClubUseCase: FetchDetailClubUseCase
-    
+    private let clubExitUseCase: ClubExitUseCase
+    private let clubApplyUseCase: ClubApplyUseCase
+    private let clubCancelUseCase: ClubCancelUseCase
+    private let clubOpenUseCase: ClubOpenUseCase
+    private let clubCloseUseCase: ClubCloseUseCase
     
     // MARK: - Init
     init(
         query: ClubRequestQuery,
         deleteClubUseCase: DeleteClubUseCase,
-        fetchDetailClubUseCase: FetchDetailClubUseCase
+        fetchDetailClubUseCase: FetchDetailClubUseCase,
+        clubExitUseCase: ClubExitUseCase,
+        clubApplyUseCase: ClubApplyUseCase,
+        clubCancelUseCase: ClubCancelUseCase,
+        clubOpenUseCase: ClubOpenUseCase,
+        clubCloseUseCase: ClubCloseUseCase
     ) {
         initialState = State(
             isLoading: false
@@ -43,6 +52,11 @@ final class DetailClubReactor: Reactor, Stepper {
         self.query = query
         self.deleteClubUseCase = deleteClubUseCase
         self.fetchDetailClubUseCase = fetchDetailClubUseCase
+        self.clubExitUseCase = clubExitUseCase
+        self.clubApplyUseCase = clubApplyUseCase
+        self.clubCancelUseCase = clubCancelUseCase
+        self.clubOpenUseCase = clubOpenUseCase
+        self.clubCloseUseCase = clubCloseUseCase
     }
     
 }
