@@ -68,7 +68,9 @@ private extension BaseRemote {
                 guard let moyaErr = error as? MoyaError else {
                     return .error(error)
                 }
-                
+                if moyaErr.response?.statusCode == 401 {
+                    return .error(TokenError.expired)
+                }
                 return .error(api.errorMapper?[moyaErr.response?.statusCode ?? 400] ?? error)
             }
     }
