@@ -133,6 +133,9 @@ final class CertificationVC: BaseVC<CertificationReactor> {
             .disposed(by: disposeBag)
         
         completeButton.rx.tap
+            .do(onNext: { [weak self] _ in
+                self?.codeOTPTextField.text?.removeAll()
+            })
             .map { Reactor.Action.completeButotnDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
