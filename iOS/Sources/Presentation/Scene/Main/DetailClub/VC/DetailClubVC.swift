@@ -192,7 +192,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                 owner.descriptionLabel.text = item.description
                 owner.activityView.setImages(urls: item.activities)
                 if let relatedLink = item.relatedLink {
-                    owner.relatedLinkHeaderLabel.setTitle(title: relatedLink.name)
+                    owner.relatedLinkHeaderLabel.text = relatedLink.name
                     owner.relatedLinkButton.setTitle(relatedLink.url, for: .normal)
                     owner.relatedLinkButton.isHidden = false
                 } else {
