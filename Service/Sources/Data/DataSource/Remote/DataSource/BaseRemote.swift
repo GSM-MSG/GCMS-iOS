@@ -7,7 +7,7 @@ import AVFoundation
 class BaseRemote<API: GCMSAPI> {
     public var testStatus = false
     public var successStatus = true
-    private let provider = MoyaProvider<API>(plugins: [JWTPlugin(), NetworkLoggerPlugin()])
+    private let provider = MoyaProvider<API>(plugins: [JWTPlugin()])
     private let successTestEndpoint = { (target: API) -> Endpoint in
         return Endpoint(
             url: URL(target: target).absoluteString,
