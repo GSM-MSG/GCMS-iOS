@@ -49,7 +49,6 @@ final class LoginReactor: Reactor, Stepper {
         )
         self.loginUseCase = loginUseCase
     }
-    
 }
 
 // MARK: - Mutate

@@ -69,6 +69,7 @@ final class CertificationVC: BaseVC<CertificationReactor> {
     override func setup() {
         codeOTPTextField.dpOTPViewDelegate = self
     }
+    
     override func addView() {
         view.addSubViews(backgroundView, rootView, mailImage)
         rootView.addSubViews(sendMessageLabel, codeOTPTextField, completeButton)
@@ -105,9 +106,11 @@ final class CertificationVC: BaseVC<CertificationReactor> {
             $0.leading.trailing.equalToSuperview().inset(15)
         }
     }
+    
     override func configureVC() {
         view.backgroundColor = .clear
     }
+    
     override func configureNavigation() {
         self.navigationController?.navigationBar.setClear()
     }
@@ -136,7 +139,6 @@ final class CertificationVC: BaseVC<CertificationReactor> {
             .map { Reactor.Action.completeButotnDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
     }
 }
 
@@ -154,5 +156,4 @@ extension CertificationVC : DPOTPViewDelegate {
     func dpOTPViewBecomeFirstResponder() {}
     
     func dpOTPViewResignFirstResponder() {}
-    
 }

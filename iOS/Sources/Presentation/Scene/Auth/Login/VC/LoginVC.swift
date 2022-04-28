@@ -71,9 +71,11 @@ final class LoginVC : BaseVC<LoginReactor> {
     private let primaryWaveView = WaveView().then {
         $0.preferredColor = UIColor(red: 0.415, green: 0.439, blue: 1, alpha: 0.9)
     }
+    
     private let secondaryWaveView = WaveView().then {
         $0.preferredColor = UIColor(red: 0.568, green: 0.584, blue: 1, alpha: 0.9)
     }
+    
     private let thirdWaveView = WaveView().then {
         $0.preferredColor = UIColor(red: 0.414, green: 0.438, blue: 0.9, alpha: 0.8)
     }
