@@ -127,6 +127,6 @@ public extension Package {
     )
     static let ParkedTextField = Package.remote(
         url: "https://github.com/gmertk/ParkedTextField",
-        requirement: .upToNextMinor(from: "1.0.0")
+        requirement: .upToNextMajor(from: "1.0.0")
     )
 }
