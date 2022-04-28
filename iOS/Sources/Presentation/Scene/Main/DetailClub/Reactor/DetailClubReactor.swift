@@ -98,9 +98,13 @@ extension DetailClubReactor {
 // MARK: - Method
 private extension DetailClubReactor {
     func viewDidLoad() -> Observable<Mutation> {
-        return .just(.setClub(
-            .dummy
-        ))
+        let start = Observable.just(Mutation.setIsLoading(true))
+        let task = fetchDetailClubUseCase.execute(query: query)
+            .asObservable()
+            .flatMap { Observable.from([Mutation.setClub($0), .setIsLoading(false)]) }
+            .catchAndReturn(.setIsLoading(false))
+        
+        return .concat([start, task])
     }
     func statusButtonDidTap() -> Observable<Mutation> {
         let isHead = (currentState.clubDetail?.scope ?? .member) == .head
