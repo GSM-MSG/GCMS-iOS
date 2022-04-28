@@ -99,9 +99,9 @@ extension LoginReactor {
 // MARK: - Method
 private extension LoginReactor {
     func loginButtonDidTap() -> Observable<Mutation> {
-        
+        let email = String(currentState.email.split(separator: "@").first ?? .init())
         let startLoading = Observable.just(Mutation.setIsLoading(true))
-        let login = loginUseCase.execute(req: LoginRequest(email: currentState.email, password: currentState.password))
+        let task = loginUseCase.execute(req: LoginRequest(email: email, password: currentState.password))
             .do(onError: { [weak self] _ in
                 self?.action.onNext(.loginDidFailed)
             }, onCompleted: { [weak self] in
@@ -111,6 +111,6 @@ private extension LoginReactor {
             .asObservable()
             .catchAndReturn(.setIsLoading(false))
             
-        return .concat([startLoading, login])
+        return .concat([startLoading, task])
     }
 }

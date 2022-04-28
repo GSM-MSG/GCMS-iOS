@@ -205,8 +205,25 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                         $0.height.equalTo(owner.bound.width-32)
                     }
                 }
+                owner.loadViewIfNeeded()
+                switch item.scope {
+                case .head:
+                    owner.applyButton.setTitle("동아리 신청 마감하기", for: .normal)
+                case .member:
+                    owner.applyButton.isHidden = true
+                case .`default`:
+                    owner.applyButton.setTitle(item.isApplied ? "신청취소하기" : "동아리 신청하기", for: .normal)
+                    owner.applyButton.backgroundColor = item.isApplied
+                    ? .init(red: 1, green: 0.5, blue: 0.5, alpha: 1)
+                    : GCMSAsset.Colors.gcmsMainColor.color
+                }
+                if item.isOpen && !(item.scope == .head) {
+                    owner.applyButton.isHidden = false
+                    owner.applyButton.setTitle("마감됨", for: .normal)
+                    owner.applyButton.backgroundColor = .init(red: 0.58, green: 0.58, blue: 0.58, alpha: 1)
+                }
                 owner.headView.bind(user: item.head)
-                if let teacher = item.teacher {
+                if let teacher = item.teacher, !teacher.isEmpty {
                     owner.teacherHeaderLabel.isHidden = false
                     owner.teacherView.isHidden = false
                     owner.teacherView.setName(name: teacher)

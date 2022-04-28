@@ -54,9 +54,9 @@ extension ClubAPI: GCMSAPI {
     }
     var method: Method {
         switch self {
-        case .clubList, .clubDetail, .createNewClub, .clubMember, .clubApplicant:
+        case .clubList, .clubDetail, .clubMember, .clubApplicant:
             return .get
-        case .userAccept, .userReject, .apply, .cancel:
+        case .userAccept, .userReject, .apply, .cancel, .createNewClub:
             return .post
         case .updateClub, .clubOpen, .clubClose, .delegation:
             return .put

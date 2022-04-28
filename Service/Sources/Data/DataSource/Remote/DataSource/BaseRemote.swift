@@ -61,6 +61,9 @@ private extension BaseRemote {
         return (testStatus ? testingProvider : provider).rx
             .request(api)
             .timeout(.seconds(120), scheduler: MainScheduler.asyncInstance)
+            .do(onSuccess: {
+                print(try? $0.mapJSON())
+            })
             .catch { error in
                 guard let moyaErr = error as? MoyaError else {
                     return .error(error)

@@ -258,6 +258,7 @@ private extension NewClubReactor {
             .andThen(Observable.just(Mutation.setIsLoading(false)))
             .catchAndReturn(.setIsLoading(false))
         }
+            .catchAndReturn(.setIsLoading(false))
         return .concat([start, task])
     }
 }
