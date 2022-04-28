@@ -6,6 +6,7 @@ import IQKeyboardManagerSwift
 import Service
 import RxSwift
 import ViewAnimator
+import ParkedTextField
 
 final class LoginVC : BaseVC<LoginReactor> {
     // MARK: - Properties
@@ -40,15 +41,15 @@ final class LoginVC : BaseVC<LoginReactor> {
         $0.font = UIFont(font: GCMSFontFamily.Inter.regular, size: 11)
         $0.isHidden = true
     }
-    private let emailTextfield = UITextField().then {
-        $0.attributedPlaceholder = NSAttributedString(string: "학교 이메일을 입력해주세요", attributes: [
-            .foregroundColor: GCMSAsset.Colors.gcmsGray4.color,
-            .font: UIFont(font: GCMSFontFamily.Inter.medium, size: 13)!
-        ])
+    private let emailTextfield = ParkedTextField().then {
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 7
         $0.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
+        $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 13)
         $0.leftSpace(13)
+        $0.parkedTextFont = UIFont(font: GCMSFontFamily.Inter.medium, size: 15)
+        $0.parkedTextColor = GCMSAsset.Colors.gcmsGray2.color
+        $0.placeholderText = "학교 이메일을 입력해주세요"
     }
     
     private let passwordTextfield = UITextField().then {
@@ -61,15 +62,6 @@ final class LoginVC : BaseVC<LoginReactor> {
         $0.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
         $0.leftSpace(13)
         $0.isSecureTextEntry = true
-    }
-    
-    private let emailLabel = UILabel().then {
-        $0.text = "@gsm.hs.kr"
-        $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 13)
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 7
-        $0.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
-        $0.textAlignment = .center
     }
     
     private let passwordVisibleButton = UIButton().then {
@@ -101,7 +93,7 @@ final class LoginVC : BaseVC<LoginReactor> {
             AnimationType.from(direction: .top, offset: 300),
         ], duration: 1.6)
         UIView.animate(views: [
-            emailTextfield, emailLabel, passwordTextfield, passwordVisibleButton, findPasswordButton
+            emailTextfield, passwordTextfield, passwordVisibleButton, findPasswordButton
         ], animations: [
             AnimationType.from(direction: .bottom, offset: 3)
         ], delay: 1.4, duration: 1.2)
@@ -118,7 +110,7 @@ final class LoginVC : BaseVC<LoginReactor> {
     }
     
     override func addView() {
-        view.addSubViews(thirdWaveView, secondaryWaveView, primaryWaveView, logoImageView, loginLabel, loginButton,findPasswordButton, invalidLabel, emailTextfield, emailLabel, passwordTextfield, passwordVisibleButton)
+        view.addSubViews(thirdWaveView, secondaryWaveView, primaryWaveView, logoImageView, loginLabel, loginButton,findPasswordButton, invalidLabel, emailTextfield, passwordTextfield, passwordVisibleButton)
     }
     
     override func setLayout() {
@@ -175,12 +167,6 @@ final class LoginVC : BaseVC<LoginReactor> {
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(51)
         }
-        emailLabel.snp.makeConstraints {
-            $0.trailing.equalTo(emailTextfield.snp.trailing)
-            $0.bottom.equalTo(emailTextfield.snp.bottom)
-            $0.height.equalTo(emailTextfield.snp.height)
-            $0.width.equalTo(emailLabel.snp.height).multipliedBy(2)
-        }
     }
     
     override func configureVC() {
@@ -204,7 +190,6 @@ final class LoginVC : BaseVC<LoginReactor> {
             .map(\.isLoginFailure)
             .subscribe(with: self){ owner, item in
                 owner.emailTextfield.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
-                owner.emailLabel.layer.borderColor = item ? GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
                 owner.passwordTextfield.layer.borderColor = item ?GCMSAsset.Colors.gcmsThemeColor.color.cgColor : GCMSAsset.Colors.gcmsGray3.color.cgColor
                 owner.findPasswordButton.isHidden = item
                 owner.invalidLabel.isHidden = !item
@@ -238,6 +223,16 @@ final class LoginVC : BaseVC<LoginReactor> {
         passwordTextfield.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
             .map(Reactor.Action.updatePassword)
             .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        emailTextfield.rx.text.orEmpty
+            .map(\.isEmpty)
+            .distinctUntilChanged()
+            .map { !$0 ? "@gsm.hs.kr" : "" }
+            .bind(with: self, onNext: { owner, str in
+                owner.emailTextfield.parkedText = str
+                owner.emailTextfield.setPlaceholderColor(GCMSAsset.Colors.gcmsGray4.color)
+            })
             .disposed(by: disposeBag)
     }
 }
