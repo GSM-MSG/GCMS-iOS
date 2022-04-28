@@ -103,13 +103,13 @@ extension MemberAppendReactor {
 // MARK: - Method
 private extension MemberAppendReactor {
     func updateQuery(query: String) -> Observable<Mutation> {
-        let users: [User] = [
-            .dummy,
-            .dummy
-        ].filter { $0.name.contains(query) }
+        let users = searchUserUseCase.execute(name: query, type: clubType)
+            .asObservable()
+            .map(Mutation.setUsers)
+            .catchAndReturn(Mutation.setUsers([]))
         return .concat([
             .just(.setQuery(query)),
-            .just(.setUsers(users))
+            users
         ])
     }
 }
