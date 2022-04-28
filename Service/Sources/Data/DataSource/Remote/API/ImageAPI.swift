@@ -29,7 +29,7 @@ extension ImageAPI: GCMSAPI {
                 let uuid = UUID().uuidString
                 return MultipartFormData(
                     provider: .data(data),
-                    name: uuid,
+                    name: "files",
                     fileName: "\(uuid).png"
                 )
             }

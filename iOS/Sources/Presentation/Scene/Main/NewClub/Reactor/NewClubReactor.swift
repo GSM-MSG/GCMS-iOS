@@ -35,6 +35,9 @@ final class NewClubReactor: Reactor, Stepper {
         case memberRemove(Int)
         case updateLoading(Bool)
         case completeButtonDidTap
+        
+        // etc
+        case createNewClub(state: State)
     }
     enum Mutation {
         case setTitle(String)
@@ -131,6 +134,8 @@ extension NewClubReactor {
             return .just(.memberRemove(index))
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
+        case let .createNewClub(state):
+            return createNewClub(state: state)
         }
         return .empty()
     }
@@ -215,10 +220,44 @@ private extension NewClubReactor {
         }
         steps.accept(GCMSStep.alert(title: "정말로 완료하시겠습니까?", message: nil, style: .alert, actions: [
             .init(title: "예", style: .default, handler: { [weak self] _ in
-                self?.steps.accept(GCMSStep.popToRoot)
+                guard let current = self?.currentState else {
+                    return
+                }
+                self?.action.onNext(.createNewClub(state: current))
             }),
             .init(title: "아니요", style: .default, handler: nil)
         ]))
         return .empty()
+    }
+    func createNewClub(state: State) -> Observable<Mutation> {
+        let start = Observable.just(Mutation.setIsLoading(true))
+        let task = Observable.zip(
+            uploadImagesUseCase.execute(images: [state.imageData ?? Data()]).compactMap(\.first).asObservable(),
+            uploadImagesUseCase.execute(images: state.activitiesData).asObservable()
+        ).withUnretained(self).flatMap { owner, urls -> Observable<Mutation> in
+            var relatedLink: RelatedLinkDTO? = nil
+            if let linkName = state.linkName, let linkUrl = state.linkUrl {
+                relatedLink = RelatedLinkDTO(name: linkName, url: linkUrl)
+            }
+            return owner.createNewClubUseCase.execute(
+                req: .init(
+                    type: state.clubType,
+                    title: state.title,
+                    description: state.description,
+                    bannerUrl: urls.0,
+                    contact: state.contact,
+                    relatedLink: relatedLink,
+                    teacher: state.teacher,
+                    activities: urls.1,
+                    member: state.members.map(\.userId)
+                )
+            )
+            .do(afterCompleted: {
+                owner.steps.accept(GCMSStep.popToRoot)
+            })
+            .andThen(Observable.just(Mutation.setIsLoading(false)))
+            .catchAndReturn(.setIsLoading(false))
+        }
+        return .concat([start, task])
     }
 }

@@ -160,7 +160,6 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
     override func configureNavigation() {
         self.navigationItem.setRightBarButton(statusButton, animated: true)
         self.navigationItem.configBack()
-        bannerImageView.kf.setImage(with: URL(string: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4") ?? .none)
     }
     
     // MARK: - Reactor
@@ -185,8 +184,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         let sharedState = reactor.state.share(replay: 3).observe(on: MainScheduler.asyncInstance)
         
         sharedState
-            .map(\.clubDetail)
-            .compactMap { $0 }
+            .compactMap(\.clubDetail)
             .withUnretained(self)
             .bind { owner, item in
                 owner.descriptionLabel.text = item.description
@@ -229,8 +227,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         
         sharedState
             .map(\.clubDetail)
-            .map(\.?.member)
-            .compactMap { $0 }
+            .compactMap(\.?.member)
             .map { [ClubMemberSection(header: "", items: $0)] }
             .bind(to: memberCollectionView.rx.items(dataSource: ds))
             .disposed(by: disposeBag)
