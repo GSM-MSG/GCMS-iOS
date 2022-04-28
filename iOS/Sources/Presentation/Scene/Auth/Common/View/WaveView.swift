@@ -47,7 +47,6 @@ final class WaveView: UIView {
         self.layer.addSublayer(customLayer)
     }
     
-    
     func animationStart(direction: Direction, speed: Double) {
         if direction == .right {
             self.speed = -speed
@@ -56,8 +55,6 @@ final class WaveView: UIView {
         }
         self.startDisplayLink()
     }
-    
-    
 }
 
 private extension WaveView {

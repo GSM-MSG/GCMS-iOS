@@ -29,6 +29,7 @@ public extension TargetDependency.SPM{
     static let Tabman = TargetDependency.package(product: "Tabman")
     static let RxKeyboard = TargetDependency.package(product: "RxKeyboard")
     static let Loaf = TargetDependency.package(product: "Loaf")
+    static let ParkedTextField = TargetDependency.package(product: "ParkedTextField")
 }
 
 public extension Package {
@@ -123,5 +124,9 @@ public extension Package {
     static let Loaf = Package.remote(
         url: "https://github.com/schmidyy/Loaf",
         requirement: .upToNextMinor(from: "0.7.0")
+    )
+    static let ParkedTextField = Package.remote(
+        url: "https://github.com/gmertk/ParkedTextField",
+        requirement: .upToNextMajor(from: "1.0.0")
     )
 }
