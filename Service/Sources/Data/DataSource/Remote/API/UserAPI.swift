@@ -41,7 +41,7 @@ extension UserAPI: GCMSAPI {
             ], encoding: JSONEncoding.default)
         case let .search(name, type):
             return .requestParameters(parameters: [
-                "q": name,
+                "name": name,
                 "type": type.rawValue
             ], encoding: URLEncoding.queryString)
 

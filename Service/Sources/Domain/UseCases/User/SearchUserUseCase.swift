@@ -7,7 +7,7 @@ public struct SearchUserUseCase {
     
     private let userRepository: UserRepository
     
-    public func execute(query: ClubRequestQuery) -> Single<[User]> {
-        userRepository.fetchSearchUser(query: query)
+    public func execute(name: String, type: ClubType) -> Single<[User]> {
+        userRepository.searchUser(name: name, type: type)
     }
 }

@@ -12,8 +12,8 @@ final class DefaultUserRepository: UserRepository {
         userRemote.updateProfileImage(imageUrl: imageUrl)
     }
     
-    func fetchSearchUser(query: ClubRequestQuery) -> Single<[User]> {
-        userRemote.fetchSearchUser(query: query)
+    func searchUser(name: String, type: ClubType) -> Single<[User]> {
+        userRemote.fetchSearchUser(name: name, type: type)
     }
     
     func clubExit(query: ClubRequestQuery) -> Completable {
