@@ -44,7 +44,9 @@ extension ImageAPI: GCMSAPI {
             return JWTTokenType.none
         }
     }
-    
+    var headers: [String : String]? {
+        return ["Content-type" : "multipart/form-data"]
+    }
     var errorMapper: [Int: GCMSError]?{
         return [
             403: .forbidden,

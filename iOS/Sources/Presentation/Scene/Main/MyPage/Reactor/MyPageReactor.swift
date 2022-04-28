@@ -65,7 +65,7 @@ extension MyPageReactor {
         case let .clubDidTap(q):
             steps.accept(GCMSStep.clubDetailIsRequired(query: q))
         case let .profileImageDidTap(data):
-            break
+            return profileChange(data: data)
         }
         return .empty()
     }
@@ -90,11 +90,12 @@ extension MyPageReactor {
 // MARK: - Method
 private extension MyPageReactor {
     func viewDidLoad() -> Observable<Mutation> {
-        return .concat([
-            .just(.setUser(
-                .dummy
-            ))
-        ])
+        let start = Observable.just(Mutation.setIsLoading(true))
+        let task = fetchProfileUseCase.execute()
+            .asObservable()
+            .flatMap { Observable.from([Mutation.setUser($0), .setIsLoading(false)])}
+            .catchAndReturn(.setIsLoading(false))
+        return .concat([start, task])
     }
     func logoutButtonDidTap() {
         logoutUseCase.execute()
@@ -107,5 +108,18 @@ private extension MyPageReactor {
                 ]))
             })
             .disposed(by: disposeBag)
+    }
+    func profileChange(data: Data) -> Observable<Mutation> {
+        let start = Observable.just(Mutation.setIsLoading(true))
+        let task = uploadImagesUseCase.execute(images: [data])
+            .compactMap(\.first)
+            .asObservable()
+            .withUnretained(self)
+            .flatMap { owner, url in
+                owner.updateProfileImageUseCase.execute(imageUrl: url)
+                    .andThen(Observable.just(Mutation.setIsLoading(false)))
+            }
+            .catchAndReturn(.setIsLoading(false))
+        return .concat([start, task])
     }
 }
