@@ -91,5 +91,4 @@ private extension CertificationReactor {
             .catchAndReturn(.setIsLoading(false))
         return .concat([startLoding, signUp])
     }
-    
 }

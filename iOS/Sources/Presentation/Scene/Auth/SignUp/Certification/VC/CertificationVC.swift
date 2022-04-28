@@ -14,9 +14,8 @@ final class CertificationVC: BaseVC<CertificationReactor> {
     private let backgroundView = UIView().then {
         $0.backgroundColor = .black.withAlphaComponent(0.3)
     }
-    private let mailImage = UIImageView().then {
-        $0.image = UIImage(named: "GCMS_Mail.svg")
-    }
+    
+    private let mailImage = UIImageView(image: UIImage(named: "GCMS_Mail.svg"))
     
     private let sendMessageLabel = UILabel().then {
         $0.text = "입력하신 이메일로\n 4자리 코드를 보냈어요!"
@@ -69,6 +68,7 @@ final class CertificationVC: BaseVC<CertificationReactor> {
     override func setup() {
         codeOTPTextField.dpOTPViewDelegate = self
     }
+    
     override func addView() {
         view.addSubViews(backgroundView, rootView, mailImage)
         rootView.addSubViews(sendMessageLabel, codeOTPTextField, completeButton)
@@ -105,9 +105,11 @@ final class CertificationVC: BaseVC<CertificationReactor> {
             $0.leading.trailing.equalToSuperview().inset(15)
         }
     }
+    
     override func configureVC() {
         view.backgroundColor = .clear
     }
+    
     override func configureNavigation() {
         self.navigationController?.navigationBar.setClear()
     }
@@ -139,7 +141,6 @@ final class CertificationVC: BaseVC<CertificationReactor> {
             .map { Reactor.Action.completeButotnDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
     }
 }
 
@@ -157,5 +158,4 @@ extension CertificationVC : DPOTPViewDelegate {
     func dpOTPViewBecomeFirstResponder() {}
     
     func dpOTPViewResignFirstResponder() {}
-    
 }
