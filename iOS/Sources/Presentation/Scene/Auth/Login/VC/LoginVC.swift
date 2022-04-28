@@ -113,6 +113,10 @@ final class LoginVC : BaseVC<LoginReactor> {
     }
     
     // MARK: - UI
+    override func setup() {
+        [emailTextfield, passwordTextfield].forEach { $0.delegate = self }
+    }
+    
     override func addView() {
         view.addSubViews(thirdWaveView, secondaryWaveView, primaryWaveView, logoImageView, loginLabel, loginButton,findPasswordButton, invalidLabel, emailTextfield, emailLabel, passwordTextfield, passwordVisibleButton)
     }
@@ -235,5 +239,18 @@ final class LoginVC : BaseVC<LoginReactor> {
             .map(Reactor.Action.updatePassword)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+    }
+}
+
+extension LoginVC: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let char = string.cString(using: String.Encoding.utf8) {
+            let isBackSpace = strcmp(char, "\\b")
+            if isBackSpace == -92 {
+                return true
+            }
+        }
+        guard textField.text!.count < 20 else { return false }
+        return true
     }
 }

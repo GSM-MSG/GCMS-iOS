@@ -27,6 +27,7 @@ let project = Project.dynamicFramework(
         .Tabman,
         .RxKeyboard,
         .Loaf,
+        .ParkedTextField,
     ],
     deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
     dependencies: [
@@ -52,5 +53,6 @@ let project = Project.dynamicFramework(
         .SPM.Tabman,
         .SPM.RxKeyboard,
         .SPM.Loaf,
+        .SPM.ParkedTextField,
     ]
 )

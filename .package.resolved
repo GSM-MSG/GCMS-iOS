@@ -208,6 +208,15 @@
       }
     },
     {
+      "identity" : "parkedtextfield",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gmertk/ParkedTextField",
+      "state" : {
+        "revision" : "5e2838afd27d57edb399a9192fb10bb11f686ad3",
+        "version" : "1.0.0"
+      }
+    },
+    {
       "identity" : "promises",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/promises.git",
