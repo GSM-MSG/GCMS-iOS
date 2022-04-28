@@ -71,30 +71,24 @@ private extension BaseRemote {
     }
     
     func requestWithAccessToken(_ api: API) -> Single<Response> {
-        return .create { single in
-            var disposables: [Disposable] = []
+        return .deferred {
             do {
                 if try self.checkTokenIsValid() {
-                    disposables.append(
-                        self.defaultRequest(api)
-                            .subscribe(
-                                onSuccess: { single(.success($0)) },
-                                onFailure: { single(.failure($0)) }
-                            )
-                    )
+                    return self.defaultRequest(api)
                 } else {
-                    single(.failure(TokenError.noData))
+                    return .error(TokenError.expired)
                 }
             } catch {
-                single(.failure(error))
+                return .error(error)
             }
-            return Disposables.create(disposables)
         }.retry { (errorObservable: Observable<TokenError>) in
-            errorObservable.flatMap { error -> Completable in
-                if error == .expired {
+            errorObservable.flatMap { error -> Observable<Void> in
+                switch error {
+                case .expired:
                     return self.reissueToken()
-                } else {
-                    throw TokenError.noData
+                        .andThen(.just(()))
+                default:
+                    return .error(error)
                 }
             }
         }
