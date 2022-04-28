@@ -14,9 +14,8 @@ final class CertificationVC: BaseVC<CertificationReactor> {
     private let backgroundView = UIView().then {
         $0.backgroundColor = .black.withAlphaComponent(0.3)
     }
-    private let mailImage = UIImageView().then {
-        $0.image = UIImage(named: "GCMS_Mail.svg")
-    }
+    
+    private let mailImage = UIImageView(image: UIImage(named: "GCMS_Mail.svg"))
     
     private let sendMessageLabel = UILabel().then {
         $0.text = "입력하신 이메일로\n 4자리 코드를 보냈어요!"

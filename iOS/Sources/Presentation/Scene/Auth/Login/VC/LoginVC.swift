@@ -53,10 +53,9 @@ final class LoginVC : BaseVC<LoginReactor> {
     }
     
     private let passwordTextfield = UITextField().then {
-        $0.attributedPlaceholder = NSAttributedString(string: "비밀번호를 입력해주세요", attributes: [
-            .foregroundColor: GCMSAsset.Colors.gcmsGray4.color,
-            .font: UIFont(font: GCMSFontFamily.Inter.medium, size: 15)!
-        ])
+        $0.placeholder = "비밀번호를 입력해주세요"
+        $0.setPlaceholderColor(GCMSAsset.Colors.gcmsGray4.color)
+        $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 15)
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 7
         $0.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
