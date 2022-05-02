@@ -1,0 +1,8 @@
+app_identifier("com.msg.GCMS") # The bundle identifier of your app
+apple_id("baegteun@gmail.com") # Your Apple email address
+
+itc_team_id("124246232") # App Store Connect Team ID
+team_id("235C2RVZ7L") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
