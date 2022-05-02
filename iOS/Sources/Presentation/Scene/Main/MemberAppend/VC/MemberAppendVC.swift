@@ -133,8 +133,8 @@ final class MemberAppendVC: BaseVC<MemberAppendReactor> {
         
         searchTextField.rx.text
             .debounce(.milliseconds(300), scheduler: MainScheduler.asyncInstance)
-            .map { $0 == nil ? "" : $0 }
-            .compactMap { $0 }
+            .compactMap { $0 == nil ? "" : $0 }
+            .filter { $0.count > 0 }
             .map(Reactor.Action.updateQuery)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)

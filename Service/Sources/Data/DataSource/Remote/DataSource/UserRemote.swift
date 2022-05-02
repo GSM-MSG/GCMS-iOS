@@ -17,8 +17,8 @@ final class UserRemote: BaseRemote<UserAPI> {
     
     func fetchSearchUser(name: String, type: ClubType) -> Single<[User]> {
         request(.search(name: name, type: type))
-            .map(UserSearchResponse.self)
-            .map { $0.toDomain() }
+            .map([UserDTO].self)
+            .map { $0.map { $0.toDomain() } }
     }
     
     func clubExit(query: ClubRequestQuery) -> Completable {

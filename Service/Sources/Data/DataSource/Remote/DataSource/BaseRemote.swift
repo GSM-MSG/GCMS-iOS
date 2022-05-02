@@ -65,13 +65,13 @@ private extension BaseRemote {
                 print(try? $0.mapJSON())
             })
             .catch { error in
-                guard let moyaErr = error as? MoyaError else {
+                guard let code = (error as? MoyaError)?.response?.statusCode else {
                     return .error(error)
                 }
-                if moyaErr.response?.statusCode == 401 {
+                if code == 401 {
                     return .error(TokenError.expired)
                 }
-                return .error(api.errorMapper?[moyaErr.response?.statusCode ?? 400] ?? error)
+                return .error(api.errorMapper?[code] ?? error)
             }
     }
     
@@ -86,17 +86,19 @@ private extension BaseRemote {
             } catch {
                 return .error(error)
             }
-        }.retry { (errorObservable: Observable<TokenError>) in
-            errorObservable.flatMap { error -> Observable<Void> in
-                switch error {
-                case .expired:
-                    return self.reissueToken()
-                        .andThen(.just(()))
-                default:
-                    return .error(error)
-                }
-            }
         }
+        .retry(when: { (errorObservable: Observable<TokenError>) in
+            return errorObservable
+                .flatMap { error -> Observable<Void> in
+                    switch error {
+                    case .expired:
+                        return self.reissueToken()
+                            .andThen(.just(()))
+                    default:
+                        return .error(error)
+                    }
+                }
+        })
     }
     
     func isApiNeedsAccessToken(_ api: API) -> Bool {
@@ -105,7 +107,7 @@ private extension BaseRemote {
     func checkTokenIsValid() throws -> Bool {
         do {
             let expired = try KeychainLocal.shared.fetchExpiredAt().toDateWithISO8601()
-            return Date() > expired
+            return Date() < expired
         } catch {
             throw TokenError.noData
         }
