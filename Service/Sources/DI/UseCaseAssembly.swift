@@ -5,130 +5,139 @@ public final class UseCaseAssembly: Assembly {
     public func assemble(container: Container) {
         // MARK: - Auth
         container.register(LoginUseCase.self) { r in
-            return LoginUseCase(
+             LoginUseCase(
                 authRepository: r.resolve(AuthRepository.self)!
             )
         }
-        
         container.register(RegisterUseCase.self) { r in
-            return RegisterUseCase(
+             RegisterUseCase(
                 authRepository: r.resolve(AuthRepository.self)!
             )
         }
-        
         container.register(CheckIsLoginedUseCase.self) { r in
-            return CheckIsLoginedUseCase(
+             CheckIsLoginedUseCase(
                 authRepository: r.resolve(AuthRepository.self)!
             )
         }
-        
         container.register(SendVerifyUseCase.self) { r in
-            return SendVerifyUseCase(
+             SendVerifyUseCase(
                 authRepository: r.resolve(AuthRepository.self)!
             )
         }
-        
         container.register(CheckIsVerifiedUseCase.self) { r in
-            return CheckIsVerifiedUseCase(
+             CheckIsVerifiedUseCase(
                 authRepository: r.resolve(AuthRepository.self)!
             )
         }
-        
         container.register(LogoutUseCase.self) { r in
-            return LogoutUseCase(
+             LogoutUseCase(
                 authRepository: r.resolve(AuthRepository.self)!
             )
         }
         
         // MARK: - Club
         container.register(ClubOpenUseCase.self) { r in
-            return ClubOpenUseCase(
+             ClubOpenUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
-        
         container.register(ClubCloseUseCase.self) { r in
-            return ClubCloseUseCase(
+             ClubCloseUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
-        
         container.register(CreateNewClubUseCase.self) { r in
-            return CreateNewClubUseCase(
+             CreateNewClubUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
-        
         container.register(DeleteClubUseCase.self) { r in
-            return DeleteClubUseCase(
+             DeleteClubUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
-        
-        container.register(FetchClubLiseUseCase.self) { r in
-            return FetchClubLiseUseCase(
+        container.register(FetchClubListUseCase.self) { r in
+             FetchClubListUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
-        
         container.register(FetchClubMemberUseCase.self) { r in
-            return FetchClubMemberUseCase(
+             FetchClubMemberUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
-        
         container.register(FetchClubApplicantUseCase.self) { r in
-            return FetchClubApplicantUseCase(
+             FetchClubApplicantUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
-        
         container.register(FetchDetailClubUseCase.self) { r in
-            return FetchDetailClubUseCase(
+             FetchDetailClubUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
-        
         container.register(UserAcceptUseCase.self) { r in
-            return UserAcceptUseCase(
+             UserAcceptUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
-        
         container.register(UserRejectUseCase.self) { r in
-            return UserRejectUseCase(
+             UserRejectUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
-        
         container.register(UserKickUseCase.self) { r in
-            return UserKickUseCase(
+             UserKickUseCase(
+                clubRepository: r.resolve(ClubRepository.self)!
+            )
+        }
+        container.register(ClubApplyUseCase.self) { r in
+             ClubApplyUseCase(
+                clubRepository: r.resolve(ClubRepository.self)!
+            )
+        }
+        container.register(ClubCancelUseCase.self) { r in
+             ClubCancelUseCase(
+                clubRepository: r.resolve(ClubRepository.self)!
+            )
+        }
+        container.register(ClubDelegationUseCase.self) { r in
+             ClubDelegationUseCase(
+                clubRepository: r.resolve(ClubRepository.self)!
+            )
+        }
+        container.register(UpdateClubUseCase.self) { r in
+            UpdateClubUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
         
         // MARK: - User
         container.register(FetchProfileUseCase.self) { r in
-            return FetchProfileUseCase(
+             FetchProfileUseCase(
                 userRepository: r.resolve(UserRepository.self)!
             )
         }
-        
         container.register(UpdateProfileImageUseCase.self) { r in
-            return UpdateProfileImageUseCase(
+             UpdateProfileImageUseCase(
                 userRepository: r.resolve(UserRepository.self)!
             )
         }
-        
         container.register(SearchUserUseCase.self) { r in
-            return SearchUserUseCase(
+             SearchUserUseCase(
+                userRepository: r.resolve(UserRepository.self)!
+            )
+        }
+        container.register(ClubExitUseCase.self) { r in
+             ClubExitUseCase(
                 userRepository: r.resolve(UserRepository.self)!
             )
         }
         
-        container.register(ClubExitUseCase.self) { r in
-            return ClubExitUseCase(
-                userRepository: r.resolve(UserRepository.self)!
+        // MARK: - Image
+        container.register(UploadImagesUseCase.self) { r in
+             UploadImagesUseCase(
+                imageRepository: r.resolve(ImageRepository.self)!
             )
         }
     }

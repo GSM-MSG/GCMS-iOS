@@ -4,7 +4,7 @@ enum ClubAPI {
     case clubList(type: ClubType)
     case clubDetail(query: ClubRequestQuery)
     case createNewClub(req: NewClubRequest)
-    case updateClub(query: ClubRequestQuery, req: NewClubRequest)
+    case updateClub(req: UpdateClubRequest)
     case deleteClub(query: ClubRequestQuery)
     case clubMember(query: ClubRequestQuery)
     case clubApplicant(query: ClubRequestQuery)
@@ -13,6 +13,9 @@ enum ClubAPI {
     case clubOpen(query: ClubRequestQuery)
     case clubClose(query: ClubRequestQuery)
     case userKick(query: ClubRequestQuery, userId: String)
+    case apply(query: ClubRequestQuery)
+    case cancel(query: ClubRequestQuery)
+    case delegation(query: ClubRequestQuery, userId: String)
 }
 
 extension ClubAPI: GCMSAPI {
@@ -41,15 +44,21 @@ extension ClubAPI: GCMSAPI {
             return "/close"
         case .userKick:
             return "/kick"
+        case .apply:
+            return "/apply"
+        case .cancel:
+            return "/cancel"
+        case .delegation:
+            return "/delegation"
         }
     }
     var method: Method {
         switch self {
-        case .clubList, .clubDetail, .createNewClub, .clubMember, .clubApplicant:
+        case .clubList, .clubDetail, .clubMember, .clubApplicant:
             return .get
-        case .userAccept, .userReject:
+        case .userAccept, .userReject, .apply, .cancel, .createNewClub:
             return .post
-        case .updateClub, .clubOpen, .clubClose:
+        case .updateClub, .clubOpen, .clubClose, .delegation:
             return .put
         case .deleteClub, .userKick:
             return .delete
@@ -63,7 +72,7 @@ extension ClubAPI: GCMSAPI {
             ], encoding: URLEncoding.queryString)
         case let .clubDetail(q), let .clubMember(q), let .clubApplicant(q):
             return .requestParameters(parameters: [
-                "q": q.name,
+                "q": q.q,
                 "type": q.type
             ], encoding: URLEncoding.queryString)
         case let .createNewClub(req):
@@ -72,22 +81,21 @@ extension ClubAPI: GCMSAPI {
             return .requestJSONEncodable(query)
         case let .userAccept(query, userId), let .userReject(query, userId), let .userKick(query, userId):
             return .requestParameters(parameters: [
-                "q": query.name,
+                "q": query.q,
                 "type": query.type.rawValue,
                 "userId": userId
             ], encoding: JSONEncoding.default)
-        case let .updateClub(query, req):
+        case let .updateClub(req):
+            return .requestJSONEncodable(req)
+        case let .apply(query):
+            return .requestJSONEncodable(query)
+        case let .cancel(query):
+            return .requestJSONEncodable(query)
+        case let .delegation(query, userId):
             return .requestParameters(parameters: [
-                "q": query.name,
+                "q": query.q,
                 "type": query.type.rawValue,
-                "title": req.title,
-                "description": req.description,
-                "bannerUrl": req.bannerUrl,
-                "contact": req.contact,
-                "relatedLink": req.relatedLink,
-                "teacher": req.teacher,
-                "activities": req.activities,
-                "member": req.member
+                "email": userId
             ], encoding: JSONEncoding.default)
         }
     }

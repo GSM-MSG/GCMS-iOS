@@ -1,7 +1,7 @@
 import RxCocoa
 import RxSwift
 
-public final class LogoutUseCase {
+public struct LogoutUseCase {
     public init(authRepository: AuthRepository) {
         self.authRepository = authRepository
     }

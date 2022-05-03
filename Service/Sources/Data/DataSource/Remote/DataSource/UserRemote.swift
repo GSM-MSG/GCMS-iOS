@@ -5,7 +5,7 @@ final class UserRemote: BaseRemote<UserAPI> {
     private override init() {}
     
     func fetchProfile() -> Single<UserProfile> {
-        request(.userInfo)
+        request(.myProfile)
             .map(UserMyProfileResponse.self)
             .map { $0.toDomain() }
     }
@@ -15,10 +15,10 @@ final class UserRemote: BaseRemote<UserAPI> {
             .asCompletable()
     }
     
-    func fetchSearchUser(query: ClubRequestQuery) -> Single<[User]> {
-        request(.search(name: query.name, type: query.type))
-            .map(UserSearchResponse.self)
-            .map { $0.toDomain() }
+    func fetchSearchUser(name: String, type: ClubType) -> Single<[User]> {
+        request(.search(name: name, type: type))
+            .map([UserDTO].self)
+            .map { $0.map { $0.toDomain() } }
     }
     
     func clubExit(query: ClubRequestQuery) -> Completable {

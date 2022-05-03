@@ -73,9 +73,15 @@ final class UpdateClubReactor: Reactor, Stepper {
     let initialState: State
     private let legacyMember: [User]
     private let legacyImageUrl: [Data: String]
+    private let updateClubUseCase: UpdateClubUseCase
+    private let uploadImagesUseCase: UploadImagesUseCase
     
     // MARK: - Init
-    init(club: Club) {
+    init(
+        club: Club,
+        updateClubUseCase: UpdateClubUseCase,
+        uploadImagesUseCase: UploadImagesUseCase
+    ) {
         self.legacyMember = club.member
         self.legacyImageUrl = club.activities.reduce(into: [Data:String](), { partialResult, url in
             if let data = try? Data(contentsOf: URL(string: url)!) {
@@ -85,8 +91,8 @@ final class UpdateClubReactor: Reactor, Stepper {
         initialState = State(
             title: club.title,
             description: club.description,
-            linkName: club.relatedLink.first?.name,
-            linkUrl: club.relatedLink.first?.url,
+            linkName: club.relatedLink?.name,
+            linkUrl: club.relatedLink?.url,
             contact: club.contact,
             teacher: club.teacher,
             isBanner: true,
@@ -100,6 +106,8 @@ final class UpdateClubReactor: Reactor, Stepper {
             removedImage: [],
             isLoading: false
         )
+        self.updateClubUseCase = updateClubUseCase
+        self.uploadImagesUseCase = uploadImagesUseCase
     }
     
 }
@@ -136,9 +144,9 @@ extension UpdateClubReactor {
         case let .activityDeleteDidTap(index):
             return .just(.removeImageData(index))
         case .memberAppendButtonDidTap:
-            steps.accept(GCMSStep.memberAppendIsRequired({ [weak self] users in
+            steps.accept(GCMSStep.memberAppendIsRequired(closue: { [weak self] users in
                 self?.action.onNext(.memberDidSelected(users))
-            }))
+            }, clubType: currentState.clubType))
         case let .memberDidSelected(users):
             return .just(.appendMember(users))
         case let .memberRemove(index):

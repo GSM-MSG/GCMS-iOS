@@ -1,6 +1,6 @@
 import RxSwift
 
-public final class UpdateProfileImageUseCase {
+public struct UpdateProfileImageUseCase {
     public init(userRepository: UserRepository) {
         self.userRepository = userRepository
     }

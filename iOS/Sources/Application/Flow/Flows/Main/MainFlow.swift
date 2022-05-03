@@ -40,8 +40,8 @@ final class MainFlow: Flow{
             return navigateToMyPage()
         case let .alert(title, message, style, actions):
             return presentToAlert(title: title, message: message, style: style, actions: actions)
-        case let .memberAppendIsRequired(closure):
-            return presentToMemberAppend(closure: closure)
+        case let .memberAppendIsRequired(closure, clubType):
+            return presentToMemberAppend(closure: closure, clubType: clubType)
         case .popToRoot:
             return popToRoot()
         case .dismiss:
@@ -110,8 +110,8 @@ private extension MainFlow{
         self.rootVC.visibleViewController?.present(alert, animated: true)
         return .none
     }
-    func presentToMemberAppend(closure: @escaping (([User]) -> Void)) -> FlowContributors {
-        let reactor = AppDelegate.container.resolve(MemberAppendReactor.self, argument: closure)!
+    func presentToMemberAppend(closure: @escaping (([User]) -> Void), clubType: ClubType) -> FlowContributors {
+        let reactor = AppDelegate.container.resolve(MemberAppendReactor.self, arguments: closure, clubType)!
         let vc = MemberAppendVC(reactor: reactor)
         self.rootVC.visibleViewController?.presentPanModal(vc)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))

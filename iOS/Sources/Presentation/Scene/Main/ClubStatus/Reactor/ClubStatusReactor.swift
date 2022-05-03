@@ -35,6 +35,10 @@ final class ClubStatusReactor: Reactor, Stepper {
     private let clubCloseUseCase: ClubCloseUseCase
     private let fetchClubMemberUseCase: FetchClubMemberUseCase
     private let fetchClubApplicantUseCase: FetchClubApplicantUseCase
+    private let userAcceptUseCase: UserAcceptUseCase
+    private let userRejectUseCase: UserRejectUseCase
+    private let clubDelegationUseCase: ClubDelegationUseCase
+    private let userKickUseCase: UserKickUseCase
     
     // MARK: - Init
     init(
@@ -42,7 +46,11 @@ final class ClubStatusReactor: Reactor, Stepper {
         clubOpenUseCase: ClubOpenUseCase,
         clubCloseUseCase: ClubCloseUseCase,
         fetchClubMemberUseCase: FetchClubMemberUseCase,
-        fetchClubApplicantUseCase: FetchClubApplicantUseCase
+        fetchClubApplicantUseCase: FetchClubApplicantUseCase,
+        userAcceptUseCase: UserAcceptUseCase,
+        userRejectUseCase: UserRejectUseCase,
+        clubDelegationUseCase: ClubDelegationUseCase,
+        userKickUseCase: UserKickUseCase
     ) {
         initialState = State(
             isLoading: false,
@@ -54,6 +62,10 @@ final class ClubStatusReactor: Reactor, Stepper {
         self.clubCloseUseCase = clubCloseUseCase
         self.fetchClubMemberUseCase = fetchClubMemberUseCase
         self.fetchClubApplicantUseCase = fetchClubApplicantUseCase
+        self.userAcceptUseCase = userAcceptUseCase
+        self.userRejectUseCase = userRejectUseCase
+        self.clubDelegationUseCase = clubDelegationUseCase
+        self.userKickUseCase = userKickUseCase
     }
     
 }
@@ -66,14 +78,14 @@ extension ClubStatusReactor {
             return .just(.setIsLoading(load))
         case .viewDidLoad:
             return viewDidLoad()
-        case let .acceptButtonDidTap(_): break
-            
-        case let .rejectButtonDidTap(_): break
-            
-        case let .kickButtonDidTap(_): break
-            
-        case let .delegationButtonDidTap(_): break
-            
+        case let .acceptButtonDidTap(user):
+            return userAcceptButtonDidTap(user: user)
+        case let .rejectButtonDidTap(user):
+            return userRejectButtonDidTap(user: user)
+        case let .kickButtonDidTap(member):
+            return userKickButtonDidTap(member: member)
+        case let .delegationButtonDidTap(member):
+            return delegationButtonDidTap(member: member)
         }
         return .empty()
     }
@@ -101,21 +113,46 @@ extension ClubStatusReactor {
 private extension ClubStatusReactor {
     func viewDidLoad() -> Observable<Mutation> {
         let startLoading = Observable.just(Mutation.setIsLoading(true))
-        let members: [Member] = [
-            .dummy,
-            .dummy,
-            .dummy
-        ]
-        let applicants: [User] = [
-            .dummy,
-            .dummy
-        ]
-        let stopLoading = Observable.just(Mutation.setIsLoading(false))
+        let members = fetchClubMemberUseCase.execute(query: query)
+            .asObservable()
+            .map(Mutation.setMembers)
+            .catchAndReturn(Mutation.setIsLoading(false))
+        let applicants = fetchClubApplicantUseCase.execute(query: query)
+            .asObservable()
+            .flatMap { Observable.from([Mutation.setApplicants($0), .setIsLoading(false)] )}
+            .catchAndReturn(.setIsLoading(false))
         return .concat([
             startLoading,
-            .just(.setMembers(members)),
-            .just(.setApplicants(applicants)),
-            stopLoading
+            members,
+            applicants
         ])
+    }
+    func userAcceptButtonDidTap(user: User) -> Observable<Mutation> {
+        let start = Observable.just(Mutation.setIsLoading(true))
+        let task = userAcceptUseCase.execute(query: query, userId: user.userId)
+            .andThen(Observable.just(Mutation.setIsLoading(false)))
+            .catchAndReturn(.setIsLoading(false))
+        return .concat([start, task])
+    }
+    func userRejectButtonDidTap(user: User) -> Observable<Mutation> {
+        let start = Observable.just(Mutation.setIsLoading(true))
+        let task = userRejectUseCase.execute(query: query, userId: user.userId)
+            .andThen(Observable.just(Mutation.setIsLoading(false)))
+            .catchAndReturn(.setIsLoading(false))
+        return .concat([start, task])
+    }
+    func userKickButtonDidTap(member: Member) -> Observable<Mutation> {
+        let start = Observable.just(Mutation.setIsLoading(true))
+        let task = userKickUseCase.execute(query: query, userId: member.email)
+            .andThen(Observable.just(Mutation.setIsLoading(false)))
+            .catchAndReturn(.setIsLoading(false))
+        return .concat([start, task])
+    }
+    func delegationButtonDidTap(member: Member) -> Observable<Mutation> {
+        let start = Observable.just(Mutation.setIsLoading(true))
+        let task = clubDelegationUseCase.execute(query: query, userId: member.email)
+            .andThen(Observable.just(Mutation.setIsLoading(false)))
+            .catchAndReturn(.setIsLoading(false))
+        return .concat([start, task])
     }
 }

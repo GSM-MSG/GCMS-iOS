@@ -18,8 +18,8 @@ final class ClubRemote: BaseRemote<ClubAPI> {
         request(.createNewClub(req: req))
             .asCompletable()
     }
-    func updateClub(query: ClubRequestQuery, req: NewClubRequest) -> Completable {
-        request(.updateClub(query: query, req: req))
+    func updateClub(req: UpdateClubRequest) -> Completable {
+        request(.updateClub(req: req))
             .asCompletable()
     }
     func deleteClub(query: ClubRequestQuery) -> Completable {
@@ -54,6 +54,18 @@ final class ClubRemote: BaseRemote<ClubAPI> {
     }
     func userKick(query: ClubRequestQuery, userId: String) -> Completable {
         request(.userKick(query: query, userId: userId))
+            .asCompletable()
+    }
+    func apply(query: ClubRequestQuery) -> Completable {
+        request(.apply(query: query))
+            .asCompletable()
+    }
+    func cancel(query: ClubRequestQuery) -> Completable {
+        request(.cancel(query: query))
+            .asCompletable()
+    }
+    func delegation(query: ClubRequestQuery, userId: String) -> Completable {
+        request(.delegation(query: query, userId: userId))
             .asCompletable()
     }
 }

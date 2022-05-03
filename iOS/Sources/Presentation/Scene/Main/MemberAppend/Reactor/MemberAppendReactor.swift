@@ -32,13 +32,16 @@ final class MemberAppendReactor: Reactor, Stepper {
         var addedUsers: [User]
         var isLoading: Bool
     }
-    private let closure: (([User]) -> Void)
     let initialState: State
+    private let closure: (([User]) -> Void)
+    private let clubType: ClubType
+    private let searchUserUseCase: SearchUserUseCase
     
     // MARK: - Init
     init(
-        closure: @escaping (([User]) -> Void)
-
+        closure: @escaping (([User]) -> Void),
+        clubType: ClubType,
+        searchUserUseCase: SearchUserUseCase
     ) {
         initialState = State(   
             query: "",
@@ -46,8 +49,9 @@ final class MemberAppendReactor: Reactor, Stepper {
             addedUsers: [],
             isLoading: false
         )
-        
         self.closure = closure
+        self.clubType = clubType
+        self.searchUserUseCase = searchUserUseCase
     }
     
 }
@@ -99,13 +103,13 @@ extension MemberAppendReactor {
 // MARK: - Method
 private extension MemberAppendReactor {
     func updateQuery(query: String) -> Observable<Mutation> {
-        let users: [User] = [
-            .dummy,
-            .dummy
-        ].filter { $0.name.contains(query) }
+        let users = searchUserUseCase.execute(name: query, type: clubType)
+            .asObservable()
+            .map(Mutation.setUsers)
+            .catchAndReturn(Mutation.setUsers([]))
         return .concat([
             .just(.setQuery(query)),
-            .just(.setUsers(users))
+            users
         ])
     }
 }

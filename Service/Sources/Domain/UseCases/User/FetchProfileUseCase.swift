@@ -1,6 +1,6 @@
 import RxSwift
 
-public final class FetchProfileUseCase {
+public struct FetchProfileUseCase {
     public init(userRepository: UserRepository) {
         self.userRepository = userRepository
     }

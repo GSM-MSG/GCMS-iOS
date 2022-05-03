@@ -1,6 +1,6 @@
 import RxSwift
 
-public final class CheckIsVerifiedUseCase {
+public struct CheckIsVerifiedUseCase {
     public init(authRepository: AuthRepository) {
         self.authRepository = authRepository
     }

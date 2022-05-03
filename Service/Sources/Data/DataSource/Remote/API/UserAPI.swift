@@ -1,7 +1,7 @@
 import Moya
 
 enum UserAPI {
-    case userInfo
+    case myProfile
     case editProfile(url: String)
     case search(name: String, type: ClubType)
     case exit(ClubRequestQuery)
@@ -13,7 +13,7 @@ extension UserAPI: GCMSAPI {
     }
     var urlPath: String {
         switch self {
-        case .userInfo:
+        case .myProfile:
             return "/my"
         case .editProfile:
             return "/profile"
@@ -25,7 +25,7 @@ extension UserAPI: GCMSAPI {
     }
     var method: Method {
         switch self {
-        case .userInfo, .search:
+        case .myProfile, .search:
             return .get
         case .editProfile:
             return .put
@@ -41,13 +41,13 @@ extension UserAPI: GCMSAPI {
             ], encoding: JSONEncoding.default)
         case let .search(name, type):
             return .requestParameters(parameters: [
-                "q": name,
+                "name": name,
                 "type": type.rawValue
             ], encoding: URLEncoding.queryString)
 
         case let .exit(query):
             return .requestParameters(parameters: [
-                "q": query.name,
+                "q": query.q,
                 "type": query.type.rawValue
             ], encoding: JSONEncoding.default)
         default:
@@ -56,7 +56,7 @@ extension UserAPI: GCMSAPI {
     }
     var jwtTokenType: JWTTokenType? {
         switch self {
-        case .userInfo, .editProfile, .search, .exit:
+        case .myProfile, .editProfile, .search, .exit:
             return .accessToken
         default:
             return JWTTokenType.none

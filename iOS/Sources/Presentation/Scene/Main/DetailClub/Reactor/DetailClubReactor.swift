@@ -16,6 +16,7 @@ final class DetailClubReactor: Reactor, Stepper {
         case viewDidLoad
         case updateLoading(Bool)
         case statusButtonDidTap
+        case linkButtonDidTap
     }
     enum Mutation {
         case setClub(Club)
@@ -29,12 +30,22 @@ final class DetailClubReactor: Reactor, Stepper {
     private let query: ClubRequestQuery
     private let deleteClubUseCase: DeleteClubUseCase
     private let fetchDetailClubUseCase: FetchDetailClubUseCase
+    private let clubExitUseCase: ClubExitUseCase
+    private let clubApplyUseCase: ClubApplyUseCase
+    private let clubCancelUseCase: ClubCancelUseCase
+    private let clubOpenUseCase: ClubOpenUseCase
+    private let clubCloseUseCase: ClubCloseUseCase
     
     // MARK: - Init
     init(
         query: ClubRequestQuery,
         deleteClubUseCase: DeleteClubUseCase,
-        fetchDetailClubUseCase: FetchDetailClubUseCase
+        fetchDetailClubUseCase: FetchDetailClubUseCase,
+        clubExitUseCase: ClubExitUseCase,
+        clubApplyUseCase: ClubApplyUseCase,
+        clubCancelUseCase: ClubCancelUseCase,
+        clubOpenUseCase: ClubOpenUseCase,
+        clubCloseUseCase: ClubCloseUseCase
     ) {
         initialState = State(
             isLoading: false
@@ -42,6 +53,11 @@ final class DetailClubReactor: Reactor, Stepper {
         self.query = query
         self.deleteClubUseCase = deleteClubUseCase
         self.fetchDetailClubUseCase = fetchDetailClubUseCase
+        self.clubExitUseCase = clubExitUseCase
+        self.clubApplyUseCase = clubApplyUseCase
+        self.clubCancelUseCase = clubCancelUseCase
+        self.clubOpenUseCase = clubOpenUseCase
+        self.clubCloseUseCase = clubCloseUseCase
     }
     
 }
@@ -56,6 +72,8 @@ extension DetailClubReactor {
             return .just(.setIsLoading(load))
         case .statusButtonDidTap:
             return statusButtonDidTap()
+        case .linkButtonDidTap:
+            UIApplication.shared.open(URL(string: currentState.clubDetail?.relatedLink?.url ?? "")!)
         }
         return .empty()
     }
@@ -80,9 +98,13 @@ extension DetailClubReactor {
 // MARK: - Method
 private extension DetailClubReactor {
     func viewDidLoad() -> Observable<Mutation> {
-        return .just(.setClub(
-            .dummy
-        ))
+        let start = Observable.just(Mutation.setIsLoading(true))
+        let task = fetchDetailClubUseCase.execute(query: query)
+            .asObservable()
+            .flatMap { Observable.from([Mutation.setClub($0), .setIsLoading(false)]) }
+            .catchAndReturn(.setIsLoading(false))
+        
+        return .concat([start, task])
     }
     func statusButtonDidTap() -> Observable<Mutation> {
         let isHead = (currentState.clubDetail?.scope ?? .member) == .head

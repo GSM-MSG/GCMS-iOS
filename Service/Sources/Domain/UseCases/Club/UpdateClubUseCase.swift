@@ -1,16 +1,13 @@
 import RxSwift
 
-public final class UpdateClubUseCase {
+public struct UpdateClubUseCase {
     public init(clubRepository: ClubRepository) {
         self.clubRepository = clubRepository
     }
     
     private let clubRepository: ClubRepository
     
-    public func execute(
-        query: ClubRequestQuery,
-        req: NewClubRequest
-    ) -> Completable{
-        clubRepository.updateClub(query: query, req: req)
+    public func execute(req: UpdateClubRequest) -> Completable{
+        clubRepository.updateClub(req: req)
     }
 }

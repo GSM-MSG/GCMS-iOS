@@ -21,7 +21,7 @@ extension DetailClubResponse {
             description: club.description,
             contact: club.contact,
             head: head.toDomain(),
-            relatedLink: club.relatedLink.map { $0.toDomain() },
+            relatedLink: club.relatedLink.first?.toDomain(),
             scope: scope,
             isApplied: isApplied,
             isOpen: club.isOpend,

@@ -33,8 +33,8 @@ final class Keychain {
         let status = SecItemCopyMatching(query, &dataRef)
         if status == errSecSuccess {
             guard let data = dataRef as? Data else { throw KeychainError.noData }
-            let value = String(data: data, encoding: .utf8) ?? .init()
-            return value
+            let value = String(data: data, encoding: .utf8)
+            return value!
         } else {
             throw KeychainError.noData
         }

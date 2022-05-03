@@ -1,6 +1,6 @@
 import RxSwift
 
-public final class ClubExitUseCase {
+public struct ClubExitUseCase {
     public init(userRepository: UserRepository) {
         self.userRepository = userRepository
     }

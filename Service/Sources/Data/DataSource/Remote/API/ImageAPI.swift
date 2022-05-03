@@ -29,7 +29,7 @@ extension ImageAPI: GCMSAPI {
                 let uuid = UUID().uuidString
                 return MultipartFormData(
                     provider: .data(data),
-                    name: uuid,
+                    name: "files",
                     fileName: "\(uuid).png"
                 )
             }
@@ -44,7 +44,9 @@ extension ImageAPI: GCMSAPI {
             return JWTTokenType.none
         }
     }
-    
+    var headers: [String : String]? {
+        return ["Content-type" : "multipart/form-data"]
+    }
     var errorMapper: [Int: GCMSError]?{
         return [
             403: .forbidden,

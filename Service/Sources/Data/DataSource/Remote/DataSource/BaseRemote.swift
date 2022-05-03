@@ -7,7 +7,7 @@ import AVFoundation
 class BaseRemote<API: GCMSAPI> {
     public var testStatus = false
     public var successStatus = true
-    private let provider = MoyaProvider<API>(plugins: [JWTPlugin()])
+    private let provider = MoyaProvider<API>(plugins: [JWTPlugin(), NetworkLoggerPlugin()])
     private let successTestEndpoint = { (target: API) -> Endpoint in
         return Endpoint(
             url: URL(target: target).absoluteString,
@@ -61,43 +61,44 @@ private extension BaseRemote {
         return (testStatus ? testingProvider : provider).rx
             .request(api)
             .timeout(.seconds(120), scheduler: MainScheduler.asyncInstance)
+            .do(onSuccess: {
+                print(try? $0.mapJSON())
+            })
             .catch { error in
-                guard let moyaErr = error as? MoyaError else {
+                guard let code = (error as? MoyaError)?.response?.statusCode else {
                     return .error(error)
                 }
-                
-                return .error(api.errorMapper?[moyaErr.response?.statusCode ?? 400] ?? error)
+                if code == 401 {
+                    return .error(TokenError.expired)
+                }
+                return .error(api.errorMapper?[code] ?? error)
             }
     }
     
     func requestWithAccessToken(_ api: API) -> Single<Response> {
-        return .create { single in
-            var disposables: [Disposable] = []
+        return .deferred {
             do {
                 if try self.checkTokenIsValid() {
-                    disposables.append(
-                        self.defaultRequest(api)
-                            .subscribe(
-                                onSuccess: { single(.success($0)) },
-                                onFailure: { single(.failure($0)) }
-                            )
-                    )
+                    return self.defaultRequest(api)
                 } else {
-                    single(.failure(TokenError.noData))
+                    return .error(TokenError.expired)
                 }
             } catch {
-                single(.failure(error))
-            }
-            return Disposables.create(disposables)
-        }.retry { (errorObservable: Observable<TokenError>) in
-            errorObservable.flatMap { error -> Completable in
-                if error == .expired {
-                    return self.reissueToken()
-                } else {
-                    throw TokenError.noData
-                }
+                return .error(error)
             }
         }
+        .retry(when: { (errorObservable: Observable<TokenError>) in
+            return errorObservable
+                .flatMap { error -> Observable<Void> in
+                    switch error {
+                    case .expired:
+                        return self.reissueToken()
+                            .andThen(.just(()))
+                    default:
+                        return .error(error)
+                    }
+                }
+        })
     }
     
     func isApiNeedsAccessToken(_ api: API) -> Bool {
@@ -106,7 +107,7 @@ private extension BaseRemote {
     func checkTokenIsValid() throws -> Bool {
         do {
             let expired = try KeychainLocal.shared.fetchExpiredAt().toDateWithISO8601()
-            return Date() > expired
+            return Date() < expired
         } catch {
             throw TokenError.noData
         }

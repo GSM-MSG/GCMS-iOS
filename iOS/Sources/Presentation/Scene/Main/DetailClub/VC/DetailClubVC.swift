@@ -27,6 +27,14 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         $0.textColor = GCMSAsset.Colors.gcmsGray1.color
         $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 13)
     }
+    private let relatedLinkHeaderLabel = HeaderLabel(title: "")
+    private let relatedLinkButton = UIButton().then {
+        $0.setTitleColor(.init(red: 0.18, green: 0.36, blue: 1, alpha: 1), for: .normal)
+        $0.backgroundColor = .white
+        $0.layer.cornerRadius = 5
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 13)
+        $0.titleLabel?.textAlignment = .left
+    }
     private let activityHeaderLabel = HeaderLabel(title: "동아리 활동")
     private let activityView = BTImageView(aligns: [2,2], axis: .horizontal).then {
         $0.spacing = 15
@@ -62,7 +70,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
     override func addView() {
         view.addSubViews(contentView, applyButton)
         contentView.addSubViews(bannerImageView, containerView)
-        containerView.addSubViews(descriptionHeaderLabel, descriptionLabel, activityHeaderLabel, activityView, memberHeaderLabel, memberCollectionView, headHeaderLabel, headView, teacherHeaderLabel, teacherView, contactHeaderLabel, contactDescriptionLabel)
+        containerView.addSubViews(descriptionHeaderLabel, descriptionLabel, relatedLinkHeaderLabel, relatedLinkButton, activityHeaderLabel, activityView, memberHeaderLabel, memberCollectionView, headHeaderLabel, headView, teacherHeaderLabel, teacherView, contactHeaderLabel, contactDescriptionLabel)
     }
     override func setLayout() {
         contentView.snp.makeConstraints {
@@ -90,8 +98,16 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             $0.top.equalTo(descriptionHeaderLabel.snp.bottom).offset(Metric.headerContentSpace)
             $0.leading.trailing.equalTo(descriptionHeaderLabel)
         }
-        activityHeaderLabel.snp.makeConstraints {
+        relatedLinkHeaderLabel.snp.makeConstraints {
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(Metric.sectionSpace)
+            $0.leading.trailing.equalTo(descriptionLabel)
+        }
+        relatedLinkButton.snp.makeConstraints {
+            $0.top.equalTo(relatedLinkHeaderLabel.snp.bottom).offset(Metric.headerContentSpace)
+            $0.leading.trailing.equalTo(relatedLinkHeaderLabel)
+        }
+        activityHeaderLabel.snp.makeConstraints {
+            $0.top.equalTo(relatedLinkButton.snp.bottom).offset(Metric.sectionSpace)
             $0.leading.trailing.equalTo(descriptionLabel)
         }
         activityView.snp.makeConstraints {
@@ -144,13 +160,17 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
     override func configureNavigation() {
         self.navigationItem.setRightBarButton(statusButton, animated: true)
         self.navigationItem.configBack()
-        bannerImageView.kf.setImage(with: URL(string: "https://avatars.githubusercontent.com/u/89921023?s=64&v=4") ?? .none)
     }
     
     // MARK: - Reactor
     override func bindView(reactor: DetailClubReactor) {
         statusButton.rx.tap
             .map { Reactor.Action.statusButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        relatedLinkButton.rx.tap
+            .map { Reactor.Action.linkButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
@@ -164,12 +184,18 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         let sharedState = reactor.state.share(replay: 3).observe(on: MainScheduler.asyncInstance)
         
         sharedState
-            .map(\.clubDetail)
-            .compactMap { $0 }
+            .compactMap(\.clubDetail)
             .withUnretained(self)
             .bind { owner, item in
                 owner.descriptionLabel.text = item.description
                 owner.activityView.setImages(urls: item.activities)
+                if let relatedLink = item.relatedLink {
+                    owner.relatedLinkHeaderLabel.text = relatedLink.name
+                    owner.relatedLinkButton.setTitle(relatedLink.url, for: .normal)
+                    owner.relatedLinkButton.isHidden = false
+                } else {
+                    owner.relatedLinkButton.isHidden = true
+                }
                 if item.activities.isEmpty {
                     owner.activityView.snp.updateConstraints {
                         $0.height.equalTo(0)
@@ -179,8 +205,25 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                         $0.height.equalTo(owner.bound.width-32)
                     }
                 }
+                owner.loadViewIfNeeded()
+                switch item.scope {
+                case .head:
+                    owner.applyButton.setTitle("동아리 신청 마감하기", for: .normal)
+                case .member:
+                    owner.applyButton.isHidden = true
+                case .`default`:
+                    owner.applyButton.setTitle(item.isApplied ? "신청취소하기" : "동아리 신청하기", for: .normal)
+                    owner.applyButton.backgroundColor = item.isApplied
+                    ? .init(red: 1, green: 0.5, blue: 0.5, alpha: 1)
+                    : GCMSAsset.Colors.gcmsMainColor.color
+                }
+                if item.isOpen && !(item.scope == .head) {
+                    owner.applyButton.isHidden = false
+                    owner.applyButton.setTitle("마감됨", for: .normal)
+                    owner.applyButton.backgroundColor = .init(red: 0.58, green: 0.58, blue: 0.58, alpha: 1)
+                }
                 owner.headView.bind(user: item.head)
-                if let teacher = item.teacher {
+                if let teacher = item.teacher, !teacher.isEmpty {
                     owner.teacherHeaderLabel.isHidden = false
                     owner.teacherView.isHidden = false
                     owner.teacherView.setName(name: teacher)
@@ -201,8 +244,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         
         sharedState
             .map(\.clubDetail)
-            .map(\.?.member)
-            .compactMap { $0 }
+            .compactMap(\.?.member)
             .map { [ClubMemberSection(header: "", items: $0)] }
             .bind(to: memberCollectionView.rx.items(dataSource: ds))
             .disposed(by: disposeBag)
