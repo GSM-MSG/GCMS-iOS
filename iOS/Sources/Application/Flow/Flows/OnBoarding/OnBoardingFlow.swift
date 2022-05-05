@@ -47,6 +47,10 @@ final class OnBoardingFlow: Flow{
             return dismissVC()
         case let .loaf(message, state: state, location: location):
             return showLoaf(message, state: state, location: location)
+        case let .alert(title, message, style, actions):
+            return presentToAlert(title: title, message: message, style: style, actions: actions)
+        case let .failureAlert(title, message, action):
+            return presentToFailureAlert(title: title, message: message, action: action)
         default:
             return .none
         }
@@ -94,5 +98,20 @@ private extension OnBoardingFlow{
         Loaf(message, state: state, location: location, sender: self.rootVC.visibleViewController ?? .init()).show()
         return .none
     }
-    
+    func presentToAlert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction]) -> FlowContributors {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: style)
+        actions.forEach { alert.addAction($0) }
+        self.rootVC.visibleViewController?.present(alert, animated: true)
+        return .none
+    }
+    func presentToFailureAlert(title: String?, message: String?, action: UIAlertAction?) -> FlowContributors {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        if let action = action {
+            alert.addAction(action)
+        } else {
+            alert.addAction(.init(title: "확인", style: .default))
+        }
+        self.rootVC.visibleViewController?.present(alert, animated: true)
+        return .none
+    }
 }

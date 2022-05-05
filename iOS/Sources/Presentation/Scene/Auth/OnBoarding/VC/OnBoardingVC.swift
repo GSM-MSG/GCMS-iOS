@@ -27,50 +27,55 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         $0.text = "it’s GCMS sign up now"
         $0.textColor = GCMSAsset.Colors.gcmsGray4.color
     }
-    private let loginButton = UIButton().then {
-        $0.setTitle("로그인", for: .normal)
-        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 18)
-        $0.layer.cornerRadius = 9
+    private let googleSigninButton = UIButton().then {
+        $0.setTitle("Google로 로그인", for: .normal)
+        $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
+        $0.setImage(GCMSAsset.Images.gcmsGoogleLogo.image.downSample(size: .init(width: 5.5, height: 5.5)), for: .normal)
         $0.backgroundColor = GCMSAsset.Colors.gcmsOnBoardingMainColor.color
-    }
-    private let signUpButton = UIButton().then {
-        $0.setTitle("회원가입", for: .normal)
-        $0.setTitleColor(.white, for: .normal)
-        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 18)
-        $0.setTitleColor(.init(red: 50/255, green: 56/255, blue: 187/255, alpha: 1), for: .normal)
         $0.layer.cornerRadius = 9
-        $0.backgroundColor = GCMSAsset.Colors.gcmsGray1.color
+        if #available(iOS 15.0, *) {
+            $0.configuration = .plain()
+            $0.configuration?.imagePadding = 5
+            $0.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { i in
+                var o = i
+                o.font = .systemFont(ofSize: 20)
+                return o
+            }
+        } else {
+            $0.contentEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 5)
+        }
     }
+    private let appleSigninButton = ASAuthorizationAppleIDButton(type: .signIn, style: .white)
     // MARK: - UI
     override func addView() {
-        view.addSubViews(headerLabel, logoImageView, loginButton, signUpButton, signUpLabel, nowLabel)
+        view.addSubViews(headerLabel, logoImageView, googleSigninButton, appleSigninButton, signUpLabel, nowLabel)
     }
     override func setLayout() {
         logoImageView.snp.makeConstraints {
             $0.centerX.equalToSuperview().offset(-10)
             $0.top.equalToSuperview().offset(bound.height*0.21)
-            $0.width.equalTo(145)
-            $0.height.equalTo(145)
+            $0.width.equalTo(144)
+            $0.height.equalTo(144)
         }
         headerLabel.snp.makeConstraints {
             $0.top.equalTo(logoImageView.snp.bottom).offset(16)
             $0.centerX.equalToSuperview()
         }
-        signUpButton.snp.makeConstraints {
+        appleSigninButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.height.equalTo(51)
             $0.bottom.equalToSuperview().offset(-bound.height*0.1)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
-        loginButton.snp.makeConstraints {
+        googleSigninButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.height.equalTo(51)
-            $0.bottom.equalTo(signUpButton.snp.top).offset(-12)
+            $0.bottom.equalTo(appleSigninButton.snp.top).offset(-12)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
         nowLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(loginButton.snp.top).offset(-42)
+            $0.bottom.equalTo(googleSigninButton.snp.top).offset(-42)
         }
         signUpLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
@@ -94,7 +99,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             
         ], initialAlpha: 0, finalAlpha: 1, delay: 1.05, duration: 0.75)
         UIView.animate(views: [
-            loginButton, signUpButton
+            googleSigninButton, appleSigninButton
         ], animations: [
             AnimationType.from(direction: .left, offset: 200)
         ], delay: 1.8, duration: 1, usingSpringWithDamping: 1, initialSpringVelocity: 0.7, options: .curveEaseInOut)
@@ -113,13 +118,49 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     }
     
     override func bindView(reactor: OnBoardingReactor) {
-        loginButton.rx.tap
-            .map { Reactor.Action.loginButtonDidTap }
+        googleSigninButton.rx.tap
+            .withUnretained(self)
+            .map { Reactor.Action.googleSigninButtonDidTap($0.0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        signUpButton.rx.tap
-            .map { Reactor.Action.signUpButtonDidTap }
-            .bind(to: reactor.action)
+        
+        appleSigninButton.rx.controlEvent(.touchUpInside)
+            .bind(with: self) { owner, _ in
+                owner.appleSigninMessage()
+            }
             .disposed(by: disposeBag)
+    }
+}
+
+private extension OnBoardingVC {
+    func appleSigninMessage() {
+        self.reactor?.steps.accept(GCMSStep.alert(title: nil, message: "Apple로 로그인 시 게스트 로그인과 동일시 됩니다", style: .alert, actions: [
+            .init(title: "확인", style: .default, handler: { [weak self] _ in
+                self?.appleSignin()
+            }),
+            .init(title: "취소", style: .cancel)
+        ]))
+    }
+    func appleSignin() {
+        let provider = ASAuthorizationAppleIDProvider()
+        let req = provider.createRequest()
+        req.requestedScopes = []
+        
+        let authController = ASAuthorizationController(authorizationRequests: [req])
+        authController.delegate = self
+        authController.presentationContextProvider = self
+        authController.performRequests()
+    }
+}
+
+extension OnBoardingVC: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        self.view.window ?? .init()
+    }
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        self.reactor?.action.onNext(.appleSigninCompleted)
+    }
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        self.reactor?.action.onNext(.appleSigninFailed)
     }
 }

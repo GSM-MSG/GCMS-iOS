@@ -2,22 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSExceptionDomains</key>
-		<dict>
-			<key>http://gsm.o-r.kr:4000</key>
-			<dict/>
-			<key>NSIncludesSubDomains</key>
-			<true/>
-			<key>NSExceptionAllowsInsecureHTTPLoads</key>
-			<true/>
-		</dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>ko_KR</string>
 	<key>CFBundleExecutable</key>
@@ -39,14 +23,30 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.406780900894-7d58bqmag51kpd71a4ma3kk8md92g9q8</string>
+				<string>com.googleusercontent.apps.406780900894-mp76r4ssbe8kh3qvhk1o1rd6gtijvdon</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>NSExceptionAllowsInsecureHTTPLoads</key>
+			<true/>
+			<key>NSIncludesSubDomains</key>
+			<true/>
+			<key>http://gsm.o-r.kr:4000</key>
+			<dict/>
+		</dict>
+	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>앨범에서 사진을 가져올 때 사진 앨범 권한이 필요합니다.</string>
 	<key>UIApplicationSceneManifest</key>
