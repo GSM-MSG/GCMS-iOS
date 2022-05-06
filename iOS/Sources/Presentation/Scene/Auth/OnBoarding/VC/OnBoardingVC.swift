@@ -28,7 +28,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         $0.textColor = GCMSAsset.Colors.gcmsGray4.color
     }
     private let googleSigninButton = UIButton().then {
-        $0.setTitle("Google로 로그인", for: .normal)
+        $0.setTitle("Google로 계속하기", for: .normal)
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
         $0.setImage(GCMSAsset.Images.gcmsGoogleLogo.image.downSample(size: .init(width: 5.5, height: 5.5)), for: .normal)
         $0.backgroundColor = GCMSAsset.Colors.gcmsOnBoardingMainColor.color
@@ -45,7 +45,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             $0.contentEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 5)
         }
     }
-    private let appleSigninButton = ASAuthorizationAppleIDButton(type: .signIn, style: .white)
+    private let appleSigninButton = ASAuthorizationAppleIDButton(type: .continue, style: .white)
     // MARK: - UI
     override func addView() {
         view.addSubViews(headerLabel, logoImageView, googleSigninButton, appleSigninButton, signUpLabel, nowLabel)
