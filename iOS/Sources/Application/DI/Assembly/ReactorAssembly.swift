@@ -38,26 +38,6 @@ final class ReactorAssembly: Assembly {
             )
         }
         
-        container.register(LoginReactor.self) { r in
-             LoginReactor(
-                loginUseCase: r.resolve(LoginUseCase.self)!
-            )
-        }
-        
-        container.register(SignUpReactor.self) { r in
-             SignUpReactor(
-                sendVerifyUseCase: r.resolve(SendVerifyUseCase.self)!,
-                registerUseCase: r.resolve(RegisterUseCase.self)!
-            )
-        }
-        
-        container.register(CertificationReactor.self) { r, email in
-             CertificationReactor(
-                checkIsVerifiedUseCase: r.resolve(CheckIsVerifiedUseCase.self)!,
-                email: email
-            )
-        }
-        
         container.register(NewClubReactor.self) { r in
              NewClubReactor(
                 createNewClubUseCase: r.resolve(CreateNewClubUseCase.self)!,

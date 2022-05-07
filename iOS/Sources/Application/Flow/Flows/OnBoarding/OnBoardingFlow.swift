@@ -33,16 +33,8 @@ final class OnBoardingFlow: Flow{
         switch step{
         case .onBoardingIsRequired:
             return coordinateToOnBoarding()
-        case .loginIsRequired:
-            return navigateToLogin()
         case .clubListIsRequired:
             return .end(forwardToParentFlowWithStep: GCMSStep.clubListIsRequired)
-        case .signUpIsRequired:
-            return navigateToSignUp()
-        case .signUpIsCompleted:
-            return signUpIsCompleted()
-        case let .certificationIsRequired(email):
-            return presentCertification(email: email)
         case .dismiss:
             return dismissVC()
         case let .loaf(message, state: state, location: location):
@@ -64,29 +56,8 @@ private extension OnBoardingFlow{
         self.rootVC.setViewControllers([vc], animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
-    func navigateToLogin() -> FlowContributors {
-        let vc = AppDelegate.container.resolve(LoginVC.self)!
-        self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
-    }
-    func navigateToSignUp() -> FlowContributors {
-        let vc = AppDelegate.container.resolve(SignUpVC.self)!
-        self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
-    }
-    func presentCertification(email: String) -> FlowContributors {
-        let reactor = AppDelegate.container.resolve(CertificationReactor.self, argument: email)
-        let vc = CertificationVC(reactor: reactor)
-        vc.modalPresentationStyle = .overFullScreen
-        self.rootVC.visibleViewController?.present(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
-    }
     func dismissVC() -> FlowContributors {
         self.rootVC.visibleViewController?.dismiss(animated: true)
-        return .none
-    }
-    func signUpIsCompleted() -> FlowContributors {
-        self.rootVC.popViewController(animated: true)
         return .none
     }
 
