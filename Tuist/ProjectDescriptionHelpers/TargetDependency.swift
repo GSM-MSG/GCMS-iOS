@@ -30,6 +30,7 @@ public extension TargetDependency.SPM{
     static let RxKeyboard = TargetDependency.package(product: "RxKeyboard")
     static let Loaf = TargetDependency.package(product: "Loaf")
     static let ParkedTextField = TargetDependency.package(product: "ParkedTextField")
+    static let GoogleSignIn = TargetDependency.package(product: "GoogleSignIn")
 }
 
 public extension Package {
@@ -128,5 +129,9 @@ public extension Package {
     static let ParkedTextField = Package.remote(
         url: "https://github.com/gmertk/ParkedTextField",
         requirement: .upToNextMajor(from: "1.0.0")
+    )
+    static let GoogleSignIn = Package.remote(
+        url: "https://github.com/google/GoogleSignIn-iOS.git",
+        requirement: .upToNextMajor(from: "6.1.0")
     )
 }

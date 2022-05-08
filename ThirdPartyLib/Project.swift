@@ -28,6 +28,7 @@ let project = Project.dynamicFramework(
         .RxKeyboard,
         .Loaf,
         .ParkedTextField,
+        .GoogleSignIn,
     ],
     deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
     dependencies: [
@@ -54,5 +55,6 @@ let project = Project.dynamicFramework(
         .SPM.RxKeyboard,
         .SPM.Loaf,
         .SPM.ParkedTextField,
+        .SPM.GoogleSignIn,
     ]
 )

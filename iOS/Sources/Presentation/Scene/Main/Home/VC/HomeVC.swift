@@ -21,6 +21,10 @@ final class HomeVC: TabmanViewController, View {
                                               style: .plain,
                                               target: nil,
                                               action: nil)
+    private let guestLogoutButton = UIBarButtonItem(image: .init(systemName: "rectangle.portrait.and.arrow.right")?.tintColor(GCMSAsset.Colors.gcmsGray4.color),
+                                                    style: .plain,
+                                                    target: nil,
+                                                    action: nil)
     private lazy var indicator = AnimationView(name: "GCMS-Indicator").then {
         $0.contentMode = .scaleAspectFit
         $0.loopMode = .loop
@@ -95,8 +99,12 @@ private extension HomeVC {
         }
     }
     func configNavigation(){
-        self.navigationItem.setLeftBarButton(myPageButton, animated: true)
-        self.navigationItem.setRightBarButton(newClubButton, animated: true)
+        if UserDefaultsLocal.shared.isApple {
+            self.navigationItem.setRightBarButton(guestLogoutButton, animated: true)
+        } else {
+            self.navigationItem.setLeftBarButton(myPageButton, animated: true)
+            self.navigationItem.setRightBarButton(newClubButton, animated: true)
+        }
         self.navigationItem.configBack()
     }
     func bindAction(reactor: HomeReactor) {
@@ -113,6 +121,11 @@ private extension HomeVC {
         
         newClubButton.rx.tap
             .map { _ in Reactor.Action.newClubButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        guestLogoutButton.rx.tap
+            .map { _ in Reactor.Action.guestLogoutButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }

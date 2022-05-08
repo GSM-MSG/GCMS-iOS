@@ -6,7 +6,7 @@ final class ReactorAssembly: Assembly {
     func assemble(container: Container) {
         container.register(OnBoardingReactor.self) { r in
              OnBoardingReactor(
-                loginUseCase: r.resolve(LoginUseCase.self)!
+                
             )
         }
         
@@ -35,26 +35,6 @@ final class ReactorAssembly: Assembly {
                 fetchProfileUseCase: r.resolve(FetchProfileUseCase.self)!,
                 uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!,
                 updateProfileImageUseCase: r.resolve(UpdateProfileImageUseCase.self)!
-            )
-        }
-        
-        container.register(LoginReactor.self) { r in
-             LoginReactor(
-                loginUseCase: r.resolve(LoginUseCase.self)!
-            )
-        }
-        
-        container.register(SignUpReactor.self) { r in
-             SignUpReactor(
-                sendVerifyUseCase: r.resolve(SendVerifyUseCase.self)!,
-                registerUseCase: r.resolve(RegisterUseCase.self)!
-            )
-        }
-        
-        container.register(CertificationReactor.self) { r, email in
-             CertificationReactor(
-                checkIsVerifiedUseCase: r.resolve(CheckIsVerifiedUseCase.self)!,
-                email: email
             )
         }
         

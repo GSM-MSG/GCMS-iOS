@@ -19,6 +19,7 @@ final class HomeReactor: Reactor, Stepper {
         case newClubButtonDidTap
         case updateLoading(Bool)
         case clubDidTap(ClubRequestQuery)
+        case guestLogoutButtonDidTap
     }
     enum Mutation {
         case setClubList(ClubType, [ClubList])
@@ -64,6 +65,8 @@ extension HomeReactor {
             return viewDidLoad()
         case let .clubDidTap(query):
             steps.accept(GCMSStep.clubDetailIsRequired(query: query))
+        case .guestLogoutButtonDidTap:
+            return guestLogoutButtonDidTap()
         }
         return .empty()
     }
@@ -108,5 +111,16 @@ private extension HomeReactor {
             ])
         }.catchAndReturn(Mutation.setIsLoading(false))
         return .concat([start, clubs])
+    }
+    func guestLogoutButtonDidTap() -> Observable<Mutation> {
+        UserDefaultsLocal.shared.isApple = false
+        steps.accept(GCMSStep.alert(title: nil, message: "게스트 계정을 로그아웃 하시겠습니까?", style: .alert, actions: [
+            .init(title: "확인", style: .default, handler: { [weak self] _ in
+                UserDefaultsLocal.shared.isApple = false
+                self?.steps.accept(GCMSStep.onBoardingIsRequired)
+            }),
+            .init(title: "취소", style: .cancel)
+        ]))
+        return .empty()
     }
 }
