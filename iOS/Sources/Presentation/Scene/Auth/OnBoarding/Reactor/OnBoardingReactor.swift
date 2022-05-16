@@ -12,9 +12,12 @@ final class OnBoardingReactor: Reactor, Stepper {
     
     private let disposeBag: DisposeBag = .init()
     
+    private let loginUseCase: LoginUseCase
+    
     // MARK: - Reactor
     enum Action {
         case googleSigninButtonDidTap(UIViewController)
+        case googleSigninCompleted
         case appleSigninCompleted
         case appleSigninFailed
     }
@@ -27,10 +30,13 @@ final class OnBoardingReactor: Reactor, Stepper {
     let initialState: State
     
     // MARK: - Init
-    init() {
+    init(
+        loginUseCase: LoginUseCase
+    ) {
         initialState = State(
             isLoading: false
         )
+        self.loginUseCase = loginUseCase
     }
     
 }
@@ -44,7 +50,9 @@ extension OnBoardingReactor {
         case .appleSigninCompleted:
             return appleSigninCompleted()
         case .appleSigninFailed:
-            return appleSigninFailed()
+            return signinFailed()
+        case .googleSigninCompleted:
+            return googleSigninCompleted()
         }
         return .empty()
     }
@@ -82,15 +90,24 @@ private extension OnBoardingReactor {
     }
     func googleSigninTokenReceived(token: String) {
         UserDefaultsLocal.shared.isApple = false
-        // TODO: 서버에 idToken값 보내기
+        loginUseCase.execute(idToken: token)
+            .andThen(.just(()))
+            .map { Action.googleSigninCompleted }
+            .catchAndReturn(.appleSigninFailed)
+            .bind(to: action)
+            .disposed(by: disposeBag)
+    }
+    func googleSigninCompleted() -> Observable<Mutation> {
+        steps.accept(GCMSStep.clubListIsRequired)
+        return .empty()
     }
     func appleSigninCompleted() -> Observable<Mutation> {
         UserDefaultsLocal.shared.isApple = true
         steps.accept(GCMSStep.clubListIsRequired)
         return .empty()
     }
-    func appleSigninFailed() -> Observable<Mutation> {
-        self.steps.accept(GCMSStep.failureAlert(title: nil, message: "Apple로 로그인이 실패하였습니다", action: nil))
+    func signinFailed() -> Observable<Mutation> {
+        self.steps.accept(GCMSStep.failureAlert(title: nil, message: "로그인이 실패하였습니다", action: nil))
         return .empty()
     }
 }
