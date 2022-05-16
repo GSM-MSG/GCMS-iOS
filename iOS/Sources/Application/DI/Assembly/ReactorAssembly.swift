@@ -6,7 +6,7 @@ final class ReactorAssembly: Assembly {
     func assemble(container: Container) {
         container.register(OnBoardingReactor.self) { r in
              OnBoardingReactor(
-                
+                loginUseCase: r.resolve(LoginUseCase.self)!
             )
         }
         

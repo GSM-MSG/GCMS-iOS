@@ -9,23 +9,8 @@ public final class UseCaseAssembly: Assembly {
                 authRepository: r.resolve(AuthRepository.self)!
             )
         }
-        container.register(RegisterUseCase.self) { r in
-             RegisterUseCase(
-                authRepository: r.resolve(AuthRepository.self)!
-            )
-        }
         container.register(CheckIsLoginedUseCase.self) { r in
              CheckIsLoginedUseCase(
-                authRepository: r.resolve(AuthRepository.self)!
-            )
-        }
-        container.register(SendVerifyUseCase.self) { r in
-             SendVerifyUseCase(
-                authRepository: r.resolve(AuthRepository.self)!
-            )
-        }
-        container.register(CheckIsVerifiedUseCase.self) { r in
-             CheckIsVerifiedUseCase(
                 authRepository: r.resolve(AuthRepository.self)!
             )
         }
