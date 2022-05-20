@@ -76,7 +76,7 @@ private extension OnBoardingReactor {
         GIDSignIn.sharedInstance.signIn(with: config, presenting: vc) { [weak self] user, err in
             if let err = err {
                 print(err.localizedDescription)
-                self?.signinFailed(message: "로그인이 실패하였습니다. 계정 또는 네트워크를 확인해주세요")
+                self.action.onNext(.appleSigninFailed)
                 return
             }
             
