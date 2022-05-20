@@ -82,6 +82,7 @@ private extension OnBoardingReactor {
             
             user?.authentication.do({ auth in
                 if let idToken = auth.idToken {
+                    print(idToken)
                     self?.googleSigninTokenReceived(token: idToken)
                 }
             })

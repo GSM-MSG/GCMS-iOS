@@ -12,7 +12,7 @@ extension AuthAPI: GCMSAPI {
     var urlPath: String {
         switch self {
         case .login:
-            return "/login"
+            return "/mobile"
         case .refresh:
             return "/refresh"
         }
@@ -26,7 +26,9 @@ extension AuthAPI: GCMSAPI {
     var task: Task {
         switch self {
         case let .login(req):
-            return .requestJSONEncodable(req)
+            return .requestParameters(parameters: [
+                "idToken": req
+            ], encoding: JSONEncoding.default)
         case .refresh:
             return .requestPlain
         }
