@@ -35,6 +35,11 @@ final class HomeVC: TabmanViewController, View {
         $0.isHidden = true
         $0.backgroundColor = .black.withAlphaComponent(0.4)
     }
+    private let titleLabel = UILabel().then {
+        $0.text = "전공동아리"
+        $0.textColor = .white
+        $0.font = .systemFont(ofSize: 30, weight: .black)
+    }
     var disposeBag: DisposeBag = .init()
     
     typealias Reactor = HomeReactor
@@ -55,18 +60,18 @@ final class HomeVC: TabmanViewController, View {
         
         let bar = TMBar.ButtonBar()
         bar.layout.transitionStyle = .snap
-        bar.layout.interButtonSpacing = 20
+        bar.layout.interButtonSpacing = 90
         bar.buttons.customize {
-            $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 13) ?? .init()
+            $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 15) ?? .init()
             $0.tintColor = GCMSAsset.Colors.gcmsGray3.color
             $0.selectedFont = UIFont(font: GCMSFontFamily.Inter.bold, size: 13) ?? .init()
             $0.selectedTintColor = UIColor(red: 0, green: 0.65, blue: 1, alpha: 0.99)
         }
-        bar.layout.contentMode = .fit
-        bar.indicator.weight = .custom(value: 0)
+        bar.indicator.weight = .custom(value: 2)
+        bar.indicator.cornerStyle = .rounded
         bar.layout.alignment = .centerDistributed
         bar.systemBar().backgroundStyle = .clear
-        addBar(bar, dataSource: self, at: .navigationItem(item: self.navigationItem))
+        addBar(bar, dataSource: self, at: .bottom)
     }
     
     // MARK: - UI
@@ -102,8 +107,8 @@ private extension HomeVC {
         if UserDefaultsLocal.shared.isApple {
             self.navigationItem.setRightBarButton(guestLogoutButton, animated: true)
         } else {
-            self.navigationItem.setLeftBarButton(myPageButton, animated: true)
-            self.navigationItem.setRightBarButton(newClubButton, animated: true)
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: titleLabel)
+            self.navigationItem.setRightBarButtonItems([myPageButton, newClubButton], animated: true)
         }
         self.navigationItem.configBack()
     }
@@ -132,12 +137,12 @@ private extension HomeVC {
     func bindState(reactor: HomeReactor) {
         let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
         
-        sharedState
-            .map(\.isLoading)
-            .bind(with: self) { owner, load in
-                load ? owner.startIndicator() : owner.stopIndicator()
-            }
-            .disposed(by: disposeBag)
+//        sharedState
+//            .map(\.isLoading)
+//            .bind(with: self) { owner, load in
+//                load ? owner.startIndicator() : owner.stopIndicator()
+//            }
+//            .disposed(by: disposeBag)
     }
     func startIndicator() {
         indicatorBackgroundView.isHidden = false
