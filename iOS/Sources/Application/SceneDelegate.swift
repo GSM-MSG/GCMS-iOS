@@ -32,8 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             appFlow,
             when: .created
         ) { [weak self] root in
-            let inject = Inject.ViewControllerHost(root)
-            self?.window?.rootViewController = inject
+            self?.window?.rootViewController = root
             self?.window?.makeKeyAndVisible()
         }
     }

@@ -68,7 +68,7 @@ private extension BaseRemote {
                 guard let code = (error as? MoyaError)?.response?.statusCode else {
                     return .error(error)
                 }
-                if code == 401 {
+                if code == 401 && API.self != AuthAPI.self {
                     print(code)
                     return self.reissueToken()
                         .andThen(.error(TokenError.expired))
