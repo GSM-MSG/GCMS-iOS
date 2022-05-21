@@ -76,7 +76,6 @@ extension HomeReactor {
 extension HomeReactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
-        
         switch mutation {
         case let .setClubList(type, lists):
             switch type{

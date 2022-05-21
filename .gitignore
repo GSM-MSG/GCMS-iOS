@@ -20,7 +20,7 @@ Pods/
 
 # fastlane specific
 fastlane/report.xml
-
+GoogleService-Info.plist
 # deliver temporary files
 fastlane/Preview.html
 
