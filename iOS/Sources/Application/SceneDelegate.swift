@@ -1,6 +1,7 @@
 import UIKit
 import RxSwift
 import RxFlow
+import Inject
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -31,7 +32,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             appFlow,
             when: .created
         ) { [weak self] root in
-            self?.window?.rootViewController = root
+            let inject = Inject.ViewControllerHost(root)
+            self?.window?.rootViewController = inject
             self?.window?.makeKeyAndVisible()
         }
     }

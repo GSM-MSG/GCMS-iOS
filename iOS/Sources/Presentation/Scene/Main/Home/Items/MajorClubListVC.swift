@@ -11,12 +11,14 @@ final class MajorClubListVC: BaseVC<HomeReactor> {
         $0.register(cellType: ClubListCell.self)
         $0.backgroundColor = .clear
     }
+    private let refreshControl = UIRefreshControl()
     
     // MARK: - UI
     override func setup() {
         let lay = GCMSLayout()
         lay.delegate = self
         clubListCollectionView.collectionViewLayout = lay
+        clubListCollectionView.refreshControl = refreshControl
     }
     override func addView() {
         view.addSubViews(clubListCollectionView)
@@ -36,6 +38,11 @@ final class MajorClubListVC: BaseVC<HomeReactor> {
             .map { Reactor.Action.clubDidTap(.init(name: $0.title, type: $0.type)) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        refreshControl.rx.controlEvent(.valueChanged)
+            .map { Reactor.Action.refreshTrigger(.major) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     override func bindState(reactor: HomeReactor) {
         let ds = RxCollectionViewSectionedReloadDataSource<ClubListSection> { _, tv, ip, item in
@@ -49,6 +56,11 @@ final class MajorClubListVC: BaseVC<HomeReactor> {
             .map(\.majorClubList)
             .map { [ClubListSection.init(header: "", items: $0)] }
             .bind(to: clubListCollectionView.rx.items(dataSource: ds))
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.isRefreshing)
+            .bind(to: refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
     }
 }

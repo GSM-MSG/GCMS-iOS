@@ -87,6 +87,7 @@ extension MemberAppendReactor {
         case let .setQuery(q):
             newState.query = q
         case let .setUsers(users):
+            print(users)
             newState.users = users
         case let .appendAddedUser(user):
             newState.addedUsers.append(user)
@@ -103,13 +104,14 @@ extension MemberAppendReactor {
 // MARK: - Method
 private extension MemberAppendReactor {
     func updateQuery(query: String) -> Observable<Mutation> {
-        let users = searchUserUseCase.execute(name: query, type: clubType)
+        searchUserUseCase.execute(name: query, type: clubType)
             .asObservable()
-            .map(Mutation.setUsers)
+            .flatMap {
+                Observable<Mutation>.concat([
+                    Observable.just(Mutation.setQuery(query)),
+                    .just(Mutation.setUsers($0))
+                ])
+            }
             .catchAndReturn(Mutation.setUsers([]))
-        return .concat([
-            .just(.setQuery(query)),
-            users
-        ])
     }
 }
