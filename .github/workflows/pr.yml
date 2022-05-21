@@ -20,7 +20,7 @@ jobs:
       run: curl -Ls https://install.tuist.io | bash
     - name: configure GoogleService-Info.plist
       run: |
-        gpg -d "$DECRYPTED_GPLIST_FILE_PATH" --pinentry-mode=loopback --passphrase "$GPLIST_PW" "$ENCRYPTED_GPLIST_FILE_PATH"
+        gpg --pinentry-mode=loopback --passphrase  "$GPLIST_PW" -d -o "$DECRYPTED_GPLIST_FILE_PATH" "$ENCRYPTED_GPLIST_FILE_PATH"
     - name: project Generate
       run: |
         rm -rf .package.resolved
