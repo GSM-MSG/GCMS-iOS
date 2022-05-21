@@ -113,7 +113,6 @@ private extension HomeReactor {
         return .concat([start, clubs])
     }
     func guestLogoutButtonDidTap() -> Observable<Mutation> {
-        UserDefaultsLocal.shared.isApple = false
         steps.accept(GCMSStep.alert(title: nil, message: "게스트 계정을 로그아웃 하시겠습니까?", style: .alert, actions: [
             .init(title: "확인", style: .default, handler: { [weak self] _ in
                 UserDefaultsLocal.shared.isApple = false
