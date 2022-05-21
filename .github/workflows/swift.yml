@@ -6,16 +6,21 @@ on:
 
 jobs:
   build:
-
-    runs-on: macos-11
+    env:
+      ENCRYPTED_GPLIST_FILE_PATH: ${{ 'iOS/Resources/GoogleService-Info.plist.gpg' }}
+      DECRYPTED_GPLIST_FILE_PATH: ${{ 'iOS/Resources/GoogleService-Info.plist' }}
+      GPLIST_PW: ${{ secrets.GOOGLE_SERVICE_ENCRYPTO_PW }}
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v2
       with:
-        swift-version: "5.5.2"
         xcode-version: latest
     - name: install tuist
       run: curl -Ls https://install.tuist.io | bash
+    - name: configure GoogleService-Info.plist
+      run: |
+        gpg -d "$DECRYPTED_GPLIST_FILE_PATH" --pinentry-mode=loopback --passphrase "$GPLIST_PW" "$ENCRYPTED_GPLIST_FILE_PATH"
     - name: project Generate
       run: |
         rm -rf .package.resolved
