@@ -102,6 +102,7 @@ private extension BaseRemote {
                     }
                 }
         })
+        .retry(2)
     }
     
     func isApiNeedsAccessToken(_ api: API) -> Bool {
