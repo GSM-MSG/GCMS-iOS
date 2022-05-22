@@ -22,7 +22,9 @@ final class MyPageVC: BaseVC<MyPageReactor> {
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
     }
-    private let editorialLabel = HeaderLabel(title: "내가 속한 사설 동아리")
+    private let editorialLabel = HeaderLabel(title: "내가 속한 사설 동아리").then {
+        $0.isHidden = true
+    }
     private let editorialCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -33,9 +35,13 @@ final class MyPageVC: BaseVC<MyPageReactor> {
         $0.register(cellType: ClubListCell.self)
         $0.showsHorizontalScrollIndicator = false
     }
-    private let majorLabel = HeaderLabel(title: "내가 속한 전공 동아리")
+    private let majorLabel = HeaderLabel(title: "내가 속한 전공 동아리").then {
+        $0.isHidden = true
+    }
     private let majorClubView = ClubView()
-    private let freedomLabel = HeaderLabel(title: "내가 속한 자율 동아리")
+    private let freedomLabel = HeaderLabel(title: "내가 속한 자율 동아리").then {
+        $0.isHidden = true
+    }
     private let freedomClubView = ClubView()
     private var PHConfiguration: PHPickerConfiguration = {
         var config = PHPickerConfiguration()
@@ -131,6 +137,9 @@ final class MyPageVC: BaseVC<MyPageReactor> {
             .compactMap { $0.user }
             .compactMap { $0.joinedClub.filter { $0.type == .editorial } }
             .map { [ClubListSection.init(header: "", items: $0)] }
+            .do(onNext: { [weak self] item in
+                self?.editorialLabel.isHidden = item.isEmpty
+            })
             .bind(to: editorialCollectionView.rx.items(dataSource: ds))
             .disposed(by: disposeBag)
         
@@ -139,6 +148,7 @@ final class MyPageVC: BaseVC<MyPageReactor> {
             .map { $0.joinedClub.first(where: { $0.type == .major } ) }
             .bind(with: self) { owner, major in
                 owner.majorClubView.setClub(club: major)
+                owner.majorLabel.isHidden = major == nil
             }
             .disposed(by: disposeBag)
         
@@ -147,6 +157,7 @@ final class MyPageVC: BaseVC<MyPageReactor> {
             .map { $0.joinedClub.first(where: { $0.type == .freedom } ) }
             .bind(with: self) { owner, free in
                 owner.freedomClubView.setClub(club: free)
+                owner.freedomLabel.isHidden = free == nil
             }
             .disposed(by: disposeBag)
         

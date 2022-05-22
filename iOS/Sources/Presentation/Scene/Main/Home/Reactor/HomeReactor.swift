@@ -20,11 +20,13 @@ final class HomeReactor: Reactor, Stepper {
         case updateLoading(Bool)
         case clubDidTap(ClubRequestQuery)
         case guestLogoutButtonDidTap
+        case refreshTrigger(ClubType)
     }
     enum Mutation {
         case setClubList(ClubType, [ClubList])
         case setIsLoading(Bool)
         case setClubType(ClubType)
+        case setIsRefreshing(Bool)
     }
     struct State {
         var majorClubList: [ClubList]
@@ -32,6 +34,7 @@ final class HomeReactor: Reactor, Stepper {
         var editorialClubList: [ClubList]
         var clubType: ClubType
         var isLoading: Bool
+        var isRefreshing: Bool
     }
     let initialState: State
     
@@ -44,7 +47,8 @@ final class HomeReactor: Reactor, Stepper {
             freedomClubList: [],
             editorialClubList: [],
             clubType: .major,
-            isLoading: false
+            isLoading: false,
+            isRefreshing: false
         )
         self.fetchClubListsUseCase = fetchClubListsUseCase
     }
@@ -67,6 +71,8 @@ extension HomeReactor {
             steps.accept(GCMSStep.clubDetailIsRequired(query: query))
         case .guestLogoutButtonDidTap:
             return guestLogoutButtonDidTap()
+        case let .refreshTrigger(type):
+            return refresh(type: type)
         }
         return .empty()
     }
@@ -87,6 +93,8 @@ extension HomeReactor {
             newState.isLoading = load
         case let .setClubType(type):
             newState.clubType = type
+        case let .setIsRefreshing(refresh):
+            newState.isRefreshing = refresh
         }
         
         return newState
@@ -120,5 +128,19 @@ private extension HomeReactor {
             .init(title: "취소", style: .cancel)
         ]))
         return .empty()
+    }
+    func refresh(type: ClubType) -> Observable<Mutation> {
+        let start = Observable.just(Mutation.setIsLoading(true))
+        let task = fetchClubListsUseCase.execute(type: type)
+            .asObservable()
+            .flatMap { list in
+                Observable.concat([
+                    Observable.just(Mutation.setClubList(type, list)),
+                    .just(.setIsLoading(false)),
+                    .just(.setIsRefreshing(false))
+                ])
+            }
+            .catchAndReturn(Mutation.setIsLoading(false))
+        return .concat([start, task])
     }
 }

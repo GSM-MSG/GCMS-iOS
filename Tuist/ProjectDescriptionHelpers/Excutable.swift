@@ -5,8 +5,9 @@ extension Project{
         name: String,
         platform: Platform,
         product: Product = .app,
-        deploymentTarget: DeploymentTarget = .iOS(targetVersion: "13.0", devices: [.iphone, .iphone]),
-        dependencies: [TargetDependency]
+        deploymentTarget: DeploymentTarget = .iOS(targetVersion: "13.0", devices: [.iphone, .ipad]),
+        dependencies: [TargetDependency],
+        settings: Settings? = nil
     ) -> Project {
         return Project(
             name: name,
@@ -25,7 +26,8 @@ extension Project{
                     entitlements: Path("Support/\(name).entitlements"),
                     dependencies: [
                         .project(target: "ThirdPartyLib", path: Path("../ThirdPartyLib")),
-                    ] + dependencies
+                    ] + dependencies,
+                    settings: settings
                 ),
                 Target(
                     name: "\(name)Test",
