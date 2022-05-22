@@ -87,7 +87,6 @@ extension MemberAppendReactor {
         case let .setQuery(q):
             newState.query = q
         case let .setUsers(users):
-            print(users)
             newState.users = users
         case let .appendAddedUser(user):
             newState.addedUsers.append(user)
