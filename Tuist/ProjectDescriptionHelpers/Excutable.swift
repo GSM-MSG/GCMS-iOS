@@ -5,7 +5,7 @@ extension Project{
         name: String,
         platform: Platform,
         product: Product = .app,
-        deploymentTarget: DeploymentTarget = .iOS(targetVersion: "13.0", devices: [.iphone, .iphone]),
+        deploymentTarget: DeploymentTarget = .iOS(targetVersion: "13.0", devices: [.iphone, .ipad]),
         dependencies: [TargetDependency],
         settings: Settings? = nil
     ) -> Project {
