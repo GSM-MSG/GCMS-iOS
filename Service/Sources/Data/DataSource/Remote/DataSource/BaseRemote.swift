@@ -69,7 +69,6 @@ private extension BaseRemote {
                     return .error(error)
                 }
                 if code == 401 && API.self != AuthAPI.self {
-                    print(code)
                     return self.reissueToken()
                         .andThen(.error(TokenError.expired))
                 }
