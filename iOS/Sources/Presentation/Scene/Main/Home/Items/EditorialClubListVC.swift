@@ -38,7 +38,7 @@ final class EditorialClubListVC: BaseVC<HomeReactor> {
             .disposed(by: disposeBag)
         
         refreshControl.rx.controlEvent(.valueChanged)
-            .map { Reactor.Action.refreshTrigger(.major) }
+            .map { Reactor.Action.refreshTrigger(.editorial) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }

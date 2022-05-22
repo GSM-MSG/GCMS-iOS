@@ -36,7 +36,6 @@ final class JWTPlugin: PluginType {
         switch result {
         case let .success(res):
             if let newToken = try? res.map(TokenDTO.self) {
-                print(newToken)
                 self.setToken(token: newToken)
             }
         default:

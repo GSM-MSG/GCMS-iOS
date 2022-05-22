@@ -38,7 +38,7 @@ final class FreedomClubListVC: BaseVC<HomeReactor> {
             .disposed(by: disposeBag)
         
         refreshControl.rx.controlEvent(.valueChanged)
-            .map { Reactor.Action.refreshTrigger(.major) }
+            .map { Reactor.Action.refreshTrigger(.freedom) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
