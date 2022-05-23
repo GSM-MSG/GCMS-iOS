@@ -21,7 +21,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         $0.text = "Sign Up"
         $0.font = .systemFont(ofSize: 24, weight: .semibold)
     }
-    private let nowLabel = UILabel().then {
+    private let contentsLabel = UILabel().then {
         $0.text = "it’s GCMS sign up now"
         $0.textColor = GCMSAsset.Colors.gcmsGray4.color
     }
@@ -46,7 +46,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     private let appleSigninButton = ASAuthorizationAppleIDButton(type: .continue, style: .white)
     // MARK: - UI
     override func addView() {
-        view.addSubViews(headerLabel, logoImageView, googleSigninButton, appleSigninButton, signUpLabel, nowLabel)
+        view.addSubViews(headerLabel, logoImageView, googleSigninButton, appleSigninButton, signUpLabel, contentsLabel)
     }
     override func setLayout() {
         logoImageView.snp.makeConstraints {
@@ -71,13 +71,13 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             $0.bottom.equalTo(appleSigninButton.snp.top).offset(-12)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
-        nowLabel.snp.makeConstraints {
+        contentsLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.bottom.equalTo(googleSigninButton.snp.top).offset(-42)
         }
         signUpLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(nowLabel.snp.top).offset(-4)
+            $0.bottom.equalTo(contentsLabel.snp.top).offset(-4)
         }
     }
     override func configureVC() {
@@ -92,7 +92,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             AnimationType.from(direction: .top, offset: 100)
         ], initialAlpha: 0, finalAlpha: 1, delay: 0.3, duration: 1.25)
         UIView.animate(views: [
-            signUpLabel, nowLabel
+            signUpLabel, contentsLabel
         ], animations: [
             
         ], initialAlpha: 0, finalAlpha: 1, delay: 1.05, duration: 0.75)
