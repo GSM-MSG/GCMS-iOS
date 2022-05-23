@@ -1,9 +1,7 @@
 import UIKit
 import Then
 import SnapKit
-//import RxCocoa
 import AuthenticationServices
-// unused import import Service
 import RxSwift
 import ViewAnimator
 
@@ -36,10 +34,10 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         if #available(iOS 15.0, *) {
             $0.configuration = .plain()
             $0.configuration?.imagePadding = 5
-            $0.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { i in
-                var o = i
-                o.font = .systemFont(ofSize: 20)
-                return o
+            $0.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+                var outgoing = incoming
+                outgoing.font = .systemFont(ofSize: 20)
+                return outgoing
             }
         } else {
             $0.contentEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 5)
