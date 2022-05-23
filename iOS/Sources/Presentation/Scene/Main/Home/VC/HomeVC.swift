@@ -36,9 +36,16 @@ final class HomeVC: TabmanViewController, View {
         $0.backgroundColor = .black.withAlphaComponent(0.4)
     }
     private let titleLabel = UILabel().then {
-        $0.text = "전공동아리"
         $0.textColor = .white
         $0.font = .systemFont(ofSize: 30, weight: .black)
+    }
+    private let afterSchoolButton = UIButton().then {
+        $0.setTitle("방과후", for: .normal)
+        $0.tintColor = .systemPink
+        $0.backgroundColor = .init(red: 0.87, green: 0.25, blue: 0.85, alpha: 1)
+        $0.layer.cornerRadius = 25
+        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
+        $0.setImage(UIImage(systemName: "chevron.left"), for: .normal)
     }
     var disposeBag: DisposeBag = .init()
     
@@ -92,7 +99,7 @@ final class HomeVC: TabmanViewController, View {
 // MARK: - Extension
 private extension HomeVC {
     func addView() {
-        view.addSubViews(indicatorBackgroundView, indicator)
+        view.addSubViews(indicatorBackgroundView, indicator, afterSchoolButton)
     }
     func setLayout() {
         indicatorBackgroundView.snp.makeConstraints {
@@ -102,6 +109,13 @@ private extension HomeVC {
             $0.center.equalToSuperview()
             $0.size.equalTo(150)
         }
+        afterSchoolButton.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(53)
+            $0.width.equalTo(122)
+            $0.height.equalTo(50)
+            $0.trailing.equalTo(-10)
+        }
+        
     }
     func configNavigation(){
         if UserDefaultsLocal.shared.isApple {
@@ -131,6 +145,11 @@ private extension HomeVC {
         
         guestLogoutButton.rx.tap
             .map { _ in Reactor.Action.guestLogoutButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        afterSchoolButton.rx.tap
+            .map { _ in Reactor.Action.afterSchoolButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
