@@ -31,6 +31,7 @@ public extension TargetDependency.SPM{
     static let Loaf = TargetDependency.package(product: "Loaf")
     static let ParkedTextField = TargetDependency.package(product: "ParkedTextField")
     static let GoogleSignIn = TargetDependency.package(product: "GoogleSignIn")
+    static let Inject = TargetDependency.package(product: "Inject")
 }
 
 public extension Package {
@@ -133,5 +134,9 @@ public extension Package {
     static let GoogleSignIn = Package.remote(
         url: "https://github.com/google/GoogleSignIn-iOS.git",
         requirement: .upToNextMajor(from: "6.1.0")
+    )
+    static let Inject = Package.remote(
+        url: "https://github.com/krzysztofzablocki/Inject.git",
+        requirement: .upToNextMajor(from: "1.1.1")
     )
 }

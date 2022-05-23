@@ -29,6 +29,7 @@ let project = Project.dynamicFramework(
         .Loaf,
         .ParkedTextField,
         .GoogleSignIn,
+        .Inject,
     ],
     deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
     dependencies: [
@@ -56,5 +57,6 @@ let project = Project.dynamicFramework(
         .SPM.Loaf,
         .SPM.ParkedTextField,
         .SPM.GoogleSignIn,
+        .SPM.Inject,
     ]
 )

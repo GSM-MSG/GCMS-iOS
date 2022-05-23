@@ -23,7 +23,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.406780900894-mp76r4ssbe8kh3qvhk1o1rd6gtijvdon</string>
+				<string>com.googleusercontent.apps.406780900894-flc3ue0hsdopkah5v7fivi87rot66d7c</string>
 			</array>
 		</dict>
 	</array>
@@ -37,15 +37,6 @@
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
-		<key>NSExceptionDomains</key>
-		<dict>
-			<key>NSExceptionAllowsInsecureHTTPLoads</key>
-			<true/>
-			<key>NSIncludesSubDomains</key>
-			<true/>
-			<key>http://gsm.o-r.kr:4000</key>
-			<dict/>
-		</dict>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>앨범에서 사진을 가져올 때 사진 앨범 권한이 필요합니다.</string>

@@ -76,12 +76,13 @@ private extension OnBoardingReactor {
         GIDSignIn.sharedInstance.signIn(with: config, presenting: vc) { [weak self] user, err in
             if let err = err {
                 print(err.localizedDescription)
-                print("Goolge Signin Failure")
+                self?.action.onNext(.appleSigninFailed)
                 return
             }
             
             user?.authentication.do({ auth in
                 if let idToken = auth.idToken {
+                    print(idToken)
                     self?.googleSigninTokenReceived(token: idToken)
                 }
             })
@@ -106,7 +107,7 @@ private extension OnBoardingReactor {
         steps.accept(GCMSStep.clubListIsRequired)
         return .empty()
     }
-    func signinFailed() -> Observable<Mutation> {
+    func signinFailed(message: String = "로그인이 실패하였습니다") -> Observable<Mutation> {
         self.steps.accept(GCMSStep.failureAlert(title: nil, message: "로그인이 실패하였습니다", action: nil))
         return .empty()
     }

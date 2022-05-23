@@ -1,6 +1,7 @@
 import UIKit
 import RxSwift
 import RxFlow
+import Inject
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 

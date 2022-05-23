@@ -20,11 +20,13 @@ final class HomeReactor: Reactor, Stepper {
         case updateLoading(Bool)
         case clubDidTap(ClubRequestQuery)
         case guestLogoutButtonDidTap
+        case refreshTrigger(ClubType)
     }
     enum Mutation {
         case setClubList(ClubType, [ClubList])
         case setIsLoading(Bool)
         case setClubType(ClubType)
+        case setIsRefreshing(Bool)
     }
     struct State {
         var majorClubList: [ClubList]
@@ -32,6 +34,7 @@ final class HomeReactor: Reactor, Stepper {
         var editorialClubList: [ClubList]
         var clubType: ClubType
         var isLoading: Bool
+        var isRefreshing: Bool
     }
     let initialState: State
     
@@ -44,7 +47,8 @@ final class HomeReactor: Reactor, Stepper {
             freedomClubList: [],
             editorialClubList: [],
             clubType: .major,
-            isLoading: false
+            isLoading: false,
+            isRefreshing: false
         )
         self.fetchClubListsUseCase = fetchClubListsUseCase
     }
@@ -67,6 +71,8 @@ extension HomeReactor {
             steps.accept(GCMSStep.clubDetailIsRequired(query: query))
         case .guestLogoutButtonDidTap:
             return guestLogoutButtonDidTap()
+        case let .refreshTrigger(type):
+            return refresh(type: type)
         }
         return .empty()
     }
@@ -76,7 +82,6 @@ extension HomeReactor {
 extension HomeReactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
-        
         switch mutation {
         case let .setClubList(type, lists):
             switch type{
@@ -88,6 +93,8 @@ extension HomeReactor {
             newState.isLoading = load
         case let .setClubType(type):
             newState.clubType = type
+        case let .setIsRefreshing(refresh):
+            newState.isRefreshing = refresh
         }
         
         return newState
@@ -113,7 +120,6 @@ private extension HomeReactor {
         return .concat([start, clubs])
     }
     func guestLogoutButtonDidTap() -> Observable<Mutation> {
-        UserDefaultsLocal.shared.isApple = false
         steps.accept(GCMSStep.alert(title: nil, message: "게스트 계정을 로그아웃 하시겠습니까?", style: .alert, actions: [
             .init(title: "확인", style: .default, handler: { [weak self] _ in
                 UserDefaultsLocal.shared.isApple = false
@@ -122,5 +128,19 @@ private extension HomeReactor {
             .init(title: "취소", style: .cancel)
         ]))
         return .empty()
+    }
+    func refresh(type: ClubType) -> Observable<Mutation> {
+        let start = Observable.just(Mutation.setIsLoading(true))
+        let task = fetchClubListsUseCase.execute(type: type)
+            .asObservable()
+            .flatMap { list in
+                Observable.concat([
+                    Observable.just(Mutation.setClubList(type, list)),
+                    .just(.setIsLoading(false)),
+                    .just(.setIsRefreshing(false))
+                ])
+            }
+            .catchAndReturn(Mutation.setIsLoading(false))
+        return .concat([start, task])
     }
 }

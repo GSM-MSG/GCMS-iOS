@@ -68,11 +68,13 @@ private extension BaseRemote {
                 guard let code = (error as? MoyaError)?.response?.statusCode else {
                     return .error(error)
                 }
-                if code == 401 {
-                    return .error(TokenError.expired)
+                if code == 401 && API.self != AuthAPI.self {
+                    return self.reissueToken()
+                        .andThen(.error(TokenError.expired))
                 }
                 return .error(api.errorMapper?[code] ?? error)
             }
+            .retry(3)
     }
     
     func requestWithAccessToken(_ api: API) -> Single<Response> {
@@ -99,6 +101,7 @@ private extension BaseRemote {
                     }
                 }
         })
+        .retry(2)
     }
     
     func isApiNeedsAccessToken(_ api: API) -> Bool {
@@ -106,16 +109,13 @@ private extension BaseRemote {
     }
     func checkTokenIsValid() throws -> Bool {
         do {
-            let expired = try KeychainLocal.shared.fetchExpiredAt().toDateWithISO8601()
+            let expired = try KeychainLocal.shared.fetchExpiredAt().toDateWithISO8601().addingTimeInterval(60 * 60 * 9)
             return Date() < expired
         } catch {
             throw TokenError.noData
         }
     }
     func reissueToken() -> Completable {
-        return MoyaProvider<AuthAPI>(plugins: [JWTPlugin()])
-            .rx
-            .request(.refresh)
-            .asCompletable()
+        return AuthRemote.shared.refresh()
     }
 }
