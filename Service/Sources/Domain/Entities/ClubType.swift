@@ -1,8 +1,8 @@
 
 public enum ClubType: String, Codable, CaseIterable {
     case major = "MAJOR"
-    case editorial = "EDITORIAL"
     case freedom = "FREEDOM"
+    case editorial = "EDITORIAL"
 }
 
 public extension ClubType {

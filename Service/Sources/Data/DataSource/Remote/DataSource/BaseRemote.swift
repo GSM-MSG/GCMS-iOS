@@ -74,7 +74,6 @@ private extension BaseRemote {
                 }
                 return .error(api.errorMapper?[code] ?? error)
             }
-            .retry(3)
     }
     
     func requestWithAccessToken(_ api: API) -> Single<Response> {
