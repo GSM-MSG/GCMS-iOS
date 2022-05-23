@@ -3,7 +3,7 @@ struct DetailClubDTO: Codable {
     let description: String
     let contact: String
     let teacher: String?
-    let isOpend: Bool
+    let isOpened: Bool
     let type: ClubType
     let bannerUrl: String
     let relatedLink: [RelatedLinkDTO]

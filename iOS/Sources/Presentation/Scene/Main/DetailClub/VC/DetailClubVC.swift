@@ -3,6 +3,7 @@ import BTImageView
 import Reusable
 import RxSwift
 import RxDataSources
+import Kingfisher
 
 final class DetailClubVC: BaseVC<DetailClubReactor> {
     // MARK: - Metric
@@ -187,6 +188,8 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             .compactMap(\.clubDetail)
             .withUnretained(self)
             .bind { owner, item in
+                owner.bannerImageView.kf.setImage(with: URL(string: item.bannerUrl) ?? .none,
+                                                  placeholder: UIImage())
                 owner.descriptionLabel.text = item.description
                 owner.activityView.setImages(urls: item.activities)
                 if let relatedLink = item.relatedLink {
@@ -216,6 +219,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                     owner.applyButton.backgroundColor = item.isApplied
                     ? .init(red: 1, green: 0.5, blue: 0.5, alpha: 1)
                     : GCMSAsset.Colors.gcmsMainColor.color
+                    owner.navigationItem.rightBarButtonItem = nil
                 }
                 if item.isOpen && !(item.scope == .head) {
                     owner.applyButton.isHidden = false
