@@ -137,12 +137,18 @@ private extension HomeVC {
     func bindState(reactor: HomeReactor) {
         let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
         
-//        sharedState
-//            .map(\.isLoading)
-//            .bind(with: self) { owner, load in
-//                load ? owner.startIndicator() : owner.stopIndicator()
-//            }
-//            .disposed(by: disposeBag)
+        sharedState
+            .map(\.clubType)
+            .map { "\($0.display)동아리" }
+            .bind(to: titleLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.isLoading)
+            .bind(with: self) { owner, load in
+                load ? owner.startIndicator() : owner.stopIndicator()
+            }
+            .disposed(by: disposeBag)
     }
     func startIndicator() {
         indicatorBackgroundView.isHidden = false
@@ -169,13 +175,8 @@ extension HomeVC: PageboyViewControllerDataSource, TMBarDataSource {
         return .first
     }
     func barItem(for bar: TMBar, at index: Int) -> TMBarItemable {
-        var title = ""
-        switch index {
-        case 0: title = "전공"
-        case 1: title = "자율"
-        case 2: title = "사설"
-        default: title = "Anomaly"
-        }
-        return TMBarItem(title: title)
+        let clubCase = ClubType.allCases
+        
+        return TMBarItem(title: clubCase[index].display)
     }
 }

@@ -13,6 +13,10 @@ final class MajorClubListVC: BaseVC<HomeReactor> {
     }
     private let refreshControl = UIRefreshControl()
     
+    override func viewDidAppear(_ animated: Bool) {
+        
+    }
+    
     // MARK: - UI
     override func setup() {
         let lay = GCMSLayout()
@@ -61,6 +65,12 @@ final class MajorClubListVC: BaseVC<HomeReactor> {
         sharedState
             .map(\.isRefreshing)
             .bind(to: refreshControl.rx.isRefreshing)
+            .disposed(by: disposeBag)
+    }
+    override func bindAction(reactor: HomeReactor) {
+        self.rx.viewDidAppear
+            .map { _ in Reactor.Action.viewDidAppear(.major) }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
 }
