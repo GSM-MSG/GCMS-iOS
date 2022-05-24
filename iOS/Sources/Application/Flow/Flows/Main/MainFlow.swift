@@ -64,6 +64,8 @@ final class MainFlow: Flow{
             return presentToFailureAlert(title: title, message: message, action: action)
         case let .clubStatusIsRequired(query, isHead):
             return presentToClubStatus(query: query, isHead: isHead)
+        case .afterschoolIsRequired:
+            return navigateToAfterSchool()
         default:
             return .none
         }
@@ -132,6 +134,11 @@ private extension MainFlow{
     }
     func navigateToThirdNewClub(reactor: NewClubReactor?) -> FlowContributors {
         let vc = AppDelegate.container.resolve(ThirdNewClubVC.self, argument: reactor)!
+        self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
+    func navigateToAfterSchool() -> FlowContributors {
+        let vc = AppDelegate.container.resolve(AfterSchoolVC.self)!
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }

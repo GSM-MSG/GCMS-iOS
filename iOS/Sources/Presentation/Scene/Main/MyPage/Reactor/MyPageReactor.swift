@@ -11,7 +11,6 @@ final class MyPageReactor: Reactor, Stepper {
     
     private let disposeBag: DisposeBag = .init()
     
-    
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
