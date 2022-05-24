@@ -12,11 +12,6 @@ final class MajorClubListVC: BaseVC<HomeReactor> {
         $0.backgroundColor = .clear
     }
     private let refreshControl = UIRefreshControl()
-    
-    override func viewDidAppear(_ animated: Bool) {
-        
-    }
-    
     // MARK: - UI
     override func setup() {
         let lay = GCMSLayout()

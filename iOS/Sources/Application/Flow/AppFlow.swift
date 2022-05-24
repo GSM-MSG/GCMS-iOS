@@ -21,7 +21,7 @@ struct AppStepper: Stepper{
         checkIsLoginedUseCase.execute()
             .andThen(Single.just(GCMSStep.clubListIsRequired))
             .asObservable()
-            .catchAndReturn(GCMSStep.clubListIsRequired)
+            .catchAndReturn(GCMSStep.onBoardingIsRequired)
             .bind(to: steps)
             .disposed(by: disposeBag)
     }
@@ -85,7 +85,7 @@ private extension AppFlow{
         }
         return .one(flowContributor: .contribute(
             withNextPresentable: flow,
-            withNextStepper: OneStepper(withSingleStep: GCMSStep.clubListIsRequired)
+            withNextStepper: OneStepper(withSingleStep: GCMSStep.onBoardingIsRequired)
         ))
     }
     func coordinateToClubList() -> FlowContributors {
