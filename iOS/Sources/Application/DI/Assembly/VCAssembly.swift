@@ -32,5 +32,8 @@ final class VCAssembly: Assembly {
         container.register(ThirdNewClubVC.self) { _, reactor in
             ThirdNewClubVC(reactor: reactor)
         }
+        container.register(AfterSchoolVC.self) { r in
+            AfterSchoolVC(reactor: r.resolve(AfterSchoolReactor.self))
+        }
     }
 }

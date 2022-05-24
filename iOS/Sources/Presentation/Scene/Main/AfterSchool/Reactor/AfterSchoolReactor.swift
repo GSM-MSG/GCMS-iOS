@@ -12,7 +12,7 @@ class AfterSchoolReactor: Reactor, Stepper {
     private let disposeBag: DisposeBag = .init()
     // MARK: - Reactor
     enum Action {
-        // actiom cases
+        
     }
     
     enum Mutation {

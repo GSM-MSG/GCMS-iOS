@@ -74,5 +74,9 @@ final class ReactorAssembly: Assembly {
                 uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!
             )
         }
+        
+        container.register(AfterSchoolReactor.self) { r in
+            AfterSchoolReactor()
+        }
     }
 }
