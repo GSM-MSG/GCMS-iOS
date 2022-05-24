@@ -37,7 +37,7 @@ final class HomeVC: TabmanViewController, View {
     }
     private let titleLabel = UILabel().then {
         $0.textColor = .white
-        $0.font = .systemFont(ofSize: 30, weight: .black)
+        $0.font = .systemFont(ofSize: 28, weight: .black)
     }
     private let afterSchoolButton = UIButton().then {
         $0.setImage(UIImage(systemName: "chevron.left"), for: .normal)

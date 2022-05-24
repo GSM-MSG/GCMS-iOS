@@ -24,18 +24,18 @@ class AfterSchoolReactor: Reactor, Stepper {
     }
     
     let initialState: State
-    
+    // MARK: - Init
     init() {
         initialState = State(
             isLoading: false
         )
     }
-    
+    // MARK: - Mutate
     func mutate(action: Action) -> Observable<Mutation> {
          switch action {
          }
     }
-    
+    // MARK: - Reduce
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
          switch mutation {
