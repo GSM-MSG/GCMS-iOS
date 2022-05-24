@@ -9,7 +9,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     // MARK: - Properties
     private let headerLabel = UILabel().then {
         $0.text = "GSM동아리\n관리의 모든 것"
-        $0.textColor = .white
+        $0.textColor = GCMSAsset.Colors.gcmsGray1.color
         $0.numberOfLines = 0
         $0.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 34)
         $0.textAlignment = .center
