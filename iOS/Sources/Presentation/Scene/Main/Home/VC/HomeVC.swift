@@ -130,7 +130,7 @@ private extension HomeVC {
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(53)
             $0.width.equalTo(122)
             $0.height.equalTo(50)
-            $0.trailing.equalTo(0)
+            $0.trailing.equalToSuperview()
         }
         
     }
