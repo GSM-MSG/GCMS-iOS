@@ -40,12 +40,29 @@ final class HomeVC: TabmanViewController, View {
         $0.font = .systemFont(ofSize: 30, weight: .black)
     }
     private let afterSchoolButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "chevron.left"), for: .normal)
         $0.setTitle("방과후", for: .normal)
-        $0.tintColor = .systemPink
+        $0.titleLabel?.font = .boldSystemFont(ofSize: 20)
+        $0.tintColor = .white
         $0.backgroundColor = .init(red: 0.87, green: 0.25, blue: 0.85, alpha: 1)
         $0.layer.cornerRadius = 25
         $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
-        $0.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        $0.imageView?.contentMode = .scaleAspectFit
+        $0.layer.shadowColor = UIColor.init(red: 0.87, green: 0.25, blue: 0.85, alpha: 1).cgColor
+        $0.layer.shadowOffset = CGSize(width: 1, height: 1)
+        $0.layer.shadowOpacity = 1
+        $0.layer.shadowRadius = 5
+        if #available(iOS 15.0, *) {
+            $0.configuration = .plain()
+            $0.configuration?.imagePadding = 15
+            $0.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ con in
+                return .init([
+                    .font: UIFont.systemFont(ofSize: 20, weight: .bold)
+                ])
+            })
+        } else {
+            $0.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 15)
+        }
     }
     var disposeBag: DisposeBag = .init()
     
@@ -71,7 +88,7 @@ final class HomeVC: TabmanViewController, View {
         bar.buttons.customize {
             $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 15) ?? .init()
             $0.tintColor = GCMSAsset.Colors.gcmsGray3.color
-            $0.selectedFont = UIFont(font: GCMSFontFamily.Inter.bold, size: 13) ?? .init()
+            $0.selectedFont = UIFont(font: GCMSFontFamily.Inter.bold, size: 15) ?? .init()
             $0.selectedTintColor = UIColor(red: 0, green: 0.65, blue: 1, alpha: 0.99)
         }
         bar.indicator.weight = .custom(value: 2)
@@ -113,7 +130,7 @@ private extension HomeVC {
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(53)
             $0.width.equalTo(122)
             $0.height.equalTo(50)
-            $0.trailing.equalTo(-10)
+            $0.trailing.equalTo(0)
         }
         
     }
