@@ -48,10 +48,6 @@ final class HomeVC: TabmanViewController, View {
         $0.layer.cornerRadius = 25
         $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         $0.imageView?.contentMode = .scaleAspectFit
-        $0.layer.shadowColor = UIColor.init(red: 0.87, green: 0.25, blue: 0.85, alpha: 1).cgColor
-        $0.layer.shadowOffset = CGSize(width: 1, height: 1)
-        $0.layer.shadowOpacity = 1
-        $0.layer.shadowRadius = 5
         if #available(iOS 15.0, *) {
             $0.configuration = .plain()
             $0.configuration?.imagePadding = 15
