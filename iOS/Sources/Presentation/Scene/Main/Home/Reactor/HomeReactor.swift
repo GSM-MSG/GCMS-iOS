@@ -15,12 +15,14 @@ final class HomeReactor: Reactor, Stepper {
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
+        case viewDidAppear(ClubType)
         case myPageButtonDidTap
         case newClubButtonDidTap
         case updateLoading(Bool)
         case clubDidTap(ClubRequestQuery)
         case guestLogoutButtonDidTap
         case refreshTrigger(ClubType)
+        case afterSchoolButtonDidTap
     }
     enum Mutation {
         case setClubList(ClubType, [ClubList])
@@ -73,6 +75,10 @@ extension HomeReactor {
             return guestLogoutButtonDidTap()
         case let .refreshTrigger(type):
             return refresh(type: type)
+        case let .viewDidAppear(type):
+            return .just(.setClubType(type))
+        case .afterSchoolButtonDidTap:
+            return .empty()
         }
         return .empty()
     }

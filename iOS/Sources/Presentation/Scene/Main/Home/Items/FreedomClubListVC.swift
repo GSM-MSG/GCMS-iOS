@@ -61,6 +61,12 @@ final class FreedomClubListVC: BaseVC<HomeReactor> {
             .bind(to: refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
     }
+    override func bindAction(reactor: HomeReactor) {
+        self.rx.viewDidAppear
+            .map { _ in Reactor.Action.viewDidAppear(.freedom) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
 }
 
 extension FreedomClubListVC: GCMSLayoutDelegate {
