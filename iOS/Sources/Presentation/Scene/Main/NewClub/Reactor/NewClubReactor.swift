@@ -19,8 +19,8 @@ final class NewClubReactor: Reactor, Stepper {
         //Second
         case updateTitle(String)
         case updateDescription(String)
-        case updateLinkName(String?)
-        case updateLinkUrl(String?)
+        case updateLinkName(String)
+        case updateLinkUrl(String)
         case updateTeacher(String?)
         case updateContact(String)
         case secondNextButtonDidTap
@@ -42,8 +42,8 @@ final class NewClubReactor: Reactor, Stepper {
     enum Mutation {
         case setTitle(String)
         case setDescription(String)
-        case setLinkName(String?)
-        case setLinkUrl(String?)
+        case setLinkName(String)
+        case setLinkUrl(String)
         case setTeacher(String?)
         case setContact(String)
         case setImageData(Data)
@@ -57,8 +57,8 @@ final class NewClubReactor: Reactor, Stepper {
     struct State {
         var title: String
         var description: String
-        var linkName: String?
-        var linkUrl: String?
+        var linkName: String
+        var linkUrl: String
         var contact: String
         var teacher: String?
         var isBanner: Bool
@@ -80,6 +80,8 @@ final class NewClubReactor: Reactor, Stepper {
         initialState = State(
             title: "",
             description: "",
+            linkName: "노션 링크",
+            linkUrl: "",
             contact: "",
             isBanner: false,
             activitiesData: [],
@@ -205,6 +207,8 @@ private extension NewClubReactor {
         }
         else if currentState.contact.isEmpty {
             errorMessage = "연락처를 입력해주세요!"
+        } else if currentState.linkName.isEmpty || currentState.linkUrl.isEmpty {
+            errorMessage = "링크이름 및 URL를 입력해주세요!"
         } else {
             steps.accept(GCMSStep.thirdNewClubIsRequired(reactor: self))
         }
@@ -235,10 +239,7 @@ private extension NewClubReactor {
             uploadImagesUseCase.execute(images: [state.imageData ?? Data()]).compactMap(\.first).asObservable(),
             uploadImagesUseCase.execute(images: state.activitiesData).asObservable()
         ).withUnretained(self).flatMap { owner, urls -> Observable<Mutation> in
-            var relatedLink: RelatedLinkDTO? = nil
-            if let linkName = state.linkName, let linkUrl = state.linkUrl {
-                relatedLink = RelatedLinkDTO(name: linkName, url: linkUrl)
-            }
+            let relatedLink: RelatedLinkDTO = .init(name: state.linkName, url: state.linkUrl)
             return owner.createNewClubUseCase.execute(
                 req: .init(
                     type: state.clubType,
