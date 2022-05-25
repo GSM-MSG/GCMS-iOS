@@ -33,10 +33,10 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
     private let contactTextField = NewClubTextField(placeholder: "연락처를 입력해주세요.(디스코드 등)").then {
         $0.addHeaderLabel(title: "연락처")
     }
-    private let relatedLinkHeaderLabel = HeaderLabel(title: "관련 링크").then {
-        $0.appendSelection()
+    private let relatedLinkHeaderLabel = HeaderLabel(title: "관련 링크")
+    private let linkNameTextField = NewClubTextField(placeholder: "링크 이름").then {
+        $0.text = "노션 링크"
     }
-    private let linkNameTextField = NewClubTextField(placeholder: "링크 이름")
     private let linkUrlTextField = NewClubTextField(placeholder: "링크 URL")
     private let teacherTextField = NewClubTextField(placeholder: "담당 선생님 성함을 입력해주세요.").then {
         $0.addHeaderSelectionLabel(title: "담당 선생님")
