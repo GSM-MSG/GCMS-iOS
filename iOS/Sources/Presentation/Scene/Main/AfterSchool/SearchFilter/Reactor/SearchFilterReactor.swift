@@ -5,7 +5,7 @@ import RxRelay
 import Service
 import Foundation
 
-class SearchFilterReactor: Reactor, Stepper {
+final class SearchFilterReactor: Reactor, Stepper {
     // MARK: - Properties
     var steps: PublishRelay<Step> = .init()
     

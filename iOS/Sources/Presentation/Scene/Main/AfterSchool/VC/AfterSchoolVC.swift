@@ -108,21 +108,11 @@ final class AfterSchoolVC: BaseVC<AfterSchoolReactor>{
             $0.top.equalTo(afterSchoolNameLabel.snp.top)
         }
     }
-    
+    // MARK: - Reactor
     override func bindView(reactor: AfterSchoolReactor) {
         searchFilterButton.rx.tap
             .map { Reactor.Action.searchFilterButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-    }
-    override func bindAction(reactor: AfterSchoolReactor) {
-        searchController.rx.willDismiss
-            .bind(with: self) { owner, _ in
-                UIView.animate(withDuration: 0.5) {
-                    owner.view.layoutIfNeeded()
-                }
-            }
-            .disposed(by: disposeBag)
-        
     }
 }

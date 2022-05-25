@@ -21,7 +21,7 @@ struct AppStepper: Stepper{
         checkIsLoginedUseCase.execute()
             .andThen(Single.just(GCMSStep.clubListIsRequired))
             .asObservable()
-            .catchAndReturn(GCMSStep.clubListIsRequired)
+            .catchAndReturn(GCMSStep.onBoardingIsRequired)
             .bind(to: steps)
             .disposed(by: disposeBag)
     }

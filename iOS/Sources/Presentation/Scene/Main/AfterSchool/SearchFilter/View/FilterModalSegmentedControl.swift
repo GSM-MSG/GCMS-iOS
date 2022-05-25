@@ -57,7 +57,6 @@ final class FilterModalSegmentedControl: UIView {
             if #available(iOS 15.0, *) {
                 button.configuration = .filled()
                 button.configuration?.contentInsets = .init(top: 10, leading: 0, bottom: 10, trailing: 0)
-//                button.configuration?.
                 button.configuration?.baseBackgroundColor = unselectedBackgroundColor
             } else {
                 button.contentEdgeInsets = .init(top: 10, left: 0, bottom: 10, right: 0)
@@ -72,7 +71,7 @@ final class FilterModalSegmentedControl: UIView {
             buttons[index].configuration?.baseBackgroundColor = selectedBackgroundColor
             buttons[index].configuration?.baseForegroundColor = selectedTextColor
         } else {
-            buttons[index].setBackgroundColor(selectedBackgroundColor, for: .normal)
+            buttons[index].backgroundColor = selectedBackgroundColor
         }
         buttons[index].setTitleColor(selectedTextColor, for: .normal)
         buttons[index].layer.borderColor = UIColor.clear.cgColor
@@ -95,7 +94,7 @@ final class FilterModalSegmentedControl: UIView {
                 button.configuration?.baseBackgroundColor = unselectedBackgroundColor
                 button.configuration?.baseForegroundColor = unselectedTextColor
             } else {
-                button.setBackgroundColor(unselectedBackgroundColor, for: .normal)
+                button.backgroundColor = selectedBackgroundColor
             }
             button.titleLabel?.textColor = unselectedTextColor
             button.layer.borderColor = borderColor.cgColor
@@ -104,7 +103,7 @@ final class FilterModalSegmentedControl: UIView {
                     button.configuration?.baseBackgroundColor = selectedBackgroundColor
                     button.configuration?.baseForegroundColor = selectedTextColor
                 } else {
-                    button.setBackgroundColor(selectedBackgroundColor, for: .normal)
+                    button.backgroundColor = selectedBackgroundColor
                 }
                 button.setTitleColor(selectedTextColor, for: .normal)
                 button.layer.borderColor = UIColor.clear.cgColor
