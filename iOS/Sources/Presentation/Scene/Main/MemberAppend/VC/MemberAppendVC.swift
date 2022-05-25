@@ -1,4 +1,6 @@
 import UIKit
+import SnapKit
+import Then
 import PanModal
 import RxSwift
 import RxDataSources
@@ -9,12 +11,12 @@ final class MemberAppendVC: BaseVC<MemberAppendReactor> {
     private let cancelButton = UIButton().then {
         $0.setTitle("취소", for: .normal)
         $0.setTitleColor(.systemBlue, for: .normal)
-        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 13)
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 14)
     }
     private let completeButton = UIButton().then {
         $0.setTitle("완료", for: .normal)
         $0.setTitleColor(.systemBlue, for: .normal)
-        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 13)
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 14)
     }
     private let currentUserListCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
         let layout = UICollectionViewFlowLayout()
