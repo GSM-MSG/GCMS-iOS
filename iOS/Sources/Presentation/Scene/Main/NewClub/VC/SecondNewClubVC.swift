@@ -182,12 +182,12 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        linkNameTextField.rx.text.observe(on: MainScheduler.asyncInstance)
+        linkNameTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
             .map(Reactor.Action.updateLinkName)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        linkUrlTextField.rx.text.observe(on: MainScheduler.asyncInstance)
+        linkUrlTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
             .map(Reactor.Action.updateLinkUrl)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
