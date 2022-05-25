@@ -9,9 +9,7 @@ final class SemiBoldTextLabel: UILabel {
         self.textAlignment = .center
         self.numberOfLines = 0
         self.clipsToBounds = true
-        self.layer.cornerRadius = 5
         self.backgroundColor = .white
-        self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
     }
     
     required init?(coder: NSCoder) {

@@ -33,7 +33,10 @@ final class AfterSchoolVC: BaseVC<AfterSchoolReactor>{
         $0.layer.cornerRadius = 5
     }
     
-    private let afterSchoolNameLabel = SemiBoldTextLabel(title: "컴퓨터 활용 능력", weight: .semibold)
+    private let afterSchoolNameLabel = SemiBoldTextLabel(title: "컴퓨터 활용 능력", weight: .semibold).then {
+        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
+        $0.layer.cornerRadius = 5
+    }
     
     private let periodLabel = SemiBoldTextLabel(title: "월요일 8,9교시", weight: .regular)
     
@@ -77,31 +80,31 @@ final class AfterSchoolVC: BaseVC<AfterSchoolReactor>{
         afterSchoolNameLabel.snp.makeConstraints {
             $0.leading.equalTo(15)
             $0.height.equalTo(40)
-            $0.width.equalTo(80)
+            $0.width.equalTo(bound.width*0.22)
             $0.top.equalTo(contourView.snp.bottom).offset(12)
         }
         periodLabel.snp.makeConstraints {
-            $0.leading.equalTo(afterSchoolNameLabel).offset(75)
+            $0.leading.equalTo(afterSchoolNameLabel.snp.trailing)
             $0.height.equalTo(40)
-            $0.width.equalTo(97)
+            $0.width.equalTo(bound.width*0.232)
             $0.top.equalTo(afterSchoolNameLabel.snp.top)
         }
         gradeLabel.snp.makeConstraints {
-            $0.leading.equalTo(periodLabel).offset(92)
+            $0.leading.equalTo(periodLabel.snp.trailing)
             $0.height.equalTo(40)
-            $0.width.equalTo(63)
+            $0.width.equalTo(bound.width*0.14)
             $0.top.equalTo(afterSchoolNameLabel.snp.top)
         }
         participantsLabel.snp.makeConstraints {
-            $0.leading.equalTo(gradeLabel).offset(50)
+            $0.leading.equalTo(gradeLabel.snp.trailing)
             $0.height.equalTo(40)
-            $0.width.equalTo(85)
+            $0.width.equalTo(bound.width*0.168)
             $0.top.equalTo(afterSchoolNameLabel.snp.top)
         }
         applyButton.snp.makeConstraints {
-            $0.leading.equalTo(participantsLabel).offset(70)
+            $0.leading.equalTo(participantsLabel.snp.trailing).offset(-4)
             $0.height.equalTo(40)
-            $0.width.equalTo(62)
+            $0.width.equalTo(bound.width*0.175)
             $0.top.equalTo(afterSchoolNameLabel.snp.top)
         }
     }
@@ -111,5 +114,15 @@ final class AfterSchoolVC: BaseVC<AfterSchoolReactor>{
             .map { Reactor.Action.searchFilterButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+    }
+    override func bindAction(reactor: AfterSchoolReactor) {
+        searchController.rx.willDismiss
+            .bind(with: self) { owner, _ in
+                UIView.animate(withDuration: 0.5) {
+                    owner.view.layoutIfNeeded()
+                }
+            }
+            .disposed(by: disposeBag)
+        
     }
 }
