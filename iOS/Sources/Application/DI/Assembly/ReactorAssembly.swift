@@ -78,5 +78,9 @@ final class ReactorAssembly: Assembly {
         container.register(AfterSchoolReactor.self) { r in
             AfterSchoolReactor()
         }
+        
+        container.register(SearchFilterReactor.self) { r in
+            SearchFilterReactor()
+        }
     }
 }

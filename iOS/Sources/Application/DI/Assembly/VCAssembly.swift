@@ -35,5 +35,8 @@ final class VCAssembly: Assembly {
         container.register(AfterSchoolVC.self) { r in
             AfterSchoolVC(reactor: r.resolve(AfterSchoolReactor.self))
         }
+        container.register(SearchFilterVC.self) { r in
+            SearchFilterVC(reactor: r.resolve(SearchFilterReactor.self))
+        }
     }
 }

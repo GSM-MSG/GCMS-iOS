@@ -4,7 +4,7 @@ final class SemiBoldTextLabel: UILabel {
     init(title: String, weight: UIFont.Weight) {
         super.init(frame: .zero)
         self.text = title
-        self.font = .systemFont(ofSize: 14, weight: weight)
+        self.font = .systemFont(ofSize: 13, weight: weight)
         self.textColor = .black
         self.textAlignment = .center
         self.numberOfLines = 0

@@ -36,4 +36,5 @@ enum GCMSStep: Step {
     
     // MARK: AfterSchool
     case afterschoolIsRequired
+    case searchFilterIsRequired
 }

@@ -64,8 +64,11 @@ final class MainFlow: Flow{
             return presentToFailureAlert(title: title, message: message, action: action)
         case let .clubStatusIsRequired(query, isHead):
             return presentToClubStatus(query: query, isHead: isHead)
+        // MARK: - AfterSchool
         case .afterschoolIsRequired:
             return navigateToAfterSchool()
+        case .searchFilterIsRequired:
+            return presentToSearchFilter()
         default:
             return .none
         }
@@ -137,11 +140,6 @@ private extension MainFlow{
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
-    func navigateToAfterSchool() -> FlowContributors {
-        let vc = AppDelegate.container.resolve(AfterSchoolVC.self)!
-        self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
-    }
     func presentToFailureAlert(title: String?, message: String?, action: UIAlertAction?) -> FlowContributors {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         if let action = action {
@@ -165,5 +163,15 @@ private extension MainFlow{
     func popToRoot() -> FlowContributors {
         self.rootVC.popToRootViewController(animated: true)
         return .none
+    }
+    func navigateToAfterSchool() -> FlowContributors {
+        let vc = AppDelegate.container.resolve(AfterSchoolVC.self)!
+        self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+    }
+    func presentToSearchFilter() -> FlowContributors {
+        let vc = AppDelegate.container.resolve(SearchFilterVC.self)!
+        self.rootVC.visibleViewController?.presentPanModal(vc)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
 }

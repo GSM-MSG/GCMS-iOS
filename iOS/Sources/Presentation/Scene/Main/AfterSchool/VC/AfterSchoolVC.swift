@@ -24,10 +24,10 @@ final class AfterSchoolVC: BaseVC<AfterSchoolReactor>{
         $0.backgroundColor = .white
     }
     
-    private let searchFilter = UIButton().then {
+    private let searchFilterButton = UIButton().then {
         $0.setTitle("검색 필터", for: .normal)
         $0.setTitleColor(.black, for: .normal)
-        $0.titleLabel?.font = .systemFont(ofSize: 14, weight: .semibold)
+        $0.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
         $0.contentHorizontalAlignment = .center
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 5
@@ -45,7 +45,7 @@ final class AfterSchoolVC: BaseVC<AfterSchoolReactor>{
         $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color 
         $0.layer.cornerRadius = 5
         $0.setTitle("신청", for: .normal)
-        $0.titleLabel?.font = .systemFont(ofSize: 14, weight: .bold)
+        $0.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
         $0.contentHorizontalAlignment = .center
     }
     
@@ -60,11 +60,11 @@ final class AfterSchoolVC: BaseVC<AfterSchoolReactor>{
     }
     
     override func addView() {
-        view.addSubViews(searchFilter, contourView, afterSchoolNameLabel, periodLabel, gradeLabel, participantsLabel, applyButton)
+        view.addSubViews(searchFilterButton, contourView, afterSchoolNameLabel, periodLabel, gradeLabel, participantsLabel, applyButton)
     }
     
     override func setLayout() {
-        searchFilter.snp.makeConstraints {
+        searchFilterButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.trailing.leading.equalToSuperview().inset(15)
             $0.height.equalTo(30)
@@ -72,7 +72,7 @@ final class AfterSchoolVC: BaseVC<AfterSchoolReactor>{
         contourView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(1.5)
-            $0.top.equalTo(searchFilter.snp.bottom).offset(12)
+            $0.top.equalTo(searchFilterButton.snp.bottom).offset(12)
         }
         afterSchoolNameLabel.snp.makeConstraints {
             $0.leading.equalTo(15)
@@ -104,5 +104,12 @@ final class AfterSchoolVC: BaseVC<AfterSchoolReactor>{
             $0.width.equalTo(62)
             $0.top.equalTo(afterSchoolNameLabel.snp.top)
         }
+    }
+    
+    override func bindView(reactor: AfterSchoolReactor) {
+        searchFilterButton.rx.tap
+            .map { Reactor.Action.searchFilterButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }

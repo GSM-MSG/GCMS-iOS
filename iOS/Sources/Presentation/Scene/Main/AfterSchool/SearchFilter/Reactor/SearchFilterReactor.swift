@@ -5,14 +5,14 @@ import RxRelay
 import Service
 import Foundation
 
-class AfterSchoolReactor: Reactor, Stepper {
+class SearchFilterReactor: Reactor, Stepper {
     // MARK: - Properties
     var steps: PublishRelay<Step> = .init()
     
     private let disposeBag: DisposeBag = .init()
     // MARK: - Reactor
     enum Action {
-        case searchFilterButtonDidTap
+        
     }
     
     enum Mutation {
@@ -33,10 +33,7 @@ class AfterSchoolReactor: Reactor, Stepper {
     // MARK: - Mutate
     func mutate(action: Action) -> Observable<Mutation> {
          switch action {
-         case .searchFilterButtonDidTap:
-             steps.accept(GCMSStep.searchFilterIsRequired)
          }
-        return .empty()
     }
     // MARK: - Reduce
     func reduce(state: State, mutation: Mutation) -> State {
