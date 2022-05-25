@@ -3,9 +3,10 @@ import SnapKit
 import Then
 
 final class AfterSchoolTableViewCell: BaseTableViewCell<Void> {
-
+    // MARK: - Propreties
     private let titleLabel = SemiBoldTextLabel(title: "컴퓨터 활용 능력", weight: .semibold)
 
+    // MARK: - UI
     override func addView() {
         contentView.addSubViews(titleLabel)
     }
@@ -17,7 +18,7 @@ final class AfterSchoolTableViewCell: BaseTableViewCell<Void> {
             $0.width.equalTo(80)
         }
     }
-
+    
     override func configureCell() {
         backgroundColor = .white
     }

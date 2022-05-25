@@ -9,24 +9,17 @@ final class SearchFilterVC: BaseVC<SearchFilterReactor> {
         $0.text = "정렬"
         $0.font = .systemFont(ofSize: 20, weight: .bold)
     }
-    
     private let dayLabel = SegmentHeaderLabel(title: "요일")
-    
     private let dayTypeSegment = FilterModalSegmentedControl(titles: ["월요일", "화요일", "수요일", "전체"])
-    
     private let gradeLabel = SegmentHeaderLabel(title: "학년")
-    
     private let gradeTypeSegment = FilterModalSegmentedControl(titles: ["1학년", "2학년", "3학년", "전체"])
-    
     private let applyButton = UIButton().then {
         $0.setTitle("적용하기", for: .normal)
         $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
         $0.layer.cornerRadius = 8
         $0.contentHorizontalAlignment = .center
     }
-    
     // MARK: - UI
-    
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
@@ -66,13 +59,11 @@ final class SearchFilterVC: BaseVC<SearchFilterReactor> {
     }
 }
 
-
 // MARK: - PanModalPresentable
 extension SearchFilterVC: PanModalPresentable {
     var panScrollable: UIScrollView? {
         return nil
     }
-
     var shortFormHeight: PanModalHeight {
         return .contentHeight(400)
     }

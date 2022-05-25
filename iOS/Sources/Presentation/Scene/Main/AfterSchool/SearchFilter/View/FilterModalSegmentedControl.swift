@@ -5,6 +5,7 @@ protocol FilterModalSegmentedControlDelegate: AnyObject {
 }
 
 final class FilterModalSegmentedControl: UIView {
+    // MARK: - Propreties
     weak var delegate: FilterModalSegmentedControlDelegate?
     private var titles: [String] = []
     private var buttons: [UIButton] = []
@@ -15,7 +16,7 @@ final class FilterModalSegmentedControl: UIView {
     var selectedBackgroundColor: UIColor = GCMSAsset.Colors.gcmsMainColor.color
     var borderColor: UIColor = .white
     var selectedIndex: Int = 0
-    
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -30,7 +31,7 @@ final class FilterModalSegmentedControl: UIView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
+    // MARK: - Method
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         updateView()

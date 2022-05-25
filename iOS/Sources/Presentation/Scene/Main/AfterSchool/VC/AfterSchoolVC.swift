@@ -12,18 +12,15 @@ final class AfterSchoolVC: BaseVC<AfterSchoolReactor>{
         $0.searchBar.tintColor = .white
         $0.searchBar.barTintColor = .white
     }
-    
     private let titleLabel = UILabel().then {
         $0.text = "방과후 신청"
         $0.font = .systemFont(ofSize: 18, weight: .semibold)
         $0.textColor = .white
         $0.sizeToFit()
     }
-    
     private let contourView = UIView().then {
         $0.backgroundColor = .white
     }
-    
     private let searchFilterButton = UIButton().then {
         $0.setTitle("검색 필터", for: .normal)
         $0.setTitleColor(.black, for: .normal)
@@ -32,18 +29,13 @@ final class AfterSchoolVC: BaseVC<AfterSchoolReactor>{
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 5
     }
-    
     private let afterSchoolNameLabel = SemiBoldTextLabel(title: "컴퓨터 활용 능력", weight: .semibold).then {
         $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         $0.layer.cornerRadius = 5
     }
-    
     private let periodLabel = SemiBoldTextLabel(title: "월요일 8,9교시", weight: .regular)
-    
     private let gradeLabel = SemiBoldTextLabel(title: "1학년", weight: .semibold)
-    
     private let participantsLabel = SemiBoldTextLabel(title: "17/30", weight: .semibold)
-
     private let applyButton = UIButton().then {
         $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color 
         $0.layer.cornerRadius = 5
