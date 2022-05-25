@@ -19,8 +19,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let s = (scene as? UIWindowScene) else { return }
         
-        coordinateLogger()
-        coordinateToAppFlow(with: s)
+        window = UIWindow(windowScene: s)
+        let reactor = ClubMemberReactor()
+        let vc = ClubMemberVC(reactor: reactor, isHead: true)
+        let inject = Inject.ViewControllerHost(vc)
+        window?.rootViewController = inject
+        window?.makeKeyAndVisible()
+//        coordinateLogger()
+//        coordinateToAppFlow(with: s)
     }
     
     private func coordinateToAppFlow(with scene: UIWindowScene){

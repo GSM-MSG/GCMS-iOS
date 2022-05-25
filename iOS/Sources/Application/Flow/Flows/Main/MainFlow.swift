@@ -149,8 +149,7 @@ private extension MainFlow{
         let reactor = AppDelegate.container.resolve(ClubStatusReactor.self, argument: query)!
         let vc = ClubStatusVC(reactor: reactor)
         vc.setViewControllers([
-            ClubApplicantsVC(reactor: reactor, isHead: isHead),
-            ClubMemberVC(reactor: reactor, isHead: isHead)
+            ClubApplicantsVC(reactor: reactor, isHead: isHead)
         ])
         self.rootVC.visibleViewController?.present(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
