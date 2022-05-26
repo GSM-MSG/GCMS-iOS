@@ -15,7 +15,7 @@ extension AfterSchoolAPI: GCMSAPI {
     var urlPath: String {
         switch self {
         case .afterSchoolList:
-            return "/"
+            return ""
         case .apply:
             return "/apply"
         case .cancel:
