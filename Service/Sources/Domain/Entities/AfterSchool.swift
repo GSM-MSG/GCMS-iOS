@@ -1,6 +1,6 @@
 public struct AfterSchool: Equatable {
     
-    internal init(id: Int, title: String, week: AfterSchoolWeek, grade: Int, personnel: Int, maxPersonnel: Int, isOpened: Bool, isApplied: Bool) {
+    public init(id: Int, title: String, week: AfterSchoolWeek, grade: Int, personnel: Int, maxPersonnel: Int, isOpened: Bool, isApplied: Bool) {
         self.id = id
         self.title = title
         self.week = week
