@@ -23,7 +23,7 @@ enum GCMSStep: Step {
     case secondNewClubIsRequired(reactor: NewClubReactor)
     case thirdNewClubIsRequired(reactor: NewClubReactor)
     
-    // MARK: updateClub
+    // MARK: UpdateClub
     case firstUpdateClubIsRequired(club: Club)
     case secondUpdateClubIsRequired(reactor: UpdateClubReactor)
     case thirdUpdateClubIsRequired(reactor: UpdateClubReactor)
@@ -34,4 +34,7 @@ enum GCMSStep: Step {
     // MARK: Administrator
     case myPageIsRequired
     
+    // MARK: AfterSchool
+    case afterschoolIsRequired
+    case searchFilterIsRequired
 }

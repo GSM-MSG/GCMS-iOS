@@ -78,7 +78,7 @@ extension HomeReactor {
         case let .viewDidAppear(type):
             return .just(.setClubType(type))
         case .afterSchoolButtonDidTap:
-            return .empty()
+            steps.accept(GCMSStep.afterschoolIsRequired)
         }
         return .empty()
     }
