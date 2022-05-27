@@ -17,6 +17,10 @@ final class ClubMemberVC: BaseVC<ClubMemberReactor> {
         $0.backgroundColor = .clear
         $0.separatorStyle = .none
     }
+    private let clubOpenCloseButton = UIButton().then {
+        $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
+        $0.setTitleColor(.white, for: .normal)
+    }
     private let isHead: Bool
     
     init(reactor: ClubMemberReactor?, isHead: Bool) {
@@ -34,15 +38,28 @@ final class ClubMemberVC: BaseVC<ClubMemberReactor> {
         membersTableView.dataSource = self
     }
     override func addView() {
-        view.addSubViews(membersTableView)
+        view.addSubViews(membersTableView, clubOpenCloseButton)
     }
     override func setLayout() {
         membersTableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        clubOpenCloseButton.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(view.safeAreaInsets.bottom + 56)
+        }
     }
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
+        
+    }
+    
+    // MARK: - Reactor
+    override func bindAction(reactor: ClubMemberReactor) {
+        self.rx.viewDidLoad
+            .map { Reactor.Action.viewDidLoad }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 
@@ -69,10 +86,12 @@ extension ClubMemberVC: UITableViewDelegate, UITableViewDataSource {
         switch item {
         case let .applicant(user):
             let cell = tableView.dequeueReusableCell(for: indexPath, cellType: ApplicantCell.self)
+            cell.isHead = isHead
             cell.model = user
             return cell
         case let .member(member):
             let cell = tableView.dequeueReusableCell(for: indexPath, cellType: StatusMemberCell.self)
+            cell.isHead = isHead
             cell.model = member
             return cell
         }

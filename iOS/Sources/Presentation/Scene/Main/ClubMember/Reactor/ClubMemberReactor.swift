@@ -13,12 +13,17 @@ final class ClubMemberReactor: Reactor, Stepper {
     // MARK: - Reactor
     enum Action {
         case sectionDidTap(Int, Bool)
+        case viewDidLoad
     }
     enum Mutation {
         case setIsOpened(Int, Bool)
+        case setUsers([ExpandableMemberSection])
+        case appendUsers(ExpandableMemberSection)
+        case setIsLoading(Bool)
     }
     struct State {
         var users: [ExpandableMemberSection]
+        var isLoading: Bool
     }
     let initialState: State
     private let query: ClubRequestQuery
@@ -54,10 +59,8 @@ final class ClubMemberReactor: Reactor, Stepper {
         self.clubCloseUseCase = clubCloseUseCase
         
         initialState = State(
-            users: [
-                .init(header: "멤버", items: [.member(.dummy), .member(.dummy)], isOpened: false),
-                .init(header: "지원자", items: [.applicant(.dummy), .applicant(.dummy)], isOpened: false)
-            ]
+            users: [],
+            isLoading: false
         )
         self.query = query
     }
@@ -70,6 +73,8 @@ extension ClubMemberReactor {
         switch action {
         case let .sectionDidTap(index, open):
             return .just(.setIsOpened(index, open))
+        case .viewDidLoad:
+            return viewDidLoad()
         }
         return .empty()
     }
@@ -83,6 +88,12 @@ extension ClubMemberReactor {
         switch mutation {
         case let .setIsOpened(index, open):
             newState.users[index].isOpened = open
+        case let .setUsers(section):
+            newState.users = section
+        case let .appendUsers(section):
+            newState.users.append(section)
+        case let .setIsLoading(load):
+            newState.isLoading = load
         }
         
         return newState
@@ -91,5 +102,24 @@ extension ClubMemberReactor {
 
 // MARK: - Method
 private extension ClubMemberReactor {
-    
+    func viewDidLoad() -> Observable<Mutation> {
+        let start = Observable.just(Mutation.setIsLoading(true))
+        let member = fetchClubMemberUseCase.execute(query: query)
+            .asObservable()
+            .map { ExpandableMemberSection(header: "구성원", items: $0.map { MemberSectionType.member($0) }, isOpened: false) }
+            .flatMap { Observable.concat([
+                Observable.just(Mutation.setIsLoading(false)),
+                .just(.appendUsers($0))
+            ]) }
+            .catchAndReturn(.setIsLoading(false))
+        let applicant = fetchClubApplicantUseCase.execute(query: query)
+            .asObservable()
+            .map { ExpandableMemberSection(header: "가입 대기자 명단", items: $0.map { MemberSectionType.applicant($0) }, isOpened: false) }
+            .flatMap { Observable.concat([
+                Observable.just(Mutation.setIsLoading(false)),
+                .just(.appendUsers($0))
+            ]) }
+            .catchAndReturn(.setIsLoading(false))
+        return .concat([start, member, applicant])
+    }
 }
