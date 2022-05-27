@@ -7,6 +7,5 @@ let project = Project.excutable(
     deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
     dependencies: [
         .project(target: "Service", path: "../Service")
-    ],
-    settings: .settings(base: ["OTHER_LDFLAGS": "$(inherited) -Xlinker -interposable"])
+    ]
 )
