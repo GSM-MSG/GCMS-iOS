@@ -44,9 +44,15 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         }
     }
     private let appleSigninButton = ASAuthorizationAppleIDButton(type: .continue, style: .white)
+    private let guestSigninButton = UIButton().then {
+        $0.setTitle("게스트로 로그인하기", for: .normal)
+        $0.setTitleColor(GCMSAsset.Colors.gcmsGray4.color, for: .normal)
+        $0.titleLabel?.font = .systemFont(ofSize: 16)
+    }
+    
     // MARK: - UI
     override func addView() {
-        view.addSubViews(headerLabel, logoImageView, googleSigninButton, appleSigninButton, signUpLabel, contentsLabel)
+        view.addSubViews(headerLabel, logoImageView, googleSigninButton, appleSigninButton, signUpLabel, contentsLabel, guestSigninButton)
     }
     override func setLayout() {
         logoImageView.snp.makeConstraints {
@@ -64,6 +70,10 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             $0.height.equalTo(51)
             $0.bottom.equalToSuperview().offset(-bound.height*0.1)
             $0.leading.trailing.equalToSuperview().inset(15)
+        }
+        guestSigninButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(appleSigninButton.snp.bottom).offset(7.5)
         }
         googleSigninButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
@@ -101,6 +111,10 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         ], animations: [
             AnimationType.from(direction: .left, offset: 200)
         ], delay: 1.8, duration: 1, usingSpringWithDamping: 1, initialSpringVelocity: 0.7, options: .curveEaseInOut)
+        UIView.animate(views: [
+            guestSigninButton
+        ], animations: [
+        ],initialAlpha: 0, finalAlpha: 1, delay: 2.6)
     }
     
     // MARK: - Reactor
@@ -126,6 +140,11 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             .bind(with: self) { owner, _ in
                 owner.appleSigninMessage()
             }
+            .disposed(by: disposeBag)
+        
+        guestSigninButton.rx.tap
+            .map { Reactor.Action.guestSigninButtonDidTap }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
 }
