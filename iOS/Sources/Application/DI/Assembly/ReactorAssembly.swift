@@ -53,17 +53,17 @@ final class ReactorAssembly: Assembly {
             )
         }
         
-        container.register(ClubStatusReactor.self) { r, query in
-             ClubStatusReactor(
+        container.register(ClubMemberReactor.self) { r, query in
+            ClubMemberReactor(
                 query: query,
-                clubOpenUseCase: r.resolve(ClubOpenUseCase.self)!,
-                clubCloseUseCase: r.resolve(ClubCloseUseCase.self)!,
                 fetchClubMemberUseCase: r.resolve(FetchClubMemberUseCase.self)!,
                 fetchClubApplicantUseCase: r.resolve(FetchClubApplicantUseCase.self)!,
+                userKickUseCase: r.resolve(UserKickUseCase.self)!,
+                clubDelegationUseCase: r.resolve(ClubDelegationUseCase.self)!,
                 userAcceptUseCase: r.resolve(UserAcceptUseCase.self)!,
                 userRejectUseCase: r.resolve(UserRejectUseCase.self)!,
-                clubDelegationUseCase: r.resolve(ClubDelegationUseCase.self)!,
-                userKickUseCase: r.resolve(UserKickUseCase.self)!
+                clubOpenUseCase: r.resolve(ClubOpenUseCase.self)!,
+                clubCloseUseCase: r.resolve(ClubCloseUseCase.self)!
             )
         }
         

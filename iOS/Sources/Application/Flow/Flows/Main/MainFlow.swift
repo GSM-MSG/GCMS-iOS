@@ -63,7 +63,7 @@ final class MainFlow: Flow{
         case let .failureAlert(title, message, action):
             return presentToFailureAlert(title: title, message: message, action: action)
         case let .clubStatusIsRequired(query, isHead):
-            return presentToClubStatus(query: query, isHead: isHead)
+            return navigateToClubStatus(query: query, isHead: isHead)
         default:
             return .none
         }
@@ -145,13 +145,10 @@ private extension MainFlow{
         self.rootVC.visibleViewController?.present(alert, animated: true)
         return .none
     }
-    func presentToClubStatus(query: ClubRequestQuery, isHead: Bool) -> FlowContributors {
-        let reactor = AppDelegate.container.resolve(ClubStatusReactor.self, argument: query)!
-        let vc = ClubStatusVC(reactor: reactor)
-        vc.setViewControllers([
-            ClubApplicantsVC(reactor: reactor, isHead: isHead)
-        ])
-        self.rootVC.visibleViewController?.present(vc, animated: true)
+    func navigateToClubStatus(query: ClubRequestQuery, isHead: Bool) -> FlowContributors {
+        let reactor = AppDelegate.container.resolve(ClubMemberReactor.self, argument: query)!
+        let vc = ClubMemberVC(reactor: reactor, isHead: isHead)
+        self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
     func popToRoot() -> FlowContributors {

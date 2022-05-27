@@ -1,8 +1,10 @@
 import UIKit
 import Reusable
+import RxSwift
 
 class BaseTableViewHeaderFooterView<T>: UITableViewHeaderFooterView, Reusable {
 
+    var disposeBag = DisposeBag()
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         addView()
