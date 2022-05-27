@@ -62,7 +62,7 @@ private extension BaseRemote {
             .request(api)
             .timeout(.seconds(120), scheduler: MainScheduler.asyncInstance)
             .do(onSuccess: {
-                print(try? $0.mapJSON())
+                print(try? $0.mapJSON()) /// TODO:  나중에 지우시길
             })
             .catch { error in
                 guard let code = (error as? MoyaError)?.response?.statusCode else {
