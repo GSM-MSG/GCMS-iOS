@@ -151,7 +151,7 @@ private extension MainFlow{
         return .none
     }
     func navigateToClubMembers(query: ClubRequestQuery, isHead: Bool, isOpened: Bool) -> FlowContributors {
-        let reactor = AppDelegate.container.resolve(ClubMemberReactor.self, argument: query)!
+        let reactor = AppDelegate.container.resolve(ClubMemberReactor.self, arguments: query, isOpened)!
         let vc = ClubMemberVC(reactor: reactor, isHead: isHead)
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
