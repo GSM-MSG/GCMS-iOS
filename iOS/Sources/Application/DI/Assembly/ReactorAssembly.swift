@@ -53,9 +53,10 @@ final class ReactorAssembly: Assembly {
             )
         }
         
-        container.register(ClubMemberReactor.self) { r, query in
+        container.register(ClubMemberReactor.self) { r, query, isOpened in
             ClubMemberReactor(
                 query: query,
+                isOpened: isOpened,
                 fetchClubMemberUseCase: r.resolve(FetchClubMemberUseCase.self)!,
                 fetchClubApplicantUseCase: r.resolve(FetchClubApplicantUseCase.self)!,
                 userKickUseCase: r.resolve(UserKickUseCase.self)!,

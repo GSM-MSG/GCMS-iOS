@@ -24,6 +24,7 @@ final class ClubMemberReactor: Reactor, Stepper {
     struct State {
         var users: [ExpandableMemberSection]
         var isLoading: Bool
+        var isOpened: Bool
     }
     let initialState: State
     private let query: ClubRequestQuery
@@ -40,6 +41,7 @@ final class ClubMemberReactor: Reactor, Stepper {
     // MARK: - Init
     init(
         query: ClubRequestQuery,
+        isOpened: Bool,
         fetchClubMemberUseCase: FetchClubMemberUseCase,
         fetchClubApplicantUseCase: FetchClubApplicantUseCase,
         userKickUseCase: UserKickUseCase,
@@ -60,7 +62,8 @@ final class ClubMemberReactor: Reactor, Stepper {
         
         initialState = State(
             users: [],
-            isLoading: false
+            isLoading: false,
+            isOpened: isOpened
         )
         self.query = query
     }

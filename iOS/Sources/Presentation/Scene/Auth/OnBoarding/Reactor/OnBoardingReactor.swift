@@ -50,7 +50,7 @@ extension OnBoardingReactor {
         case .appleSigninCompleted:
             return appleSigninCompleted()
         case .appleSigninFailed:
-            return signinFailed()
+            return signinFailed(message: "알 수 없는 이유로 로그인이 실패했습니다.")
         case .googleSigninCompleted:
             return googleSigninCompleted()
         }
@@ -108,7 +108,7 @@ private extension OnBoardingReactor {
         return .empty()
     }
     func signinFailed(message: String = "로그인이 실패하였습니다") -> Observable<Mutation> {
-        self.steps.accept(GCMSStep.failureAlert(title: nil, message: "로그인이 실패하였습니다", action: nil))
+        self.steps.accept(GCMSStep.failureAlert(title: nil, message: message))
         return .empty()
     }
 }
