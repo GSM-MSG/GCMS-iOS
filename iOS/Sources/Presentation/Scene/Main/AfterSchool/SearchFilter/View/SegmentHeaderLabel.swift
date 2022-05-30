@@ -4,7 +4,7 @@ final class SegmentHeaderLabel: UILabel {
     init(title: String) {
         super.init(frame: .zero)
         self.text = title
-        self.font = .systemFont(ofSize: 18, weight: .semibold)
+        self.font = .systemFont(ofSize: 18, weight: .regular)
     }
     
     required init?(coder: NSCoder) {

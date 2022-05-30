@@ -1,6 +1,7 @@
 import UIKit
 import SnapKit
 import Then
+import Service
 import PanModal
 
 final class SearchFilterVC: BaseVC<SearchFilterReactor> {
@@ -9,8 +10,10 @@ final class SearchFilterVC: BaseVC<SearchFilterReactor> {
         $0.text = "정렬"
         $0.font = .systemFont(ofSize: 20, weight: .bold)
     }
+    private let semesterLabel = SegmentHeaderLabel(title: "학기")
+    private let semesterTypeSegment = FilterModalSegmentedControl(titles: AfterSchoolSeason.allCases.map(\.display))
     private let dayLabel = SegmentHeaderLabel(title: "요일")
-    private let dayTypeSegment = FilterModalSegmentedControl(titles: ["월요일", "화요일", "수요일", "전체"])
+    private let dayTypeSegment = FilterModalSegmentedControl(titles: AfterSchoolWeek.allCases.map(\.segmentDisplay))
     private let gradeLabel = SegmentHeaderLabel(title: "학년")
     private let gradeTypeSegment = FilterModalSegmentedControl(titles: ["1학년", "2학년", "3학년", "전체"])
     private let applyButton = UIButton().then {
@@ -25,7 +28,7 @@ final class SearchFilterVC: BaseVC<SearchFilterReactor> {
     }
     
     override func addView() {
-        view.addSubViews(headerLabel, dayLabel, dayTypeSegment, gradeLabel, gradeTypeSegment, applyButton)
+        view.addSubViews(headerLabel, semesterLabel, semesterTypeSegment, dayLabel, dayTypeSegment, gradeLabel, gradeTypeSegment, applyButton)
     }
     
     override func setLayout() {
@@ -33,9 +36,18 @@ final class SearchFilterVC: BaseVC<SearchFilterReactor> {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(8)
         }
-        dayLabel.snp.makeConstraints {
+        semesterLabel.snp.makeConstraints {
             $0.leading.equalTo(20)
             $0.top.equalTo(69)
+        }
+        semesterTypeSegment.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.top.equalTo(semesterLabel.snp.bottom).offset(8)
+            $0.height.equalTo(32)
+        }
+        dayLabel.snp.makeConstraints {
+            $0.leading.equalTo(semesterLabel.snp.leading)
+            $0.top.equalTo(semesterTypeSegment.snp.bottom).offset(40)
         }
         dayTypeSegment.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(20)
@@ -65,9 +77,9 @@ extension SearchFilterVC: PanModalPresentable {
         return nil
     }
     var shortFormHeight: PanModalHeight {
-        return .contentHeight(400)
+        return .contentHeight(500)
     }
     var longFormHeight: PanModalHeight {
-        return .contentHeight(400)
+        return .contentHeight(500)
     }
 }
