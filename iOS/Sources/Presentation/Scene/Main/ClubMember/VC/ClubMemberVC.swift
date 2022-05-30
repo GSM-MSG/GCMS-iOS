@@ -42,12 +42,13 @@ final class ClubMemberVC: BaseVC<ClubMemberReactor> {
         view.addSubViews(membersTableView, clubOpenCloseButton)
     }
     override func setLayout() {
-        membersTableView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
         clubOpenCloseButton.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
-            $0.height.equalTo(view.safeAreaInsets.bottom + 56)
+            $0.height.equalTo(view.safeAreaInsets.bottom + 72)
+        }
+        membersTableView.snp.makeConstraints {
+            $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.equalTo(clubOpenCloseButton.snp.top)
         }
     }
     override func configureVC() {
