@@ -72,21 +72,27 @@ extension OnBoardingReactor {
 // MARK: - Method
 private extension OnBoardingReactor {
     func googleSigninButtonDidTap(vc: UIViewController) -> Observable<Mutation> {
-        let config = GIDConfiguration(clientID: FirebaseApp.app()?.options.clientID ?? "")
-        GIDSignIn.sharedInstance.signIn(with: config, presenting: vc) { [weak self] user, err in
-            if let err = err {
-                print(err.localizedDescription)
-                self?.action.onNext(.appleSigninFailed)
-                return
-            }
-            
-            user?.authentication.do({ auth in
-                if let idToken = auth.idToken {
-                    print(idToken)
-                    self?.googleSigninTokenReceived(token: idToken)
+        self.steps.accept(GCMSStep.alert(title: "gsm.hs.kr 계정으로 로그인해주세요.", message: "이외 계정은 로그인되지 않습니다.", style: .alert, actions: [
+            .init(title: "확인", style: .default, handler: { [weak self] _ in
+                let config = GIDConfiguration(clientID: FirebaseApp.app()?.options.clientID ?? "")
+                GIDSignIn.sharedInstance.signIn(with: config, presenting: vc) { [weak self] user, err in
+                    if let err = err {
+                        print(err.localizedDescription)
+                        self?.action.onNext(.appleSigninFailed)
+                        return
+                    }
+                    
+                    user?.authentication.do({ auth in
+                        if let idToken = auth.idToken {
+                            print(idToken)
+                            self?.googleSigninTokenReceived(token: idToken)
+                        }
+                    })
                 }
-            })
-        }
+            }),
+            .init(title: "취소", style: .cancel)
+        ]))
+        
         return .empty()
     }
     func googleSigninTokenReceived(token: String) {
