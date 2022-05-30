@@ -18,6 +18,7 @@ final class ClubMemberReactor: Reactor, Stepper {
         case kickButtonDidTap(Member)
         case acceptButtonDidTap(User)
         case rejectButtonDidTap(User)
+        case clubOpenCloseButtonDidTap
     }
     enum Mutation {
         case setIsOpened(Int, Bool)
@@ -90,6 +91,8 @@ extension ClubMemberReactor {
             return acceptButtonDidTap(user: user)
         case let .rejectButtonDidTap(user):
             return rejectButtonDidTap(user: user)
+        case .clubOpenCloseButtonDidTap:
+            return clubOpenCloseButtonDidTap()
         }
         return .empty()
     }
@@ -136,6 +139,40 @@ private extension ClubMemberReactor {
             ]) }
             .catchAndReturn(.setIsLoading(false))
         return .concat([start, member, applicant])
+    }
+    func clubOpenCloseButtonDidTap() -> Observable<Mutation> {
+        if currentState.isOpened {
+            self.steps.accept(GCMSStep.alert(title: "마감하기", message: "동아리 신청을 마감하시겠습니까?", style: .alert, actions: [
+                .init(title: "마감", style: .default, handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    self.clubCloseUseCase.execute(query: self.query)
+                        .andThen(Observable.just(()))
+                        .subscribe { _ in
+                            self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 마감되었습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
+                        } onError: { _ in
+                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "동아리 신청 마감이 실패했습니다."))
+                        }
+                        .disposed(by: self.disposeBag)
+                }),
+                .init(title: "취소", style: .cancel)
+            ]))
+        } else {
+            self.steps.accept(GCMSStep.alert(title: "신청받기", message: "동아리 신청을 받겠습니까?", style: .alert, actions: [
+                .init(title: "받기", style: .default, handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    self.clubOpenUseCase.execute(query: self.query)
+                        .andThen(Observable.just(()))
+                        .subscribe { _ in
+                            self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 열렸습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
+                        } onError: { _ in
+                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "동아리 신청 열기가 실패했습니다."))
+                        }
+                        .disposed(by: self.disposeBag)
+                }),
+                .init(title: "취소", style: .cancel)
+            ]))
+        }
+        return .empty()
     }
     func delegationButtonDidTap(user: Member) -> Observable<Mutation> {
         self.steps.accept(GCMSStep.alert(title: "위임하기", message: "정말 '\(user.name)'님을 부장으로 위임하시겠습니까?", style: .alert, actions: [

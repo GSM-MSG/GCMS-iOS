@@ -52,7 +52,7 @@ final class ClubMemberVC: BaseVC<ClubMemberReactor> {
     }
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
-        
+        clubOpenCloseButton.isHidden = !isHead
     }
     
     // MARK: - Reactor
@@ -60,6 +60,15 @@ final class ClubMemberVC: BaseVC<ClubMemberReactor> {
         self.rx.viewDidLoad
             .map { Reactor.Action.viewDidLoad }
             .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    override func bindState(reactor: ClubMemberReactor) {
+        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        
+        sharedState
+            .map(\.isOpened)
+            .map { $0 ? "동아리 신청 마감하기" : "동아리 신청 받기" }
+            .bind(to: clubOpenCloseButton.rx.title())
             .disposed(by: disposeBag)
     }
 }
