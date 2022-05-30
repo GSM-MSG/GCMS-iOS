@@ -4,7 +4,7 @@ import Then
 import ReactorKit
 import RxSwift
 
-final class AfterSchoolVC: BaseVC<AfterSchoolReactor>{
+final class AfterSchoolVC: BaseVC<AfterSchoolReactor> {
     // MARK: - Properties
     private let searchController = UISearchController().then {
         $0.searchBar.placeholder = "검색어를 입력해주세요"

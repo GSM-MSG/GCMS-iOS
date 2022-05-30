@@ -76,7 +76,9 @@ final class ReactorAssembly: Assembly {
         }
         
         container.register(AfterSchoolReactor.self) { r in
-            AfterSchoolReactor()
+            AfterSchoolReactor(
+                fetchAfterSchoolListUseCase: r.resolve(FetchAfterSchoolListUseCase.self)!
+            )
         }
         
         container.register(SearchFilterReactor.self) { r in

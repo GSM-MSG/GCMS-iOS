@@ -12,29 +12,40 @@ final class AfterSchoolReactor: Reactor, Stepper {
     private let disposeBag: DisposeBag = .init()
     // MARK: - Reactor
     enum Action {
+        case viewDidLoad
         case searchFilterButtonDidTap
     }
     
     enum Mutation {
         case setIsLoading(Bool)
+        case setAfterSchool([AfterSchool])
     }
     
     struct State {
         var isLoading: Bool
+        var afterSchool: [AfterSchool]
     }
     
     let initialState: State
+    private let fetchAfterSchoolListUseCase: FetchAfterSchoolListUseCase
+    
     // MARK: - Init
-    init() {
+    init(
+        fetchAfterSchoolListUseCase: FetchAfterSchoolListUseCase
+    ) {
         initialState = State(
-            isLoading: false
+            isLoading: false,
+            afterSchool: []
         )
+        self.fetchAfterSchoolListUseCase = fetchAfterSchoolListUseCase
     }
     // MARK: - Mutate
     func mutate(action: Action) -> Observable<Mutation> {
          switch action {
          case .searchFilterButtonDidTap:
              steps.accept(GCMSStep.searchFilterIsRequired)
+         case .viewDidLoad:
+             return .empty()
          }
         return .empty()
     }
@@ -44,6 +55,8 @@ final class AfterSchoolReactor: Reactor, Stepper {
          switch mutation {
          case let .setIsLoading(load):
              newState.isLoading = load
+         case let .setAfterSchool(afterSchool):
+             newState.afterSchool = afterSchool
          }
         return newState
     }
