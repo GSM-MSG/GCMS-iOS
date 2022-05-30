@@ -1,9 +1,8 @@
 import UIKit
 
 final class SemiBoldTextLabel: UILabel {
-    init(title: String, weight: UIFont.Weight) {
+    init(weight: UIFont.Weight) {
         super.init(frame: .zero)
-        self.text = title
         self.font = .systemFont(ofSize: 13, weight: weight)
         self.textColor = .black
         self.textAlignment = .center

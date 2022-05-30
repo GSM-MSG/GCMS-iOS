@@ -21,3 +21,15 @@ public struct AfterSchool: Equatable {
     public let isApplied: Bool
 }
 
+public extension AfterSchool {
+    static let dummy = AfterSchool(
+        id: 0,
+        title: "컴퓨터 활용능력",
+        week: AfterSchoolWeek.monday,
+        grade: 1,
+        personnel: 17,
+        maxPersonnel: 30,
+        isOpened: true,
+        isApplied: true
+    )
+}
