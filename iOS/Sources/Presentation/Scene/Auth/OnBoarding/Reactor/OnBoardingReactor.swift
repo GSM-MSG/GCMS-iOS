@@ -20,6 +20,7 @@ final class OnBoardingReactor: Reactor, Stepper {
         case googleSigninCompleted
         case appleSigninCompleted
         case appleSigninFailed
+        case guestSigninButtonDidTap
     }
     enum Mutation {
         case setIsLoading(Bool)
@@ -47,7 +48,7 @@ extension OnBoardingReactor {
         switch action {
         case let .googleSigninButtonDidTap(vc):
             return googleSigninButtonDidTap(vc: vc)
-        case .appleSigninCompleted:
+        case .appleSigninCompleted, .guestSigninButtonDidTap:
             return appleSigninCompleted()
         case .appleSigninFailed:
             return signinFailed(message: "알 수 없는 이유로 로그인이 실패했습니다.")

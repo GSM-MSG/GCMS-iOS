@@ -1,4 +1,3 @@
-
 struct ClubListDTO: Codable {
     let title: String
     let type: ClubType
