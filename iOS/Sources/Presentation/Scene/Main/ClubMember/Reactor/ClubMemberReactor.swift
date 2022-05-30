@@ -124,7 +124,7 @@ private extension ClubMemberReactor {
         let start = Observable.just(Mutation.setIsLoading(true))
         let member = fetchClubMemberUseCase.execute(query: query)
             .asObservable()
-            .map { ExpandableMemberSection(header: "구성원", items: $0.map { MemberSectionType.member($0) }, isOpened: currentState.isOpened) }
+            .map { [weak self] in ExpandableMemberSection(header: "구성원", items: $0.map { MemberSectionType.member($0) }, isOpened: self?.currentState.isOpened ?? false) }
             .flatMap { Observable.concat([
                 Observable.just(Mutation.setIsLoading(false)),
                 .just(.appendUsers($0))
@@ -132,7 +132,7 @@ private extension ClubMemberReactor {
             .catchAndReturn(.setIsLoading(false))
         let applicant = fetchClubApplicantUseCase.execute(query: query)
             .asObservable()
-            .map { ExpandableMemberSection(header: "가입 대기자 명단", items: $0.map { MemberSectionType.applicant($0) }, isOpened: currentState.isOpened) }
+            .map { [weak self] in ExpandableMemberSection(header: "가입 대기자 명단", items: $0.map { MemberSectionType.applicant($0) }, isOpened: self?.currentState.isOpened ?? false) }
             .flatMap { Observable.concat([
                 Observable.just(Mutation.setIsLoading(false)),
                 .just(.appendUsers($0))
