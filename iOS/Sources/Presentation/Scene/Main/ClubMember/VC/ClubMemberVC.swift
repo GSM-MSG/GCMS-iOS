@@ -5,6 +5,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import RxGesture
+import Service
 
 final class ClubMemberVC: BaseVC<ClubMemberReactor> {
     // MARK: - Properties
@@ -88,11 +89,13 @@ extension ClubMemberVC: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(for: indexPath, cellType: ApplicantCell.self)
             cell.isHead = isHead
             cell.model = user
+            cell.delegate = self
             return cell
         case let .member(member):
             let cell = tableView.dequeueReusableCell(for: indexPath, cellType: StatusMemberCell.self)
             cell.isHead = isHead
             cell.model = member
+            cell.delegate = self
             return cell
         }
     }
@@ -111,4 +114,24 @@ extension ClubMemberVC: MemberHeaderViewDelegate {
         
         membersTableView.reloadSections(.init([section]), with: .automatic)
     }
+}
+
+extension ClubMemberVC: ApplicantCellDelegate, StatusMemberCellDelegate {
+    func acceptButtonDidTap(user: User) {
+        reactor?.action.onNext(.acceptButtonDidTap(user))
+    }
+    
+    func rejectButtonDidTap(user: User) {
+        reactor?.action.onNext(.rejectButtonDidTap(user))
+    }
+    
+    func kicktButtonDidTap(user: Member) {
+        reactor?.action.onNext(.kickButtonDidTap(user))
+    }
+    
+    func delegationButtonDidTap(user: Member) {
+        reactor?.action.onNext(.delegationButtonDidTap(user))
+    }
+    
+    
 }
