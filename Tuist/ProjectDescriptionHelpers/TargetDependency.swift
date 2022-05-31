@@ -32,6 +32,8 @@ public extension TargetDependency.SPM{
     static let ParkedTextField = TargetDependency.package(product: "ParkedTextField")
     static let GoogleSignIn = TargetDependency.package(product: "GoogleSignIn")
     static let Inject = TargetDependency.package(product: "Inject")
+    static let Realm = TargetDependency.package(product: "Realm")
+    static let RealmSwift = TargetDependency.package(product: "RealmSwift")
 }
 
 public extension Package {
@@ -138,5 +140,9 @@ public extension Package {
     static let Inject = Package.remote(
         url: "https://github.com/krzysztofzablocki/Inject.git",
         requirement: .upToNextMajor(from: "1.1.1")
+    )
+    static let Realm = Package.remote(
+        url: "https://github.com/realm/realm-swift.git",
+        requirement: .upToNextMajor(from: "10.27.0")
     )
 }
