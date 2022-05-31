@@ -30,6 +30,7 @@ let project = Project.dynamicFramework(
         .ParkedTextField,
         .GoogleSignIn,
         .Inject,
+        .Realm
     ],
     deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
     dependencies: [
@@ -58,5 +59,7 @@ let project = Project.dynamicFramework(
         .SPM.ParkedTextField,
         .SPM.GoogleSignIn,
         .SPM.Inject,
+        .SPM.Realm,
+        .SPM.RealmSwift,
     ]
 )

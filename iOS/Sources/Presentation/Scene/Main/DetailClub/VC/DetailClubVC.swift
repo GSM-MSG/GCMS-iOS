@@ -221,10 +221,12 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                     : GCMSAsset.Colors.gcmsMainColor.color
                     owner.navigationItem.rightBarButtonItem = nil
                 }
-                if item.isOpen && !(item.scope == .head) {
+                if !item.isOpen {
                     owner.applyButton.isHidden = false
                     owner.applyButton.setTitle("마감됨", for: .normal)
                     owner.applyButton.backgroundColor = .init(red: 0.58, green: 0.58, blue: 0.58, alpha: 1)
+                } else if !item.isOpen {
+                    
                 }
                 owner.headView.bind(user: item.head)
                 if let teacher = item.teacher, !teacher.isEmpty {

@@ -75,10 +75,10 @@ private extension OnBoardingFlow{
         self.rootVC.visibleViewController?.present(alert, animated: true)
         return .none
     }
-    func presentToFailureAlert(title: String?, message: String?, action: UIAlertAction?) -> FlowContributors {
+    func presentToFailureAlert(title: String?, message: String?, action: [UIAlertAction]) -> FlowContributors {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        if let action = action {
-            alert.addAction(action)
+        if !action.isEmpty {
+            action.forEach(alert.addAction(_:))
         } else {
             alert.addAction(.init(title: "확인", style: .default))
         }

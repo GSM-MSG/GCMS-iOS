@@ -19,6 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let s = (scene as? UIWindowScene) else { return }
         
+        window = UIWindow(windowScene: s)
+        
         coordinateLogger()
         coordinateToAppFlow(with: s)
     }
