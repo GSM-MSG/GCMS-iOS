@@ -22,6 +22,7 @@ final class ReactorAssembly: Assembly {
                 query: query,
                 deleteClubUseCase: r.resolve(DeleteClubUseCase.self)!,
                 fetchDetailClubUseCase: r.resolve(FetchDetailClubUseCase.self)!,
+                fetchGuestDetailClubUseCase: r.resolve(FetchGuestDeatilClubUseCase.self)!,
                 clubExitUseCase: r.resolve(ClubExitUseCase.self)!,
                 clubApplyUseCase: r.resolve(ClubApplyUseCase.self)!,
                 clubCancelUseCase: r.resolve(ClubCancelUseCase.self)!,
