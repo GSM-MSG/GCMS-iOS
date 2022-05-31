@@ -144,7 +144,7 @@ extension UpdateClubReactor {
         case let .activityDeleteDidTap(index):
             return .just(.removeImageData(index))
         case .memberAppendButtonDidTap:
-            steps.accept(GCMSStep.memberAppendIsRequired(closue: { [weak self] users in
+            steps.accept(GCMSStep.memberAppendIsRequired(closure: { [weak self] users in
                 self?.action.onNext(.memberDidSelected(users))
             }, clubType: currentState.clubType))
         case let .memberDidSelected(users):
