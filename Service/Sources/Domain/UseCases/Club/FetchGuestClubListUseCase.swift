@@ -1,6 +1,6 @@
 import RxSwift
 
-public struct FetchClubListUseCase {
+public struct FetchGuestClubListUseCase {
     public init(clubRepository: ClubRepository) {
         self.clubRepository = clubRepository
     }
@@ -8,6 +8,6 @@ public struct FetchClubListUseCase {
     private let clubRepository: ClubRepository
     
     public func execute(type: ClubType) -> Observable<[ClubList]> {
-        clubRepository.fetchClubList(type: type)
+        clubRepository.fetchGuestClubList(type: type)
     }
 }

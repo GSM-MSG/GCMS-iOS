@@ -11,6 +11,7 @@ final class HomeReactor: Reactor, Stepper {
     private let disposeBag: DisposeBag = .init()
     
     private let fetchClubListsUseCase: FetchClubListUseCase
+    private let fetchGuestClubListUseCase: FetchGuestClubListUseCase
     
     // MARK: - Reactor
     enum Action {
@@ -42,7 +43,8 @@ final class HomeReactor: Reactor, Stepper {
     
     // MARK: - Init
     init(
-        fetchClubListsUseCase: FetchClubListUseCase
+        fetchClubListsUseCase: FetchClubListUseCase,
+        fetchGuestClubListUseCase: FetchGuestClubListUseCase
     ) {
         initialState = State(
             majorClubList: [],
@@ -53,6 +55,7 @@ final class HomeReactor: Reactor, Stepper {
             isRefreshing: false
         )
         self.fetchClubListsUseCase = fetchClubListsUseCase
+        self.fetchGuestClubListUseCase = fetchGuestClubListUseCase
     }
     
 }
@@ -111,19 +114,35 @@ extension HomeReactor {
 private extension HomeReactor {
     func viewDidLoad() -> Observable<Mutation> {
         let start = Observable.just(Mutation.setIsLoading(true))
-        let clubs = Observable.zip(
-            fetchClubListsUseCase.execute(type: .major).asObservable(),
-            fetchClubListsUseCase.execute(type: .editorial).asObservable(),
-            fetchClubListsUseCase.execute(type: .freedom).asObservable()
-        ).flatMap { major, editorial, freedom in
-            return Observable.concat([
-                .just(Mutation.setClubList(.major, major)),
-                .just(.setClubList(.editorial, editorial)),
-                .just(.setClubList(.freedom, freedom)),
-                .just(.setIsLoading(false))
-            ])
-        }.catchAndReturn(Mutation.setIsLoading(false))
-        return .concat([start, clubs])
+        if UserDefaultsLocal.shared.isApple {
+            let clubs = Observable.zip(
+                fetchGuestClubListUseCase.execute(type: .major).asObservable(),
+                fetchGuestClubListUseCase.execute(type: .editorial).asObservable(),
+                fetchGuestClubListUseCase.execute(type: .freedom).asObservable()
+            ).flatMap { major, editorial, freedom in
+                return Observable.concat([
+                    .just(Mutation.setClubList(.major, major)),
+                    .just(.setClubList(.editorial, editorial)),
+                    .just(.setClubList(.freedom, freedom)),
+                    .just(.setIsLoading(false))
+                ])
+            }.catchAndReturn(Mutation.setIsLoading(false))
+            return .concat([start, clubs])
+        } else {
+            let clubs = Observable.zip(
+                fetchClubListsUseCase.execute(type: .major).asObservable(),
+                fetchClubListsUseCase.execute(type: .editorial).asObservable(),
+                fetchClubListsUseCase.execute(type: .freedom).asObservable()
+            ).flatMap { major, editorial, freedom in
+                return Observable.concat([
+                    .just(Mutation.setClubList(.major, major)),
+                    .just(.setClubList(.editorial, editorial)),
+                    .just(.setClubList(.freedom, freedom)),
+                    .just(.setIsLoading(false))
+                ])
+            }.catchAndReturn(Mutation.setIsLoading(false))
+            return .concat([start, clubs])
+        }
     }
     func guestLogoutButtonDidTap() -> Observable<Mutation> {
         steps.accept(GCMSStep.alert(title: nil, message: "게스트 계정을 로그아웃 하시겠습니까?", style: .alert, actions: [
