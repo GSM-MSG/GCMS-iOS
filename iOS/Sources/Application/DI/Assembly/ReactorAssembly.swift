@@ -12,7 +12,8 @@ final class ReactorAssembly: Assembly {
         
         container.register(HomeReactor.self) { r in
              HomeReactor(
-                fetchClubListsUseCase: r.resolve(FetchClubListUseCase.self)!
+                fetchClubListsUseCase: r.resolve(FetchClubListUseCase.self)!,
+                fetchGuestClubListUseCase: r.resolve(FetchGuestClubListUseCase.self)!
             )
         }
         

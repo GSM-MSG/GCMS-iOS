@@ -1,7 +1,8 @@
 import RxSwift
 
 public protocol ClubRepository {
-    func fetchClubList(type: ClubType) -> Single<[ClubList]>
+    func fetchClubList(type: ClubType) -> Observable<[ClubList]>
+    func fetchGuestClubList(type: ClubType) -> Observable<[ClubList]>
     func fetchDetailClub(query: ClubRequestQuery) -> Single<Club>
     func createNewClub(req: NewClubRequest) -> Completable
     func updateClub(req: UpdateClubRequest) -> Completable

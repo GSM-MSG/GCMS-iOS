@@ -2,6 +2,7 @@ import Moya
 
 enum ClubAPI {
     case clubList(type: ClubType)
+    case guestClubList(type: ClubType)
     case clubDetail(query: ClubRequestQuery)
     case createNewClub(req: NewClubRequest)
     case updateClub(req: UpdateClubRequest)
@@ -26,6 +27,8 @@ extension ClubAPI: GCMSAPI {
         switch self {
         case .clubList:
             return "/list"
+        case .guestClubList:
+            return "/guest/list"
         case .clubDetail:
             return "/detail"
         case .createNewClub, .updateClub, .deleteClub:
@@ -54,7 +57,7 @@ extension ClubAPI: GCMSAPI {
     }
     var method: Method {
         switch self {
-        case .clubList, .clubDetail, .clubMember, .clubApplicant:
+        case .clubList, .clubDetail, .clubMember, .clubApplicant, .guestClubList:
             return .get
         case .userAccept, .userReject, .apply, .cancel, .createNewClub:
             return .post
@@ -66,7 +69,7 @@ extension ClubAPI: GCMSAPI {
     }
     var task: Task {
         switch self {
-        case let .clubList(type):
+        case let .clubList(type), let .guestClubList(type):
             return .requestParameters(parameters: [
                 "type": type.rawValue
             ], encoding: URLEncoding.queryString)
@@ -101,6 +104,8 @@ extension ClubAPI: GCMSAPI {
     }
     var jwtTokenType: JWTTokenType? {
         switch self {
+        case .guestClubList:
+            return JWTTokenType.none
         default:
             return .accessToken
         }
