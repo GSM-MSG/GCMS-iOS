@@ -21,6 +21,9 @@ final class DefaultClubRepository: ClubRepository {
     func fetchDetailClub(query: ClubRequestQuery) -> Single<Club> {
         clubRemote.fetchDetailClub(query: query)
     }
+    func fetchGuestDetailClub(query: ClubRequestQuery) -> Single<Club> {
+        clubRemote.fetchGuestDetailClub(query: query)
+    }
     func createNewClub(req: NewClubRequest) -> Completable {
         clubRemote.createNewClub(req: req)
     }

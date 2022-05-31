@@ -66,6 +66,11 @@ public final class UseCaseAssembly: Assembly {
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
+        container.register(FetchGuestDeatilClubUseCase.self) { r in
+            FetchGuestDeatilClubUseCase(
+                clubRepository: r.resolve(ClubRepository.self)!
+            )
+        }
         container.register(UserAcceptUseCase.self) { r in
              UserAcceptUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!

@@ -19,6 +19,11 @@ final class ClubRemote: BaseRemote<ClubAPI> {
             .map(DetailClubResponse.self)
             .map { $0.toDomain() }
     }
+    func fetchGuestDetailClub(query: ClubRequestQuery) -> Single<Club> {
+        request(.guestClubDetail(query: query))
+            .map(DetailClubResponse.self)
+            .map { $0.toDomain() }
+    }
     func createNewClub(req: NewClubRequest) -> Completable {
         request(.createNewClub(req: req))
             .asCompletable()

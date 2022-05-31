@@ -30,6 +30,7 @@ final class DetailClubReactor: Reactor, Stepper {
     private let query: ClubRequestQuery
     private let deleteClubUseCase: DeleteClubUseCase
     private let fetchDetailClubUseCase: FetchDetailClubUseCase
+    private let fetchGuestDetailClubUseCase: FetchGuestDeatilClubUseCase
     private let clubExitUseCase: ClubExitUseCase
     private let clubApplyUseCase: ClubApplyUseCase
     private let clubCancelUseCase: ClubCancelUseCase
@@ -41,6 +42,7 @@ final class DetailClubReactor: Reactor, Stepper {
         query: ClubRequestQuery,
         deleteClubUseCase: DeleteClubUseCase,
         fetchDetailClubUseCase: FetchDetailClubUseCase,
+        fetchGuestDetailClubUseCase: FetchGuestDeatilClubUseCase,
         clubExitUseCase: ClubExitUseCase,
         clubApplyUseCase: ClubApplyUseCase,
         clubCancelUseCase: ClubCancelUseCase,
@@ -53,6 +55,7 @@ final class DetailClubReactor: Reactor, Stepper {
         self.query = query
         self.deleteClubUseCase = deleteClubUseCase
         self.fetchDetailClubUseCase = fetchDetailClubUseCase
+        self.fetchGuestDetailClubUseCase = fetchGuestDetailClubUseCase
         self.clubExitUseCase = clubExitUseCase
         self.clubApplyUseCase = clubApplyUseCase
         self.clubCancelUseCase = clubCancelUseCase
@@ -73,7 +76,7 @@ extension DetailClubReactor {
         case .statusButtonDidTap:
             return statusButtonDidTap()
         case .linkButtonDidTap:
-            UIApplication.shared.open(URL(string: currentState.clubDetail?.relatedLink?.url ?? "")!)
+            UIApplication.shared.open(URL(string: currentState.clubDetail?.relatedLink?.url ?? "https://www.google.com")!)
         }
         return .empty()
     }
@@ -99,12 +102,20 @@ extension DetailClubReactor {
 private extension DetailClubReactor {
     func viewDidLoad() -> Observable<Mutation> {
         let start = Observable.just(Mutation.setIsLoading(true))
-        let task = fetchDetailClubUseCase.execute(query: query)
-            .asObservable()
-            .flatMap { Observable.from([Mutation.setClub($0), .setIsLoading(false)]) }
-            .catchAndReturn(.setIsLoading(false))
-        
-        return .concat([start, task])
+        if UserDefaultsLocal.shared.isApple {
+            let task = fetchGuestDetailClubUseCase.execute(query: query)
+                .asObservable()
+                .flatMap { Observable.from([Mutation.setClub($0), .setIsLoading(false)]) }
+                .catchAndReturn(.setIsLoading(false))
+            return .concat([start, task])
+        } else {
+            let task = fetchDetailClubUseCase.execute(query: query)
+                .asObservable()
+                .flatMap { Observable.from([Mutation.setClub($0), .setIsLoading(false)]) }
+                .catchAndReturn(.setIsLoading(false))
+            
+            return .concat([start, task])            
+        }
     }
     func statusButtonDidTap() -> Observable<Mutation> {
         let isHead = (currentState.clubDetail?.scope ?? .member) == .head
