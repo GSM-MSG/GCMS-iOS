@@ -81,8 +81,10 @@ final class ReactorAssembly: Assembly {
             )
         }
         
-        container.register(SearchFilterReactor.self) { r in
-            SearchFilterReactor()
+        container.register(SearchFilterReactor.self) { r, closure in
+            SearchFilterReactor(
+                closure: closure
+            )
         }
     }
 }

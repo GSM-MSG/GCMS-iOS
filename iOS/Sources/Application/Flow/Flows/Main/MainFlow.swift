@@ -67,8 +67,8 @@ final class MainFlow: Flow{
         // MARK: - AfterSchool
         case .afterschoolIsRequired:
             return navigateToAfterSchool()
-        case .searchFilterIsRequired:
-            return presentToSearchFilter()
+        case let .searchFilterIsRequired(closure):
+            return presentToSearchFilter(closure: closure)
         default:
             return .none
         }
@@ -169,9 +169,10 @@ private extension MainFlow{
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
-    func presentToSearchFilter() -> FlowContributors {
+    func presentToSearchFilter(closure: @escaping ((AfterSchoolSeason, AfterSchoolWeek, Int) -> Void)) -> FlowContributors {
+        let reactor = AppDelegate.container.resolve(SearchFilterReactor.self, argument: closure)!
         let vc = AppDelegate.container.resolve(SearchFilterVC.self)!
         self.rootVC.visibleViewController?.presentPanModal(vc)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
 }

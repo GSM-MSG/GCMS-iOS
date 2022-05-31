@@ -14,6 +14,7 @@ final class AfterSchoolReactor: Reactor, Stepper {
     enum Action {
         case viewDidLoad
         case searchFilterButtonDidTap
+        case applyButtonDidTap(AfterSchoolSeason, AfterSchoolWeek, Int)
     }
     
     enum Mutation {
@@ -43,9 +44,13 @@ final class AfterSchoolReactor: Reactor, Stepper {
     func mutate(action: Action) -> Observable<Mutation> {
          switch action {
          case .searchFilterButtonDidTap:
-             steps.accept(GCMSStep.searchFilterIsRequired)
+             steps.accept(GCMSStep.searchFilterIsRequired(closure: { [weak self] season, week, grade in
+                 self?.action.onNext(.applyButtonDidTap(season, week, grade))
+             }))
          case .viewDidLoad:
              return .empty()
+         case let .applyButtonDidTap(season, week, grade):
+             return applyButtonDidTap(season: season, week: week, grade: grade)
          }
         return .empty()
     }
@@ -61,4 +66,19 @@ final class AfterSchoolReactor: Reactor, Stepper {
         return newState
     }
     
+}
+
+private extension AfterSchoolReactor {
+    func applyButtonDidTap(season: AfterSchoolSeason, week: AfterSchoolWeek, grade: Int) -> Observable<Mutation> {
+        let start = Observable.just(Mutation.setIsLoading(true))
+        let task = fetchAfterSchoolListUseCase.execute(query: .init(season: season, week: week, grade: grade))
+            .asObservable()
+            .flatMap {
+                Observable.from([
+                    Mutation.setAfterSchool($0),
+                    .setIsLoading(false)
+                ])
+            }.catchAndReturn(Mutation.setIsLoading(false))
+        return .concat([start, task])
+    }
 }

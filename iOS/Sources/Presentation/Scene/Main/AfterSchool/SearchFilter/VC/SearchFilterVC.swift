@@ -1,6 +1,7 @@
 import UIKit
 import SnapKit
 import Then
+import RxSwift
 import Service
 import PanModal
 
@@ -69,6 +70,14 @@ final class SearchFilterVC: BaseVC<SearchFilterReactor> {
             $0.top.equalTo(gradeTypeSegment.snp.bottom).offset(56)
         }
     }
+    // MARK: - Reactor
+    
+    override func bindView(reactor: SearchFilterReactor) {
+        applyButton.rx.tap
+            .map { Reactor.Action.applyButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
 }
 
 // MARK: - PanModalPresentable
@@ -81,5 +90,42 @@ extension SearchFilterVC: PanModalPresentable {
     }
     var longFormHeight: PanModalHeight {
         return .contentHeight(500)
+    }
+    
+    func segmentValueChanged(to index: Int, sender: FilterModalSegmentedControl) {
+        if sender == semesterTypeSegment {
+            var season: AfterSchoolSeason = .first
+            switch index {
+            case 0:
+                season = .first
+            case 1:
+                season = .second
+            case 2:
+                season = .summer
+            case 3:
+                season = .winter
+            default:
+                return
+            }
+            reactor?.action.onNext(.segementedSeasonCange(season))
+        } else if sender == dayTypeSegment {
+            var week: AfterSchoolWeek = .all
+            switch index {
+            case 0:
+                week = .monday
+            case 1:
+                week = .tuesday
+            case 2:
+                week = .wednesday
+            case 3:
+                week = .all
+            default:
+                return
+            }
+            reactor?.action.onNext(.segementedWeekChange(week))
+        } else if sender == gradeTypeSegment {
+            let grade = index == 3 ? 0 : index
+            reactor?.action.onNext(.segementedGradeChange(grade))
+        }
     }
 }
