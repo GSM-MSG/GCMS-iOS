@@ -26,18 +26,18 @@ final class ApplicantCell: BaseTableViewCell<User> {
         $0.textColor = GCMSAsset.Colors.gcmsGray3.color
     }
     private let acceptButton = UIButton().then {
-        $0.setTitle("거절", for: .normal)
+        $0.setTitle("수락", for: .normal)
         $0.setTitleColor(.white, for: .normal)
-        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 10)
-        $0.layer.borderColor = UIColor.white.cgColor
-        $0.layer.borderWidth = 0.5
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 11)
+        $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
         $0.layer.cornerRadius = 4
     }
     private let rejectButton = UIButton().then {
-        $0.setTitle("강퇴", for: .normal)
+        $0.setTitle("거절", for: .normal)
         $0.setTitleColor(.white, for: .normal)
-        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 10)
-        $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 11)
+        $0.layer.borderColor = UIColor.white.cgColor
+        $0.layer.borderWidth = 0.5
         $0.layer.cornerRadius = 4
     }
     public var isHead: Bool = false {
@@ -56,6 +56,7 @@ final class ApplicantCell: BaseTableViewCell<User> {
         profileImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.size.equalTo(40)
+            $0.bottom.equalToSuperview().inset(10)
             $0.leading.equalToSuperview().offset(15)
         }
         nameLabel.snp.makeConstraints {
@@ -69,15 +70,18 @@ final class ApplicantCell: BaseTableViewCell<User> {
         acceptButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(15)
             $0.centerY.equalToSuperview()
-            $0.height.equalTo(25)
-            $0.width.equalTo(42)
+            $0.height.equalTo(30)
+            $0.width.equalTo(48)
         }
         rejectButton.snp.makeConstraints {
             $0.trailing.equalTo(acceptButton.snp.leading).offset(-10)
             $0.centerY.equalToSuperview()
-            $0.height.equalTo(24)
-            $0.width.equalTo(42)
+            $0.height.equalTo(30)
+            $0.width.equalTo(48)
         }
+    }
+    override func configureCell() {
+        backgroundColor = .clear
     }
     
     override func prepareForReuse() {

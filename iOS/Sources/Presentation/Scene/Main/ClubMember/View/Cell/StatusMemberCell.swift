@@ -28,7 +28,7 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
     private let delegationButton = UIButton().then {
         $0.setTitle("위임", for: .normal)
         $0.setTitleColor(.white, for: .normal)
-        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 10)
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 11)
         $0.layer.borderColor = UIColor.white.cgColor
         $0.layer.borderWidth = 0.5
         $0.layer.cornerRadius = 4
@@ -36,8 +36,8 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
     private let kickButton = UIButton().then {
         $0.setTitle("강퇴", for: .normal)
         $0.setTitleColor(.white, for: .normal)
-        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 10)
-        $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
+        $0.titleLabel?.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 11)
+        $0.backgroundColor = GCMSAsset.Colors.gcmsThemeColor.color
         $0.layer.cornerRadius = 4
     }
     public var isHead: Bool = false{
@@ -57,6 +57,7 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
         profileImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.size.equalTo(40)
+            $0.bottom.equalToSuperview().inset(10)
             $0.leading.equalToSuperview().offset(15)
         }
         nameLabel.snp.makeConstraints {
@@ -70,14 +71,14 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
         kickButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(15)
-            $0.height.equalTo(25)
-            $0.width.equalTo(42)
+            $0.height.equalTo(30)
+            $0.width.equalTo(48)
         }
         delegationButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalTo(kickButton.snp.leading).offset(-10)
-            $0.height.equalTo(25)
-            $0.width.equalTo(42)
+            $0.height.equalTo(30)
+            $0.width.equalTo(48)
         }
         
     }
@@ -95,6 +96,9 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
                 owner.delegate?.kicktButtonDidTap(user: model)
             }
             .disposed(by: disposeBag)
+        
+        backgroundColor = .clear
+        
     }
     
     override func prepareForReuse() {

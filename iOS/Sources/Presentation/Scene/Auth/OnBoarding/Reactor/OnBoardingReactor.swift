@@ -51,7 +51,7 @@ extension OnBoardingReactor {
         case .appleSigninCompleted, .guestSigninButtonDidTap:
             return appleSigninCompleted()
         case .appleSigninFailed:
-            return signinFailed()
+            return signinFailed(message: "알 수 없는 이유로 로그인이 실패했습니다.")
         case .googleSigninCompleted:
             return googleSigninCompleted()
         }
@@ -73,21 +73,27 @@ extension OnBoardingReactor {
 // MARK: - Method
 private extension OnBoardingReactor {
     func googleSigninButtonDidTap(vc: UIViewController) -> Observable<Mutation> {
-        let config = GIDConfiguration(clientID: FirebaseApp.app()?.options.clientID ?? "")
-        GIDSignIn.sharedInstance.signIn(with: config, presenting: vc) { [weak self] user, err in
-            if let err = err {
-                print(err.localizedDescription)
-                self?.action.onNext(.appleSigninFailed)
-                return
-            }
-            
-            user?.authentication.do({ auth in
-                if let idToken = auth.idToken {
-                    print(idToken)
-                    self?.googleSigninTokenReceived(token: idToken)
+        self.steps.accept(GCMSStep.alert(title: "gsm.hs.kr 계정으로 로그인해주세요.", message: "이외 계정은 로그인되지 않습니다.", style: .alert, actions: [
+            .init(title: "확인", style: .default, handler: { [weak self] _ in
+                let config = GIDConfiguration(clientID: FirebaseApp.app()?.options.clientID ?? "")
+                GIDSignIn.sharedInstance.signIn(with: config, presenting: vc) { [weak self] user, err in
+                    if let err = err {
+                        print(err.localizedDescription)
+                        self?.action.onNext(.appleSigninFailed)
+                        return
+                    }
+                    
+                    user?.authentication.do({ auth in
+                        if let idToken = auth.idToken {
+                            print(idToken)
+                            self?.googleSigninTokenReceived(token: idToken)
+                        }
+                    })
                 }
-            })
-        }
+            }),
+            .init(title: "취소", style: .cancel)
+        ]))
+        
         return .empty()
     }
     func googleSigninTokenReceived(token: String) {
@@ -109,7 +115,7 @@ private extension OnBoardingReactor {
         return .empty()
     }
     func signinFailed(message: String = "로그인이 실패하였습니다") -> Observable<Mutation> {
-        self.steps.accept(GCMSStep.failureAlert(title: nil, message: "로그인이 실패하였습니다", action: nil))
+        self.steps.accept(GCMSStep.failureAlert(title: nil, message: message))
         return .empty()
     }
 }

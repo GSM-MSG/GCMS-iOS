@@ -213,13 +213,13 @@ private extension NewClubReactor {
             steps.accept(GCMSStep.thirdNewClubIsRequired(reactor: self))
         }
         if !errorMessage.isEmpty {
-            steps.accept(GCMSStep.failureAlert(title: errorMessage, message: nil, action: nil))
+            steps.accept(GCMSStep.failureAlert(title: errorMessage, message: nil))
         }
         return .empty()
     }
     func completeButtonDidTap() -> Observable<Mutation> {
         guard (currentState.imageData != nil)  else {
-            steps.accept(GCMSStep.failureAlert(title: "동아리 배너 이미지를 넣어주세요!", message: nil, action: nil))
+            steps.accept(GCMSStep.failureAlert(title: "동아리 배너 이미지를 넣어주세요!", message: nil))
             return .empty()
         }
         steps.accept(GCMSStep.alert(title: "정말로 완료하시겠습니까?", message: nil, style: .alert, actions: [
