@@ -5,6 +5,7 @@ enum UserAPI {
     case editProfile(url: String)
     case search(name: String, type: ClubType)
     case exit(ClubRequestQuery)
+    case withdrawal
 }
 
 extension UserAPI: GCMSAPI {
@@ -21,6 +22,8 @@ extension UserAPI: GCMSAPI {
             return "/search"
         case .exit:
             return "/exit"
+        case .withdrawal:
+            return "/withdrawal"
         }
     }
     var method: Method {
@@ -29,7 +32,7 @@ extension UserAPI: GCMSAPI {
             return .get
         case .editProfile:
             return .put
-        case .exit:
+        case .exit, .withdrawal:
             return .delete
         }
     }
@@ -56,7 +59,7 @@ extension UserAPI: GCMSAPI {
     }
     var jwtTokenType: JWTTokenType? {
         switch self {
-        case .myProfile, .editProfile, .search, .exit:
+        case .myProfile, .editProfile, .search, .exit, .withdrawal:
             return .accessToken
         default:
             return JWTTokenType.none

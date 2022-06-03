@@ -128,6 +128,11 @@ public final class UseCaseAssembly: Assembly {
                 userRepository: r.resolve(UserRepository.self)!
             )
         }
+        container.register(WithdrawalUseCase.self) { r in
+            WithdrawalUseCase(
+                userRepository: r.resolve(UserRepository.self)!
+            )
+        }
         
         // MARK: - Image
         container.register(UploadImagesUseCase.self) { r in

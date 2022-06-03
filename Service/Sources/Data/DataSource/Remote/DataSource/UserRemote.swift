@@ -9,21 +9,21 @@ final class UserRemote: BaseRemote<UserAPI> {
             .map(UserMyProfileResponse.self)
             .map { $0.toDomain() }
     }
-    
     func updateProfileImage(imageUrl: String) -> Completable {
         request(.editProfile(url: imageUrl))
             .asCompletable()
     }
-    
     func fetchSearchUser(name: String, type: ClubType) -> Single<[User]> {
         request(.search(name: name, type: type))
             .map([UserDTO].self)
             .map { $0.map { $0.toDomain() } }
     }
-    
     func clubExit(query: ClubRequestQuery) -> Completable {
         request(.exit(query))
             .asCompletable()
     }
-    
+    func withdrawal() -> Completable {
+        request(.withdrawal)
+            .asCompletable()
+    }
 }
