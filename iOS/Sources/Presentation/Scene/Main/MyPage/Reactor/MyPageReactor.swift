@@ -3,7 +3,6 @@ import RxFlow
 import RxSwift
 import RxRelay
 import Service
-import Foundation
 import UIKit
 
 final class MyPageReactor: Reactor, Stepper {
