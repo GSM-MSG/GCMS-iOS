@@ -282,7 +282,6 @@ private extension UpdateClubReactor {
             return .empty()
         }
         let current = self.currentState
-        print(current)
         steps.accept(GCMSStep.alert(title: "정말로 완료하시겠습니까?", message: nil, style: .alert, actions: [
             .init(title: "예", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
