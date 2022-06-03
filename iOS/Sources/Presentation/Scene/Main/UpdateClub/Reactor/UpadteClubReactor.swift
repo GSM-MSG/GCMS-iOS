@@ -20,8 +20,8 @@ final class UpdateClubReactor: Reactor, Stepper {
         //Second
         case updateTitle(String)
         case updateDescription(String)
-        case updateLinkName(String?)
-        case updateLinkUrl(String?)
+        case updateLinkName(String)
+        case updateLinkUrl(String)
         case updateTeacher(String?)
         case updateContact(String)
         case secondNextButtonDidTap
@@ -40,8 +40,8 @@ final class UpdateClubReactor: Reactor, Stepper {
     enum Mutation {
         case setTitle(String)
         case setDescription(String)
-        case setLinkName(String?)
-        case setLinkUrl(String?)
+        case setLinkName(String)
+        case setLinkUrl(String)
         case setTeacher(String?)
         case setContact(String)
         case setImageData(Data)
@@ -55,8 +55,8 @@ final class UpdateClubReactor: Reactor, Stepper {
     struct State {
         var title: String
         var description: String
-        var linkName: String?
-        var linkUrl: String?
+        var linkName: String
+        var linkUrl: String
         var contact: String
         var teacher: String?
         var isBanner: Bool
@@ -72,6 +72,8 @@ final class UpdateClubReactor: Reactor, Stepper {
     }
     let initialState: State
     private let legacyMember: [User]
+    private let legacyBanner: Data?
+    private let legacyBannerUrl: String
     private let legacyImageUrl: [Data: String]
     private let updateClubUseCase: UpdateClubUseCase
     private let uploadImagesUseCase: UploadImagesUseCase
@@ -82,6 +84,8 @@ final class UpdateClubReactor: Reactor, Stepper {
         updateClubUseCase: UpdateClubUseCase,
         uploadImagesUseCase: UploadImagesUseCase
     ) {
+        self.legacyBannerUrl = club.bannerUrl
+        self.legacyBanner = try? Data(contentsOf: URL(string: club.bannerUrl)!)
         self.legacyMember = club.member
         self.legacyImageUrl = club.activities.reduce(into: [Data:String](), { partialResult, url in
             if let data = try? Data(contentsOf: URL(string: url)!) {
@@ -91,8 +95,8 @@ final class UpdateClubReactor: Reactor, Stepper {
         initialState = State(
             title: club.title,
             description: club.description,
-            linkName: club.relatedLink?.name,
-            linkUrl: club.relatedLink?.url,
+            linkName: club.relatedLink.name,
+            linkUrl: club.relatedLink.url,
             contact: club.contact,
             teacher: club.teacher,
             isBanner: true,
@@ -240,14 +244,68 @@ private extension UpdateClubReactor {
         }
         return .empty()
     }
+    func updateClub(banner: String? = nil, added: [String]) {
+        let banner = banner == nil ? self.legacyBannerUrl : banner ?? .init()
+        let initial = self.initialState
+        let current = self.currentState
+        let relatedLink: RelatedLinkDTO = .init(name: current.linkName, url: current.linkUrl)
+        self.updateClubUseCase.execute(
+            req: .init(
+                q: initial.title,
+                type: initial.clubType,
+                title: current.title,
+                description: current.description,
+                bannerUrl: banner,
+                contact: current.contact,
+                relatedLink: relatedLink,
+                teacher: current.teacher,
+                newActivityUrls: added,
+                deleteActivityUrls: current.removedImage,
+                newMember: current.addedUser.map(\.userId),
+                deleteMember: current.removedUser.map(\.userId)
+            )
+        )
+        .andThen(Observable.just(()))
+            .catch { _ in
+                self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "알 수 없는 이유로 동아리 생성이 실패했습니다"))
+                return .just(())
+            }
+            .asObservable()
+            .bind { _ in
+                self.steps.accept(GCMSStep.popToRoot)
+            }
+            .disposed(by: self.disposeBag)
+    }
     func completeButtonDidTap() -> Observable<Mutation> {
         guard (currentState.imageData != nil)  else {
             steps.accept(GCMSStep.failureAlert(title: "동아리 배너 이미지를 넣어주세요!", message: nil))
             return .empty()
         }
+        let current = self.currentState
+        print(current)
         steps.accept(GCMSStep.alert(title: "정말로 완료하시겠습니까?", message: nil, style: .alert, actions: [
             .init(title: "예", style: .default, handler: { [weak self] _ in
-                self?.steps.accept(GCMSStep.popToRoot)
+                guard let self = self else { return }
+                if current.imageData != self.legacyBanner {
+                    Observable.zip(
+                        self.uploadImagesUseCase.execute(images: [current.imageData ?? .init()]).compactMap(\.first).asObservable(),
+                        self.uploadImagesUseCase.execute(images: current.addedImage).asObservable()
+                    )
+                    .subscribe(onNext: { (banner, added) in
+                        self.updateClub(banner: banner, added: added)
+                    }, onError: { _ in
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "알 수 없는 이유로 동아리 생성이 실패했습니다"))
+                    })
+                    .disposed(by: self.disposeBag)
+                } else {
+                    self.uploadImagesUseCase.execute(images: current.addedImage).asObservable()
+                        .subscribe { added in
+                            self.updateClub(added: added)
+                        } onError: { _ in
+                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "알 수 없는 이유로 동아리 생성이 실패했습니다"))
+                        }
+                        .disposed(by: self.disposeBag)
+                }
             }),
             .init(title: "아니요", style: .default, handler: nil)
         ]))
