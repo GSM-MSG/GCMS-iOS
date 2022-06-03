@@ -9,6 +9,7 @@ public struct UploadImagesUseCase {
     private let imageRepository: ImageRepository
     
     public func execute(images: [Data]) -> Single<[String]> {
-        imageRepository.uploadImages(datas: images)
+        if images.isEmpty { return .just([])}
+        return imageRepository.uploadImages(datas: images)
     }
 }

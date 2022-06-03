@@ -76,7 +76,7 @@ extension DetailClubReactor {
         case .statusButtonDidTap:
             return statusButtonDidTap()
         case .linkButtonDidTap:
-            UIApplication.shared.open(URL(string: currentState.clubDetail?.relatedLink?.url ?? "https://www.google.com")!)
+            UIApplication.shared.open(URL(string: currentState.clubDetail?.relatedLink.url ?? "https://www.google.com")!)
         }
         return .empty()
     }

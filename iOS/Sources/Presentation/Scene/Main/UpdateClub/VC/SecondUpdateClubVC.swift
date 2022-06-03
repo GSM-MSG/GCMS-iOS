@@ -57,6 +57,18 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
     }
     
     // MARK: - UI
+    override func setup() {
+        guard let reactor = reactor else { return }
+        let initialState = reactor.initialState
+        
+        clubNameTextField.text = initialState.title
+        clubDescriptionTextView.text = initialState.description
+        clubDescriptionTextView.textColor = GCMSAsset.Colors.gcmsGray1.color
+        contactTextField.text = initialState.contact
+        linkNameTextField.text = initialState.linkName
+        linkUrlTextField.text = initialState.linkUrl
+        teacherTextField.text = initialState.teacher
+    }
     override func addView() {
         view.addSubViews(scrollView, nextButton)
         scrollView.addSubViews(progressBar, clubNameTextField, clubDescriptionHeaderLabel, clubDescriptionTextView, contactTextField, relatedLinkHeaderLabel, linkNameTextField, linkUrlTextField, teacherTextField)
@@ -182,12 +194,12 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        linkNameTextField.rx.text.observe(on: MainScheduler.asyncInstance)
+        linkNameTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
             .map(Reactor.Action.updateLinkName)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        linkUrlTextField.rx.text.observe(on: MainScheduler.asyncInstance)
+        linkUrlTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
             .map(Reactor.Action.updateLinkUrl)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -206,16 +218,5 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
             .map { Reactor.Action.secondNextButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-    }
-    override func bindState(reactor: UpdateClubReactor) {
-        let initialState = reactor.initialState
-        
-        clubNameTextField.text = initialState.title
-        clubDescriptionTextView.text = initialState.description
-        clubDescriptionTextView.textColor = GCMSAsset.Colors.gcmsGray1.color
-        contactTextField.text = initialState.contact
-        linkNameTextField.text = initialState.linkName
-        linkUrlTextField.text = initialState.linkUrl
-        teacherTextField.text = initialState.teacher
     }
 }

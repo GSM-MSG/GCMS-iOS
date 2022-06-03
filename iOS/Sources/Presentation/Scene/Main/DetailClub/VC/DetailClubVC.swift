@@ -192,13 +192,9 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                                                   placeholder: UIImage())
                 owner.descriptionLabel.text = item.description
                 owner.activityView.setImages(urls: item.activities)
-                if let relatedLink = item.relatedLink {
-                    owner.relatedLinkHeaderLabel.text = relatedLink.name
-                    owner.relatedLinkButton.setTitle(relatedLink.url, for: .normal)
-                    owner.relatedLinkButton.isHidden = false
-                } else {
-                    owner.relatedLinkButton.isHidden = true
-                }
+                owner.relatedLinkHeaderLabel.text = item.relatedLink.name
+                owner.relatedLinkButton.setTitle(item.relatedLink.url, for: .normal)
+                owner.relatedLinkButton.isHidden = false
                 if item.activities.isEmpty {
                     owner.activityView.snp.updateConstraints {
                         $0.height.equalTo(0)
