@@ -50,6 +50,7 @@ final class MyPageVC: BaseVC<MyPageReactor> {
         return config
     }()
     private lazy var PHPickerController = PHPickerViewController(configuration: PHConfiguration)
+    private let withdrawalButton = UIBarButtonItem(image: .init(systemName: "gearshape.fill")?.tintColor(.white), style: .plain, target: nil, action: nil)
     
     // MARK: - UI
     override func setup() {
@@ -185,6 +186,11 @@ final class MyPageVC: BaseVC<MyPageReactor> {
             .when(.recognized)
             .compactMap { [weak self] _ in self?.freedomClubView.club }
             .map { Reactor.Action.clubDidTap(.init(name: $0.title, type: $0.type) ) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        withdrawalButton.rx.tap
+            .map { Reactor.Action.withdrawalButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
