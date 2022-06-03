@@ -20,4 +20,7 @@ final class DefaultUserRepository: UserRepository {
         userRemote.clubExit(query: query)
     }
     
+    func withdrawal() -> Completable {
+        userRemote.withdrawal()
+    }
 }

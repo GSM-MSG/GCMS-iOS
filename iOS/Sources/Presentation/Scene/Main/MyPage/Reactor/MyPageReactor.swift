@@ -3,7 +3,7 @@ import RxFlow
 import RxSwift
 import RxRelay
 import Service
-import Foundation
+import UIKit
 
 final class MyPageReactor: Reactor, Stepper {
     // MARK: - Properties
@@ -18,6 +18,7 @@ final class MyPageReactor: Reactor, Stepper {
         case updateLoading(Bool)
         case clubDidTap(ClubRequestQuery)
         case profileImageDidTap(Data)
+        case withdrawalButtonDidTap
     }
     enum Mutation {
         case setUser(UserProfile)
@@ -32,13 +33,15 @@ final class MyPageReactor: Reactor, Stepper {
     private let logoutUseCase: LogoutUseCase
     private let uploadImagesUseCase: UploadImagesUseCase
     private let updateProfileImageUseCase: UpdateProfileImageUseCase
+    private let withdrawalUseCase: WithdrawalUseCase
     
     // MARK: - Init
     init(
         logoutUseCase: LogoutUseCase,
         fetchProfileUseCase: FetchProfileUseCase,
         uploadImagesUseCase: UploadImagesUseCase,
-        updateProfileImageUseCase: UpdateProfileImageUseCase
+        updateProfileImageUseCase: UpdateProfileImageUseCase,
+        withdrawalUseCase: WithdrawalUseCase
     ) {
         initialState = State(
             isLoading: false
@@ -47,6 +50,7 @@ final class MyPageReactor: Reactor, Stepper {
         self.fetchProfileUseCase = fetchProfileUseCase
         self.uploadImagesUseCase = uploadImagesUseCase
         self.updateProfileImageUseCase = updateProfileImageUseCase
+        self.withdrawalUseCase = withdrawalUseCase
     }
     
 }
@@ -65,6 +69,8 @@ extension MyPageReactor {
             steps.accept(GCMSStep.clubDetailIsRequired(query: q))
         case let .profileImageDidTap(data):
             return profileChange(data: data)
+        case .withdrawalButtonDidTap:
+            return withdrawalButtonDidTap()
         }
         return .empty()
     }
@@ -120,5 +126,42 @@ private extension MyPageReactor {
             }
             .catchAndReturn(.setIsLoading(false))
         return .concat([start, task])
+    }
+    func withdrawalLogic() {
+        self.steps.accept(GCMSStep.alert(title: "계정 탈퇴하기", message: "정말로 GCMS를 탈퇴하실건가요?", style: .alert, actions: [
+            .init(title: "확인", style: .destructive, handler: { [weak self] _ in
+                guard let self = self else { return }
+                self.withdrawalUseCase.execute()
+                    .andThen(Observable.just(()))
+                    .catch { _ in
+                        self.errorAlert(message: "알 수 없는 이유로 탈퇴가 실패했습니다")
+                        return .empty()
+                    }
+                    .bind(onNext: { _ in
+                        self.steps.accept(GCMSStep.alert(title: "성공", message: "회원 탈퇴가 성공하였습니다", style: .alert, actions: [
+                            .init(title: "확인", style: .default, handler: { _ in
+                                self.steps.accept(GCMSStep.onBoardingIsRequired)
+                            })
+                        ]))
+                    })
+                    .disposed(by: self.disposeBag)
+                    
+            }),
+            .init(title: "취소", style: .cancel)
+        ]))
+    }
+    func withdrawalButtonDidTap() -> Observable<Mutation> {
+        let style = UIDevice.current.userInterfaceIdiom == .phone ? UIAlertController.Style.actionSheet : .alert
+        self.steps.accept(GCMSStep.alert(title: "계정", message: nil, style: style, actions: [
+            .init(title: "탈퇴하기", style: .destructive, handler: { [weak self] _ in
+                guard let self = self else { return }
+                self.withdrawalLogic()
+            }),
+            .init(title: "취소", style: .cancel)
+        ]))
+        return .empty()
+    }
+    func errorAlert(message: String?) {
+        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: message))
     }
 }

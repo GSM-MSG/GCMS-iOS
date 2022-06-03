@@ -5,4 +5,5 @@ public protocol UserRepository {
     func updateProfileImage(imageUrl: String) -> Completable
     func searchUser(name: String, type: ClubType) -> Single<[User]>
     func clubExit(query: ClubRequestQuery) -> Completable
+    func withdrawal() -> Completable
 }

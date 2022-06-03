@@ -36,7 +36,8 @@ final class ReactorAssembly: Assembly {
                 logoutUseCase: r.resolve(LogoutUseCase.self)!,
                 fetchProfileUseCase: r.resolve(FetchProfileUseCase.self)!,
                 uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!,
-                updateProfileImageUseCase: r.resolve(UpdateProfileImageUseCase.self)!
+                updateProfileImageUseCase: r.resolve(UpdateProfileImageUseCase.self)!,
+                withdrawalUseCase: r.resolve(WithdrawalUseCase.self)!
             )
         }
         
