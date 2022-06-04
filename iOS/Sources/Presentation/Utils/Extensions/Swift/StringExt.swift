@@ -4,7 +4,7 @@ extension String {
     func clubTitleRegex() -> String {
         let strArr = Array(self)
         
-        let pattern = "^가-힣a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ$"
+        let pattern = "^[가-힣a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ]$"
         
         var resultString = ""
         if strArr.count > 0 {
