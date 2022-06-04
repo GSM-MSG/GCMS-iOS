@@ -243,7 +243,7 @@ private extension NewClubReactor {
             return owner.createNewClubUseCase.execute(
                 req: .init(
                     type: state.clubType,
-                    title: state.title,
+                    title: state.title.clubTitleRegex(),
                     description: state.description,
                     bannerUrl: urls.0,
                     contact: state.contact,
