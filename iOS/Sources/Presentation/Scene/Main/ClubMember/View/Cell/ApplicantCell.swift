@@ -83,8 +83,6 @@ final class ApplicantCell: BaseTableViewCell<User> {
     override func configureCell() {
         backgroundColor = .clear
         selectionStyle = .none
-        
-        
     }
     
     override func prepareForReuse() {

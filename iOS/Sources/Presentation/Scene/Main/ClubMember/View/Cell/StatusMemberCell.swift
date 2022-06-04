@@ -83,7 +83,6 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
         
     }
     override func configureCell() {
-        
         backgroundColor = .clear
         selectionStyle = .none
     }
