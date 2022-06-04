@@ -2,6 +2,7 @@ import UIKit
 import Then
 import SnapKit
 import RxGesture
+import RxSwift
 
 protocol MemberHeaderViewDelegate: AnyObject {
     func toggleSection(header: MemberHeaderView, section: Int)
@@ -16,6 +17,11 @@ final class MemberHeaderView: BaseTableViewHeaderFooterView<String> {
     }
     private let isOpenedImageView = UIImageView(image: .init(systemName: "chevron.down")?.tintColor(.white))
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        model = nil
+        disposeBag = DisposeBag()
+    }
     // MARK: - UI
     override func addView() {
         contentView.addSubViews(titleLabel, isOpenedImageView)
@@ -31,18 +37,16 @@ final class MemberHeaderView: BaseTableViewHeaderFooterView<String> {
             $0.size.equalTo(20)
         }
     }
-    override func configureCell() {
-        self.backgroundColor = .clear
+    
+    override func bind(_ model: String) {
+        titleLabel.text = model
+        
         self.rx.tapGesture()
             .when(.recognized)
             .bind(with: self) { owner, gesture in
                 owner.delegate?.toggleSection(header: owner, section: owner.section)
             }
             .disposed(by: disposeBag)
-    }
-    
-    override func bind(_ model: String) {
-        titleLabel.text = model
     }
     public func setIsOpened(isOpen: Bool) {
         isOpenedImageView.rotate(isOpen ? 0.0 : .pi/2)

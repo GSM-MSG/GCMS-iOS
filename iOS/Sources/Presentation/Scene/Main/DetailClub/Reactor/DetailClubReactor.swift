@@ -76,7 +76,7 @@ extension DetailClubReactor {
         case .statusButtonDidTap:
             return statusButtonDidTap()
         case .linkButtonDidTap:
-            UIApplication.shared.open(URL(string: currentState.clubDetail?.relatedLink?.url ?? "https://www.google.com")!)
+            UIApplication.shared.open(URL(string: currentState.clubDetail?.relatedLink.url ?? "https://www.google.com")!)
         }
         return .empty()
     }
@@ -114,7 +114,7 @@ private extension DetailClubReactor {
                 .flatMap { Observable.from([Mutation.setClub($0), .setIsLoading(false)]) }
                 .catchAndReturn(.setIsLoading(false))
             
-            return .concat([start, task])            
+            return .concat([start, task])
         }
     }
     func statusButtonDidTap() -> Observable<Mutation> {
@@ -138,16 +138,14 @@ private extension DetailClubReactor {
                 self.steps.accept(GCMSStep.alert(title: "정말로 동아리를 삭제하시겠습니까?", message: "이 선택은 되돌릴 수 없습니다.", style: .alert, actions: [
                     .init(title: "확인", style: .destructive, handler: { _ in
                         self.deleteClubUseCase.execute(query: self.query)
-                            .andThen(.just(()))
-                            .catch({ _ in
+                            .andThen(Observable.just(()))
+                            .subscribe(onNext: { _ in
+                                self.steps.accept(GCMSStep.popToRoot)
+                            }, onError: { _ in
                                 self.steps.accept(GCMSStep.failureAlert(title: "알 수 없는 오류가 일어났습니다.", message: "동아리 삭제를 실패했습니다.", action: [
                                     .init(title: "확인", style: .default)
                                 ]))
-                                return .just(())
                             })
-                            .bind { _ in
-                                self.steps.accept(GCMSStep.popToRoot)
-                            }
                             .disposed(by: self.disposeBag)
                     }),
                     .init(title: "취소", style: .cancel)
@@ -155,17 +153,15 @@ private extension DetailClubReactor {
             } else {
                 self.steps.accept(GCMSStep.alert(title: "정말로 동아리를 탈퇴하시겠습니까?", message: "이 선택은 되돌릴 수 없습니다.", style: .alert, actions: [
                     .init(title: "확인", style: .destructive, handler: { _ in
-                        self.deleteClubUseCase.execute(query: self.query)
-                            .andThen(.just(()))
-                            .catch({ _ in
+                        self.clubExitUseCase.execute(query: self.query)
+                            .andThen(Observable.just(()))
+                            .subscribe(onNext: { _ in
+                                self.steps.accept(GCMSStep.popToRoot)
+                            }, onError: { _ in
                                 self.steps.accept(GCMSStep.failureAlert(title: "알 수 없는 오류가 일어났습니다.", message: "동아리 탈퇴를 실패했습니다.", action: [
                                     .init(title: "확인", style: .default)
                                 ]))
-                                return .just(())
                             })
-                            .bind { _ in
-                                self.steps.accept(GCMSStep.popToRoot)
-                            }
                             .disposed(by: self.disposeBag)
                     }),
                     .init(title: "취소", style: .cancel)
