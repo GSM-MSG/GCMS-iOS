@@ -253,7 +253,7 @@ private extension UpdateClubReactor {
             req: .init(
                 q: initial.title,
                 type: initial.clubType,
-                title: current.title,
+                title: current.title.clubTitleRegex(),
                 description: current.description,
                 bannerUrl: banner,
                 contact: current.contact,
