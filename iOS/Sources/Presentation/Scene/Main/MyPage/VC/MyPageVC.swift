@@ -109,6 +109,7 @@ final class MyPageVC: BaseVC<MyPageReactor> {
     }
     override func configureNavigation() {
         self.navigationItem.configBack()
+        self.navigationItem.setRightBarButton(withdrawalButton, animated: true)
     }
     
     // MARK: - Reactor
