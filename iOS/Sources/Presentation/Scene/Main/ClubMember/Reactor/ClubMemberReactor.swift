@@ -19,8 +19,10 @@ final class ClubMemberReactor: Reactor, Stepper {
         case acceptButtonDidTap(User)
         case rejectButtonDidTap(User)
         case clubOpenCloseButtonDidTap
+        case clubIsOpenedChange(Bool)
     }
     enum Mutation {
+        case setClubIsOpened(Bool)
         case setIsOpened(Int, Bool)
         case setUsers([ExpandableMemberSection])
         case appendUsers(ExpandableMemberSection)
@@ -93,6 +95,8 @@ extension ClubMemberReactor {
             return rejectButtonDidTap(user: user)
         case .clubOpenCloseButtonDidTap:
             return clubOpenCloseButtonDidTap()
+        case let .clubIsOpenedChange(isOpened):
+            return .just(.setClubIsOpened(isOpened))
         }
         return .empty()
     }
@@ -104,6 +108,8 @@ extension ClubMemberReactor {
         var newState = state
         
         switch mutation {
+        case let .setClubIsOpened(isOpened):
+            newState.isOpened = isOpened
         case let .setIsOpened(index, open):
             newState.users[index].isOpened = open
         case let .setUsers(section):
@@ -124,7 +130,7 @@ private extension ClubMemberReactor {
         let start = Observable.just(Mutation.setIsLoading(true))
         let member = fetchClubMemberUseCase.execute(query: query)
             .asObservable()
-            .map { [weak self] in ExpandableMemberSection(header: "구성원", items: $0.map { MemberSectionType.member($0) }, isOpened: self?.currentState.isOpened ?? false) }
+            .map { ExpandableMemberSection(header: "구성원", items: $0.map { MemberSectionType.member($0) }, isOpened: false) }
             .flatMap { Observable.concat([
                 Observable.just(Mutation.setIsLoading(false)),
                 .just(.appendUsers($0))
@@ -132,7 +138,7 @@ private extension ClubMemberReactor {
             .catchAndReturn(.setIsLoading(false))
         let applicant = fetchClubApplicantUseCase.execute(query: query)
             .asObservable()
-            .map { [weak self] in ExpandableMemberSection(header: "가입 대기자 명단", items: $0.map { MemberSectionType.applicant($0) }, isOpened: self?.currentState.isOpened ?? false) }
+            .map { ExpandableMemberSection(header: "가입 대기자 명단", items: $0.map { MemberSectionType.applicant($0) }, isOpened: false) }
             .flatMap { Observable.concat([
                 Observable.just(Mutation.setIsLoading(false)),
                 .just(.appendUsers($0))
@@ -148,6 +154,7 @@ private extension ClubMemberReactor {
                     self.clubCloseUseCase.execute(query: self.query)
                         .andThen(Observable.just(()))
                         .subscribe { _ in
+                            self.action.onNext(.clubIsOpenedChange(false))
                             self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 마감되었습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
                         } onError: { _ in
                             self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "동아리 신청 마감이 실패했습니다."))
@@ -163,6 +170,7 @@ private extension ClubMemberReactor {
                     self.clubOpenUseCase.execute(query: self.query)
                         .andThen(Observable.just(()))
                         .subscribe { _ in
+                            self.action.onNext(.clubIsOpenedChange(true))
                             self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 열렸습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
                         } onError: { _ in
                             self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "동아리 신청 열기가 실패했습니다."))
@@ -179,13 +187,12 @@ private extension ClubMemberReactor {
             .init(title: "위임", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
                 self.clubDelegationUseCase.execute(query: self.query, userId: user.email)
-                    .andThen(.just(()))
-                    .catch { _ in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "부장 위임을 실패했습니다."))
-                        return .just(())
-                    }
-                    .bind(onNext: { _ in
-                        self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님에게 부장을 위임했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))
+                    .andThen(Observable.just(()))
+                    .subscribe(onNext: { _ in
+                        self.steps.accept(GCMSStep.popToRoot)
+                        self.action.onNext(.viewDidLoad)
+                    }, onError: { _ in
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "알 수 없는 이유로 부장 위임을 실패했습니다."))
                     })
                     .disposed(by: self.disposeBag)
             }),
@@ -198,13 +205,12 @@ private extension ClubMemberReactor {
             .init(title: "추방", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
                 self.userKickUseCase.execute(query: self.query, userId: user.email)
-                    .andThen(.just(()))
-                    .catch { _ in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "추방을 실패했습니다."))
-                        return .just(())
-                    }
-                    .bind(onNext: { _ in
+                    .andThen(Observable.just(()))
+                    .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님을 추방했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))
+                        self.action.onNext(.viewDidLoad)
+                    }, onError: { _ in
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "알 수 없는 이유로 추방을 실패했습니다."))
                     })
                     .disposed(by: self.disposeBag)
             }),
@@ -217,13 +223,11 @@ private extension ClubMemberReactor {
             .init(title: "승인", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
                 self.userAcceptUseCase.execute(query: self.query, userId: user.userId)
-                    .andThen(.just(()))
-                    .catch { _ in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "가입 승인을 실패했습니다."))
-                        return .just(())
-                    }
-                    .bind(onNext: { _ in
+                    .andThen(Observable.just(()))
+                    .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님의 가입을 승인했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))
+                    }, onError: { _ in
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "알 수 없는 이유로 가입 승인을 실패했습니다."))
                     })
                     .disposed(by: self.disposeBag)
             }),
@@ -236,13 +240,11 @@ private extension ClubMemberReactor {
             .init(title: "거절", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
                 self.userRejectUseCase.execute(query: self.query, userId: user.userId)
-                    .andThen(.just(()))
-                    .catch { _ in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "가입 거절을 실패했습니다."))
-                        return .just(())
-                    }
-                    .bind(onNext: { _ in
+                    .andThen(Observable.just(()))
+                    .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님의 가입을 거절했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))
+                    }, onError: { _ in
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "알 수 없는 이유로 가입 거절을 실패했습니다."))
                     })
                     .disposed(by: self.disposeBag)
             }),

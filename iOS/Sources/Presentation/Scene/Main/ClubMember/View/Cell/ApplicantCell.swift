@@ -82,6 +82,9 @@ final class ApplicantCell: BaseTableViewCell<User> {
     }
     override func configureCell() {
         backgroundColor = .clear
+        selectionStyle = .none
+        
+        
     }
     
     override func prepareForReuse() {
@@ -100,5 +103,19 @@ final class ApplicantCell: BaseTableViewCell<User> {
         }
         nameLabel.text = model.name
         infoLabel.text = "\(model.grade)학년\(model.class)반\(model.number)번"
+        
+        acceptButton.rx.tap
+            .compactMap { [weak self] in self?.model }
+            .bind(with: self) { owner, model in
+                owner.delegate?.acceptButtonDidTap(user: model)
+            }
+            .disposed(by: disposeBag)
+        
+        rejectButton.rx.tap
+            .compactMap { [weak self] in self?.model }
+            .bind(with: self) { owner, model in
+                owner.delegate?.rejectButtonDidTap(user: model)
+            }
+            .disposed(by: disposeBag)
     }
 }

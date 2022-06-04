@@ -83,22 +83,9 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
         
     }
     override func configureCell() {
-        delegationButton.rx.tap
-            .compactMap { [weak self] in self?.model }
-            .bind(with: self) { owner, model in
-                owner.delegate?.delegationButtonDidTap(user: model)
-            }
-            .disposed(by: disposeBag)
-        
-        kickButton.rx.tap
-            .compactMap { [weak self] in self?.model }
-            .bind(with: self) { owner, model in
-                owner.delegate?.kicktButtonDidTap(user: model)
-            }
-            .disposed(by: disposeBag)
         
         backgroundColor = .clear
-        
+        selectionStyle = .none
     }
     
     override func prepareForReuse() {
@@ -117,5 +104,19 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
         }
         nameLabel.text = model.name
         infoLabel.text = "\(model.grade)학년\(model.class)반\(model.number)번"
+        
+        delegationButton.rx.tap
+            .compactMap { [weak self] in self?.model }
+            .bind(with: self) { owner, model in
+                owner.delegate?.delegationButtonDidTap(user: model)
+            }
+            .disposed(by: disposeBag)
+        
+        kickButton.rx.tap
+            .compactMap { [weak self] in self?.model }
+            .bind(with: self) { owner, model in
+                owner.delegate?.kicktButtonDidTap(user: model)
+            }
+            .disposed(by: disposeBag)
     }
 }

@@ -63,13 +63,26 @@ final class ClubMemberVC: BaseVC<ClubMemberReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
+    override func bindView(reactor: ClubMemberReactor) {
+        clubOpenCloseButton.rx.tap
+            .map { Reactor.Action.clubOpenCloseButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
     override func bindState(reactor: ClubMemberReactor) {
-        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 2).observe(on: MainScheduler.asyncInstance)
         
         sharedState
             .map(\.isOpened)
             .map { $0 ? "동아리 신청 마감하기" : "동아리 신청 받기" }
             .bind(to: clubOpenCloseButton.rx.title())
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.users)
+            .bind(with: self) { owner, _ in
+                owner.membersTableView.reloadData()
+            }
             .disposed(by: disposeBag)
     }
 }
@@ -88,7 +101,6 @@ extension ClubMemberVC: UITableViewDelegate, UITableViewDataSource {
         let header = tableView.dequeueReusableHeaderFooterView(MemberHeaderView.self)
         header?.section = section
         header?.model = reactor.currentState.users[section].header
-        header?.setIsOpened(isOpen: reactor.currentState.users[section].isOpened)
         header?.delegate = self
         return header
     }
@@ -120,7 +132,6 @@ extension ClubMemberVC: MemberHeaderViewDelegate {
         guard let reactor = reactor else { return  }
         let opened = !reactor.currentState.users[section].isOpened
         reactor.action.onNext(.sectionDidTap(section, opened))
-        header.setIsOpened(isOpen: opened)
         
         membersTableView.reloadSections(.init([section]), with: .automatic)
     }
