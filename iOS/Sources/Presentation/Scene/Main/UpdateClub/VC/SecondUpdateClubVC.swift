@@ -33,7 +33,7 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
     private let contactTextField = NewClubTextField(placeholder: "연락처를 입력해주세요.(디스코드 등)").then {
         $0.addHeaderLabel(title: "연락처")
     }
-    private let notionLinkHeaderLabel = HeaderLabel(title: "관련 링크")
+    private let notionLinkHeaderLabel = HeaderLabel(title: "노션 링크")
     private let notionLinkTextField = NewClubTextField(placeholder: "링크 URL")
     private let teacherTextField = NewClubTextField(placeholder: "담당 선생님 성함을 입력해주세요.").then {
         $0.addHeaderSelectionLabel(title: "담당 선생님")
