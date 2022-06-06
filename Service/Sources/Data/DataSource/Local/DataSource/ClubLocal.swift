@@ -25,4 +25,9 @@ final class ClubLocal {
         }
         realm.set(list)
     }
+    
+    func deleteClubList() {
+        let list = realm.fetchObjectsResults(for: ClubListRealmEntity.self).toArray()
+        realm.delete(list)
+    }
 }
