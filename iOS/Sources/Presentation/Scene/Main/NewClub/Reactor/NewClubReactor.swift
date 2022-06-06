@@ -19,8 +19,7 @@ final class NewClubReactor: Reactor, Stepper {
         //Second
         case updateTitle(String)
         case updateDescription(String)
-        case updateLinkName(String)
-        case updateLinkUrl(String)
+        case updateNotionLink(String)
         case updateTeacher(String?)
         case updateContact(String)
         case secondNextButtonDidTap
@@ -42,8 +41,7 @@ final class NewClubReactor: Reactor, Stepper {
     enum Mutation {
         case setTitle(String)
         case setDescription(String)
-        case setLinkName(String)
-        case setLinkUrl(String)
+        case setNotionLink(String)
         case setTeacher(String?)
         case setContact(String)
         case setImageData(Data)
@@ -57,8 +55,7 @@ final class NewClubReactor: Reactor, Stepper {
     struct State {
         var title: String
         var description: String
-        var linkName: String
-        var linkUrl: String
+        var notionLink: String
         var contact: String
         var teacher: String?
         var isBanner: Bool
@@ -80,8 +77,7 @@ final class NewClubReactor: Reactor, Stepper {
         initialState = State(
             title: "",
             description: "",
-            linkName: "노션 링크",
-            linkUrl: "",
+            notionLink: "",
             contact: "",
             isBanner: false,
             activitiesData: [],
@@ -105,10 +101,8 @@ extension NewClubReactor {
             return completeButtonDidTap()
         case let .updateDescription(desc):
             return .just(.setDescription(desc))
-        case let .updateLinkName(name):
-            return .just(.setLinkName(name))
-        case let .updateLinkUrl(url):
-            return .just(.setLinkUrl(url))
+        case let .updateNotionLink(link):
+            return .just(.setNotionLink(link))
         case let .updateContact(cont):
             return .just(.setContact(cont))
         case let .updateTeacher(teac):
@@ -153,10 +147,8 @@ extension NewClubReactor {
             newState.title = title
         case let .setDescription(desc):
             newState.description = desc
-        case let .setLinkName(name):
-            newState.linkName = name
-        case let .setLinkUrl(url):
-            newState.linkUrl = url
+        case let .setNotionLink(link):
+            newState.notionLink = link
         case let .setContact(cont):
             newState.contact = cont
         case let .setTeacher(teac):
@@ -207,8 +199,9 @@ private extension NewClubReactor {
         }
         else if currentState.contact.isEmpty {
             errorMessage = "연락처를 입력해주세요!"
-        } else if currentState.linkName.isEmpty || currentState.linkUrl.isEmpty {
-            errorMessage = "링크이름 및 URL를 입력해주세요!"
+        }
+        else if currentState.notionLink.isEmpty {
+            errorMessage = "노션 링크를 입력해주세요!"
         } else {
             steps.accept(GCMSStep.thirdNewClubIsRequired(reactor: self))
         }
@@ -239,7 +232,6 @@ private extension NewClubReactor {
             uploadImagesUseCase.execute(images: [state.imageData ?? Data()]).compactMap(\.first).asObservable(),
             uploadImagesUseCase.execute(images: state.activitiesData).asObservable()
         ).withUnretained(self).flatMap { owner, urls -> Observable<Mutation> in
-            let relatedLink: RelatedLinkDTO = .init(name: state.linkName, url: state.linkUrl)
             return owner.createNewClubUseCase.execute(
                 req: .init(
                     type: state.clubType,
@@ -247,7 +239,7 @@ private extension NewClubReactor {
                     description: state.description,
                     bannerUrl: urls.0,
                     contact: state.contact,
-                    relatedLink: relatedLink,
+                    notionLink: state.notionLink,
                     teacher: state.teacher,
                     activities: urls.1,
                     member: state.members.map(\.userId)

@@ -6,5 +6,5 @@ struct DetailClubDTO: Codable {
     let isOpened: Bool
     let type: ClubType
     let bannerUrl: String
-    let relatedLink: [RelatedLinkDTO]
+    let notionLink: String
 }

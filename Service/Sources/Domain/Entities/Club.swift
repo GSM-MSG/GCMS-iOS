@@ -1,12 +1,12 @@
 public struct Club: Equatable {
-    public init(type: ClubType, bannerUrl: String, title: String, description: String, contact: String, head: User, relatedLink: RelatedLink, scope: MemberScope, isApplied: Bool, isOpen: Bool, activities: [String], member: [User], teacher: String?) {
+    public init(type: ClubType, bannerUrl: String, title: String, description: String, contact: String, head: User, notionLink: String, scope: MemberScope, isApplied: Bool, isOpen: Bool, activities: [String], member: [User], teacher: String?) {
         self.type = type
         self.bannerUrl = bannerUrl
         self.title = title
         self.description = description
         self.contact = contact
         self.head = head
-        self.relatedLink = relatedLink
+        self.notionLink = notionLink
         self.scope = scope
         self.isApplied = isApplied
         self.isOpen = isOpen
@@ -14,6 +14,7 @@ public struct Club: Equatable {
         self.member = member
         self.teacher = teacher
     }
+    
     
     public static func == (lhs: Club, rhs: Club) -> Bool {
         lhs.title == rhs.title && lhs.`type` == rhs.`type`
@@ -25,7 +26,7 @@ public struct Club: Equatable {
     public let description: String
     public let contact: String
     public let head: User
-    public let relatedLink: RelatedLink
+    public let notionLink: String
     public let scope: MemberScope
     public let isApplied: Bool
     public let isOpen: Bool
@@ -42,7 +43,7 @@ public extension Club {
         description: "대충 설명 대충 설명 대\n충 설명",
         contact: "대충 연락처",
         head: .dummy,
-        relatedLink: .dummy,
+        notionLink: "https://github.com/baekteun",
         scope: .default,
         isApplied: .random(),
         isOpen: .random(),
