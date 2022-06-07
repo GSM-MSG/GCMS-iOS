@@ -31,7 +31,6 @@ enum GCMSDomain: String {
     case auth
     case user
     case club
-    case afterSchool = "afterschool"
 }
 
 extension GCMSDomain {
