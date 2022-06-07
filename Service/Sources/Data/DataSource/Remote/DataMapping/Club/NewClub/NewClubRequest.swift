@@ -11,7 +11,6 @@ public struct NewClubRequest: Encodable {
         self.member = member
     }
     
-    
     public let type: ClubType
     public let title: String
     public let description: String
