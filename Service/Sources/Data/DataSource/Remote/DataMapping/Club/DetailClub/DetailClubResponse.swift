@@ -22,7 +22,7 @@ extension DetailClubResponse {
             description: club.description,
             contact: club.contact,
             head: head.toDomain(),
-            relatedLink: club.relatedLink.first?.toDomain() ?? .init(name: "", url: ""),
+            notionLink: club.notionLink,
             scope: scope,
             isApplied: isApplied,
             isOpen: club.isOpened,

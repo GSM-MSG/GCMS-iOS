@@ -28,8 +28,8 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         $0.textColor = GCMSAsset.Colors.gcmsGray1.color
         $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 13)
     }
-    private let relatedLinkHeaderLabel = HeaderLabel(title: "")
-    private let relatedLinkButton = UIButton().then {
+    private let notionLinkHeaderLabel = HeaderLabel(title: "노션 링크")
+    private let notionLinkButton = UIButton().then {
         $0.setTitleColor(.init(red: 0.18, green: 0.36, blue: 1, alpha: 1), for: .normal)
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 5
@@ -71,7 +71,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
     override func addView() {
         view.addSubViews(contentView, applyButton)
         contentView.addSubViews(bannerImageView, containerView)
-        containerView.addSubViews(descriptionHeaderLabel, descriptionLabel, relatedLinkHeaderLabel, relatedLinkButton, activityHeaderLabel, activityView, memberHeaderLabel, memberCollectionView, headHeaderLabel, headView, teacherHeaderLabel, teacherView, contactHeaderLabel, contactDescriptionLabel)
+        containerView.addSubViews(descriptionHeaderLabel, descriptionLabel, notionLinkHeaderLabel, notionLinkButton, activityHeaderLabel, activityView, memberHeaderLabel, memberCollectionView, headHeaderLabel, headView, teacherHeaderLabel, teacherView, contactHeaderLabel, contactDescriptionLabel)
     }
     override func setLayout() {
         contentView.snp.makeConstraints {
@@ -99,16 +99,16 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             $0.top.equalTo(descriptionHeaderLabel.snp.bottom).offset(Metric.headerContentSpace)
             $0.leading.trailing.equalTo(descriptionHeaderLabel)
         }
-        relatedLinkHeaderLabel.snp.makeConstraints {
+        notionLinkHeaderLabel.snp.makeConstraints {
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(Metric.sectionSpace)
             $0.leading.trailing.equalTo(descriptionLabel)
         }
-        relatedLinkButton.snp.makeConstraints {
-            $0.top.equalTo(relatedLinkHeaderLabel.snp.bottom).offset(Metric.headerContentSpace)
-            $0.leading.trailing.equalTo(relatedLinkHeaderLabel)
+        notionLinkButton.snp.makeConstraints {
+            $0.top.equalTo(notionLinkHeaderLabel.snp.bottom).offset(Metric.headerContentSpace)
+            $0.leading.trailing.equalTo(notionLinkHeaderLabel)
         }
         activityHeaderLabel.snp.makeConstraints {
-            $0.top.equalTo(relatedLinkButton.snp.bottom).offset(Metric.sectionSpace)
+            $0.top.equalTo(notionLinkButton.snp.bottom).offset(Metric.sectionSpace)
             $0.leading.trailing.equalTo(descriptionLabel)
         }
         activityView.snp.makeConstraints {
@@ -170,7 +170,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        relatedLinkButton.rx.tap
+        notionLinkButton.rx.tap
             .map { Reactor.Action.linkButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -192,9 +192,8 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                                                   placeholder: UIImage())
                 owner.descriptionLabel.text = item.description
                 owner.activityView.setImages(urls: item.activities)
-                owner.relatedLinkHeaderLabel.text = item.relatedLink.name
-                owner.relatedLinkButton.setTitle(item.relatedLink.url, for: .normal)
-                owner.relatedLinkButton.isHidden = false
+                owner.notionLinkButton.setTitle(item.notionLink, for: .normal)
+                owner.notionLinkButton.isHidden = false
                 if item.activities.isEmpty {
                     owner.activityView.snp.updateConstraints {
                         $0.height.equalTo(0)

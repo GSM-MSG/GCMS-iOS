@@ -20,9 +20,8 @@ final class UpdateClubReactor: Reactor, Stepper {
         //Second
         case updateTitle(String)
         case updateDescription(String)
-        case updateLinkName(String)
-        case updateLinkUrl(String)
-        case updateTeacher(String?)
+        case updateTeacher(String)
+        case updateNotionLink(String)
         case updateContact(String)
         case secondNextButtonDidTap
         
@@ -40,8 +39,7 @@ final class UpdateClubReactor: Reactor, Stepper {
     enum Mutation {
         case setTitle(String)
         case setDescription(String)
-        case setLinkName(String)
-        case setLinkUrl(String)
+        case setNotionLink(String)
         case setTeacher(String?)
         case setContact(String)
         case setImageData(Data)
@@ -55,8 +53,7 @@ final class UpdateClubReactor: Reactor, Stepper {
     struct State {
         var title: String
         var description: String
-        var linkName: String
-        var linkUrl: String
+        var notionLink: String
         var contact: String
         var teacher: String?
         var isBanner: Bool
@@ -95,8 +92,7 @@ final class UpdateClubReactor: Reactor, Stepper {
         initialState = State(
             title: club.title,
             description: club.description,
-            linkName: club.relatedLink.name,
-            linkUrl: club.relatedLink.url,
+            notionLink: club.notionLink,
             contact: club.contact,
             teacher: club.teacher,
             isBanner: true,
@@ -126,10 +122,8 @@ extension UpdateClubReactor {
             return completeButtonDidTap()
         case let .updateDescription(desc):
             return .just(.setDescription(desc))
-        case let .updateLinkName(name):
-            return .just(.setLinkName(name))
-        case let .updateLinkUrl(url):
-            return .just(.setLinkUrl(url))
+        case let .updateNotionLink(link):
+            return .just(.setNotionLink(link))
         case let .updateContact(cont):
             return .just(.setContact(cont))
         case let .updateTeacher(teac):
@@ -171,10 +165,8 @@ extension UpdateClubReactor {
             newState.title = title
         case let .setDescription(desc):
             newState.description = desc
-        case let .setLinkName(name):
-            newState.linkName = name
-        case let .setLinkUrl(url):
-            newState.linkUrl = url
+        case let .setNotionLink(link):
+            newState.notionLink = link
         case let .setContact(cont):
             newState.contact = cont
         case let .setTeacher(teac):
@@ -236,6 +228,9 @@ private extension UpdateClubReactor {
         }
         else if currentState.contact.isEmpty && initialState.contact.isEmpty {
             errorMessage = "연락처를 입력해주세요!"
+        }
+        else if currentState.notionLink.isEmpty {
+            errorMessage = "노션 링크를 입력해주세요!"
         } else {
             steps.accept(GCMSStep.thirdUpdateClubIsRequired(reactor: self))
         }
@@ -248,7 +243,6 @@ private extension UpdateClubReactor {
         let banner = banner == nil ? self.legacyBannerUrl : banner ?? .init()
         let initial = self.initialState
         let current = self.currentState
-        let relatedLink: RelatedLinkDTO = .init(name: current.linkName, url: current.linkUrl)
         self.updateClubUseCase.execute(
             req: .init(
                 q: initial.title,
@@ -257,7 +251,7 @@ private extension UpdateClubReactor {
                 description: current.description,
                 bannerUrl: banner,
                 contact: current.contact,
-                relatedLink: relatedLink,
+                notionLink: current.notionLink,
                 teacher: current.teacher,
                 newActivityUrls: added,
                 deleteActivityUrls: current.removedImage,

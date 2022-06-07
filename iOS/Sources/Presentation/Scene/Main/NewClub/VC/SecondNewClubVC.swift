@@ -33,11 +33,8 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
     private let contactTextField = NewClubTextField(placeholder: "연락처를 입력해주세요.(디스코드 등)").then {
         $0.addHeaderLabel(title: "연락처")
     }
-    private let relatedLinkHeaderLabel = HeaderLabel(title: "관련 링크")
-    private let linkNameTextField = NewClubTextField(placeholder: "링크 이름").then {
-        $0.text = "노션 링크"
-    }
-    private let linkUrlTextField = NewClubTextField(placeholder: "링크 URL")
+    private let notionLinkHeaderLabel = HeaderLabel(title: "노션 링크")
+    private let notionLinkTextField = NewClubTextField(placeholder: "노션 URL")
     private let teacherTextField = NewClubTextField(placeholder: "담당 선생님 성함을 입력해주세요.").then {
         $0.addHeaderSelectionLabel(title: "담당 선생님")
     }
@@ -59,7 +56,7 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
     // MARK: - UI
     override func addView() {
         view.addSubViews(scrollView, nextBUtton)
-        scrollView.addSubViews(progressBar, clubNameTextField, clubDescriptionHeaderLabel, clubDescriptionTextView, contactTextField, relatedLinkHeaderLabel, linkNameTextField, linkUrlTextField, teacherTextField)
+        scrollView.addSubViews(progressBar, clubNameTextField, clubDescriptionHeaderLabel, clubDescriptionTextView, contactTextField, notionLinkHeaderLabel, notionLinkTextField, teacherTextField)
     }
     override func setLayout() {
         scrollView.snp.makeConstraints {
@@ -91,24 +88,17 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
             $0.leading.trailing.equalToSuperview().inset(Metric.horizontalMargin)
             $0.height.equalTo(Metric.textFieldHeight)
         }
-        linkNameTextField.snp.makeConstraints {
+        notionLinkTextField.snp.makeConstraints {
             $0.top.equalTo(contactTextField.snp.bottom).offset(Metric.verticalSpacing)
-            $0.leading.equalToSuperview().inset(Metric.horizontalMargin)
-            $0.width.equalTo((bound.width-Metric.verticalSpacing*2)/3)
+            $0.leading.trailing.equalToSuperview().inset(Metric.horizontalMargin)
             $0.height.equalTo(Metric.textFieldHeight)
         }
-        linkUrlTextField.snp.makeConstraints {
-            $0.top.equalTo(linkNameTextField)
-            $0.leading.equalTo(linkNameTextField.snp.trailing).offset(15)
-            $0.trailing.equalToSuperview().inset(Metric.horizontalMargin)
-            $0.height.equalTo(Metric.textFieldHeight)
-        }
-        relatedLinkHeaderLabel.snp.makeConstraints {
-            $0.leading.equalTo(linkNameTextField)
-            $0.bottom.equalTo(linkNameTextField.snp.top).offset(-8)
+        notionLinkHeaderLabel.snp.makeConstraints {
+            $0.leading.equalTo(notionLinkTextField)
+            $0.bottom.equalTo(notionLinkTextField.snp.top).offset(-8)
         }
         teacherTextField.snp.makeConstraints {
-            $0.top.equalTo(linkUrlTextField.snp.bottom).offset(Metric.verticalSpacing)
+            $0.top.equalTo(notionLinkTextField.snp.bottom).offset(Metric.verticalSpacing)
             $0.leading.trailing.equalToSuperview().inset(Metric.horizontalMargin)
             $0.height.equalTo(Metric.textFieldHeight)
             $0.bottom.equalToSuperview().offset(-71)
@@ -182,13 +172,8 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        linkNameTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
-            .map(Reactor.Action.updateLinkName)
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        linkUrlTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
-            .map(Reactor.Action.updateLinkUrl)
+        notionLinkTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
+            .map(Reactor.Action.updateNotionLink)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
