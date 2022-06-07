@@ -39,27 +39,6 @@ final class HomeVC: TabmanViewController, View {
         $0.textColor = .white
         $0.font = .systemFont(ofSize: 28, weight: .black)
     }
-    private let afterSchoolButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "chevron.left"), for: .normal)
-        $0.setTitle("방과후", for: .normal)
-        $0.titleLabel?.font = .boldSystemFont(ofSize: 20)
-        $0.tintColor = .white
-        $0.backgroundColor = .init(red: 0.87, green: 0.25, blue: 0.85, alpha: 1)
-        $0.layer.cornerRadius = 25
-        $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
-        $0.imageView?.contentMode = .scaleAspectFit
-        if #available(iOS 15.0, *) {
-            $0.configuration = .plain()
-            $0.configuration?.imagePadding = 15
-            $0.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ con in
-                return .init([
-                    .font: UIFont.systemFont(ofSize: 20, weight: .bold)
-                ])
-            })
-        } else {
-            $0.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 15)
-        }
-    }
     var disposeBag: DisposeBag = .init()
     
     typealias Reactor = HomeReactor
@@ -112,7 +91,7 @@ final class HomeVC: TabmanViewController, View {
 // MARK: - Extension
 private extension HomeVC {
     func addView() {
-        view.addSubViews(indicatorBackgroundView, indicator, afterSchoolButton)
+        view.addSubViews(indicatorBackgroundView, indicator)
     }
     func setLayout() {
         indicatorBackgroundView.snp.makeConstraints {
@@ -122,13 +101,6 @@ private extension HomeVC {
             $0.center.equalToSuperview()
             $0.size.equalTo(150)
         }
-        afterSchoolButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(53)
-            $0.width.equalTo(122)
-            $0.height.equalTo(50)
-            $0.trailing.equalToSuperview()
-        }
-        
     }
     func configNavigation(){
         if UserDefaultsLocal.shared.isApple {
@@ -158,11 +130,6 @@ private extension HomeVC {
         
         guestLogoutButton.rx.tap
             .map { _ in Reactor.Action.guestLogoutButtonDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        afterSchoolButton.rx.tap
-            .map { _ in Reactor.Action.afterSchoolButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
