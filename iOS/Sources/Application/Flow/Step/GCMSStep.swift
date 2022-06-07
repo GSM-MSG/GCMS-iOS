@@ -33,8 +33,4 @@ enum GCMSStep: Step {
     
     // MARK: Administrator
     case myPageIsRequired
-    
-    // MARK: AfterSchool
-    case afterschoolIsRequired
-    case searchFilterIsRequired
 }
