@@ -64,11 +64,6 @@ final class MainFlow: Flow{
             return presentToFailureAlert(title: title, message: message, action: action)
         case let .clubStatusIsRequired(query, isHead, isOpened):
             return navigateToClubMembers(query: query, isHead: isHead, isOpened: isOpened)
-        // MARK: - AfterSchool
-        case .afterschoolIsRequired:
-            return navigateToAfterSchool()
-        case .searchFilterIsRequired:
-            return presentToSearchFilter()
         default:
             return .none
         }
