@@ -23,7 +23,6 @@ final class HomeReactor: Reactor, Stepper {
         case clubDidTap(ClubRequestQuery)
         case guestLogoutButtonDidTap
         case refreshTrigger(ClubType)
-        case afterSchoolButtonDidTap
     }
     enum Mutation {
         case setClubList(ClubType, [ClubList])
@@ -80,8 +79,6 @@ extension HomeReactor {
             return refresh(type: type)
         case let .viewDidAppear(type):
             return .just(.setClubType(type))
-        case .afterSchoolButtonDidTap:
-            steps.accept(GCMSStep.afterschoolIsRequired)
         }
         return .empty()
     }

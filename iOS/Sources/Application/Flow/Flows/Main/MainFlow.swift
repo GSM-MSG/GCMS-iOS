@@ -64,11 +64,6 @@ final class MainFlow: Flow{
             return presentToFailureAlert(title: title, message: message, action: action)
         case let .clubStatusIsRequired(query, isHead, isOpened):
             return navigateToClubMembers(query: query, isHead: isHead, isOpened: isOpened)
-        // MARK: - AfterSchool
-        case .afterschoolIsRequired:
-            return navigateToAfterSchool()
-        case .searchFilterIsRequired:
-            return presentToSearchFilter()
         default:
             return .none
         }
@@ -159,15 +154,5 @@ private extension MainFlow{
     func popToRoot() -> FlowContributors {
         self.rootVC.popToRootViewController(animated: true)
         return .none
-    }
-    func navigateToAfterSchool() -> FlowContributors {
-        let vc = AppDelegate.container.resolve(AfterSchoolVC.self)!
-        self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
-    }
-    func presentToSearchFilter() -> FlowContributors {
-        let vc = AppDelegate.container.resolve(SearchFilterVC.self)!
-        self.rootVC.visibleViewController?.presentPanModal(vc)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
 }

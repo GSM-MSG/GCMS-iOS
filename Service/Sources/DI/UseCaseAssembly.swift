@@ -140,26 +140,5 @@ public final class UseCaseAssembly: Assembly {
                 imageRepository: r.resolve(ImageRepository.self)!
             )
         }
-        // MARK: - AfterSchool
-        container.register(FetchAfterSchoolListUseCase.self) { r in
-            FetchAfterSchoolListUseCase(
-                afterSchoolRepository: r.resolve(AfterSchoolRepository.self)!
-            )
-        }
-        container.register(ApplyAfterSchoolUseCase.self) { r in
-            ApplyAfterSchoolUseCase(
-                afterSchoolRepository: r.resolve(AfterSchoolRepository.self)!
-            )
-        }
-        container.register(CancelAfterSchoolUseCase.self) { r in
-            CancelAfterSchoolUseCase(
-                afterSchoolRepository: r.resolve(AfterSchoolRepository.self)!
-            )
-        }
-        container.register(FetchFindAfterSchoolUseCase.self) { r in
-            FetchFindAfterSchoolUseCase(
-                afterSchoolRepository: r.resolve(AfterSchoolRepository.self)!
-            )
-        }
     }
 }
