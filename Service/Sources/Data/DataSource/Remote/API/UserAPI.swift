@@ -30,10 +30,10 @@ extension UserAPI: GCMSAPI {
         switch self {
         case .myProfile, .search:
             return .get
+        case .exit, .withdrawal:
+            return .post
         case .editProfile:
             return .put
-        case .exit, .withdrawal:
-            return .delete
         }
     }
     var task: Task {
