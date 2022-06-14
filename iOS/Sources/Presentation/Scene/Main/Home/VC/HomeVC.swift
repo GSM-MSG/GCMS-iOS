@@ -79,6 +79,7 @@ final class HomeVC: TabmanViewController, View {
         addView()
         setLayout()
         configNavigation()
+        bounces = false
     }
     
     func bind(reactor: HomeReactor) {
