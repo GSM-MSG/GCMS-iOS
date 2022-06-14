@@ -103,6 +103,9 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
         }
         nameLabel.text = model.name
         infoLabel.text = "\(model.grade)학년\(model.class)반\(model.number)번"
+        [delegationButton, kickButton].forEach {
+            $0.isHidden = (!isHead || model.scope == .head)
+        }
         
         delegationButton.rx.tap
             .compactMap { [weak self] in self?.model }

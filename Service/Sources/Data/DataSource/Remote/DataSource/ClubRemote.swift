@@ -38,8 +38,8 @@ final class ClubRemote: BaseRemote<ClubAPI> {
     }
     func fetchClubMember(query: ClubRequestQuery) -> Single<[Member]> {
         request(.clubMember(query: query))
-            .map([ClubMemberResponse].self)
-            .map { $0.map { $0.toDomain() } }
+            .map(ClubMemberResponse.self)
+            .map { $0.toDomain() }
     }
     func fetchClubApplicant(query: ClubRequestQuery) -> Single<[User]> {
         request(.clubApplicant(query: query))
