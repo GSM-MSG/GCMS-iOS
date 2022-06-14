@@ -62,12 +62,10 @@ extension ClubAPI: GCMSAPI {
         switch self {
         case .clubList, .clubDetail, .clubMember, .clubApplicant, .guestClubList, .guestClubDetail:
             return .get
-        case .userAccept, .userReject, .apply, .cancel, .createNewClub:
+        case .userAccept, .userReject, .apply, .cancel, .createNewClub, .deleteClub, .userKick:
             return .post
         case .updateClub, .clubOpen, .clubClose, .delegation:
             return .put
-        case .deleteClub, .userKick:
-            return .delete
         }
     }
     var task: Task {
