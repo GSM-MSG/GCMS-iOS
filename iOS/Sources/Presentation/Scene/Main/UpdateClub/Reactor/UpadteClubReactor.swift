@@ -232,7 +232,7 @@ private extension UpdateClubReactor {
         else if currentState.notionLink.isEmpty {
             errorMessage = "노션 링크를 입력해주세요!"
         } else {
-            steps.accept(GCMSStep.thirdUpdateClubIsRequired(reactor: self))
+            steps.accept(GCMSStep.secondUpdateClubIsRequired(reactor: self))
         }
         if !errorMessage.isEmpty {
             steps.accept(GCMSStep.failureAlert(title: errorMessage, message: nil))

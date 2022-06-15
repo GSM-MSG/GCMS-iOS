@@ -51,8 +51,6 @@ final class MainFlow: Flow{
             return navigateToFirstUpdateClub(club: club)
         case let .secondUpdateClubIsRequired(reactor):
             return navigateToSecondUpdateClub(reactor: reactor)
-        case let .thirdUpdateClubIsRequired(reactor):
-            return navigateToThirdUpdateClub(reactor: reactor)
         // MARK: NewClub
         case .firstNewClubIsRequired:
             return navigateToFirstNewClub()
@@ -91,11 +89,6 @@ private extension MainFlow{
     }
     func navigateToSecondUpdateClub(reactor: UpdateClubReactor) -> FlowContributors {
         let vc = SecondUpdateClubVC(reactor: reactor)
-        self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
-    }
-    func navigateToThirdUpdateClub(reactor: UpdateClubReactor) -> FlowContributors {
-        let vc = ThirdUpdateClubVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }

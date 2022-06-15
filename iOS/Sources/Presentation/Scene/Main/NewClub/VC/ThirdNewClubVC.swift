@@ -230,7 +230,7 @@ final class ThirdNewClubVC: BaseVC<NewClubReactor> {
     }
 }
 
-extension ThirdUpdateClubVC: PHPickerViewControllerDelegate {
+extension ThirdNewClubVC: PHPickerViewControllerDelegate {
     func picker(
         _ picker: PHPickerViewController,
         didFinishPicking results: [PHPickerResult]
