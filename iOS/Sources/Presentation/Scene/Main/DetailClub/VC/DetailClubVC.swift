@@ -237,7 +237,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                 }
                 owner.contactDescriptionLabel.text = item.contact
                 owner.navigationItem.configTitle(title: item.title)
-                owner.applyButton.isHidden = UserDefaultsLocal.shared.isApple ? true : false
+                owner.applyButton.isHidden = UserDefaultsLocal.shared.isApple
             }
             .disposed(by: disposeBag)
         
