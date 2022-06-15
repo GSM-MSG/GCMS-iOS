@@ -15,7 +15,7 @@ final class ThirdUpdateClubVC: BaseVC<UpdateClubReactor> {
     }
     // MARK: - Properties
     private let scrollView = UIScrollView()
-    private let progressBar = NewClubSteppedProgressBar(selectedIndex: 2)
+    private let progressBar = UpdateSteppedProgressBar(selectedIndex: 1)
     private let bannerHeaderLabel = HeaderLabel(title: "동아리 배너")
     private let bannerImageView = UIImageView().then {
         $0.layer.cornerRadius = 9

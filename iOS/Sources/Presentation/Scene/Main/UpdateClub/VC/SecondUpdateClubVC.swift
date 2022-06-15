@@ -1,73 +1,87 @@
 import UIKit
-import IQKeyboardManagerSwift
 import SnapKit
-import RxKeyboard
+import Reusable
+import RxGesture
 import RxSwift
+import RxDataSources
+import PhotosUI
 
 final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
     // MARK: - Metric
     enum Metric {
         static let verticalSpacing: CGFloat = 65
         static let horizontalMargin: CGFloat = 20
-        static let textFieldHeight: CGFloat = 45
+        static let buttonSize: CGFloat = 30
     }
     // MARK: - Properties
     private let scrollView = UIScrollView()
-    private let progressBar = NewClubSteppedProgressBar(selectedIndex: 1)
-    private let clubNameTextField = NewClubTextField(placeholder: "동아리 이름을 입력해주세요.").then {
-        $0.addHeaderLabel(title: "동아리 이름")
-    }
-    private let clubDescriptionHeaderLabel = HeaderLabel(title: "동아리 설명")
-    private let clubDescriptionTextView = UITextView().then {
-        $0.layer.cornerRadius = 5
-        $0.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
-        $0.layer.borderWidth = 1
+    private let progressBar = UpdateSteppedProgressBar(selectedIndex: 1)
+    private let bannerHeaderLabel = HeaderLabel(title: "동아리 배너")
+    private let bannerImageView = UIImageView().then {
+        $0.layer.cornerRadius = 9
         $0.clipsToBounds = true
+        $0.contentMode = .scaleAspectFill
+        $0.image = GCMSAsset.Images.gcmsNewClubPlaceholder.image
+    }
+    private let clubActivitiesHeaderLabel = HeaderLabel(title: "동아리 사진").then {
+        $0.appendSelection()
+    }
+    private let clubActivitiesCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = .init(width: 80, height: 80)
+        $0.showsHorizontalScrollIndicator = false
+        $0.collectionViewLayout = layout
         $0.backgroundColor = .clear
-        $0.text = "동아리 설명을 입력해주세요."
-        $0.textColor = GCMSAsset.Colors.gcmsGray4.color
-        $0.textContainerInset = .init(top: 10, left: 5, bottom: 10, right: 5)
-        $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 13)
-        $0.toolbarPlaceholder = "동아리 설명을 입력해주세요."
+        $0.register(cellType: ClubActivityCell.self)
     }
-    private let contactTextField = NewClubTextField(placeholder: "연락처를 입력해주세요.(디스코드 등)").then {
-        $0.addHeaderLabel(title: "연락처")
+    private let clubActivityAppendButton = NewClubAppendButton()
+    private let clubMemberHeaderLabel = HeaderLabel(title: "동아리 구성원").then {
+        $0.appendSelection()
     }
-    private let notionLinkHeaderLabel = HeaderLabel(title: "노션 링크")
-    private let notionLinkTextField = NewClubTextField(placeholder: "링크 URL")
-    private let teacherTextField = NewClubTextField(placeholder: "담당 선생님 성함을 입력해주세요.").then {
-        $0.addHeaderSelectionLabel(title: "담당 선생님")
+    private let clubMemberCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = .init(width: 61, height: 82)
+        $0.collectionViewLayout = layout
+        $0.backgroundColor = .clear
+        $0.register(cellType: ClubMemberCell.self)
     }
-    private let nextButton = UIButton().then {
-        $0.setTitle("다음", for: .normal)
+    private let clubMemberCountLabel = UILabel().then {
+        $0.text = "0명"
+        $0.textColor = GCMSAsset.Colors.gcmsGray3.color
+        $0.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 12)
+    }
+    private let clubMemberAppendButton = NewClubAppendButton()
+    private let completeButton = UIButton().then {
+        $0.setTitle("완료", for: .normal)
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
         $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        IQKeyboardManager.shared.keyboardDistanceFromTextField = 56
-    }
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        IQKeyboardManager.shared.keyboardDistanceFromTextField = 10
-    }
+    private var bannerPHConfiguration: PHPickerConfiguration = {
+        var config = PHPickerConfiguration()
+        config.filter = .images
+        config.selectionLimit = 1
+        return config
+    }()
+    private lazy var bannerPHPickerController = PHPickerViewController(configuration: bannerPHConfiguration)
+    
+    private var activityPHConfiguration: PHPickerConfiguration = {
+        var config = PHPickerConfiguration()
+        config.filter = .images
+        config.selectionLimit = 4
+        return config
+    }()
+    private lazy var activityPHPickerController = PHPickerViewController(configuration: activityPHConfiguration)
     
     // MARK: - UI
     override func setup() {
-        guard let reactor = reactor else { return }
-        let initialState = reactor.initialState
-        
-        clubNameTextField.text = initialState.title
-        clubDescriptionTextView.text = initialState.description
-        clubDescriptionTextView.textColor = GCMSAsset.Colors.gcmsGray1.color
-        contactTextField.text = initialState.contact
-        notionLinkTextField.text = initialState.notionLink
-        teacherTextField.text = initialState.teacher
+        [bannerPHPickerController, activityPHPickerController].forEach { $0.delegate = self }
     }
     override func addView() {
-        view.addSubViews(scrollView, nextButton)
-        scrollView.addSubViews(progressBar, clubNameTextField, clubDescriptionHeaderLabel, clubDescriptionTextView, contactTextField, notionLinkHeaderLabel, notionLinkTextField, teacherTextField)
+        view.addSubViews(scrollView, completeButton)
+        scrollView.addSubViews(progressBar, bannerImageView, bannerHeaderLabel, clubActivitiesHeaderLabel, clubActivitiesCollectionView, clubActivityAppendButton, clubMemberHeaderLabel, clubMemberCountLabel, clubMemberAppendButton, clubMemberCollectionView)
     }
     override func setLayout() {
         scrollView.snp.makeConstraints {
@@ -80,127 +94,159 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
             $0.leading.trailing.equalToSuperview().inset(35)
             $0.height.equalTo(30)
         }
-        clubNameTextField.snp.makeConstraints {
+        bannerImageView.snp.makeConstraints {
             $0.top.equalTo(progressBar.snp.bottom).offset(115)
             $0.leading.trailing.equalToSuperview().inset(Metric.horizontalMargin)
-            $0.height.equalTo(Metric.textFieldHeight)
+            $0.height.equalTo((bound.width-40)*0.6625)
         }
-        clubDescriptionTextView.snp.makeConstraints {
-            $0.top.equalTo(clubNameTextField.snp.bottom).offset(Metric.verticalSpacing)
+        bannerHeaderLabel.snp.makeConstraints {
+            $0.leading.equalTo(bannerImageView)
+            $0.bottom.equalTo(bannerImageView.snp.top).offset(-8)
+        }
+        clubActivitiesCollectionView.snp.makeConstraints {
+            $0.top.equalTo(bannerImageView.snp.bottom).offset(Metric.verticalSpacing)
             $0.leading.trailing.equalToSuperview().inset(Metric.horizontalMargin)
-            $0.height.equalTo(90)
+            $0.height.equalTo(80)
         }
-        clubDescriptionHeaderLabel.snp.makeConstraints {
-            $0.leading.equalTo(clubDescriptionTextView)
-            $0.bottom.equalTo(clubDescriptionTextView.snp.top).offset(-8)
+        clubActivitiesHeaderLabel.snp.makeConstraints {
+            $0.leading.equalTo(clubActivitiesCollectionView)
+            $0.bottom.equalTo(clubActivitiesCollectionView.snp.top).offset(-8)
         }
-        contactTextField.snp.makeConstraints {
-            $0.top.equalTo(clubDescriptionTextView.snp.bottom).offset(Metric.verticalSpacing)
+        clubActivityAppendButton.snp.makeConstraints {
+            $0.trailing.equalTo(clubActivitiesCollectionView)
+            $0.centerY.equalTo(clubActivitiesHeaderLabel)
+            $0.size.equalTo(Metric.buttonSize)
+        }
+        clubMemberCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(Metric.horizontalMargin)
-            $0.height.equalTo(Metric.textFieldHeight)
-        }
-        notionLinkTextField.snp.makeConstraints {
-            $0.top.equalTo(contactTextField.snp.bottom).offset(Metric.verticalSpacing)
-            $0.leading.trailing.equalToSuperview().inset(Metric.horizontalMargin)
-            $0.height.equalTo(Metric.textFieldHeight)
-        }
-        notionLinkHeaderLabel.snp.makeConstraints {
-            $0.leading.equalTo(notionLinkTextField)
-            $0.bottom.equalTo(notionLinkTextField.snp.top).offset(-8)
-        }
-        teacherTextField.snp.makeConstraints {
-            $0.top.equalTo(notionLinkTextField.snp.bottom).offset(Metric.verticalSpacing)
-            $0.leading.trailing.equalToSuperview().inset(Metric.horizontalMargin)
-            $0.height.equalTo(Metric.textFieldHeight)
+            $0.top.equalTo(clubActivitiesCollectionView.snp.bottom).offset(Metric.verticalSpacing)
+            $0.height.equalTo(82)
             $0.bottom.equalToSuperview().offset(-71)
         }
-        nextButton.snp.makeConstraints {
-            $0.bottom.leading.trailing.equalToSuperview()
+        clubMemberHeaderLabel.snp.makeConstraints {
+            $0.leading.equalTo(clubMemberCollectionView)
+            $0.bottom.equalTo(clubMemberCollectionView.snp.top).offset(-8)
+        }
+        clubMemberCountLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalTo(clubMemberHeaderLabel)
+        }
+        clubMemberAppendButton.snp.makeConstraints {
+            $0.trailing.equalTo(clubMemberCollectionView)
+            $0.bottom.equalTo(clubMemberCollectionView.snp.top).offset(-8)
+            $0.size.equalTo(Metric.buttonSize)
+        }
+        completeButton.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
             $0.height.equalTo(view.safeAreaInsets.bottom + 56)
         }
     }
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
-    override func configureNavigation() {
-        self.navigationItem.configBack()
-    }
     
     // MARK: - Reactor
-    override func bindAction(reactor: UpdateClubReactor) {
-        RxKeyboard.instance.visibleHeight
-            .skip(1)
-            .drive(with: self) { owner, height in
-                UIView.animate(withDuration: 0) {
-                    owner.nextButton.snp.updateConstraints {
-                        $0.bottom.equalToSuperview().offset(-height)
-                    }
-                }
-                owner.view.layoutIfNeeded()
+    override func bindView(reactor: UpdateClubReactor) {
+        bannerImageView.rx.tapGesture()
+            .when(.recognized)
+            .bind(with: self) { owner, _ in
+                owner.reactor?.action.onNext(.bannerDidTap)
+                owner.present(owner.bannerPHPickerController, animated: true)
             }
             .disposed(by: disposeBag)
         
-        clubDescriptionTextView.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
-            .do(onNext: { [weak self] _ in
-                let size = CGSize(width: self?.view.frame.width ?? 0, height: .infinity)
-                let esti = self?.clubDescriptionTextView.sizeThatFits(size) ?? .init()
-                
-                self?.clubDescriptionTextView.constraints.forEach { constraint in
-                    if esti.height < 90 {}
-                    else {
-                        if constraint.firstAttribute == .height {
-                            constraint.constant = esti.height
-                        }
-                    }
-                }
-            }).map(Reactor.Action.updateDescription)
-                .bind(to: reactor.action)
-                .disposed(by: disposeBag)
-        
-        clubDescriptionTextView.rx.didBeginEditing
-            .asObservable()
+        clubActivityAppendButton.rx.tap
             .bind(with: self) { owner, _ in
-                if owner.clubDescriptionTextView.textColor == GCMSAsset.Colors.gcmsGray4.color {
-                    owner.clubDescriptionTextView.text = nil
-                    owner.clubDescriptionTextView.textColor = GCMSAsset.Colors.gcmsGray1.color
-                }
+                owner.reactor?.action.onNext(.activityAppendButtonDidTap)
+                owner.present(owner.activityPHPickerController, animated: true)
             }
             .disposed(by: disposeBag)
         
-        clubDescriptionTextView.rx.didEndEditing
-            .asObservable()
-            .bind(with: self) { owner, _ in
-                if owner.clubDescriptionTextView.text.isEmpty {
-                    owner.clubDescriptionTextView.text = "동아리 설명을 입력해주세요."
-                    owner.clubDescriptionTextView.textColor = GCMSAsset.Colors.gcmsGray4.color
-                }
+        clubActivitiesCollectionView.rx.itemSelected
+            .map(\.row)
+            .map(Reactor.Action.activityDeleteDidTap)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        clubMemberAppendButton.rx.tap
+            .map { Reactor.Action.memberAppendButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        clubMemberCollectionView.rx.itemSelected
+            .map(\.row)
+            .map(Reactor.Action.memberRemove)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        completeButton.rx.tap
+            .map { Reactor.Action.completeButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    override func bindState(reactor: UpdateClubReactor) {
+        let sharedState = reactor.state.share(replay: 4).observe(on: MainScheduler.asyncInstance)
+        
+        let activityDS = RxCollectionViewSectionedReloadDataSource<ClubActivitySection>{ _, tv, ip, item in
+            let cell = tv.dequeueReusableCell(for: ip, cellType: ClubActivityCell.self) as ClubActivityCell
+            cell.model = item
+            return cell
+        }
+        
+        let memberDS = RxCollectionViewSectionedReloadDataSource<ClubMemberSection>{ _, tv, ip, item in
+            let cell = tv.dequeueReusableCell(for: ip, cellType: ClubMemberCell.self) as ClubMemberCell
+            cell.model = item
+            return cell
+        }
+        
+        sharedState
+            .map(\.imageData)
+            .compactMap { $0 }
+            .map { UIImage(data: $0) }
+            .bind(to: bannerImageView.rx.image)
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.activitiesData)
+            .map { [ClubActivitySection.init(items: $0)] }
+            .bind(to: clubActivitiesCollectionView.rx.items(dataSource: activityDS))
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.members)
+            .do(onNext: { [weak self] item in
+                self?.clubMemberCountLabel.text = "\(item.count)명"
+            }).map { [ClubMemberSection.init(header: "", items: $0)] }
+            .bind(to: clubMemberCollectionView.rx.items(dataSource: memberDS))
+            .disposed(by: disposeBag)
+        
+        sharedState
+            .map(\.isLoading)
+            .bind(with: self) { owner, load in
+                load ? owner.startIndicator() : owner.stopIndicator()
             }
             .disposed(by: disposeBag)
     }
-    override func bindView(reactor: UpdateClubReactor) {
-        clubNameTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
-            .map(Reactor.Action.updateTitle)
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        notionLinkTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
-            .map(Reactor.Action.updateNotionLink)
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        teacherTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
-            .map(Reactor.Action.updateTeacher)
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        contactTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
-            .map(Reactor.Action.updateContact)
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        nextButton.rx.tap
-            .map { Reactor.Action.secondNextButtonDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
+}
+
+extension SecondUpdateClubVC: PHPickerViewControllerDelegate {
+    func picker(
+        _ picker: PHPickerViewController,
+        didFinishPicking results: [PHPickerResult]
+    ) {
+        picker.dismiss(animated: true)
+        let providers = results.compactMap { $0.itemProvider }
+        providers.forEach { provider in
+            provider.loadDataRepresentation(forTypeIdentifier: "public.image") { [weak self] data, err in
+                if let err = err {
+                    print(err.localizedDescription)
+                    return
+                }
+                if let data = data {
+                    self?.reactor?.action.onNext(.imageDidSelect(data))
+                }
+            }
+        }
     }
 }
