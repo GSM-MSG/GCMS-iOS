@@ -30,9 +30,6 @@ final class UpdateClubReactor: Reactor, Stepper {
         case bannerDidTap
         case activityAppendButtonDidTap
         case activityDeleteDidTap(Int)
-        case memberAppendButtonDidTap
-        case memberDidSelected([User])
-        case memberRemove(Int)
         case updateLoading(Bool)
         case completeButtonDidTap
     }
@@ -45,8 +42,6 @@ final class UpdateClubReactor: Reactor, Stepper {
         case setImageData(Data)
         case setIsBanner(Bool)
         case removeImageData(Int)
-        case appendMember([User])
-        case memberRemove(Int)
         case setClubType(ClubType)
         case setIsLoading(Bool)
     }
@@ -59,16 +54,12 @@ final class UpdateClubReactor: Reactor, Stepper {
         var isBanner: Bool
         var imageData: Data?
         var activitiesData: [Data]
-        var members: [User]
         var clubType: ClubType
-        var addedUser: [User]
-        var removedUser: [User]
         var addedImage: [Data]
         var removedImage: [String]
         var isLoading: Bool
     }
     let initialState: State
-    private let legacyMember: [User]
     private let legacyBanner: Data?
     private let legacyBannerUrl: String
     private let legacyImageUrl: [Data: String]
@@ -83,7 +74,6 @@ final class UpdateClubReactor: Reactor, Stepper {
     ) {
         self.legacyBannerUrl = club.bannerUrl
         self.legacyBanner = try? Data(contentsOf: URL(string: club.bannerUrl)!)
-        self.legacyMember = club.member
         self.legacyImageUrl = club.activities.reduce(into: [Data:String](), { partialResult, url in
             if let data = try? Data(contentsOf: URL(string: url)!) {
                 partialResult[data] = url
@@ -98,10 +88,7 @@ final class UpdateClubReactor: Reactor, Stepper {
             isBanner: true,
             imageData: try? Data(contentsOf: URL(string: club.bannerUrl)!),
             activitiesData: club.activities.compactMap { try? Data(contentsOf: URL(string: $0)!) },
-            members: club.member,
             clubType: club.type,
-            addedUser: [],
-            removedUser: [],
             addedImage: [],
             removedImage: [],
             isLoading: false
@@ -141,14 +128,6 @@ extension UpdateClubReactor {
             return .just(.setIsBanner(false))
         case let .activityDeleteDidTap(index):
             return .just(.removeImageData(index))
-        case .memberAppendButtonDidTap:
-            steps.accept(GCMSStep.memberAppendIsRequired(closure: { [weak self] users in
-                self?.action.onNext(.memberDidSelected(users))
-            }, clubType: currentState.clubType))
-        case let .memberDidSelected(users):
-            return .just(.appendMember(users))
-        case let .memberRemove(index):
-            return .just(.memberRemove(index))
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
         }
@@ -194,17 +173,6 @@ extension UpdateClubReactor {
             newState.addedImage.removeAll(where: { $0 == removed } )
             if let legacy = legacyImageUrl[removed] {
                 newState.removedImage.append(legacy)
-            }
-        case let .appendMember(users):
-            newState.members.append(contentsOf: users)
-            newState.members.removeDuplicates()
-            newState.addedUser.append(contentsOf: users)
-            newState.addedUser.removeDuplicates()
-        case let .memberRemove(index):
-            let removed = newState.members.remove(at: index)
-            newState.addedUser.removeAll(where: { $0 == removed } )
-            if legacyMember.contains(removed) {
-                newState.removedUser.append(removed)
             }
         case let .setClubType(type):
             newState.clubType = type
@@ -254,9 +222,7 @@ private extension UpdateClubReactor {
                 notionLink: current.notionLink,
                 teacher: current.teacher,
                 newActivityUrls: added,
-                deleteActivityUrls: current.removedImage,
-                newMember: current.addedUser.map(\.userId),
-                deleteMember: current.removedUser.map(\.userId)
+                deleteActivityUrls: current.removedImage
             )
         )
         .andThen(Observable.just(()))
