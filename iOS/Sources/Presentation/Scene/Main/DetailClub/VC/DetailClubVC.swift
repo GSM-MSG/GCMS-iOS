@@ -4,6 +4,9 @@ import Reusable
 import RxSwift
 import RxDataSources
 import Kingfisher
+import Service
+import SnapKit
+import Then
 
 final class DetailClubVC: BaseVC<DetailClubReactor> {
     // MARK: - Metric
@@ -234,6 +237,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                 }
                 owner.contactDescriptionLabel.text = item.contact
                 owner.navigationItem.configTitle(title: item.title)
+                owner.applyButton.isHidden = UserDefaultsLocal.shared.isApple ? true : false
             }
             .disposed(by: disposeBag)
         

@@ -11,18 +11,8 @@ final class DefaultClubRepository: ClubRepository {
             .doOnNeedRefresh { self.clubLocal.deleteClubList(); self.clubLocal.saveClubList(clubList: $0) }
             .createObservable()
     }
-    func fetchGuestClubList(type: ClubType) -> Observable<[ClubList]> {
-        OfflineCache<[ClubList]>()
-            .localData { self.clubLocal.fetchClubList(type: type) }
-            .remoteData { self.clubRemote.fetchGuestClubList(type: type) }
-            .doOnNeedRefresh { self.clubLocal.deleteClubList(); self.clubLocal.saveClubList(clubList: $0) }
-            .createObservable()
-    }
     func fetchDetailClub(query: ClubRequestQuery) -> Single<Club> {
         clubRemote.fetchDetailClub(query: query)
-    }
-    func fetchGuestDetailClub(query: ClubRequestQuery) -> Single<Club> {
-        clubRemote.fetchGuestDetailClub(query: query)
     }
     func createNewClub(req: NewClubRequest) -> Completable {
         clubRemote.createNewClub(req: req)
