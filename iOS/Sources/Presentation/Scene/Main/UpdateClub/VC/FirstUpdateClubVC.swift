@@ -1,21 +1,73 @@
 import UIKit
+import IQKeyboardManagerSwift
 import SnapKit
+import RxKeyboard
 import RxSwift
-import RxCocoa
-import Service
 
 final class FirstUpdateClubVC: BaseVC<UpdateClubReactor> {
+    // MARK: - Metric
+    enum Metric {
+        static let verticalSpacing: CGFloat = 65
+        static let horizontalMargin: CGFloat = 20
+        static let textFieldHeight: CGFloat = 45
+    }
     // MARK: - Properties
     private let scrollView = UIScrollView()
-    private let progressBar = NewClubSteppedProgressBar(selectedIndex: 0)
-    private let majorButton = ClubTypeCardButton(type: .major, isGray: true)
-    private let freedomButton = ClubTypeCardButton(type: .freedom, isGray: true)
-    private let editorialButton = ClubTypeCardButton(type: .editorial, isGray: true)
+    private let progressBar = UpdateSteppedProgressBar(selectedIndex: 0)
+    private let clubNameTextField = NewClubTextField(placeholder: "동아리 이름을 입력해주세요.").then {
+        $0.addHeaderLabel(title: "동아리 이름")
+    }
+    private let clubDescriptionHeaderLabel = HeaderLabel(title: "동아리 설명")
+    private let clubDescriptionTextView = UITextView().then {
+        $0.layer.cornerRadius = 5
+        $0.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
+        $0.layer.borderWidth = 1
+        $0.clipsToBounds = true
+        $0.backgroundColor = .clear
+        $0.text = "동아리 설명을 입력해주세요."
+        $0.textColor = GCMSAsset.Colors.gcmsGray4.color
+        $0.textContainerInset = .init(top: 10, left: 5, bottom: 10, right: 5)
+        $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 13)
+        $0.toolbarPlaceholder = "동아리 설명을 입력해주세요."
+    }
+    private let contactTextField = NewClubTextField(placeholder: "연락처를 입력해주세요.(디스코드 등)").then {
+        $0.addHeaderLabel(title: "연락처")
+    }
+    private let notionLinkHeaderLabel = HeaderLabel(title: "노션 링크")
+    private let notionLinkTextField = NewClubTextField(placeholder: "링크 URL")
+    private let teacherTextField = NewClubTextField(placeholder: "담당 선생님 성함을 입력해주세요.").then {
+        $0.addHeaderSelectionLabel(title: "담당 선생님")
+    }
+    private let nextButton = UIButton().then {
+        $0.setTitle("다음", for: .normal)
+        $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
+        $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        IQKeyboardManager.shared.keyboardDistanceFromTextField = 56
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        IQKeyboardManager.shared.keyboardDistanceFromTextField = 10
+    }
     
     // MARK: - UI
+    override func setup() {
+        guard let reactor = reactor else { return }
+        let initialState = reactor.initialState
+        
+        clubNameTextField.text = initialState.title
+        clubDescriptionTextView.text = initialState.description
+        clubDescriptionTextView.textColor = GCMSAsset.Colors.gcmsGray1.color
+        contactTextField.text = initialState.contact
+        notionLinkTextField.text = initialState.notionLink
+        teacherTextField.text = initialState.teacher
+    }
     override func addView() {
-        view.addSubViews(scrollView)
-        scrollView.addSubViews(progressBar, majorButton, freedomButton, editorialButton)
+        view.addSubViews(scrollView, nextButton)
+        scrollView.addSubViews(progressBar, clubNameTextField, clubDescriptionHeaderLabel, clubDescriptionTextView, contactTextField, notionLinkHeaderLabel, notionLinkTextField, teacherTextField)
     }
     override func setLayout() {
         scrollView.snp.makeConstraints {
@@ -28,20 +80,43 @@ final class FirstUpdateClubVC: BaseVC<UpdateClubReactor> {
             $0.leading.trailing.equalToSuperview().inset(35)
             $0.height.equalTo(30)
         }
-        majorButton.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(progressBar.snp.bottom).offset(75)
-            $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo((bound.width-40)*0.43125)
+        clubNameTextField.snp.makeConstraints {
+            $0.top.equalTo(progressBar.snp.bottom).offset(115)
+            $0.leading.trailing.equalToSuperview().inset(Metric.horizontalMargin)
+            $0.height.equalTo(Metric.textFieldHeight)
         }
-        freedomButton.snp.makeConstraints {
-            $0.leading.trailing.height.centerX.equalTo(majorButton)
-            $0.top.equalTo(majorButton.snp.bottom).offset(15)
+        clubDescriptionTextView.snp.makeConstraints {
+            $0.top.equalTo(clubNameTextField.snp.bottom).offset(Metric.verticalSpacing)
+            $0.leading.trailing.equalToSuperview().inset(Metric.horizontalMargin)
+            $0.height.equalTo(90)
         }
-        editorialButton.snp.makeConstraints {
-            $0.leading.trailing.height.centerX.equalTo(freedomButton)
-            $0.top.equalTo(freedomButton.snp.bottom).offset(15)
-            $0.bottom.equalToSuperview().offset(-20)
+        clubDescriptionHeaderLabel.snp.makeConstraints {
+            $0.leading.equalTo(clubDescriptionTextView)
+            $0.bottom.equalTo(clubDescriptionTextView.snp.top).offset(-8)
+        }
+        contactTextField.snp.makeConstraints {
+            $0.top.equalTo(clubDescriptionTextView.snp.bottom).offset(Metric.verticalSpacing)
+            $0.leading.trailing.equalToSuperview().inset(Metric.horizontalMargin)
+            $0.height.equalTo(Metric.textFieldHeight)
+        }
+        notionLinkTextField.snp.makeConstraints {
+            $0.top.equalTo(contactTextField.snp.bottom).offset(Metric.verticalSpacing)
+            $0.leading.trailing.equalToSuperview().inset(Metric.horizontalMargin)
+            $0.height.equalTo(Metric.textFieldHeight)
+        }
+        notionLinkHeaderLabel.snp.makeConstraints {
+            $0.leading.equalTo(notionLinkTextField)
+            $0.bottom.equalTo(notionLinkTextField.snp.top).offset(-8)
+        }
+        teacherTextField.snp.makeConstraints {
+            $0.top.equalTo(notionLinkTextField.snp.bottom).offset(Metric.verticalSpacing)
+            $0.leading.trailing.equalToSuperview().inset(Metric.horizontalMargin)
+            $0.height.equalTo(Metric.textFieldHeight)
+            $0.bottom.equalToSuperview().offset(-71)
+        }
+        nextButton.snp.makeConstraints {
+            $0.bottom.leading.trailing.equalToSuperview()
+            $0.height.equalTo(view.safeAreaInsets.bottom + 56)
         }
     }
     override func configureVC() {
@@ -52,43 +127,80 @@ final class FirstUpdateClubVC: BaseVC<UpdateClubReactor> {
     }
     
     // MARK: - Reactor
-    override func bindView(reactor: UpdateClubReactor) {
-        majorButton.rx.tap
-            .map { Reactor.Action.clubTypeDidTap(.major) }
-            .bind(to: reactor.action)
+    override func bindAction(reactor: UpdateClubReactor) {
+        RxKeyboard.instance.visibleHeight
+            .skip(1)
+            .drive(with: self) { owner, height in
+                UIView.animate(withDuration: 0) {
+                    owner.nextButton.snp.updateConstraints {
+                        $0.bottom.equalToSuperview().offset(-height)
+                    }
+                }
+                owner.view.layoutIfNeeded()
+            }
             .disposed(by: disposeBag)
         
-        freedomButton.rx.tap
-            .map { Reactor.Action.clubTypeDidTap(.freedom) }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
+        clubDescriptionTextView.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
+            .do(onNext: { [weak self] _ in
+                let size = CGSize(width: self?.view.frame.width ?? 0, height: .infinity)
+                let esti = self?.clubDescriptionTextView.sizeThatFits(size) ?? .init()
+                
+                self?.clubDescriptionTextView.constraints.forEach { constraint in
+                    if esti.height < 90 {}
+                    else {
+                        if constraint.firstAttribute == .height {
+                            constraint.constant = esti.height
+                        }
+                    }
+                }
+            }).map(Reactor.Action.updateDescription)
+                .bind(to: reactor.action)
+                .disposed(by: disposeBag)
         
-        editorialButton.rx.tap
-            .map { Reactor.Action.clubTypeDidTap(.editorial) }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-    }
-    override func bindState(reactor: UpdateClubReactor) {
-        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
-        
-        sharedState
-            .map(\.clubType)
-            .bind(with: self) { owner, type in
-                switch type {
-                case .major:
-                    owner.majorButton.setImageState(isGray: false)
-                    owner.freedomButton.setImageState(isGray: true)
-                    owner.editorialButton.setImageState(isGray: true)
-                case .freedom:
-                    owner.majorButton.setImageState(isGray: true)
-                    owner.freedomButton.setImageState(isGray: false)
-                    owner.editorialButton.setImageState(isGray: true)
-                case .editorial:
-                    owner.majorButton.setImageState(isGray: true)
-                    owner.freedomButton.setImageState(isGray: true)
-                    owner.editorialButton.setImageState(isGray: false)
+        clubDescriptionTextView.rx.didBeginEditing
+            .asObservable()
+            .bind(with: self) { owner, _ in
+                if owner.clubDescriptionTextView.textColor == GCMSAsset.Colors.gcmsGray4.color {
+                    owner.clubDescriptionTextView.text = nil
+                    owner.clubDescriptionTextView.textColor = GCMSAsset.Colors.gcmsGray1.color
                 }
             }
+            .disposed(by: disposeBag)
+        
+        clubDescriptionTextView.rx.didEndEditing
+            .asObservable()
+            .bind(with: self) { owner, _ in
+                if owner.clubDescriptionTextView.text.isEmpty {
+                    owner.clubDescriptionTextView.text = "동아리 설명을 입력해주세요."
+                    owner.clubDescriptionTextView.textColor = GCMSAsset.Colors.gcmsGray4.color
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+    override func bindView(reactor: UpdateClubReactor) {
+        clubNameTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
+            .map(Reactor.Action.updateTitle)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        notionLinkTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
+            .map(Reactor.Action.updateNotionLink)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        teacherTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
+            .map(Reactor.Action.updateTeacher)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        contactTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
+            .map(Reactor.Action.updateContact)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        nextButton.rx.tap
+            .map { Reactor.Action.secondNextButtonDidTap }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
 }

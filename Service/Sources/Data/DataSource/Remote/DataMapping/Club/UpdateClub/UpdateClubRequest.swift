@@ -1,7 +1,7 @@
 import UIKit
 
 public struct UpdateClubRequest: Encodable {
-    public init(q: String, type: ClubType, title: String, description: String, bannerUrl: String, contact: String, notionLink: String, teacher: String?, newActivityUrls: [String], deleteActivityUrls: [String], newMember: [String], deleteMember: [String]) {
+    public init(q: String, type: ClubType, title: String, description: String, bannerUrl: String, contact: String, notionLink: String, teacher: String?, newActivityUrls: [String], deleteActivityUrls: [String]) {
         self.q = q
         self.type = type
         self.title = title
@@ -12,8 +12,6 @@ public struct UpdateClubRequest: Encodable {
         self.teacher = teacher
         self.newActivityUrls = newActivityUrls
         self.deleteActivityUrls = deleteActivityUrls
-        self.newMember = newMember
-        self.deleteMember = deleteMember
     }
     
     public let q: String
@@ -26,6 +24,4 @@ public struct UpdateClubRequest: Encodable {
     public let teacher: String?
     public let newActivityUrls: [String]
     public let deleteActivityUrls: [String]
-    public let newMember: [String]
-    public let deleteMember: [String]
 }

@@ -162,7 +162,6 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
     override func configureNavigation() {
-        self.navigationItem.setRightBarButton(statusButton, animated: true)
         self.navigationItem.configBack()
     }
     
@@ -210,14 +209,15 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                 switch item.scope {
                 case .head:
                     owner.applyButton.setTitle("동아리 신청 마감하기", for: .normal)
+                    owner.navigationItem.setRightBarButton(owner.statusButton, animated: true)
                 case .member:
                     owner.applyButton.isHidden = true
+                    owner.navigationItem.setRightBarButton(owner.statusButton, animated: true)
                 case .`default`:
                     owner.applyButton.setTitle(item.isApplied ? "신청취소하기" : "동아리 신청하기", for: .normal)
                     owner.applyButton.backgroundColor = item.isApplied
                     ? .init(red: 1, green: 0.5, blue: 0.5, alpha: 1)
                     : GCMSAsset.Colors.gcmsMainColor.color
-                    owner.navigationItem.rightBarButtonItem = nil
                 }
                 if !item.isOpen {
                     owner.applyButton.isHidden = false
@@ -237,7 +237,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                 }
                 owner.contactDescriptionLabel.text = item.contact
                 owner.navigationItem.configTitle(title: item.title)
-                owner.applyButton.isHidden = UserDefaultsLocal.shared.isApple ? true : false
+                owner.applyButton.isHidden = UserDefaultsLocal.shared.isApple
             }
             .disposed(by: disposeBag)
         
