@@ -147,12 +147,6 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
             return cell
         }
         
-        let memberDS = RxCollectionViewSectionedReloadDataSource<ClubMemberSection>{ _, tv, ip, item in
-            let cell = tv.dequeueReusableCell(for: ip, cellType: ClubMemberCell.self) as ClubMemberCell
-            cell.model = item
-            return cell
-        }
-        
         sharedState
             .map(\.imageData)
             .compactMap { $0 }
