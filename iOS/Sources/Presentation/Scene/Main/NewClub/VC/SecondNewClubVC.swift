@@ -38,7 +38,7 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
     private let teacherTextField = NewClubTextField(placeholder: "담당 선생님 성함을 입력해주세요.").then {
         $0.addHeaderSelectionLabel(title: "담당 선생님")
     }
-    private let nextBUtton = UIButton().then {
+    private let nextButton = UIButton().then {
         $0.setTitle("다음", for: .normal)
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
         $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
@@ -55,7 +55,7 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
     
     // MARK: - UI
     override func addView() {
-        view.addSubViews(scrollView, nextBUtton)
+        view.addSubViews(scrollView, nextButton)
         scrollView.addSubViews(progressBar, clubNameTextField, clubDescriptionHeaderLabel, clubDescriptionTextView, contactTextField, notionLinkHeaderLabel, notionLinkTextField, teacherTextField)
     }
     override func setLayout() {
@@ -103,7 +103,7 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
             $0.height.equalTo(Metric.textFieldHeight)
             $0.bottom.equalToSuperview().offset(-71)
         }
-        nextBUtton.snp.makeConstraints {
+        nextButton.snp.makeConstraints {
             $0.bottom.leading.trailing.equalToSuperview()
             $0.height.equalTo(view.safeAreaInsets.bottom + 72)
         }
@@ -121,7 +121,7 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
             .skip(1)
             .drive(with: self) { owner, height in
                 UIView.animate(withDuration: 0) {
-                    owner.nextBUtton.snp.updateConstraints {
+                    owner.nextButton.snp.updateConstraints {
                         $0.bottom.equalToSuperview().offset(-height)
                     }
                 }
@@ -187,7 +187,7 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        nextBUtton.rx.tap
+        nextButton.rx.tap
             .map { Reactor.Action.secondNextButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
