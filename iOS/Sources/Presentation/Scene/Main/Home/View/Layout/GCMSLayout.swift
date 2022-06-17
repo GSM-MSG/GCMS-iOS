@@ -8,7 +8,7 @@ final class GCMSLayout: UICollectionViewFlowLayout {
     weak var delegate: GCMSLayoutDelegate?
     private var contentHeight: CGFloat = 0
     
-    private var contentWidth: CGFloat = UIScreen.main.bounds.width - 30
+    private var contentWidth: CGFloat = UIScreen.main.bounds.width
     
     override var collectionViewContentSize: CGSize {
         return .init(width: contentWidth, height: contentHeight)
