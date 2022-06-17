@@ -92,7 +92,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         }
         applyButton.snp.makeConstraints {
             $0.bottom.leading.trailing.equalToSuperview()
-            $0.height.equalTo(view.safeAreaInsets.bottom + 56)
+            $0.height.equalTo(view.safeAreaInsets.bottom + 72)
         }
         descriptionHeaderLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(30)
