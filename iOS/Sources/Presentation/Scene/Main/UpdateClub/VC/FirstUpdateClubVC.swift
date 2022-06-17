@@ -116,7 +116,7 @@ final class FirstUpdateClubVC: BaseVC<UpdateClubReactor> {
         }
         nextButton.snp.makeConstraints {
             $0.bottom.leading.trailing.equalToSuperview()
-            $0.height.equalTo(view.safeAreaInsets.bottom + 56)
+            $0.height.equalTo(view.safeAreaInsets.bottom + 72)
         }
     }
     override func configureVC() {
