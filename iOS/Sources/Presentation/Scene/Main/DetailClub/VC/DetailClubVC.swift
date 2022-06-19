@@ -68,7 +68,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         $0.setTitle("신청하기", for: .normal)
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
     }
-    private let statusButton = UIBarButtonItem(image: .init(systemName: "gearshape")?.tintColor(.white), style: .plain, target: nil, action: nil)
+    private lazy var statusButton = UIBarButtonItem(image: .init(systemName: "gearshape")?.tintColor(.white), style: .plain, target: nil, action: nil)
     
     // MARK: - UI
     override func addView() {
