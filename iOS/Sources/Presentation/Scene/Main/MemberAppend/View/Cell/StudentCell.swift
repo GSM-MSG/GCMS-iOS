@@ -1,5 +1,6 @@
 import UIKit
 import Service
+import Kingfisher
 
 final class StudentCell: BaseTableViewCell<User> {
     // MARK: - Properties
@@ -23,6 +24,7 @@ final class StudentCell: BaseTableViewCell<User> {
     override func prepareForReuse() {
         super.prepareForReuse()
         model = nil
+        profileImageView.kf.cancelDownloadTask()
     }
     // MARK: - UI
     override func addView() {

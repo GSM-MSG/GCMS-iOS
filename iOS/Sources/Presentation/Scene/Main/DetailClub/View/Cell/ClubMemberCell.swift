@@ -17,6 +17,7 @@ final class ClubMemberCell: BaseCollectionViewCell<User> {
     override func prepareForReuse() {
         super.prepareForReuse()
         model = nil
+        profileImageView.kf.cancelDownloadTask()
     }
     
     // MARK: - UI

@@ -91,6 +91,7 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
         super.prepareForReuse()
         model = nil
         disposeBag = DisposeBag()
+        profileImageView.kf.cancelDownloadTask()
     }
     
     override func bind(_ model: Member) {
