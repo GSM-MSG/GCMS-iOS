@@ -17,6 +17,7 @@ final class DetailClubReactor: Reactor, Stepper {
         case updateLoading(Bool)
         case statusButtonDidTap
         case linkButtonDidTap
+        case bottomButtonDidTap
     }
     enum Mutation {
         case setClub(Club)
@@ -77,6 +78,8 @@ extension DetailClubReactor {
             return statusButtonDidTap()
         case .linkButtonDidTap:
             UIApplication.shared.open(URL(string: currentState.clubDetail?.notionLink ?? "https://www.google.com") ?? .init(string: "https://www.google.com")!)
+        case .bottomButtonDidTap:
+            return bottomButtonDidTap()
         }
         return .empty()
     }
@@ -112,6 +115,9 @@ private extension DetailClubReactor {
             .flatMap { Observable.from([Mutation.setClub($0), .setIsLoading(false)]) }
             .catchAndReturn(.setIsLoading(false))
         return .concat([start, res])
+    }
+    func bottomButtonDidTap() -> Observable<Mutation> {
+        return .empty()
     }
     func statusButtonDidTap() -> Observable<Mutation> {
         let isHead = (currentState.clubDetail?.scope ?? .member) == .head

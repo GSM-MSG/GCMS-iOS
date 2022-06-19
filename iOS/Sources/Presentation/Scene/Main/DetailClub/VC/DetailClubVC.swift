@@ -174,6 +174,11 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             .map { Reactor.Action.linkButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        applyButton.rx.tap
+            .map { Reactor.Action.bottomButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     override func bindAction(reactor: DetailClubReactor) {
         self.rx.viewDidLoad
