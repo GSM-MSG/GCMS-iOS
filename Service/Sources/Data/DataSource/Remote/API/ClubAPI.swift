@@ -2,9 +2,7 @@ import Moya
 
 enum ClubAPI {
     case clubList(type: ClubType)
-    case guestClubList(type: ClubType)
     case clubDetail(query: ClubRequestQuery)
-    case guestClubDetail(query: ClubRequestQuery)
     case createNewClub(req: NewClubRequest)
     case updateClub(req: UpdateClubRequest)
     case deleteClub(query: ClubRequestQuery)
@@ -28,12 +26,8 @@ extension ClubAPI: GCMSAPI {
         switch self {
         case .clubList:
             return "/list"
-        case .guestClubList:
-            return "/guest/list"
         case .clubDetail:
             return "/detail"
-        case .guestClubDetail:
-            return "/guest/detail"
         case .createNewClub, .updateClub, .deleteClub:
             return "/"
         case .clubMember:
@@ -60,23 +54,21 @@ extension ClubAPI: GCMSAPI {
     }
     var method: Method {
         switch self {
-        case .clubList, .clubDetail, .clubMember, .clubApplicant, .guestClubList, .guestClubDetail:
+        case .clubList, .clubDetail, .clubMember, .clubApplicant:
             return .get
-        case .userAccept, .userReject, .apply, .cancel, .createNewClub:
+        case .userAccept, .userReject, .apply, .cancel, .createNewClub, .deleteClub, .userKick:
             return .post
         case .updateClub, .clubOpen, .clubClose, .delegation:
             return .put
-        case .deleteClub, .userKick:
-            return .delete
         }
     }
     var task: Task {
         switch self {
-        case let .clubList(type), let .guestClubList(type):
+        case let .clubList(type):
             return .requestParameters(parameters: [
                 "type": type.rawValue
             ], encoding: URLEncoding.queryString)
-        case let .clubDetail(q), let .clubMember(q), let .clubApplicant(q), let .guestClubDetail(q):
+        case let .clubDetail(q), let .clubMember(q), let .clubApplicant(q):
             return .requestParameters(parameters: [
                 "q": q.q,
                 "type": q.type
@@ -107,8 +99,6 @@ extension ClubAPI: GCMSAPI {
     }
     var jwtTokenType: JWTTokenType? {
         switch self {
-        case .guestClubList, .guestClubDetail:
-            return JWTTokenType.none
         default:
             return .accessToken
         }

@@ -24,7 +24,7 @@ final class MajorClubListVC: BaseVC<HomeReactor> {
     }
     override func setLayout() {
         clubListCollectionView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.left.right.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
     override func configureVC() {

@@ -26,11 +26,6 @@ public final class UseCaseAssembly: Assembly {
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
-        container.register(FetchGuestClubListUseCase.self) { r in
-            FetchGuestClubListUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
-            )
-        }
         container.register(ClubCloseUseCase.self) { r in
              ClubCloseUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
@@ -63,11 +58,6 @@ public final class UseCaseAssembly: Assembly {
         }
         container.register(FetchDetailClubUseCase.self) { r in
              FetchDetailClubUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
-            )
-        }
-        container.register(FetchGuestDeatilClubUseCase.self) { r in
-            FetchGuestDeatilClubUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
@@ -138,6 +128,17 @@ public final class UseCaseAssembly: Assembly {
         container.register(UploadImagesUseCase.self) { r in
              UploadImagesUseCase(
                 imageRepository: r.resolve(ImageRepository.self)!
+            )
+        }
+        // MARK: - Guest
+        container.register(FetchGuestClubListUseCase.self) { r in
+            FetchGuestClubListUseCase(
+                guestRepository: r.resolve(GuestRepository.self)!
+            )
+        }
+        container.register(FetchGuestDeatilClubUseCase.self) { r in
+            FetchGuestDeatilClubUseCase(
+                guestRepository: r.resolve(GuestRepository.self)!
             )
         }
     }
