@@ -8,6 +8,7 @@ final class ClubListCell: BaseCollectionViewCell<ClubList> {
     override func prepareForReuse() {
         super.prepareForReuse()
         model = nil
+        clubView.cancelImageDownload()
     }
     
     // MARK: - UI

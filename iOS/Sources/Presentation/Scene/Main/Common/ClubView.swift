@@ -46,6 +46,9 @@ final class ClubView: UIView {
                                    options: [])
         nameLabel.text = club.title
     }
+    public func cancelImageDownload() {
+        clubBannerView.kf.cancelDownloadTask()
+    }
 }
 
 // MARK: - UI
