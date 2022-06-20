@@ -89,6 +89,7 @@ final class ApplicantCell: BaseTableViewCell<User> {
         super.prepareForReuse()
         model = nil
         disposeBag = DisposeBag()
+        profileImageView.kf.cancelDownloadTask()
     }
     
     override func bind(_ model: User) {
