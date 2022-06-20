@@ -28,8 +28,10 @@ extension ClubAPI: GCMSAPI {
             return "/list"
         case .clubDetail:
             return "/detail"
-        case .createNewClub, .updateClub, .deleteClub:
+        case .createNewClub, .updateClub:
             return "/"
+        case .deleteClub:
+            return "/delete"
         case .clubMember:
             return "/members"
         case .clubApplicant:
