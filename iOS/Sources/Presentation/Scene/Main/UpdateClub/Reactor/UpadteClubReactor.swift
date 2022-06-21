@@ -197,7 +197,7 @@ private extension UpdateClubReactor {
         else if currentState.contact.isEmpty && initialState.contact.isEmpty {
             errorMessage = "연락처를 입력해주세요!"
         }
-        else if currentState.notionLink.isEmpty && !currentState.notionLink.hasPrefix("https://") {
+        else if currentState.notionLink.isEmpty || !currentState.notionLink.hasPrefix("https://") {
             errorMessage = "노션 링크를 정확히 입력해주세요!"
         } else {
             steps.accept(GCMSStep.secondUpdateClubIsRequired(reactor: self))
