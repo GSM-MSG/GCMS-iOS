@@ -183,8 +183,8 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             .disposed(by: disposeBag)
     }
     override func bindAction(reactor: DetailClubReactor) {
-        self.rx.viewDidLoad
-            .map { Reactor.Action.viewDidLoad }
+        self.rx.viewWillAppear
+            .map { _ in Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
