@@ -1,7 +1,7 @@
 public struct NewClubRequest: Encodable {
-    public init(type: ClubType, q: String, description: String, bannerUrl: String, contact: String, notionLink: String, teacher: String?, activities: [String], member: [String]) {
+    public init(type: ClubType, title: String, description: String, bannerUrl: String, contact: String, notionLink: String, teacher: String?, activities: [String], member: [String]) {
         self.type = type
-        self.q = q
+        self.q = title
         self.description = description
         self.bannerUrl = bannerUrl
         self.contact = contact
