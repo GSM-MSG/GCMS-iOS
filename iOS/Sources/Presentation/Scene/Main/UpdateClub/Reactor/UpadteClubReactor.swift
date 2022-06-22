@@ -74,9 +74,11 @@ final class UpdateClubReactor: Reactor, Stepper {
     ) {
         self.legacyBannerUrl = club.bannerUrl
         self.legacyBanner = try? Data(contentsOf: URL(string: club.bannerUrl)!)
+        var activitiesData = [Data]()
         self.legacyImageUrl = club.activities.reduce(into: [Data:String](), { partialResult, url in
             if let data = try? Data(contentsOf: URL(string: url)!) {
                 partialResult[data] = url
+                activitiesData.append(data)
             }
         })
         initialState = State(
@@ -87,7 +89,7 @@ final class UpdateClubReactor: Reactor, Stepper {
             teacher: club.teacher,
             isBanner: true,
             imageData: try? Data(contentsOf: URL(string: club.bannerUrl)!),
-            activitiesData: club.activities.compactMap { try? Data(contentsOf: URL(string: $0)!) },
+            activitiesData: activitiesData,
             clubType: club.type,
             addedImage: [],
             removedImage: [],
