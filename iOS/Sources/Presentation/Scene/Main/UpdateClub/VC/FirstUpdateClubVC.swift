@@ -54,17 +54,6 @@ final class FirstUpdateClubVC: BaseVC<UpdateClubReactor> {
     }
     
     // MARK: - UI
-    override func setup() {
-        guard let reactor = reactor else { return }
-        let initialState = reactor.initialState
-        
-        clubNameTextField.text = initialState.title
-        clubDescriptionTextView.text = initialState.description
-        clubDescriptionTextView.textColor = GCMSAsset.Colors.gcmsGray1.color
-        contactTextField.text = initialState.contact
-        notionLinkTextField.text = initialState.notionLink
-        teacherTextField.text = initialState.teacher
-    }
     override func addView() {
         view.addSubViews(scrollView, nextButton)
         scrollView.addSubViews(progressBar, clubNameTextField, clubDescriptionHeaderLabel, clubDescriptionTextView, contactTextField, notionLinkHeaderLabel, notionLinkTextField, teacherTextField)
@@ -202,5 +191,14 @@ final class FirstUpdateClubVC: BaseVC<UpdateClubReactor> {
             .map { Reactor.Action.secondNextButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        let initialState = reactor.initialState
+        
+        clubNameTextField.text = initialState.title
+        clubDescriptionTextView.text = initialState.description
+        clubDescriptionTextView.textColor = GCMSAsset.Colors.gcmsGray1.color
+        contactTextField.text = initialState.contact
+        notionLinkTextField.text = initialState.notionLink
+        teacherTextField.text = initialState.teacher
     }
 }
