@@ -246,7 +246,8 @@ private extension DetailClubReactor {
                         self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "동아리 신청에 실패하였습니다."))
                     }
                     .disposed(by: self.disposeBag)
-            })
+            }),
+            .init(title: "취소", style: .cancel)
         ]))
         return .empty()
     }
@@ -262,7 +263,8 @@ private extension DetailClubReactor {
                         self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "동아리 신청 취소에 실패했습니다."))
                     }
                     .disposed(by: self.disposeBag)
-            })
+            }),
+            .init(title: "취소", style: .cancel)
         ]))
         return .empty()
     }

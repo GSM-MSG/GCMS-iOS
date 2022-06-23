@@ -224,8 +224,8 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                     if item.isOpen {
                         owner.applyButton.setTitle(item.isApplied ? "신청취소하기" : "동아리 신청하기", for: .normal)
                         owner.applyButton.backgroundColor = item.isApplied
-                        ? GCMSAsset.Colors.gcmsMainColor.color
-                        : GCMSAsset.Colors.gcmsThemeColor.color
+                        ? GCMSAsset.Colors.gcmsThemeColor.color
+                        : GCMSAsset.Colors.gcmsMainColor.color
                     } else {
                         owner.setClosedButton()
                     }
