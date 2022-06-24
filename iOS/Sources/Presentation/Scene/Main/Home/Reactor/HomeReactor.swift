@@ -111,26 +111,22 @@ extension HomeReactor {
 private extension HomeReactor {
     func viewDidLoad() -> Observable<Mutation> {
         let start = Observable.just(Mutation.setIsLoading(true))
+        let clubs: Observable<([ClubList], [ClubList], [ClubList])>
         if UserDefaultsLocal.shared.isApple {
-            let clubs = Observable.zip(
+            clubs = Observable.zip(
                 fetchGuestClubListUseCase.execute(type: .major).asObservable(),
                 fetchGuestClubListUseCase.execute(type: .editorial).asObservable(),
                 fetchGuestClubListUseCase.execute(type: .freedom).asObservable()
-            ).flatMap { major, editorial, freedom in
-                return Observable.concat([
-                    .just(Mutation.setClubList(.major, major)),
-                    .just(.setClubList(.editorial, editorial)),
-                    .just(.setClubList(.freedom, freedom)),
-                    .just(.setIsLoading(false))
-                ])
-            }.catchAndReturn(Mutation.setIsLoading(false))
-            return .concat([start, clubs])
+            )
         } else {
-            let clubs = Observable.zip(
+            clubs = Observable.zip(
                 fetchClubListsUseCase.execute(type: .major).asObservable(),
                 fetchClubListsUseCase.execute(type: .editorial).asObservable(),
                 fetchClubListsUseCase.execute(type: .freedom).asObservable()
-            ).flatMap { major, editorial, freedom in
+            )
+        }
+        let res = clubs
+            .flatMap { major, editorial, freedom in
                 return Observable.concat([
                     .just(Mutation.setClubList(.major, major)),
                     .just(.setClubList(.editorial, editorial)),
@@ -138,8 +134,7 @@ private extension HomeReactor {
                     .just(.setIsLoading(false))
                 ])
             }.catchAndReturn(Mutation.setIsLoading(false))
-            return .concat([start, clubs])
-        }
+        return .concat([start, res])
     }
     func guestLogoutButtonDidTap() -> Observable<Mutation> {
         steps.accept(GCMSStep.alert(title: nil, message: "게스트 계정을 로그아웃 하시겠습니까?", style: .alert, actions: [

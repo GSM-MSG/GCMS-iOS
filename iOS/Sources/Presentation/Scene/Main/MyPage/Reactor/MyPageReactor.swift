@@ -133,16 +133,14 @@ private extension MyPageReactor {
                 guard let self = self else { return }
                 self.withdrawalUseCase.execute()
                     .andThen(Observable.just(()))
-                    .catch { _ in
-                        self.errorAlert(message: "알 수 없는 이유로 탈퇴가 실패했습니다")
-                        return .empty()
-                    }
-                    .bind(onNext: { _ in
+                    .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "회원 탈퇴가 성공하였습니다", style: .alert, actions: [
                             .init(title: "확인", style: .default, handler: { _ in
                                 self.steps.accept(GCMSStep.onBoardingIsRequired)
                             })
                         ]))
+                    }, onError: { _ in
+                        self.errorAlert(message: "알 수 없는 이유로 탈퇴가 실패했습니다")
                     })
                     .disposed(by: self.disposeBag)
                     
