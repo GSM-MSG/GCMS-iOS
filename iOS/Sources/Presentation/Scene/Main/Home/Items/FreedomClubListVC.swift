@@ -52,6 +52,10 @@ final class FreedomClubListVC: BaseVC<HomeReactor> {
         
         sharedState
             .map(\.freedomClubList)
+            .distinctUntilChanged()
+            .do(afterNext: { [weak self] _ in
+                self?.clubListCollectionView.reloadData()
+            })
             .map { [ClubListSection.init(header: "", items: $0)] }
             .bind(to: clubListCollectionView.rx.items(dataSource: ds))
             .disposed(by: disposeBag)
