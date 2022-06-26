@@ -74,9 +74,11 @@ final class UpdateClubReactor: Reactor, Stepper {
     ) {
         self.legacyBannerUrl = club.bannerUrl
         self.legacyBanner = try? Data(contentsOf: URL(string: club.bannerUrl)!)
+        var activitiesData = [Data]()
         self.legacyImageUrl = club.activities.reduce(into: [Data:String](), { partialResult, url in
             if let data = try? Data(contentsOf: URL(string: url)!) {
                 partialResult[data] = url
+                activitiesData.append(data)
             }
         })
         initialState = State(
@@ -87,7 +89,7 @@ final class UpdateClubReactor: Reactor, Stepper {
             teacher: club.teacher,
             isBanner: true,
             imageData: try? Data(contentsOf: URL(string: club.bannerUrl)!),
-            activitiesData: club.activities.compactMap { try? Data(contentsOf: URL(string: $0)!) },
+            activitiesData: activitiesData,
             clubType: club.type,
             addedImage: [],
             removedImage: [],
@@ -193,25 +195,18 @@ private extension UpdateClubReactor {
     func secondNextButtonDidTap() -> Observable<Mutation> {
         var errorMessage = ""
         if currentState.title.isEmpty {
-            print(currentState.title)
-            print(currentState.title.isEmpty)
             errorMessage = "동아리 이름을 입력해주세요!"
         }
         else if currentState.description.isEmpty || currentState.description == "동아리 설명을 입력해주세요." {
             errorMessage = "동아리 설명을 입력해주세요!"
         }
         else if currentState.contact.isEmpty {
-            print(currentState.title)
             errorMessage = "연락처를 입력해주세요!"
         }
         else if currentState.notionLink.isEmpty {
-            print(currentState.notionLink)
-            print(initialState.notionLink)
             errorMessage = "노션 링크를 정확히 입력해주세요!"
         }
         else if !currentState.notionLink.hasPrefix("https://") {
-            print(currentState.notionLink)
-            print(initialState.notionLink)
             errorMessage = "?"
         }
         else {
