@@ -104,10 +104,10 @@ private extension HomeVC {
         }
     }
     func configNavigation(){
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: titleLabel)
         if UserDefaultsLocal.shared.isApple {
             self.navigationItem.setRightBarButton(guestLogoutButton, animated: true)
         } else {
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: titleLabel)
             self.navigationItem.setRightBarButtonItems([myPageButton, newClubButton], animated: true)
         }
         self.navigationItem.configBack()
