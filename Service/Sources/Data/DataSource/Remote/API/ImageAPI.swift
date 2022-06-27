@@ -47,10 +47,8 @@ extension ImageAPI: GCMSAPI {
     var headers: [String : String]? {
         return ["Content-type" : "multipart/form-data"]
     }
-    var errorMapper: [Int: GCMSError]?{
-        return [
-            403: .forbidden,
-            409: .conflict
-        ]
+    
+    var errorMapper: [Int : GCMSError]? {
+        return .none
     }
 }

@@ -106,9 +106,17 @@ extension ClubAPI: GCMSAPI {
         }
     }
     var errorMapper: [Int: GCMSError]?{
-        return [
-            403: .forbidden,
-            409: .conflict
-        ]
+        switch self {
+        case .login:
+            return [
+                403: .notGSMAccount,
+                404: .notFoundInGSM,
+                404: .notFoundEmail
+            ]
+        case .refresh:
+            return [
+                400: .invalidToken
+            ]
+        }
     }
 }
