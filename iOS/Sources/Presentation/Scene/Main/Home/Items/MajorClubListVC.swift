@@ -49,10 +49,14 @@ final class MajorClubListVC: BaseVC<HomeReactor> {
             cell.model = item
             return cell
         }
-        let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 2).observe(on: MainScheduler.asyncInstance)
         
         sharedState
             .map(\.majorClubList)
+            .distinctUntilChanged()
+            .do(afterNext: { [weak self] _ in
+                self?.clubListCollectionView.reloadData()
+            })
             .map { [ClubListSection.init(header: "", items: $0)] }
             .bind(to: clubListCollectionView.rx.items(dataSource: ds))
             .disposed(by: disposeBag)
