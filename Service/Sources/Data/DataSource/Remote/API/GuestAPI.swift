@@ -50,9 +50,15 @@ extension GuestAPI: GCMSAPI {
     var errorMapper: [Int: GCMSError]?{
         switch self {
         case .guestClubList:
-            <#code#>
+            return [
+                400: .clubTypeError,
+                401: .unauthorized
+            ]
         case .guestClubDetail:
-            <#code#>
+            return [
+                401: .unauthorized,
+                404: .notFoundClub
+            ]
         }
     }
 }
