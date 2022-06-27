@@ -45,14 +45,13 @@ extension AuthAPI: GCMSAPI {
         switch self {
         case .login:
             return [
+                400: .invalidToken,
                 403: .notGSMAccount,
                 404: .notFoundInGSM,
                 404: .notFoundInEmail
             ]
         case .refresh:
-            return [
-                400: .invalidToken
-            ]
+            return .none
         }
     }
     
