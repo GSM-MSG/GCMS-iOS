@@ -15,6 +15,9 @@ public enum GCMSError: Error {
     // MARK: Club
     case notClubHead
     case canNotKickHead
+    // MARK: User
+    case canNotLeaveTheClub
+    case notExistUser
     // MARK: - 404
     // MARK: Login
     case notFoundInGSM
@@ -31,13 +34,13 @@ public enum GCMSError: Error {
     case alreadyExistClub
     case belongOtherClub
     case belongClub
-
+    case appliedToAnotherClub
 }
 
 extension GCMSError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .error, .invalidToken, .unauthorized, .clubTypeError, .notFoundInUser:
+        case .error, .invalidToken, .unauthorized, .clubTypeError, .notFoundInUser, .notExistUser:
             return "알수없는 에러가 발생했습니다"
         case .noInternet:
             return "인터넷 연결이 원활하지 않습니다"
@@ -48,6 +51,8 @@ extension GCMSError: LocalizedError {
             return "동아리 부장이 아니면 수정할 수 없습니다"
         case .canNotKickHead:
             return "부장은 자기자신을 강퇴할 수 없습니다"
+        case .canNotLeaveTheClub:
+            return "부장은 동아리를 탈퇴 할 수 없습니다"
         // MARK: - 404
         case .notFoundInGSM:
             return "GSM학생이 아닙니다"
@@ -67,6 +72,8 @@ extension GCMSError: LocalizedError {
             return "다른 동아리에 소속되어있습니다"
         case .belongClub:
             return "이미 동아리에 속해있습니다"
+        case .appliedToAnotherClub:
+            return "이미 다른 동아리에 신청했습니다"
         }
     }
 }
