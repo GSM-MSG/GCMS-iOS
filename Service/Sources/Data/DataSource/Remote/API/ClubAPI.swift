@@ -107,16 +107,36 @@ extension ClubAPI: GCMSAPI {
     }
     var errorMapper: [Int: GCMSError]?{
         switch self {
-        case .login:
-            return [
-                403: .notGSMAccount,
-                404: .notFoundInGSM,
-                404: .notFoundEmail
-            ]
-        case .refresh:
-            return [
-                400: .invalidToken
-            ]
+        case .clubList:
+            <#code#>
+        case .clubDetail:
+            <#code#>
+        case .createNewClub:
+            <#code#>
+        case .updateClub:
+            <#code#>
+        case .deleteClub:
+            <#code#>
+        case .clubMember:
+            <#code#>
+        case .clubApplicant:
+            <#code#>
+        case .userAccept:
+            <#code#>
+        case .userReject:
+            <#code#>
+        case .clubOpen:
+            <#code#>
+        case .clubClose:
+            <#code#>
+        case .userKick:
+            <#code#>
+        case .apply:
+            <#code#>
+        case .cancel:
+            <#code#>
+        case .delegation:
+            <#code#>
         }
     }
 }

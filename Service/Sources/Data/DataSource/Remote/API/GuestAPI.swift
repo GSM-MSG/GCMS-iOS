@@ -49,16 +49,10 @@ extension GuestAPI: GCMSAPI {
     
     var errorMapper: [Int: GCMSError]?{
         switch self {
-        case .login:
-            return [
-                403: .notGSMAccount,
-                404: .notFoundInGSM,
-                404: .notFoundEmail
-            ]
-        case .refresh:
-            return [
-                400: .invalidToken
-            ]
+        case .guestClubList(type: let type):
+            <#code#>
+        case .guestClubDetail(query: let query):
+            <#code#>
         }
     }
 }

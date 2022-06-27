@@ -70,16 +70,16 @@ extension UserAPI: GCMSAPI {
     
     var errorMapper: [Int: GCMSError]?{
         switch self {
-        case .login:
-            return [
-                403: .notGSMAccount,
-                404: .notFoundInGSM,
-                404: .notFoundEmail
-            ]
-        case .refresh:
-            return [
-                400: .invalidToken
-            ]
+        case .myProfile:
+            <#code#>
+        case .editProfile(url: let url):
+            <#code#>
+        case .search(name: let name, type: let type):
+            <#code#>
+        case .exit(_):
+            <#code#>
+        case .withdrawal:
+            <#code#>
         }
     }
 }
