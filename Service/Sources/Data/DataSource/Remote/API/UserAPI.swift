@@ -71,15 +71,23 @@ extension UserAPI: GCMSAPI {
     var errorMapper: [Int: GCMSError]?{
         switch self {
         case .myProfile:
-            <#code#>
-        case .editProfile(url: let url):
-            <#code#>
-        case .search(name: let name, type: let type):
-            <#code#>
-        case .exit(_):
-            <#code#>
+            return .none
+        case .editProfile:
+            return .none
+        case .search:
+            return .none
+        case .exit:
+            return [
+                401: .unauthorized,
+                403: .canNotLeaveTheClub,
+                404: .notFoundClub,
+                406: .notExistInClub
+            ]
         case .withdrawal:
-            <#code#>
+            return [
+                401: .unauthorized,
+                403: .notExistUser
+            ]
         }
     }
 }

@@ -49,9 +49,9 @@ extension GuestAPI: GCMSAPI {
     
     var errorMapper: [Int: GCMSError]?{
         switch self {
-        case .guestClubList(type: let type):
+        case .guestClubList:
             <#code#>
-        case .guestClubDetail(query: let query):
+        case .guestClubDetail:
             <#code#>
         }
     }
