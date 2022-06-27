@@ -21,13 +21,15 @@ public enum GCMSError: Error {
     // MARK: Club
     case notFoundClub
     case notFoundUser
+    case notFoundApplyUser
     // MARK: - 406
     // MARK: Club
     case notExistClub
     // MARK: - 409
     // MARK: Club
     case alreadyExistClub
-    case belogOtherClub
+    case belongOtherClub
+    case belongClub
 
 }
 
@@ -50,14 +52,18 @@ extension GCMSError: LocalizedError {
             return "이메일이 올바르지 않습니다"
         case .notFoundClub:
             return "동아리를 찾을 수 없습니다"
+        case .notFoundApplyUser:
+            return "유저를 찾을 수 없습니다"
         // MARK: - 406
         case .notExistClub:
             return "동아리에 속해있지 않습니다"
         // MARK: - 409
         case .alreadyExistClub:
             return "이미 존재하는 동아리입니다"
-        case .belogOtherClub:
+        case .belongOtherClub:
             return "다른 동아리에 소속되어있습니다"
+        case .belongClub:
+            return "이미 동아리에 속해있습니다"
         }
     }
 }
