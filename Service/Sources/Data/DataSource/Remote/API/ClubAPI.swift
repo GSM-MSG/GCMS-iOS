@@ -122,8 +122,7 @@ extension ClubAPI: GCMSAPI {
                 400: .invalidInput,
                 401: .unauthorized,
                 404: .notFoundUser,
-                409: .alreadyExistClub,
-                409: .belongOtherClub
+                409: .alreadyExistClubOrBelongOtherClub
             ]
         case .updateClub:
             return [
@@ -152,18 +151,14 @@ extension ClubAPI: GCMSAPI {
         case .userAccept:
             return [
                 403: .notClubHead,
-                404: .notFoundClub,
-                404: .notFoundInApplyUser,
-                409: .belongClub,
-                409: .belongOtherClub
+                404: .notFoundInApplyUserOrNotFoundClub,
+                409: .belongOtherClubOrBelongClub
             ]
         case .userReject:
             return [
                 403: .notClubHead,
-                404: .notFoundClub,
-                404: .notFoundInApplyUser,
-                409: .belongClub,
-                409: .belongOtherClub
+                404: .notFoundInApplyUserOrNotFoundClub,
+                409: .belongOtherClubOrBelongClub
             ]
         case .clubOpen:
             return [
@@ -178,21 +173,18 @@ extension ClubAPI: GCMSAPI {
         case .userKick:
             return [
                 401: .unauthorized,
-                403: .notClubHead,
-                403: .canNotKickHead
+                403: .canNotKickHeadOrNotClubHead
             ]
         case .apply:
             return [
                 401: .unauthorized,
                 404: .notFoundClub,
-                409: .belongClub,
-                409: .appliedToAnotherClub
+                409: .appliedToAnotherClubOrBelongClub
             ]
         case .cancel:
             return [
                 401: .unauthorized,
-                404: .notFoundClub,
-                404: .notFoundUser
+                404: .notFoundInApplyUserOrNotFoundClub
             ]
         case .delegation:
             return [

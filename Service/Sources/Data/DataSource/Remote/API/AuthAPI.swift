@@ -47,8 +47,7 @@ extension AuthAPI: GCMSAPI {
             return [
                 400: .invalidToken,
                 403: .notGSMAccount,
-                404: .notFoundInGSM,
-                404: .notFoundInEmail
+                404: .notFoundInGSMOrEmail
             ]
         case .refresh:
             return .none
