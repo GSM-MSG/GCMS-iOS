@@ -175,6 +175,13 @@ extension OnBoardingVC: ASAuthorizationControllerDelegate, ASAuthorizationContro
         self.view.window ?? .init()
     }
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let cred = authorization.credential as? ASAuthorizationAppleIDCredential {
+            print(String(data: cred.identityToken ?? .init(), encoding: .utf8))
+            print(String(data: cred.authorizationCode ?? .init(), encoding: .utf8))
+        } else {
+            
+        }
+        
         self.reactor?.action.onNext(.appleSigninCompleted)
     }
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {

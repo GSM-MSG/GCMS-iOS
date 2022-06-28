@@ -19,6 +19,7 @@ final class OnBoardingReactor: Reactor, Stepper {
         case googleSigninButtonDidTap(UIViewController)
         case googleSigninCompleted
         case appleSigninCompleted
+        case appleIdTokenReceived(String)
         case appleSigninFailed
         case guestSigninButtonDidTap
     }
@@ -54,6 +55,8 @@ extension OnBoardingReactor {
             return signinFailed(message: "알 수 없는 이유로 로그인이 실패했습니다.")
         case .googleSigninCompleted:
             return googleSigninCompleted()
+        case let .appleIdTokenReceived(token):
+            return .empty()
         }
         return .empty()
     }
