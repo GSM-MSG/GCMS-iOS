@@ -13,13 +13,14 @@ final class OnBoardingReactor: Reactor, Stepper {
     private let disposeBag: DisposeBag = .init()
     
     private let loginUseCase: LoginUseCase
+    private let issueGuestTokenUseCase: IssueGuestTokenUseCase
     
     // MARK: - Reactor
     enum Action {
         case googleSigninButtonDidTap(UIViewController)
         case googleSigninCompleted
         case appleSigninCompleted
-        case appleIdTokenReceived(String)
+        case appleIdTokenReceived(idToken: String, code: String)
         case appleSigninFailed
         case guestSigninButtonDidTap
     }
@@ -33,12 +34,14 @@ final class OnBoardingReactor: Reactor, Stepper {
     
     // MARK: - Init
     init(
-        loginUseCase: LoginUseCase
+        loginUseCase: LoginUseCase,
+        issueGuestTokenUseCase: IssueGuestTokenUseCase
     ) {
         initialState = State(
             isLoading: false
         )
         self.loginUseCase = loginUseCase
+        self.issueGuestTokenUseCase = issueGuestTokenUseCase
     }
     
 }
@@ -55,8 +58,8 @@ extension OnBoardingReactor {
             return signinFailed(message: "알 수 없는 이유로 로그인이 실패했습니다.")
         case .googleSigninCompleted:
             return googleSigninCompleted()
-        case let .appleIdTokenReceived(token):
-            return .empty()
+        case let .appleIdTokenReceived(token, code):
+            return appleTokenReceived(idToken: token, code: code)
         }
         return .empty()
     }
@@ -100,7 +103,7 @@ private extension OnBoardingReactor {
         return .empty()
     }
     func googleSigninTokenReceived(token: String) {
-        UserDefaultsLocal.shared.isApple = false
+        UserDefaultsLocal.shared.isGuest = false
         loginUseCase.execute(idToken: token)
             .andThen(.just(()))
             .map { Action.googleSigninCompleted }
@@ -113,12 +116,25 @@ private extension OnBoardingReactor {
         return .empty()
     }
     func appleSigninCompleted() -> Observable<Mutation> {
-        UserDefaultsLocal.shared.isApple = true
+        UserDefaultsLocal.shared.isGuest = true
         steps.accept(GCMSStep.clubListIsRequired)
         return .empty()
     }
-    func signinFailed(message: String = "로그인이 실패하였습니다") -> Observable<Mutation> {
+    func signinFailed(message: String = "로그인을 실패하였습니다") -> Observable<Mutation> {
         self.steps.accept(GCMSStep.failureAlert(title: nil, message: message))
+        return .empty()
+    }
+    func appleTokenReceived(idToken: String, code: String) -> Observable<Mutation> {
+        issueGuestTokenUseCase.execute(idToken: idToken, code: code)
+            .andThen(Observable.just(()))
+            .subscribe(with: self) { owner, _ in
+                UserDefaultsLocal.shared.isGuest = true
+                UserDefaultsLocal.shared.isApple = true
+                owner.steps.accept(GCMSStep.clubListIsRequired)
+            } onError: { owner, e in
+                owner.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription, action: []))
+            }
+            .disposed(by: disposeBag)
         return .empty()
     }
 }
