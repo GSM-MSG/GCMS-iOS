@@ -106,7 +106,7 @@ private extension DetailClubReactor {
     func viewDidLoad() -> Observable<Mutation> {
         let start = Observable.just(Mutation.setIsLoading(true))
         let task: Single<Club>
-        task = UserDefaultsLocal.shared.isApple
+        task = UserDefaultsLocal.shared.isGuest
         ? fetchGuestDetailClubUseCase.execute(query: query)
         : fetchDetailClubUseCase.execute(query: query)
         

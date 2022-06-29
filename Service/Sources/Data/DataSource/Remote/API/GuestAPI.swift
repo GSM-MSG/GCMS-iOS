@@ -3,6 +3,8 @@ import Moya
 enum GuestAPI {
     case guestClubList(type: ClubType)
     case guestClubDetail(query: ClubRequestQuery)
+    case tokenIssue(idToken: String, code: String)
+    case tokenRevoke(refreshToken: String)
 }
 
 extension GuestAPI: GCMSAPI {
@@ -16,6 +18,10 @@ extension GuestAPI: GCMSAPI {
             return "/list"
         case .guestClubDetail:
             return "/detail"
+        case .tokenIssue:
+            return "/apple"
+        case .tokenRevoke:
+            return "/apple/revoke"
         }
     }
     
@@ -23,6 +29,8 @@ extension GuestAPI: GCMSAPI {
         switch self {
         case .guestClubList, .guestClubDetail:
             return .get
+        case .tokenIssue, .tokenRevoke:
+            return .post
         }
     }
     
@@ -37,14 +45,20 @@ extension GuestAPI: GCMSAPI {
                 "q": q.q,
                 "type": q.type
             ], encoding: URLEncoding.queryString)
+        case let .tokenIssue(idToken, code):
+            return .requestParameters(parameters: [
+                "idToken": idToken,
+                "code": code
+            ], encoding: JSONEncoding.default)
+        case let .tokenRevoke(refreshToken):
+            return .requestParameters(parameters: [
+                "refreshToken": refreshToken
+            ], encoding: JSONEncoding.default)
         }
     }
     
     var jwtTokenType: JWTTokenType? {
-        switch self {
-        case .guestClubList, .guestClubDetail:
-            return JWTTokenType.none
-        }
+        return JWTTokenType.none
     }
     
     var errorMapper: [Int: GCMSError]?{

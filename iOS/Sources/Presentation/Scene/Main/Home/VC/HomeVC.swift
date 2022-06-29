@@ -25,6 +25,10 @@ final class HomeVC: TabmanViewController, View {
                                                     style: .plain,
                                                     target: nil,
                                                     action: nil)
+    private lazy var guestExitButton = UIBarButtonItem(image: .init(systemName: "gearshape.fill")?.tintColor(GCMSAsset.Colors.gcmsGray4.color),
+                                                       style: .plain,
+                                                       target: nil,
+                                                       action: nil)
     private lazy var indicator = AnimationView(name: "GCMS-Indicator").then {
         $0.contentMode = .scaleAspectFit
         $0.loopMode = .loop
@@ -105,7 +109,9 @@ private extension HomeVC {
     }
     func configNavigation(){
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: titleLabel)
-        if UserDefaultsLocal.shared.isApple {
+        if UserDefaultsLocal.shared.isGuest && UserDefaultsLocal.shared.isApple {
+            self.navigationItem.setRightBarButtonItems([guestLogoutButton, guestExitButton], animated: true)
+        } else if UserDefaultsLocal.shared.isGuest {
             self.navigationItem.setRightBarButton(guestLogoutButton, animated: true)
         } else {
             self.navigationItem.setRightBarButtonItems([myPageButton, newClubButton], animated: true)
@@ -131,6 +137,11 @@ private extension HomeVC {
         
         guestLogoutButton.rx.tap
             .map { _ in Reactor.Action.guestLogoutButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        guestExitButton.rx.tap
+            .map { _ in Reactor.Action.appleExitButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }

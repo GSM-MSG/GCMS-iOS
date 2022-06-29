@@ -12,6 +12,7 @@ final class HomeReactor: Reactor, Stepper {
     
     private let fetchClubListsUseCase: FetchClubListUseCase
     private let fetchGuestClubListUseCase: FetchGuestClubListUseCase
+    private let revokeGuestTokenUseCase: RevokeGuestTokenUseCase
     
     // MARK: - Reactor
     enum Action {
@@ -22,6 +23,7 @@ final class HomeReactor: Reactor, Stepper {
         case updateLoading(Bool)
         case clubDidTap(ClubRequestQuery)
         case guestLogoutButtonDidTap
+        case appleExitButtonDidTap
         case refreshTrigger(ClubType)
     }
     enum Mutation {
@@ -43,7 +45,8 @@ final class HomeReactor: Reactor, Stepper {
     // MARK: - Init
     init(
         fetchClubListsUseCase: FetchClubListUseCase,
-        fetchGuestClubListUseCase: FetchGuestClubListUseCase
+        fetchGuestClubListUseCase: FetchGuestClubListUseCase,
+        revokeGuestTokenUseCase: RevokeGuestTokenUseCase
     ) {
         initialState = State(
             majorClubList: [],
@@ -55,6 +58,7 @@ final class HomeReactor: Reactor, Stepper {
         )
         self.fetchClubListsUseCase = fetchClubListsUseCase
         self.fetchGuestClubListUseCase = fetchGuestClubListUseCase
+        self.revokeGuestTokenUseCase = revokeGuestTokenUseCase
     }
     
 }
@@ -79,6 +83,8 @@ extension HomeReactor {
             return refresh(type: type)
         case let .viewDidAppear(type):
             return .just(.setClubType(type))
+        case .appleExitButtonDidTap:
+            return appleExitButtonDidTap()
         }
         return .empty()
     }
@@ -112,7 +118,7 @@ private extension HomeReactor {
     func viewDidLoad() -> Observable<Mutation> {
         let start = Observable.just(Mutation.setIsLoading(true))
         let clubs: Observable<([ClubList], [ClubList], [ClubList])>
-        if UserDefaultsLocal.shared.isApple {
+        if UserDefaultsLocal.shared.isGuest {
             clubs = Observable.zip(
                 fetchGuestClubListUseCase.execute(type: .major).asObservable(),
                 fetchGuestClubListUseCase.execute(type: .editorial).asObservable(),
@@ -139,7 +145,7 @@ private extension HomeReactor {
     func guestLogoutButtonDidTap() -> Observable<Mutation> {
         steps.accept(GCMSStep.alert(title: nil, message: "게스트 계정을 로그아웃 하시겠습니까?", style: .alert, actions: [
             .init(title: "확인", style: .default, handler: { [weak self] _ in
-                UserDefaultsLocal.shared.isApple = false
+                UserDefaultsLocal.shared.isGuest = false
                 self?.steps.accept(GCMSStep.onBoardingIsRequired)
             }),
             .init(title: "취소", style: .cancel)
@@ -159,5 +165,31 @@ private extension HomeReactor {
             }
             .catchAndReturn(Mutation.setIsLoading(false))
         return .concat([start, task])
+    }
+    func appleExitButtonDidTap() -> Observable<Mutation> {
+        self.steps.accept(GCMSStep.alert(title: "회원탈퇴", message: "정말로 탈퇴하시겠습니까?", style: .alert, actions: [
+            .init(title: "탈퇴", style: .destructive, handler: { [weak self] _ in
+                self?.revokeToken()
+            }),
+            .init(title: "취소", style: .cancel)
+        ]))
+        return .empty()
+    }
+    func revokeToken() {
+        revokeGuestTokenUseCase.execute()
+            .andThen(Observable.just(()))
+            .subscribe(with: self) { owner, _ in
+                owner.steps.accept(GCMSStep.alert(title: nil, message: "회원탈퇴에 성공했습니다.", style: .alert, actions: [
+                    .init(title: "확인", style: .destructive, handler: { _ in
+                        UserDefaultsLocal.shared.isApple = false
+                        UserDefaultsLocal.shared.isGuest = false
+                        owner.steps.accept(GCMSStep.onBoardingIsRequired)
+                    })
+                ]))
+            } onError: { owner, e in
+                owner.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription, action: []))
+            }
+            .disposed(by: disposeBag)
+
     }
 }

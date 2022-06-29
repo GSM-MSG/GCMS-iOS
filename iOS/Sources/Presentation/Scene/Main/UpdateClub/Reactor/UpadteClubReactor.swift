@@ -97,6 +97,7 @@ final class UpdateClubReactor: Reactor, Stepper {
         )
         self.updateClubUseCase = updateClubUseCase
         self.uploadImagesUseCase = uploadImagesUseCase
+        
     }
     
 }
@@ -190,18 +191,19 @@ extension UpdateClubReactor {
 private extension UpdateClubReactor {
     func secondNextButtonDidTap() -> Observable<Mutation> {
         var errorMessage = ""
-        if currentState.title.isEmpty && initialState.title.isEmpty {
+        if currentState.title.isEmpty {
             errorMessage = "동아리 이름을 입력해주세요!"
         }
         else if currentState.description.isEmpty || currentState.description == "동아리 설명을 입력해주세요." {
             errorMessage = "동아리 설명을 입력해주세요!"
         }
-        else if currentState.contact.isEmpty && initialState.contact.isEmpty {
+        else if currentState.contact.isEmpty {
             errorMessage = "연락처를 입력해주세요!"
         }
-        else if currentState.notionLink.isEmpty && !currentState.notionLink.hasPrefix("https://") {
+        else if currentState.notionLink.isEmpty || !currentState.notionLink.hasPrefix("https://") {
             errorMessage = "노션 링크를 정확히 입력해주세요!"
-        } else {
+        }
+        else {
             steps.accept(GCMSStep.secondUpdateClubIsRequired(reactor: self))
         }
         if !errorMessage.isEmpty {
