@@ -54,17 +54,6 @@ final class FirstUpdateClubVC: BaseVC<UpdateClubReactor> {
     }
     
     // MARK: - UI
-    override func setup() {
-        guard let reactor = reactor else { return }
-        let initialState = reactor.initialState
-        
-        clubNameTextField.text = initialState.title
-        clubDescriptionTextView.text = initialState.description
-        clubDescriptionTextView.textColor = GCMSAsset.Colors.gcmsGray1.color
-        contactTextField.text = initialState.contact
-        notionLinkTextField.text = initialState.notionLink
-        teacherTextField.text = initialState.teacher
-    }
     override func addView() {
         view.addSubViews(scrollView, nextButton)
         scrollView.addSubViews(progressBar, clubNameTextField, clubDescriptionHeaderLabel, clubDescriptionTextView, contactTextField, notionLinkHeaderLabel, notionLinkTextField, teacherTextField)
@@ -140,6 +129,26 @@ final class FirstUpdateClubVC: BaseVC<UpdateClubReactor> {
             }
             .disposed(by: disposeBag)
         
+        clubNameTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
+            .map(Reactor.Action.updateTitle)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        notionLinkTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
+            .map(Reactor.Action.updateNotionLink)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        teacherTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
+            .map(Reactor.Action.updateTeacher)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        contactTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
+            .map(Reactor.Action.updateContact)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         clubDescriptionTextView.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
             .do(onNext: { [weak self] _ in
                 let size = CGSize(width: self?.view.frame.width ?? 0, height: .infinity)
@@ -178,29 +187,18 @@ final class FirstUpdateClubVC: BaseVC<UpdateClubReactor> {
             .disposed(by: disposeBag)
     }
     override func bindView(reactor: UpdateClubReactor) {
-        clubNameTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
-            .map(Reactor.Action.updateTitle)
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        notionLinkTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
-            .map(Reactor.Action.updateNotionLink)
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        teacherTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
-            .map(Reactor.Action.updateTeacher)
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        contactTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
-            .map(Reactor.Action.updateContact)
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
         nextButton.rx.tap
             .map { Reactor.Action.secondNextButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        let initialState = reactor.initialState
+        
+        clubNameTextField.text = initialState.title
+        clubDescriptionTextView.text = initialState.description
+        clubDescriptionTextView.textColor = GCMSAsset.Colors.gcmsGray1.color
+        contactTextField.text = initialState.contact
+        notionLinkTextField.text = initialState.notionLink
+        teacherTextField.text = initialState.teacher
     }
 }
