@@ -193,6 +193,7 @@ extension UpdateClubReactor {
 // MARK: - Method
 private extension UpdateClubReactor {
     func secondNextButtonDidTap() -> Observable<Mutation> {
+        print(currentState)
         var errorMessage = ""
         if currentState.title.isEmpty {
             errorMessage = "동아리 이름을 입력해주세요!"
