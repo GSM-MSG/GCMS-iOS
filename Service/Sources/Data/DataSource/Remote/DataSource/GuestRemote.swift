@@ -14,4 +14,13 @@ final class GuestRemote: BaseRemote<GuestAPI> {
             .map(DetailClubResponse.self)
             .map { $0.toDomain() }
     }
+    func fetchGuestRefreshToken(idToken: String, code: String) -> Single<String> {
+        request(.tokenIssue(idToken: idToken, code: code))
+            .map(GuestRefreshTokenResponse.self)
+            .map(\.refreshToken)
+    }
+    func revokeGuestToken(refreshToken: String) -> Completable {
+        request(.tokenRevoke(refreshToken: refreshToken))
+            .asCompletable()
+    }
 }
