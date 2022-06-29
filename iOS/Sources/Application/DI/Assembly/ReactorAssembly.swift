@@ -6,14 +6,16 @@ final class ReactorAssembly: Assembly {
     func assemble(container: Container) {
         container.register(OnBoardingReactor.self) { r in
              OnBoardingReactor(
-                loginUseCase: r.resolve(LoginUseCase.self)!
+                loginUseCase: r.resolve(LoginUseCase.self)!,
+                issueGuestTokenUseCase: r.resolve(IssueGuestTokenUseCase.self)!
             )
         }
         
         container.register(HomeReactor.self) { r in
              HomeReactor(
                 fetchClubListsUseCase: r.resolve(FetchClubListUseCase.self)!,
-                fetchGuestClubListUseCase: r.resolve(FetchGuestClubListUseCase.self)!
+                fetchGuestClubListUseCase: r.resolve(FetchGuestClubListUseCase.self)!,
+                revokeGuestTokenUseCase: r.resolve(RevokeGuestTokenUseCase.self)!
             )
         }
         
