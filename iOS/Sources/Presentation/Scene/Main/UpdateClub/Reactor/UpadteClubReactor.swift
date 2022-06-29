@@ -98,9 +98,6 @@ final class UpdateClubReactor: Reactor, Stepper {
         self.updateClubUseCase = updateClubUseCase
         self.uploadImagesUseCase = uploadImagesUseCase
         
-        self.action.onNext(.updateTitle(club.title))
-        self.action.onNext(.updateDescription(club.description))
-        
     }
     
 }
@@ -203,11 +200,8 @@ private extension UpdateClubReactor {
         else if currentState.contact.isEmpty {
             errorMessage = "연락처를 입력해주세요!"
         }
-        else if currentState.notionLink.isEmpty {
+        else if currentState.notionLink.isEmpty || !currentState.notionLink.hasPrefix("https://") {
             errorMessage = "노션 링크를 정확히 입력해주세요!"
-        }
-        else if !currentState.notionLink.hasPrefix("https://") {
-            errorMessage = "?"
         }
         else {
             steps.accept(GCMSStep.secondUpdateClubIsRequired(reactor: self))
