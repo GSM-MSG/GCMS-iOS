@@ -10,8 +10,10 @@ public enum GCMSError: Error {
     case invalidInput
     case noMebmerClub
     case failedAppleLogin
+    
     // MARK: - 401
     case unauthorized
+    
     // MARK: - 403
     // MARK: Login
     case notGSMAccount
@@ -21,6 +23,7 @@ public enum GCMSError: Error {
     // MARK: User
     case canNotLeaveTheClub
     case notExistUser
+    
     // MARK: - 404
     // MARK: Login
     case notFoundInGSMOrEmail
@@ -29,9 +32,11 @@ public enum GCMSError: Error {
     case notFoundUser
     case notFoundInApplyUserOrNotFoundClub
     case notFoundUserOrNotFoundClub
+    
     // MARK: - 406
     // MARK: Club
     case notExistInClub
+    
     // MARK: - 409
     // MARK: Club
     case alreadyExistClubOrBelongOtherClub
