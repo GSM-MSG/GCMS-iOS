@@ -56,8 +56,8 @@ extension OnBoardingReactor {
             return googleSigninButtonDidTap(vc: vc)
         case .appleSigninCompleted, .guestSigninButtonDidTap:
             return appleSigninCompleted()
-        case .signinFailed:
-            return signinFailed(message: "알 수 없는 이유로 로그인이 실패했습니다.")
+        case let .signinFailed(message):
+            return signinFailed(message: message)
         case .googleSigninCompleted:
             return googleSigninCompleted()
         case .termsOfServiceButtonDidTap:
@@ -96,7 +96,6 @@ private extension OnBoardingReactor {
                     
                     user?.authentication.do({ auth in
                         if let idToken = auth.idToken {
-                            print(idToken)
                             self?.googleSigninTokenReceived(token: idToken)
                         }
                     })
@@ -115,7 +114,7 @@ private extension OnBoardingReactor {
             .subscribe(with: self, onNext: { owner, action in
                 owner.action.onNext(action)
             }, onError: { owner, e in
-                owner.action.onNext(.signinFailed(message: e.asGCMSError?.localizedDescription))
+                owner.action.onNext(.signinFailed(message: e.asGCMSError?.errorDescription))
             })
             .disposed(by: disposeBag)
     }
@@ -128,7 +127,7 @@ private extension OnBoardingReactor {
         steps.accept(GCMSStep.clubListIsRequired)
         return .empty()
     }
-    func signinFailed(message: String = "로그인을 실패하였습니다") -> Observable<Mutation> {
+    func signinFailed(message: String? = "로그인을 실패하였습니다") -> Observable<Mutation> {
         self.steps.accept(GCMSStep.failureAlert(title: nil, message: message))
         return .empty()
     }

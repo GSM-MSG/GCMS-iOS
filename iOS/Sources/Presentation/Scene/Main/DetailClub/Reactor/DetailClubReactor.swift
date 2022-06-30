@@ -18,9 +18,10 @@ final class DetailClubReactor: Reactor, Stepper {
         case statusButtonDidTap
         case linkButtonDidTap
         case bottomButtonDidTap
+        case updateClub(Club?)
     }
     enum Mutation {
-        case setClub(Club)
+        case setClub(Club?)
         case setIsLoading(Bool)
     }
     struct State {
@@ -80,6 +81,8 @@ extension DetailClubReactor {
             UIApplication.shared.open(URL(string: currentState.clubDetail?.notionLink ?? "https://www.google.com") ?? .init(string: "https://www.google.com")!)
         case .bottomButtonDidTap:
             return bottomButtonDidTap()
+        case let .updateClub(club):
+            return .just(.setClub(club))
         }
         return .empty()
     }
@@ -208,6 +211,7 @@ private extension DetailClubReactor {
                     .andThen(Observable.just(()))
                     .subscribe { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 마감되었습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
+                        self.action.onNext(.updateClub(self.currentState.clubDetail?.copyForChange(isOpen: false)))
                     } onError: { e in
                         self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
                     }
@@ -225,6 +229,7 @@ private extension DetailClubReactor {
                     .andThen(Observable.just(()))
                     .subscribe { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 열렸습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
+                        self.action.onNext(.updateClub(self.currentState.clubDetail?.copyForChange(isOpen: true)))
                     } onError: { e in
                         self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
                     }
@@ -242,6 +247,7 @@ private extension DetailClubReactor {
                     .andThen(Observable.just(()))
                     .subscribe { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 성공하였습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
+                        self.action.onNext(.updateClub(self.currentState.clubDetail?.copyForChange(isApplied: true)))
                     } onError: { e in
                         self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
                     }
@@ -259,6 +265,7 @@ private extension DetailClubReactor {
                     .andThen(Observable.just(()))
                     .subscribe { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 취소되었습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
+                        self.action.onNext(.updateClub(self.currentState.clubDetail?.copyForChange(isApplied: false)))
                     } onError: { e in
                         self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
                     }

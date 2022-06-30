@@ -57,7 +57,7 @@ private extension OnBoardingFlow{
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
     func dismissVC() -> FlowContributors {
-        self.rootVC.visibleViewController?.dismiss(animated: true)
+        self.rootVC.topViewController?.dismiss(animated: true)
         return .none
     }
 
@@ -72,7 +72,7 @@ private extension OnBoardingFlow{
     func presentToAlert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction]) -> FlowContributors {
         let alert = UIAlertController(title: title, message: message, preferredStyle: style)
         actions.forEach { alert.addAction($0) }
-        self.rootVC.visibleViewController?.present(alert, animated: true)
+        self.rootVC.topViewController?.present(alert, animated: true)
         return .none
     }
     func presentToFailureAlert(title: String?, message: String?, action: [UIAlertAction]) -> FlowContributors {
@@ -82,7 +82,7 @@ private extension OnBoardingFlow{
         } else {
             alert.addAction(.init(title: "확인", style: .default))
         }
-        self.rootVC.visibleViewController?.present(alert, animated: true)
+        self.rootVC.topViewController?.present(alert, animated: true)
         return .none
     }
 }

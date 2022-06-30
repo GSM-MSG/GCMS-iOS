@@ -20,19 +20,19 @@ public struct Club: Equatable {
         lhs.title == rhs.title && lhs.`type` == rhs.`type`
     }
     
-    public let type: ClubType
-    public let bannerUrl: String
-    public let title: String
-    public let description: String
-    public let contact: String
-    public let head: User
-    public let notionLink: String
-    public let scope: MemberScope
-    public let isApplied: Bool
-    public let isOpen: Bool
-    public let activities: [String]
-    public let member: [User]
-    public let teacher: String?
+    public var type: ClubType
+    public var bannerUrl: String
+    public var title: String
+    public var description: String
+    public var contact: String
+    public var head: User
+    public var notionLink: String
+    public var scope: MemberScope
+    public var isApplied: Bool
+    public var isOpen: Bool
+    public var activities: [String]
+    public var member: [User]
+    public var teacher: String?
 }
 
 public extension Club {
@@ -55,4 +55,35 @@ public extension Club {
             .dummy
         ], teacher: nil
     )
+    public func copyForChange(
+        type: ClubType? = nil,
+        bannerUrl: String? = nil,
+        title: String? = nil,
+        description: String? = nil,
+        contact: String? = nil,
+        head: User? = nil,
+        notionLink: String? = nil,
+        scope: MemberScope? = nil,
+        isApplied: Bool? = nil,
+        isOpen: Bool? = nil,
+        activities: [String]? = nil,
+        member: [User]? = nil,
+        teacher: String? = nil
+    ) -> Club {
+        return Club(
+            type: type ?? self.type,
+            bannerUrl: bannerUrl ?? self.bannerUrl,
+            title: title ?? self.title,
+            description: description ?? self.description,
+            contact: contact ?? self.contact,
+            head: head ?? self.head,
+            notionLink: notionLink ?? self.notionLink,
+            scope: scope ?? self.scope,
+            isApplied: isApplied ?? self.isApplied,
+            isOpen: isOpen ?? self.isOpen,
+            activities: activities ?? self.activities,
+            member: member ?? self.member,
+            teacher: teacher ?? self.teacher
+        )
+    }
 }

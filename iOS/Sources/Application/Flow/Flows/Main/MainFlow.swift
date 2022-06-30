@@ -100,17 +100,17 @@ private extension MainFlow{
     func presentToAlert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction]) -> FlowContributors {
         let alert = UIAlertController(title: title, message: message, preferredStyle: style)
         actions.forEach { alert.addAction($0) }
-        self.rootVC.visibleViewController?.present(alert, animated: true)
+        self.rootVC.topViewController?.present(alert, animated: true)
         return .none
     }
     func presentToMemberAppend(closure: @escaping (([User]) -> Void), clubType: ClubType) -> FlowContributors {
         let reactor = AppDelegate.container.resolve(MemberAppendReactor.self, arguments: closure, clubType)!
         let vc = MemberAppendVC(reactor: reactor)
-        self.rootVC.visibleViewController?.presentPanModal(vc)
+        self.rootVC.topViewController?.presentPanModal(vc)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
     func dismiss() -> FlowContributors {
-        self.rootVC.visibleViewController?.dismiss(animated: true)
+        self.rootVC.topViewController?.dismiss(animated: true)
         return .none
     }
     func navigateToFirstNewClub() -> FlowContributors {
@@ -135,7 +135,7 @@ private extension MainFlow{
         } else {
             alert.addAction(.init(title: "확인", style: .default))
         }
-        self.rootVC.visibleViewController?.present(alert, animated: true)
+        self.rootVC.topViewController?.present(alert, animated: true)
         return .none
     }
     func navigateToClubMembers(query: ClubRequestQuery, isHead: Bool, isOpened: Bool) -> FlowContributors {
