@@ -80,7 +80,7 @@ extension GCMSError: LocalizedError {
         case .belongOtherClubOrBelongClub:
             return "이미 어떤 동아리에 소속 또는 신청되어있습니다"
         case .appliedToAnotherClubOrBelongClub:
-            return "이미 소속되어있거나 다른 동아리에 신청했습니다"
+            return "이미 어떤 동아리에 소속 또는 신청했습니다"
         }
     }
 }
