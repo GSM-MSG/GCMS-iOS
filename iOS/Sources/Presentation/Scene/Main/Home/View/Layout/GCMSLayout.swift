@@ -17,6 +17,7 @@ final class GCMSLayout: UICollectionViewFlowLayout {
     
     override func prepare() {
         super.prepare()
+        cache.removeAll()
         guard let collectionView = collectionView, cache.isEmpty else { return }
         
         let numberOfColumns: Int = 2 

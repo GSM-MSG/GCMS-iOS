@@ -120,7 +120,7 @@ extension ClubAPI: GCMSAPI {
             ]
         case .createNewClub:
             return [
-                400: .invalidInput,
+                400: .alreadyExistClubOrBelongOtherClub,
                 401: .unauthorized,
                 404: .notFoundUser,
                 409: .alreadyExistClubOrBelongOtherClub
