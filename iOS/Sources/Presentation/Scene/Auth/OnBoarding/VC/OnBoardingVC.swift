@@ -117,7 +117,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             AnimationType.from(direction: .top, offset: 100)
         ], initialAlpha: 0, finalAlpha: 1, delay: 0.3, duration: 1.25)
         UIView.animate(views: [
-            googleSigninButton, appleSigninButton
+            googleSigninButton, appleSigninButton, termsOfServiceButton, privacyButton, betweenButtonView
         ], animations: [
             AnimationType.from(direction: .left, offset: 200)
         ], delay: 1.8, duration: 1, usingSpringWithDamping: 1, initialSpringVelocity: 0.7, options: .curveEaseInOut)
