@@ -141,5 +141,15 @@ public final class UseCaseAssembly: Assembly {
                 guestRepository: r.resolve(GuestRepository.self)!
             )
         }
+        container.register(IssueGuestTokenUseCase.self) { r in
+            IssueGuestTokenUseCase(
+                guestRepository: r.resolve(GuestRepository.self)!
+            )
+        }
+        container.register(RevokeGuestTokenUseCase.self) { r in
+            RevokeGuestTokenUseCase(
+                guestRepository: r.resolve(GuestRepository.self)!
+            )
+        }
     }
 }

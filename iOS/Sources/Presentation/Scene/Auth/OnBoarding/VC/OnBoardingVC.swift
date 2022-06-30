@@ -216,9 +216,15 @@ extension OnBoardingVC: ASAuthorizationControllerDelegate, ASAuthorizationContro
         self.view.window ?? .init()
     }
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        self.reactor?.action.onNext(.appleSigninCompleted)
+        if let cred = authorization.credential as? ASAuthorizationAppleIDCredential {
+            let idToken = String(data: cred.identityToken ?? .init(), encoding: .utf8) ?? .init()
+            let code = String(data: cred.authorizationCode ?? .init(), encoding: .utf8) ?? .init()
+            self.reactor?.action.onNext(.appleIdTokenReceived(idToken: idToken, code: code))
+        } else {
+            self.reactor?.action.onNext(.appleSigninCompleted)
+        }
     }
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        self.reactor?.action.onNext(.appleSigninFailed)
+        self.reactor?.action.onNext(.signinFailed(message: error.localizedDescription))
     }
 }

@@ -9,7 +9,7 @@ struct DetailClubResponse: Codable {
     enum CodingKeys: String, CodingKey {
         case head, member, scope, isApplied
         case club = "club"
-        case activities = "activityurls"
+        case activities = "activityUrls"
     }
 }
 

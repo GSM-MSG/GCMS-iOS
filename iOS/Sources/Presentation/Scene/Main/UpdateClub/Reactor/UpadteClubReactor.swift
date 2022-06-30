@@ -74,9 +74,11 @@ final class UpdateClubReactor: Reactor, Stepper {
     ) {
         self.legacyBannerUrl = club.bannerUrl
         self.legacyBanner = try? Data(contentsOf: URL(string: club.bannerUrl)!)
+        var activitiesData = [Data]()
         self.legacyImageUrl = club.activities.reduce(into: [Data:String](), { partialResult, url in
             if let data = try? Data(contentsOf: URL(string: url)!) {
                 partialResult[data] = url
+                activitiesData.append(data)
             }
         })
         initialState = State(
@@ -87,7 +89,7 @@ final class UpdateClubReactor: Reactor, Stepper {
             teacher: club.teacher,
             isBanner: true,
             imageData: try? Data(contentsOf: URL(string: club.bannerUrl)!),
-            activitiesData: club.activities.compactMap { try? Data(contentsOf: URL(string: $0)!) },
+            activitiesData: activitiesData,
             clubType: club.type,
             addedImage: [],
             removedImage: [],
@@ -95,6 +97,7 @@ final class UpdateClubReactor: Reactor, Stepper {
         )
         self.updateClubUseCase = updateClubUseCase
         self.uploadImagesUseCase = uploadImagesUseCase
+        
     }
     
 }
@@ -188,18 +191,19 @@ extension UpdateClubReactor {
 private extension UpdateClubReactor {
     func secondNextButtonDidTap() -> Observable<Mutation> {
         var errorMessage = ""
-        if currentState.title.isEmpty && initialState.title.isEmpty {
+        if currentState.title.isEmpty {
             errorMessage = "동아리 이름을 입력해주세요!"
         }
         else if currentState.description.isEmpty || currentState.description == "동아리 설명을 입력해주세요." {
             errorMessage = "동아리 설명을 입력해주세요!"
         }
-        else if currentState.contact.isEmpty && initialState.contact.isEmpty {
+        else if currentState.contact.isEmpty {
             errorMessage = "연락처를 입력해주세요!"
         }
-        else if currentState.notionLink.isEmpty && !currentState.notionLink.hasPrefix("https://") {
+        else if currentState.notionLink.isEmpty || !currentState.notionLink.hasPrefix("https://") {
             errorMessage = "노션 링크를 정확히 입력해주세요!"
-        } else {
+        }
+        else {
             steps.accept(GCMSStep.secondUpdateClubIsRequired(reactor: self))
         }
         if !errorMessage.isEmpty {

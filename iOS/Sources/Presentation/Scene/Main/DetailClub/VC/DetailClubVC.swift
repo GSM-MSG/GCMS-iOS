@@ -176,10 +176,15 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             .map { Reactor.Action.linkButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        applyButton.rx.tap
+            .map { Reactor.Action.bottomButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     override func bindAction(reactor: DetailClubReactor) {
-        self.rx.viewDidLoad
-            .map { Reactor.Action.viewDidLoad }
+        self.rx.viewWillAppear
+            .map { _ in Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
@@ -208,23 +213,25 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                 owner.loadViewIfNeeded()
                 switch item.scope {
                 case .head:
-                    owner.applyButton.setTitle("동아리 신청 마감하기", for: .normal)
+                    owner.applyButton.setTitle(item.isOpen ? "동아리 신청 마감하기" : "동아리 신청 받기", for: .normal)
                     owner.navigationItem.setRightBarButton(owner.statusButton, animated: true)
                 case .member:
-                    owner.applyButton.isHidden = true
+                    owner.applyButton.isHidden = item.isOpen
+                    if !item.isOpen { owner.setClosedButton() }
                     owner.navigationItem.setRightBarButton(owner.statusButton, animated: true)
                 case .`default`:
-                    owner.applyButton.setTitle(item.isApplied ? "신청취소하기" : "동아리 신청하기", for: .normal)
-                    owner.applyButton.backgroundColor = item.isApplied
-                    ? .init(red: 1, green: 0.5, blue: 0.5, alpha: 1)
-                    : GCMSAsset.Colors.gcmsMainColor.color
-                }
-                if !item.isOpen {
-                    owner.applyButton.isHidden = false
-                    owner.applyButton.setTitle("마감됨", for: .normal)
-                    owner.applyButton.backgroundColor = .init(red: 0.58, green: 0.58, blue: 0.58, alpha: 1)
-                } else if !item.isOpen {
-                    
+                    owner.applyButton.isHidden = item.isOpen
+                    if item.isOpen {
+                        owner.applyButton.setTitle(item.isApplied ? "신청취소하기" : "동아리 신청하기", for: .normal)
+                        owner.applyButton.backgroundColor = item.isApplied
+                        ? GCMSAsset.Colors.gcmsThemeColor.color
+                        : GCMSAsset.Colors.gcmsMainColor.color
+                    } else {
+                        owner.setClosedButton()
+                    }
+                case .other:
+                    owner.applyButton.isHidden = item.isOpen
+                    if !item.isOpen { owner.setClosedButton() }
                 }
                 owner.headView.bind(user: item.head)
                 if let teacher = item.teacher, !teacher.isEmpty {
@@ -237,7 +244,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                 }
                 owner.contactDescriptionLabel.text = item.contact
                 owner.navigationItem.configTitle(title: item.title)
-                owner.applyButton.isHidden = UserDefaultsLocal.shared.isApple
+                owner.applyButton.isHidden = UserDefaultsLocal.shared.isGuest
             }
             .disposed(by: disposeBag)
         
@@ -260,5 +267,12 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                 load ? owner.startIndicator() : owner.stopIndicator()
             }
             .disposed(by: disposeBag)
+    }
+}
+
+private extension DetailClubVC {
+    func setClosedButton() {
+        applyButton.setTitle("마감됨", for: .normal)
+        applyButton.backgroundColor = .init(red: 0.58, green: 0.58, blue: 0.58, alpha: 1)
     }
 }

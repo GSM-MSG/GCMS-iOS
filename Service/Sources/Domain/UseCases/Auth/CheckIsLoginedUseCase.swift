@@ -8,6 +8,13 @@ public struct CheckIsLoginedUseCase {
     private let authRepository: AuthRepository
     
     public func execute() -> Completable {
-        return authRepository.refresh()
+        if UserDefaultsLocal.shared.isApple {
+            return Completable.create { com in
+                com(.completed)
+                return Disposables.create()
+            }
+        } else {
+            return authRepository.refresh()
+        }
     }
 }

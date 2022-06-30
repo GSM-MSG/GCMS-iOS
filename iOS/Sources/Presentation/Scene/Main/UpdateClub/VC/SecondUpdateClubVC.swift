@@ -139,7 +139,7 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
             .disposed(by: disposeBag)
     }
     override func bindState(reactor: UpdateClubReactor) {
-        let sharedState = reactor.state.share(replay: 4).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 3).observe(on: MainScheduler.asyncInstance)
         
         let activityDS = RxCollectionViewSectionedReloadDataSource<ClubActivitySection>{ _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip, cellType: ClubActivityCell.self) as ClubActivityCell
