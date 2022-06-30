@@ -231,7 +231,7 @@ private extension UpdateClubReactor {
         )
         .andThen(Observable.just(()))
             .catch { e in
-                self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
+                self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
                 return .just(())
             }
             .asObservable()
@@ -257,7 +257,7 @@ private extension UpdateClubReactor {
                     .subscribe(onNext: { (banner, added) in
                         self.updateClub(banner: banner, added: added)
                     }, onError: { e in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
                     })
                     .disposed(by: self.disposeBag)
                 } else {
@@ -265,7 +265,7 @@ private extension UpdateClubReactor {
                         .subscribe { added in
                             self.updateClub(added: added)
                         } onError: { e in
-                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
+                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
                         }
                         .disposed(by: self.disposeBag)
                 }

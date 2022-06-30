@@ -73,7 +73,7 @@ private extension BaseRemote {
                     return self.reissueToken()
                         .andThen(.error(TokenError.expired))
                 }
-                return .error(api.errorMapper?[code] ?? error)
+                return .error(api.errorMapper?[code] ?? GCMSError.error(message: (try? (error as? MoyaError)?.response?.mapJSON() as? NSDictionary)?["message"] as? String ?? "", errorBody: [:]))
             }
     }
     

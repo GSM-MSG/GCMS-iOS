@@ -21,7 +21,7 @@ final class OnBoardingReactor: Reactor, Stepper {
         case googleSigninCompleted
         case appleSigninCompleted
         case appleIdTokenReceived(idToken: String, code: String)
-        case signinFailed(message: String)
+        case signinFailed(message: String?)
         case guestSigninButtonDidTap
         case termsOfServiceButtonDidTap
         case privacyButtonDidTap
@@ -90,7 +90,7 @@ private extension OnBoardingReactor {
                 let config = GIDConfiguration(clientID: FirebaseApp.app()?.options.clientID ?? "")
                 GIDSignIn.sharedInstance.signIn(with: config, presenting: vc) { [weak self] user, err in
                     if let err = err {
-                        self?.action.onNext(.signinFailed(message: err.localizedDescription))
+                        self?.action.onNext(.signinFailed(message: err.asGCMSError?.localizedDescription))
                         return
                     }
                     
@@ -115,7 +115,7 @@ private extension OnBoardingReactor {
             .subscribe(with: self, onNext: { owner, action in
                 owner.action.onNext(action)
             }, onError: { owner, e in
-                owner.action.onNext(.signinFailed(message: e.localizedDescription))
+                owner.action.onNext(.signinFailed(message: e.asGCMSError?.localizedDescription))
             })
             .disposed(by: disposeBag)
     }
@@ -140,7 +140,7 @@ private extension OnBoardingReactor {
                 UserDefaultsLocal.shared.isApple = true
                 owner.steps.accept(GCMSStep.clubListIsRequired)
             } onError: { owner, e in
-                owner.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription, action: []))
+                owner.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription, action: []))
             }
             .disposed(by: disposeBag)
         return .empty()

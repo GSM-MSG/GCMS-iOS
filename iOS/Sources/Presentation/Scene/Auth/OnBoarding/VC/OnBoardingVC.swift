@@ -204,6 +204,6 @@ extension OnBoardingVC: ASAuthorizationControllerDelegate, ASAuthorizationContro
         }
     }
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        self.reactor?.action.onNext(.signinFailed(message: error.localizedDescription))
+        self.reactor?.action.onNext(.signinFailed(message: error.asGCMSError?.localizedDescription))
     }
 }

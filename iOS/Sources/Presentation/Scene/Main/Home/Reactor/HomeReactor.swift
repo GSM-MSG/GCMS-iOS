@@ -187,7 +187,7 @@ private extension HomeReactor {
                     })
                 ]))
             } onError: { owner, e in
-                owner.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription, action: []))
+                owner.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription, action: []))
             }
             .disposed(by: disposeBag)
 

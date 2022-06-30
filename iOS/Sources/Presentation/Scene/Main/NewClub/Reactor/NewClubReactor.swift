@@ -250,12 +250,12 @@ private extension NewClubReactor {
             })
             .andThen(Observable.just(Mutation.setIsLoading(false)))
                 .catch { e in
-                    self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
+                    self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
                     return .just(.setIsLoading(false))
                 }
         }
             .catch { e in
-                self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
+                self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
                 return .just(.setIsLoading(false))
             }
         return .concat([start, task])

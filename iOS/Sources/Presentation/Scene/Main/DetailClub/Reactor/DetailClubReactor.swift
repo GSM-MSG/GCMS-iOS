@@ -174,7 +174,7 @@ private extension DetailClubReactor {
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.popToRoot)
                     }, onError: { e in
-                        self.steps.accept(GCMSStep.failureAlert(title: "알 수 없는 오류가 일어났습니다.", message: e.localizedDescription, action: [
+                        self.steps.accept(GCMSStep.failureAlert(title: "알 수 없는 오류가 일어났습니다.", message: e.asGCMSError?.errorDescription, action: [
                             .init(title: "확인", style: .default)
                         ]))
                     })
@@ -191,7 +191,7 @@ private extension DetailClubReactor {
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.popToRoot)
                     }, onError: { e in
-                        self.steps.accept(GCMSStep.failureAlert(title: "알 수 없는 오류가 일어났습니다.", message: e.localizedDescription, action: [
+                        self.steps.accept(GCMSStep.failureAlert(title: "알 수 없는 오류가 일어났습니다.", message: e.asGCMSError?.errorDescription, action: [
                             .init(title: "확인", style: .default)
                         ]))
                     })
@@ -209,7 +209,7 @@ private extension DetailClubReactor {
                     .subscribe { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 마감되었습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
                     } onError: { e in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
                     }
                     .disposed(by: self.disposeBag)
             }),
@@ -226,7 +226,7 @@ private extension DetailClubReactor {
                     .subscribe { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 열렸습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
                     } onError: { e in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
                     }
                     .disposed(by: self.disposeBag)
             }),
@@ -243,7 +243,7 @@ private extension DetailClubReactor {
                     .subscribe { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 성공하였습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
                     } onError: { e in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
                     }
                     .disposed(by: self.disposeBag)
             }),
@@ -260,7 +260,7 @@ private extension DetailClubReactor {
                     .subscribe { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 취소되었습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
                     } onError: { e in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
                     }
                     .disposed(by: self.disposeBag)
             }),

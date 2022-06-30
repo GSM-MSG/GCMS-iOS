@@ -47,7 +47,9 @@ public enum GCMSError: Error {
 extension GCMSError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .error, .invalidToken, .unauthorized, .clubTypeError, .notFoundUser, .notExistUser, .invalidInput, .noMebmerClub:
+        case let .error(message, _) :
+            return message
+        case .invalidToken, .unauthorized, .clubTypeError, .notFoundUser, .notExistUser, .invalidInput, .noMebmerClub:
             return "알수없는 에러가 발생했습니다"
         case .noInternet:
             return "인터넷 연결이 원활하지 않습니다"
