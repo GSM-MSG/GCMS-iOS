@@ -49,15 +49,32 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray4.color, for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: 16)
     }
+    private let termsOfServiceButton = UIButton().then {
+        $0.setTitle("서비스 이용약관", for: .normal)
+        $0.titleLabel?.font = .systemFont(ofSize: 14)
+        $0.setTitleColor(GCMSAsset.Colors.gcmsGray4.color, for: .normal)
+        $0.setUnderline()
+    }
+    
+    private let betweenButtonView = UIView().then {
+        $0.backgroundColor = GCMSAsset.Colors.gcmsGray4.color
+    }
+    
+    private let privacyButton = UIButton().then {
+        $0.setTitle("개인정보 처리 방침", for: .normal)
+        $0.titleLabel?.font = .systemFont(ofSize: 14)
+        $0.setTitleColor(GCMSAsset.Colors.gcmsGray4.color, for: .normal)
+        $0.setUnderline()
+    }
     
     // MARK: - UI
     override func addView() {
-        view.addSubViews(headerLabel, logoImageView, googleSigninButton, appleSigninButton, signUpLabel, contentsLabel, guestSigninButton)
+        view.addSubViews(headerLabel, logoImageView, googleSigninButton, appleSigninButton, signUpLabel, contentsLabel, guestSigninButton, termsOfServiceButton, betweenButtonView, privacyButton)
     }
     override func setLayout() {
         logoImageView.snp.makeConstraints {
             $0.centerX.equalToSuperview().offset(-10)
-            $0.top.equalToSuperview().offset(bound.height*0.21)
+            $0.top.equalToSuperview().offset(bound.height*0.17)
             $0.width.equalTo(144)
             $0.height.equalTo(144)
         }
@@ -83,11 +100,25 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         }
         contentsLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(googleSigninButton.snp.top).offset(-42)
+            $0.bottom.equalTo(googleSigninButton.snp.top).offset(-56)
         }
         signUpLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(contentsLabel.snp.top).offset(-4)
+            $0.bottom.equalTo(contentsLabel.snp.top).offset(-8)
+        }
+        termsOfServiceButton.snp.makeConstraints {
+            $0.bottom.equalTo(googleSigninButton.snp.top).offset(-16)
+            $0.trailing.equalTo(view.snp.centerX).offset(-8)
+        }
+        privacyButton.snp.makeConstraints {
+            $0.bottom.equalTo(termsOfServiceButton.snp.bottom)
+            $0.leading.equalTo(view.snp.centerX).offset(8)
+        }
+        betweenButtonView.snp.makeConstraints {
+            $0.bottom.equalTo(termsOfServiceButton.snp.bottom).offset(-5)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(2)
+            $0.height.equalTo(16)
         }
     }
     override func configureVC() {
@@ -146,6 +177,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             .map { Reactor.Action.guestSigninButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
     }
 }
 
