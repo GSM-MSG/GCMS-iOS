@@ -55,7 +55,7 @@ extension GCMSError: LocalizedError {
             return "애플 로그인을 실패 했습니다\n 잠시 후 다시 시도 해주세요"
         // MARK: - 403
         case .notGSMAccount:
-            return "GSM계정이 아닙니다"
+            return "*@gsm.hs.kr 계정이 아닙니다"
         case .notClubHead:
             return "동아리 부장이 아니면 수정할 수 없습니다"
         case .cannotKickHeadOrNotClubHead:
@@ -64,7 +64,7 @@ extension GCMSError: LocalizedError {
             return "부장은 동아리를 탈퇴 할 수 없습니다"
         // MARK: - 404
         case .notFoundInGSMOrEmail:
-            return "GSM학생이 아니거나 이메일이 존재하지 않습니다"
+            return "현재 재학생 리스트에서 찾을 수 없습니다"
         case .notFoundClub:
             return "동아리를 찾을 수 없습니다"
         case .notFoundInApplyUserOrNotFoundClub:
@@ -76,7 +76,7 @@ extension GCMSError: LocalizedError {
             return "동아리에 속해있지 않습니다"
         // MARK: - 409
         case .alreadyExistClubOrBelongOtherClub:
-            return "이미 존재하는 동아리이거나 다른 동아리에 참여되어있습니다"
+            return "이미 존재하는 동아리이거나 다른 동아리에 속해있습니다"
         case .belongOtherClubOrBelongClub:
             return "이미 소속되었거나 다른 동아리에 소속되어있습니다"
         case .appliedToAnotherClubOrBelongClub:
