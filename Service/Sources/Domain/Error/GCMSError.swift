@@ -57,7 +57,7 @@ extension GCMSError: LocalizedError {
         case .notGSMAccount:
             return "*@gsm.hs.kr 계정이 아닙니다"
         case .notClubHead:
-            return "동아리 부장이 아니면 수정할 수 없습니다"
+            return "부장이 아니면 사용할 수 없습니다"
         case .canNotKickHeadOrNotClubHead:
             return "부장이 아니거나 자기자신을 강퇴할 수 없습니다"
         case .canNotLeaveTheClub:
