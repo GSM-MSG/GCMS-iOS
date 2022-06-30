@@ -178,6 +178,15 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
+        termsOfServiceButton.rx.tap
+            .map { Reactor.Action.termsOfServiceButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        privacyButton.rx.tap
+            .map { Reactor.Action.privacyButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 
