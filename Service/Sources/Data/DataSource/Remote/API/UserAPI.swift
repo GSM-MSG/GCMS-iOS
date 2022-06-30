@@ -69,9 +69,25 @@ extension UserAPI: GCMSAPI {
     }
     
     var errorMapper: [Int: GCMSError]?{
-        return [
-            403: .forbidden,
-            409: .conflict
-        ]
+        switch self {
+        case .myProfile:
+            return .none
+        case .editProfile:
+            return .none
+        case .search:
+            return .none
+        case .exit:
+            return [
+                401: .unauthorized,
+                403: .canNotLeaveTheClub,
+                404: .notFoundClub,
+                406: .notExistInClub
+            ]
+        case .withdrawal:
+            return [
+                401: .unauthorized,
+                403: .notExistUser
+            ]
+        }
     }
 }

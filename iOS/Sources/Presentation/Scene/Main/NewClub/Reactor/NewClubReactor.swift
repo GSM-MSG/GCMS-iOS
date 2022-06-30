@@ -249,13 +249,13 @@ private extension NewClubReactor {
                 owner.steps.accept(GCMSStep.popToRoot)
             })
             .andThen(Observable.just(Mutation.setIsLoading(false)))
-                .catch { _ in
-                    self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "알 수 없는 이유로 동아리 생성이 실패했습니다"))
+                .catch { e in
+                    self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                     return .just(.setIsLoading(false))
                 }
         }
-            .catch { _ in
-                self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "알 수 없는 이유로 동아리 생성이 실패했습니다"))
+            .catch { e in
+                self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                 return .just(.setIsLoading(false))
             }
         return .concat([start, task])

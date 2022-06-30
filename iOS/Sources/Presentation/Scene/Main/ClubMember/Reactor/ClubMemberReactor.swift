@@ -156,8 +156,8 @@ private extension ClubMemberReactor {
                         .subscribe { _ in
                             self.action.onNext(.clubIsOpenedChange(false))
                             self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 마감되었습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
-                        } onError: { _ in
-                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "동아리 신청 마감이 실패했습니다."))
+                        } onError: { e in
+                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                         }
                         .disposed(by: self.disposeBag)
                 }),
@@ -172,8 +172,8 @@ private extension ClubMemberReactor {
                         .subscribe { _ in
                             self.action.onNext(.clubIsOpenedChange(true))
                             self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 열렸습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
-                        } onError: { _ in
-                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "동아리 신청 열기가 실패했습니다."))
+                        } onError: { e in
+                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                         }
                         .disposed(by: self.disposeBag)
                 }),
@@ -191,8 +191,8 @@ private extension ClubMemberReactor {
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.popToRoot)
                         self.action.onNext(.viewDidLoad)
-                    }, onError: { _ in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "알 수 없는 이유로 부장 위임을 실패했습니다."))
+                    }, onError: { e in
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                     })
                     .disposed(by: self.disposeBag)
             }),
@@ -209,8 +209,8 @@ private extension ClubMemberReactor {
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님을 추방했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))
                         self.action.onNext(.viewDidLoad)
-                    }, onError: { _ in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "알 수 없는 이유로 추방을 실패했습니다."))
+                    }, onError: { e in
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                     })
                     .disposed(by: self.disposeBag)
             }),
@@ -226,8 +226,8 @@ private extension ClubMemberReactor {
                     .andThen(Observable.just(()))
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님의 가입을 승인했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))
-                    }, onError: { _ in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "알 수 없는 이유로 가입 승인을 실패했습니다."))
+                    }, onError: { e in
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                     })
                     .disposed(by: self.disposeBag)
             }),
@@ -243,8 +243,8 @@ private extension ClubMemberReactor {
                     .andThen(Observable.just(()))
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님의 가입을 거절했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))
-                    }, onError: { _ in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "알 수 없는 이유로 가입 거절을 실패했습니다."))
+                    }, onError: { e in
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                     })
                     .disposed(by: self.disposeBag)
             }),

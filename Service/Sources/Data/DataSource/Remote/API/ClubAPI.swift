@@ -73,7 +73,7 @@ extension ClubAPI: GCMSAPI {
         case let .clubDetail(q), let .clubMember(q), let .clubApplicant(q):
             return .requestParameters(parameters: [
                 "q": q.q,
-                "type": q.type
+                "type": q.type.rawValue
             ], encoding: URLEncoding.queryString)
         case let .createNewClub(req):
             return .requestJSONEncodable(req)
@@ -106,9 +106,87 @@ extension ClubAPI: GCMSAPI {
         }
     }
     var errorMapper: [Int: GCMSError]?{
-        return [
-            403: .forbidden,
-            409: .conflict
-        ]
+        switch self {
+        case .clubList:
+            return [
+                400: .clubTypeError,
+                401: .unauthorized
+            ]
+        case .clubDetail:
+            return [
+                400: .noMebmerClub,
+                401: .unauthorized,
+                404: .notFoundClub
+            ]
+        case .createNewClub:
+            return [
+                400: .invalidInput,
+                401: .unauthorized,
+                404: .notFoundUser,
+                409: .alreadyExistClubOrBelongOtherClub
+            ]
+        case .updateClub:
+            return [
+                400: .invalidInput,
+                401: .unauthorized,
+                403: .notClubHead,
+                404: .notFoundClub
+            ]
+        case .deleteClub:
+            return [
+                401: .unauthorized,
+                403: .notClubHead,
+                404: .notFoundClub
+            ]
+        case .clubMember:
+            return [
+                401: .unauthorized,
+                406: .notExistInClub
+            ]
+        case .clubApplicant:
+            return [
+                401: .unauthorized,
+                404: .notFoundClub,
+                406: .notExistInClub
+            ]
+        case .userAccept, .userReject:
+            return [
+                403: .notClubHead,
+                404: .notFoundInApplyUserOrNotFoundClub,
+                409: .belongOtherClubOrBelongClub
+            ]
+        case .clubOpen:
+            return [
+                401: .unauthorized,
+                403: .notClubHead
+            ]
+        case .clubClose:
+            return [
+                401: .unauthorized,
+                403: .notClubHead
+            ]
+        case .userKick:
+            return [
+                401: .unauthorized,
+                403: .cannotKickHeadOrNotClubHead
+            ]
+        case .apply:
+            return [
+                401: .unauthorized,
+                404: .notFoundClub,
+                409: .appliedToAnotherClubOrBelongClub
+            ]
+        case .cancel:
+            return [
+                401: .unauthorized,
+                404: .notFoundInApplyUserOrNotFoundClub
+            ]
+        case .delegation:
+            return [
+                401: .unauthorized,
+                403: .notClubHead,
+                404: .notFoundUser
+            ]
+        }
     }
 }

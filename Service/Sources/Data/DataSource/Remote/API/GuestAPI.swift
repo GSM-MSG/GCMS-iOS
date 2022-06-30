@@ -62,9 +62,21 @@ extension GuestAPI: GCMSAPI {
     }
     
     var errorMapper: [Int: GCMSError]?{
-        return [
-            403: .forbidden,
-            409: .conflict
-        ]
+        switch self {
+        case .guestClubList:
+            return [
+                400: .clubTypeError,
+                401: .unauthorized
+            ]
+        case .guestClubDetail:
+            return [
+                401: .unauthorized,
+                404: .notFoundClub
+            ]
+        case .tokenIssue, .tokenRevoke:
+            return [
+                400: .failedAppleLogin
+            ]
+        }
     }
 }

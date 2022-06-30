@@ -42,10 +42,16 @@ extension AuthAPI: GCMSAPI {
         }
     }
     var errorMapper: [Int: GCMSError]?{
-        return [
-            403: .forbidden,
-            409: .conflict
-        ]
+        switch self {
+        case .login:
+            return [
+                400: .invalidToken,
+                403: .notGSMAccount,
+                404: .notFoundInGSMOrEmail
+            ]
+        case .refresh:
+            return .none
+        }
     }
     
 }
