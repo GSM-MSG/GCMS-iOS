@@ -76,7 +76,7 @@ extension GCMSError: LocalizedError {
             return "동아리에 속해있지 않습니다"
         // MARK: - 409
         case .alreadyExistClubOrBelongOtherClub:
-            return "이미 존재하는 동아리이거나 다른 동아리에 참여되어있습니다"
+            return "이미 존재하는 동아리이거나 다른 동아리에 속해있습니다"
         case .belongOtherClubOrBelongClub:
             return "이미 소속되었거나 다른 동아리에 소속되어있습니다"
         case .appliedToAnotherClubOrBelongClub:
