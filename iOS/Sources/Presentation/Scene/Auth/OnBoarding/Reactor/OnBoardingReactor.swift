@@ -84,7 +84,7 @@ private extension OnBoardingReactor {
                 let config = GIDConfiguration(clientID: FirebaseApp.app()?.options.clientID ?? "")
                 GIDSignIn.sharedInstance.signIn(with: config, presenting: vc) { [weak self] user, err in
                     if let err = err {
-                        
+                        self?.action.onNext(.signinFailed(message: err.localizedDescription))
                         return
                     }
                     
