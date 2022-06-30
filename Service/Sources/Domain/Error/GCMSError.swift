@@ -64,7 +64,7 @@ extension GCMSError: LocalizedError {
             return "부장은 동아리를 탈퇴 할 수 없습니다"
         // MARK: - 404
         case .notFoundInGSMOrEmail:
-            return "GSM학생이 아니거나 이메일이 존재하지 않습니다"
+            return "현재 재학생 리스트에서 찾을 수 없습니다"
         case .notFoundClub:
             return "동아리를 찾을 수 없습니다"
         case .notFoundInApplyUserOrNotFoundClub:
