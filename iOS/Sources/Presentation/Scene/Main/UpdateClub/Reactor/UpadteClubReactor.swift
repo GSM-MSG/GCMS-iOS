@@ -230,8 +230,8 @@ private extension UpdateClubReactor {
             )
         )
         .andThen(Observable.just(()))
-            .catch { _ in
-                self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "알 수 없는 이유로 동아리 생성이 실패했습니다"))
+            .catch { e in
+                self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                 return .just(())
             }
             .asObservable()
@@ -256,16 +256,16 @@ private extension UpdateClubReactor {
                     )
                     .subscribe(onNext: { (banner, added) in
                         self.updateClub(banner: banner, added: added)
-                    }, onError: { _ in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "알 수 없는 이유로 동아리 생성이 실패했습니다"))
+                    }, onError: { e in
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                     })
                     .disposed(by: self.disposeBag)
                 } else {
                     self.uploadImagesUseCase.execute(images: current.addedImage).asObservable()
                         .subscribe { added in
                             self.updateClub(added: added)
-                        } onError: { _ in
-                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "알 수 없는 이유로 동아리 생성이 실패했습니다"))
+                        } onError: { e in
+                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                         }
                         .disposed(by: self.disposeBag)
                 }

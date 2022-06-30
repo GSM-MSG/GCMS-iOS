@@ -173,8 +173,8 @@ private extension DetailClubReactor {
                     .andThen(Observable.just(()))
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.popToRoot)
-                    }, onError: { _ in
-                        self.steps.accept(GCMSStep.failureAlert(title: "알 수 없는 오류가 일어났습니다.", message: "동아리 삭제를 실패했습니다.", action: [
+                    }, onError: { e in
+                        self.steps.accept(GCMSStep.failureAlert(title: "알 수 없는 오류가 일어났습니다.", message: e.localizedDescription, action: [
                             .init(title: "확인", style: .default)
                         ]))
                     })
@@ -190,8 +190,8 @@ private extension DetailClubReactor {
                     .andThen(Observable.just(()))
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.popToRoot)
-                    }, onError: { _ in
-                        self.steps.accept(GCMSStep.failureAlert(title: "알 수 없는 오류가 일어났습니다.", message: "동아리 탈퇴를 실패했습니다.", action: [
+                    }, onError: { e in
+                        self.steps.accept(GCMSStep.failureAlert(title: "알 수 없는 오류가 일어났습니다.", message: e.localizedDescription, action: [
                             .init(title: "확인", style: .default)
                         ]))
                     })
@@ -208,8 +208,8 @@ private extension DetailClubReactor {
                     .andThen(Observable.just(()))
                     .subscribe { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 마감되었습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
-                    } onError: { _ in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "동아리 신청 마감이 실패했습니다."))
+                    } onError: { e in
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                     }
                     .disposed(by: self.disposeBag)
             }),
@@ -225,8 +225,8 @@ private extension DetailClubReactor {
                     .andThen(Observable.just(()))
                     .subscribe { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 열렸습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
-                    } onError: { _ in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "동아리 신청 열기가 실패했습니다."))
+                    } onError: { e in
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                     }
                     .disposed(by: self.disposeBag)
             }),
@@ -242,8 +242,8 @@ private extension DetailClubReactor {
                     .andThen(Observable.just(()))
                     .subscribe { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 성공하였습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
-                    } onError: { _ in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "동아리 신청에 실패하였습니다."))
+                    } onError: { e in
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                     }
                     .disposed(by: self.disposeBag)
             }),
@@ -259,8 +259,8 @@ private extension DetailClubReactor {
                     .andThen(Observable.just(()))
                     .subscribe { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 취소되었습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
-                    } onError: { _ in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: "동아리 신청 취소에 실패했습니다."))
+                    } onError: { e in
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                     }
                     .disposed(by: self.disposeBag)
             }),
