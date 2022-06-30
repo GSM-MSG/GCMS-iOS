@@ -73,6 +73,14 @@ extension GuestAPI: GCMSAPI {
                 401: .unauthorized,
                 404: .notFoundClub
             ]
+        case .tokenIssue:
+            return [
+                400: .failedAppleLogin
+            ]
+        case .tokenRevoke:
+            return [
+                400: .failedAppleLogin
+            ]
         }
     }
 }

@@ -8,6 +8,8 @@ public enum GCMSError: Error {
     case invalidToken
     case clubTypeError
     case invalidInput
+    case noMebmerClub
+    case failedAppleLogin
     // MARK: - 401
     case unauthorized
     // MARK: - 403
@@ -40,10 +42,12 @@ public enum GCMSError: Error {
 extension GCMSError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .error, .invalidToken, .unauthorized, .clubTypeError, .notFoundUser, .notExistUser, .invalidInput:
+        case .error, .invalidToken, .unauthorized, .clubTypeError, .notFoundUser, .notExistUser, .invalidInput, .noMebmerClub:
             return "알수없는 에러가 발생했습니다"
         case .noInternet:
             return "인터넷 연결이 원활하지 않습니다"
+        case .failedAppleLogin:
+            return "애플 로그인을 실패 했습니다\n 잠시 후 다시 시도 해주세요"
         // MARK: - 403
         case .notGSMAccount:
             return "GSM계정이 아닙니다"

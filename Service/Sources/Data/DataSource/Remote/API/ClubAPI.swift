@@ -73,7 +73,7 @@ extension ClubAPI: GCMSAPI {
         case let .clubDetail(q), let .clubMember(q), let .clubApplicant(q):
             return .requestParameters(parameters: [
                 "q": q.q,
-                "type": q.type
+                "type": q.type.rawValue
             ], encoding: URLEncoding.queryString)
         case let .createNewClub(req):
             return .requestJSONEncodable(req)
@@ -114,6 +114,7 @@ extension ClubAPI: GCMSAPI {
             ]
         case .clubDetail:
             return [
+                400: .noMebmerClub,
                 401: .unauthorized,
                 404: .notFoundClub
             ]
