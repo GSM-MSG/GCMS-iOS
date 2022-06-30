@@ -17,14 +17,6 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     private let logoImageView = UIImageView().then {
         $0.image = GCMSAsset.Images.gcmsgLogo.image.withRenderingMode(.alwaysOriginal)
     }
-    private let signUpLabel = UILabel().then {
-        $0.text = "Sign Up"
-        $0.font = .systemFont(ofSize: 24, weight: .semibold)
-    }
-    private let contentsLabel = UILabel().then {
-        $0.text = "it’s GCMS sign up now"
-        $0.textColor = GCMSAsset.Colors.gcmsGray4.color
-    }
     private let googleSigninButton = UIButton().then {
         $0.setTitle("Google로 계속하기", for: .normal)
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
@@ -69,12 +61,12 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     
     // MARK: - UI
     override func addView() {
-        view.addSubViews(headerLabel, logoImageView, googleSigninButton, appleSigninButton, signUpLabel, contentsLabel, guestSigninButton, termsOfServiceButton, betweenButtonView, privacyButton)
+        view.addSubViews(headerLabel, logoImageView, googleSigninButton, appleSigninButton, guestSigninButton, termsOfServiceButton, betweenButtonView, privacyButton)
     }
     override func setLayout() {
         logoImageView.snp.makeConstraints {
             $0.centerX.equalToSuperview().offset(-10)
-            $0.top.equalToSuperview().offset(bound.height*0.17)
+            $0.top.equalToSuperview().offset(bound.height*0.1439)
             $0.width.equalTo(144)
             $0.height.equalTo(144)
         }
@@ -85,7 +77,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         appleSigninButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.height.equalTo(51)
-            $0.bottom.equalToSuperview().offset(-bound.height*0.1)
+            $0.bottom.equalToSuperview().offset(-bound.height*0.074)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
         guestSigninButton.snp.makeConstraints {
@@ -98,16 +90,8 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             $0.bottom.equalTo(appleSigninButton.snp.top).offset(-12)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
-        contentsLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(googleSigninButton.snp.top).offset(-56)
-        }
-        signUpLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(contentsLabel.snp.top).offset(-8)
-        }
         termsOfServiceButton.snp.makeConstraints {
-            $0.bottom.equalTo(googleSigninButton.snp.top).offset(-16)
+            $0.bottom.equalTo(googleSigninButton.snp.top).offset(-24)
             $0.trailing.equalTo(view.snp.centerX).offset(-8)
         }
         privacyButton.snp.makeConstraints {
@@ -133,12 +117,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             AnimationType.from(direction: .top, offset: 100)
         ], initialAlpha: 0, finalAlpha: 1, delay: 0.3, duration: 1.25)
         UIView.animate(views: [
-            signUpLabel, contentsLabel
-        ], animations: [
-            
-        ], initialAlpha: 0, finalAlpha: 1, delay: 1.05, duration: 0.75)
-        UIView.animate(views: [
-            googleSigninButton, appleSigninButton
+            googleSigninButton, appleSigninButton, termsOfServiceButton, privacyButton, betweenButtonView
         ], animations: [
             AnimationType.from(direction: .left, offset: 200)
         ], delay: 1.8, duration: 1, usingSpringWithDamping: 1, initialSpringVelocity: 0.7, options: .curveEaseInOut)
