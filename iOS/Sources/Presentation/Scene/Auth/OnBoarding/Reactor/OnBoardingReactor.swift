@@ -21,8 +21,10 @@ final class OnBoardingReactor: Reactor, Stepper {
         case googleSigninCompleted
         case appleSigninCompleted
         case appleIdTokenReceived(idToken: String, code: String)
-        case appleSigninFailed
+        case signinFailed(message: String)
         case guestSigninButtonDidTap
+        case termsOfServiceButtonDidTap
+        case privacyButtonDidTap
     }
     enum Mutation {
         case setIsLoading(Bool)
@@ -54,10 +56,14 @@ extension OnBoardingReactor {
             return googleSigninButtonDidTap(vc: vc)
         case .appleSigninCompleted, .guestSigninButtonDidTap:
             return appleSigninCompleted()
-        case .appleSigninFailed:
+        case .signinFailed:
             return signinFailed(message: "알 수 없는 이유로 로그인이 실패했습니다.")
         case .googleSigninCompleted:
             return googleSigninCompleted()
+        case .termsOfServiceButtonDidTap:
+            UIApplication.shared.open(URL(string: "https://shy-trust-424.notion.site/f4b4084f6235444bbcc164f7c5d86fb2") ?? .init(string: "https://www.google.com")!)
+        case .privacyButtonDidTap:
+            UIApplication.shared.open(URL(string: "https://shy-trust-424.notion.site/252fc57341834617b7d3c1903286c730") ?? .init(string: "https://www.google.com")!)
         case let .appleIdTokenReceived(token, code):
             return appleTokenReceived(idToken: token, code: code)
         }
@@ -84,8 +90,7 @@ private extension OnBoardingReactor {
                 let config = GIDConfiguration(clientID: FirebaseApp.app()?.options.clientID ?? "")
                 GIDSignIn.sharedInstance.signIn(with: config, presenting: vc) { [weak self] user, err in
                     if let err = err {
-                        print(err.localizedDescription)
-                        self?.action.onNext(.appleSigninFailed)
+                        self?.action.onNext(.signinFailed(message: err.localizedDescription))
                         return
                     }
                     
@@ -107,8 +112,11 @@ private extension OnBoardingReactor {
         loginUseCase.execute(idToken: token)
             .andThen(.just(()))
             .map { Action.googleSigninCompleted }
-            .catchAndReturn(.appleSigninFailed)
-            .bind(to: action)
+            .subscribe(with: self, onNext: { owner, action in
+                owner.action.onNext(action)
+            }, onError: { owner, e in
+                owner.action.onNext(.signinFailed(message: e.localizedDescription))
+            })
             .disposed(by: disposeBag)
     }
     func googleSigninCompleted() -> Observable<Mutation> {
