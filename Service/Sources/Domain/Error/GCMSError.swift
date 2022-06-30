@@ -55,7 +55,7 @@ extension GCMSError: LocalizedError {
             return "애플 로그인을 실패 했습니다\n 잠시 후 다시 시도 해주세요"
         // MARK: - 403
         case .notGSMAccount:
-            return "GSM계정이 아닙니다"
+            return "*@gsm.hs.kr 계정이 아닙니다"
         case .notClubHead:
             return "동아리 부장이 아니면 수정할 수 없습니다"
         case .canNotKickHeadOrNotClubHead:
