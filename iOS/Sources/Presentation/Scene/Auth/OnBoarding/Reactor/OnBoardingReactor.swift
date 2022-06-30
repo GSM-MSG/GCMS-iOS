@@ -23,6 +23,8 @@ final class OnBoardingReactor: Reactor, Stepper {
         case appleIdTokenReceived(idToken: String, code: String)
         case signinFailed(message: String)
         case guestSigninButtonDidTap
+        case termsOfServiceButtonDidTap
+        case privacyButtonDidTap
     }
     enum Mutation {
         case setIsLoading(Bool)
@@ -58,6 +60,10 @@ extension OnBoardingReactor {
             return signinFailed(message: "알 수 없는 이유로 로그인이 실패했습니다.")
         case .googleSigninCompleted:
             return googleSigninCompleted()
+        case .termsOfServiceButtonDidTap:
+            UIApplication.shared.open(URL(string: "https://shy-trust-424.notion.site/f4b4084f6235444bbcc164f7c5d86fb2") ?? .init(string: "https://www.google.com")!)
+        case .privacyButtonDidTap:
+            UIApplication.shared.open(URL(string: "https://shy-trust-424.notion.site/252fc57341834617b7d3c1903286c730") ?? .init(string: "https://www.google.com")!)
         case let .appleIdTokenReceived(token, code):
             return appleTokenReceived(idToken: token, code: code)
         }
