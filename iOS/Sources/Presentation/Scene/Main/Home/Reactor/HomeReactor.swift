@@ -180,7 +180,7 @@ private extension HomeReactor {
             .andThen(Observable.just(()))
             .subscribe(with: self) { owner, _ in
                 owner.steps.accept(GCMSStep.alert(title: nil, message: "회원탈퇴에 성공했습니다.", style: .alert, actions: [
-                    .init(title: "확인", style: .destructive, handler: { _ in
+                    .init(title: "확인", style: .default, handler: { _ in
                         UserDefaultsLocal.shared.isApple = false
                         UserDefaultsLocal.shared.isGuest = false
                         owner.steps.accept(GCMSStep.onBoardingIsRequired)
