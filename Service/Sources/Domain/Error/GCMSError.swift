@@ -19,7 +19,7 @@ public enum GCMSError: Error {
     case notGSMAccount
     // MARK: Club
     case notClubHead
-    case canNotKickHeadOrNotClubHead
+    case cannotKickHeadOrNotClubHead
     // MARK: User
     case canNotLeaveTheClub
     case notExistUser
@@ -58,7 +58,7 @@ extension GCMSError: LocalizedError {
             return "GSM계정이 아닙니다"
         case .notClubHead:
             return "동아리 부장이 아니면 수정할 수 없습니다"
-        case .canNotKickHeadOrNotClubHead:
+        case .cannotKickHeadOrNotClubHead:
             return "부장이 아니거나 자기자신을 강퇴할 수 없습니다"
         case .canNotLeaveTheClub:
             return "부장은 동아리를 탈퇴 할 수 없습니다"

@@ -149,13 +149,7 @@ extension ClubAPI: GCMSAPI {
                 404: .notFoundClub,
                 406: .notExistInClub
             ]
-        case .userAccept:
-            return [
-                403: .notClubHead,
-                404: .notFoundInApplyUserOrNotFoundClub,
-                409: .belongOtherClubOrBelongClub
-            ]
-        case .userReject:
+        case .userAccept, .userReject:
             return [
                 403: .notClubHead,
                 404: .notFoundInApplyUserOrNotFoundClub,
@@ -174,7 +168,7 @@ extension ClubAPI: GCMSAPI {
         case .userKick:
             return [
                 401: .unauthorized,
-                403: .canNotKickHeadOrNotClubHead
+                403: .cannotKickHeadOrNotClubHead
             ]
         case .apply:
             return [
