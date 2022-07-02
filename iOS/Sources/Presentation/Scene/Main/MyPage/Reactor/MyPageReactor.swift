@@ -122,7 +122,11 @@ private extension MyPageReactor {
             .withUnretained(self)
             .flatMap { owner, url in
                 owner.updateProfileImageUseCase.execute(imageUrl: url)
-                    .andThen(Observable.just(Mutation.setIsLoading(false)))
+                    .andThen(Observable.just(()))
+                    .flatMap { owner.fetchProfileUseCase.execute() }
+                    .asObservable()
+                    .flatMap { Observable.from([Mutation.setUser($0), .setIsLoading(false)])}
+                    .catchAndReturn(.setIsLoading(false))
             }
             .catchAndReturn(.setIsLoading(false))
         return .concat([start, task])
