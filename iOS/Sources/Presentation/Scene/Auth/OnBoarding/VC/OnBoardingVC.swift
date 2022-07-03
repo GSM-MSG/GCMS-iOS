@@ -67,8 +67,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         logoImageView.snp.makeConstraints {
             $0.centerX.equalToSuperview().offset(-10)
             $0.top.equalToSuperview().offset(bound.height*0.1439)
-            $0.width.equalTo(144)
-            $0.height.equalTo(144)
+            $0.size.equalTo(144)
         }
         headerLabel.snp.makeConstraints {
             $0.top.equalTo(logoImageView.snp.bottom).offset(16)
