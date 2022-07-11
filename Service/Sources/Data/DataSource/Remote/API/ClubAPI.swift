@@ -95,7 +95,7 @@ extension ClubAPI: GCMSAPI {
             return .requestParameters(parameters: [
                 "q": query.q,
                 "type": query.type.rawValue,
-                "email": userId
+                "userId": userId
             ], encoding: JSONEncoding.default)
         }
     }

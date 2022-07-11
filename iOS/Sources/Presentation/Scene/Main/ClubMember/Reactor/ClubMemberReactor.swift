@@ -232,6 +232,7 @@ private extension ClubMemberReactor {
                     .andThen(Observable.just(()))
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님의 가입을 승인했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))
+                        self.action.onNext(.viewDidLoad)
                     }, onError: { e in
                         self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
                     })
@@ -249,6 +250,7 @@ private extension ClubMemberReactor {
                     .andThen(Observable.just(()))
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님의 가입을 거절했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))
+                        self.action.onNext(.viewDidLoad)
                     }, onError: { e in
                         self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
                     })
