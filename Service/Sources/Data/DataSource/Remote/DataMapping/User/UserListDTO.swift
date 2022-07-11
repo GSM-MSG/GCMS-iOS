@@ -1,9 +1,9 @@
 struct UserListDTO: Codable {
-    let list: [UserDTO]
+    let requestUser: [UserDTO]
 }
 
 extension UserListDTO {
     func toDomain() -> [User] {
-        return list.map { $0.toDomain() }
+        return requestUser.map { $0.toDomain() }
     }
 }

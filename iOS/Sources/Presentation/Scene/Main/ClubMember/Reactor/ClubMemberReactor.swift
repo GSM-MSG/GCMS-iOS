@@ -127,7 +127,10 @@ extension ClubMemberReactor {
 // MARK: - Method
 private extension ClubMemberReactor {
     func viewDidLoad() -> Observable<Mutation> {
-        let start = Observable.just(Mutation.setIsLoading(true))
+        let start = Observable.concat([
+            .just(Mutation.setIsLoading(true)),
+            .just(.setUsers([]))
+        ])
         let member = fetchClubMemberUseCase.execute(query: query)
             .asObservable()
             .map { ExpandableMemberSection(header: "구성원", items: $0.map { MemberSectionType.member($0) }, isOpened: false) }
