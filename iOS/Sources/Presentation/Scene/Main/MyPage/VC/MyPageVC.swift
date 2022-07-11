@@ -218,7 +218,7 @@ extension MyPageVC: PHPickerViewControllerDelegate {
         
         item?.loadDataRepresentation(forTypeIdentifier: "public.image", completionHandler: { [weak self] data, err in
             if let err = err {
-                print(err.asGCMSError.self)
+                print(err.asGCMSError?.errorDescription)
                 return
             }
             if let data = data {
