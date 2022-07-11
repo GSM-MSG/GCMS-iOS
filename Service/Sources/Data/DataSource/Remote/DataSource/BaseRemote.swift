@@ -3,6 +3,7 @@ import Foundation
 import RxSwift
 import RxMoya
 import AVFoundation
+import Alamofire
 
 class BaseRemote<API: GCMSAPI> {
     public var testStatus = false
@@ -65,6 +66,9 @@ private extension BaseRemote {
                 print(try? $0.mapJSON()) /// TODO:  나중에 지우시길
             })
             .catch { error in
+                if !(NetworkReachabilityManager(host: "http://3.36.15.183:4000")?.isReachable ?? false) == false{
+                    return .error(GCMSError.noInternet)
+                }
                 guard let code = (error as? MoyaError)?.response?.statusCode else {
                     return .error(error)
                 }

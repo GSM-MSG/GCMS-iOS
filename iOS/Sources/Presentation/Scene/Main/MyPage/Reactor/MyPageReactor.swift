@@ -128,7 +128,10 @@ private extension MyPageReactor {
                     .flatMap { Observable.from([Mutation.setUser($0), .setIsLoading(false)])}
                     .catchAndReturn(.setIsLoading(false))
             }
-            .catchAndReturn(.setIsLoading(false))
+            .catch { [weak self] e in
+                self?.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription, action: []))
+                return .just(.setIsLoading(false))
+            }
         return .concat([start, task])
     }
     func withdrawalLogic() {

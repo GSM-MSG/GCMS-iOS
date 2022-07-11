@@ -138,7 +138,10 @@ private extension ClubMemberReactor {
                 Observable.just(Mutation.setIsLoading(false)),
                 .just(.appendUsers($0))
             ]) }
-            .catchAndReturn(.setIsLoading(false))
+            .catch { [weak self] e in
+                self?.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription, action: []))
+                return .just(.setIsLoading(false))
+            }
         let applicant = fetchClubApplicantUseCase.execute(query: query)
             .asObservable()
             .map { ExpandableMemberSection(header: "가입 대기자 명단", items: $0.map { MemberSectionType.applicant($0) }, isOpened: false) }

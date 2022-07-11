@@ -116,7 +116,11 @@ private extension DetailClubReactor {
         let res = task
             .asObservable()
             .flatMap { Observable.from([Mutation.setClub($0), .setIsLoading(false)]) }
-            .catchAndReturn(.setIsLoading(false))
+            .catch { [weak self] e in
+                self?.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription, action: []))
+                return .just(.setIsLoading(false))
+            }
+        
         return .concat([start, res])
     }
     func bottomButtonDidTap() -> Observable<Mutation> {
