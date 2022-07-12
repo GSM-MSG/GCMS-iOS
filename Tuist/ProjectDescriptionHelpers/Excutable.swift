@@ -12,7 +12,10 @@ extension Project{
         return Project(
             name: name,
             organizationName: publicOrganizationName,
-            settings: .settings(base: .codeSign),
+            settings: .settings(base: .codeSign.merging([
+                "MARKETING_VERSION": "1.0",
+                "CURRENT_PROJECT_VERSION": "1.0"
+            ])),
             targets: [
                 Target(
                     name: name,
