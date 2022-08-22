@@ -28,10 +28,11 @@ $ make generate
 <img src="https://user-images.githubusercontent.com/74440939/185820400-59a875e5-9e0c-4123-84f0-e8b5a9b2003a.png" width="250" />
 
 ## 동아리를 개설할 수 있습니다.
-<img src="https://user-images.githubusercontent.com/74440939/185820479-3b36efcb-f6bc-49d4-98bb-9d6d659427ef.png" width="250" />
-<img src="https://user-images.githubusercontent.com/74440939/185820511-ed47b7b4-ad1c-438c-8dc4-3ab25960c0cd.png" width="250" />
-<img src="https://user-images.githubusercontent.com/74440939/185820577-39174674-3207-4bf2-888e-77ca2b997fbb.png" width="250" />
-
+<div>
+  <img src="https://user-images.githubusercontent.com/74440939/185820479-3b36efcb-f6bc-49d4-98bb-9d6d659427ef.png" width="250" />
+  <img src="https://user-images.githubusercontent.com/74440939/185820511-ed47b7b4-ad1c-438c-8dc4-3ab25960c0cd.png" width="250" />
+  <img src="https://user-images.githubusercontent.com/74440939/185820577-39174674-3207-4bf2-888e-77ca2b997fbb.png" width="250" />
+</div>
 ## 마이페이지에서 소속된 동아리와 유저 정보를 볼 수 있습니다. 로그아웃을 할 수 있습니다. 설정버튼을 누르면 탈퇴를 할 수 있습니다.
 <img src="https://user-images.githubusercontent.com/74440939/185820658-bdb3b2eb-ad7d-4739-950e-6dd18fd50e17.png" width="250" />
 
