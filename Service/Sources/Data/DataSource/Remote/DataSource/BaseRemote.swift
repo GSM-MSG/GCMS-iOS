@@ -8,7 +8,11 @@ import Alamofire
 class BaseRemote<API: GCMSAPI> {
     public var testStatus = false
     public var successStatus = true
+    #if DEBUG
     private let provider = MoyaProvider<API>(plugins: [JWTPlugin(), NetworkLoggerPlugin()])
+    #else
+    private let provider = MoyaProvider<API>(plugins: [JWTPlugin()])
+    #endif
     private let successTestEndpoint = { (target: API) -> Endpoint in
         return Endpoint(
             url: URL(target: target).absoluteString,
