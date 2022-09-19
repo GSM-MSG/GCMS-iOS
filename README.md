@@ -8,6 +8,9 @@ $ brew install make
 $ make generate
 ```
 
+## Installation
+https://apps.apple.com/kr/app/gcms/id1616315883
+
 # ✨ Features
 ## 학생계정으로 로그인할 수 있습니다 (구글로그인) & 애플 또는 게스트 로그인을 할 수 있습니다.
 <img src="https://user-images.githubusercontent.com/74440939/185819873-379e6dc8-d815-42ea-9b04-553c4974cda9.png" width="250" />
