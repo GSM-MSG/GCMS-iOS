@@ -36,6 +36,7 @@ final class MemberAppendVC: BaseVC<MemberAppendReactor> {
     }
     private let studentListTableView = UITableView().then {
         $0.register(cellType: StudentCell.self)
+        $0.separatorStyle = .none
         $0.rowHeight = 50
         $0.backgroundColor = .clear
     }
