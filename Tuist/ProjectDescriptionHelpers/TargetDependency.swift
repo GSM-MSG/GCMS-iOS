@@ -34,6 +34,7 @@ public extension TargetDependency.SPM{
     static let Inject = TargetDependency.package(product: "Inject")
     static let Realm = TargetDependency.package(product: "Realm")
     static let RealmSwift = TargetDependency.package(product: "RealmSwift")
+    static let MSGLayout = TargetDependency.package(product: "MSGLayout")
 }
 
 public extension Package {
@@ -144,5 +145,9 @@ public extension Package {
     static let Realm = Package.remote(
         url: "https://github.com/realm/realm-swift.git",
         requirement: .upToNextMajor(from: "10.27.0")
+    )
+    static let MSGLayout = Package.remote(
+        url: "https://github.com/GSM-MSG/MSGLayout.git",
+        requirement: .upToNextMajor(from: "1.0.2")
     )
 }
