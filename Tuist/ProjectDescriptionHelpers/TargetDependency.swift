@@ -34,7 +34,7 @@ public extension TargetDependency.SPM{
     static let Inject = TargetDependency.package(product: "Inject")
     static let Realm = TargetDependency.package(product: "Realm")
     static let RealmSwift = TargetDependency.package(product: "RealmSwift")
-    static let MSGLayout = TargetDependency.package(product: "MsgLayout")
+    static let MSGLayout = TargetDependency.package(product: "MSGLayout")
 }
 
 public extension Package {
