@@ -217,7 +217,6 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                     owner.navigationItem.setRightBarButton(owner.statusButton, animated: true)
                 case .member:
                     owner.applyButton.isHidden = item.isOpen
-                    if !item.isOpen { owner.setClosedButton() }
                     owner.navigationItem.setRightBarButton(owner.statusButton, animated: true)
                 case .`default`:
                     if item.isOpen {
@@ -230,7 +229,6 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                     }
                 case .other:
                     owner.applyButton.isHidden = item.isOpen
-                    if !item.isOpen { owner.setClosedButton() }
                 }
                 owner.headView.bind(user: item.head)
                 if let teacher = item.teacher, !teacher.isEmpty {
