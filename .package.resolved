@@ -208,6 +208,15 @@
       }
     },
     {
+      "identity" : "msglayout",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GSM-MSG/MSGLayout.git",
+      "state" : {
+        "revision" : "0ae84d6b30725f03d0a80a6630aea34f6bda6e0d",
+        "version" : "1.0.2"
+      }
+    },
+    {
       "identity" : "nanopb",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/nanopb.git",

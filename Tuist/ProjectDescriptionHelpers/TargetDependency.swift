@@ -38,7 +38,7 @@ public extension TargetDependency.SPM{
 }
 
 public extension Package {
-    static let RxSwift = Package.remote(
+    /*static let RxSwift = Package.remote(
         url: "https://github.com/ReactiveX/RxSwift",
         requirement: .upToNextMajor(from: "6.2.0")
     )
@@ -149,5 +149,5 @@ public extension Package {
     static let MSGLayout = Package.remote(
         url: "https://github.com/GSM-MSG/MSGLayout.git",
         requirement: .upToNextMajor(from: "1.0.2")
-    )
+    )*/
 }

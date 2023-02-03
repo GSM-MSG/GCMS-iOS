@@ -4,7 +4,7 @@ import ProjectDescriptionHelpers
 let project = Project.dynamicFramework(
     name: "ThirdPartyLib",
     packages: [
-        .RxSwift,
+        /*.RxSwift,
         .RxFlow,
         .Firebase,
         .Moya,
@@ -31,7 +31,7 @@ let project = Project.dynamicFramework(
         .GoogleSignIn,
         .Inject,
         .Realm,
-        .MSGLayout
+        .MSGLayout*/
     ],
     deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
     dependencies: [
