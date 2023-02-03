@@ -36,7 +36,6 @@ let dependencies = Dependencies(
         baseSettings: .settings(
             configurations: [
                 .debug(name: .debug),
-                .debug(name: ""),
                 .release(name: .release)
             ]
         )
