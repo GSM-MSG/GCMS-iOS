@@ -30,6 +30,10 @@ let dependencies = Dependencies(
             .remote(url: "https://github.com/krzysztofzablocki/Inject.git",requirement: .exact("1.2.2")),
             .remote(url: "https://github.com/GSM-MSG/MSGLayout.git",requirement: .exact("1.0.2"))
         ],
+        productTypes: [
+            "ReactorKit": .framework,
+            "ReactorKitRuntime": .framework
+        ],
         baseSettings: .settings(
             configurations: [
                 .debug(name: .debug),
