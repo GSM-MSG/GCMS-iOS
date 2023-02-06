@@ -35,7 +35,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache_dependencies.outputs.cache-hit != 'true'
-        run: tuist generate
+        run: tuist fetch
 
     outputs:
       dependency_cache_key: ${{ steps.compute_hash.outputs.hash }}

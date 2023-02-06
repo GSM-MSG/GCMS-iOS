@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  CACHED_DEPENDENCY_PATHS: ${{ github.workspace }}/Tuist/Dependencies
+
 jobs:
   prepare-dependency:
     name: ⚙️ prepare for CI
