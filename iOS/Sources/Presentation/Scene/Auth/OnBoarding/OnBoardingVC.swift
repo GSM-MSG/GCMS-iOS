@@ -17,24 +17,6 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     private let logoImageView = UIImageView().then {
         $0.image = GCMSAsset.Images.gcmsgLogo.image.withRenderingMode(.alwaysOriginal)
     }
-    private let googleSigninButton = UIButton().then {
-        $0.setTitle("Google로 계속하기", for: .normal)
-        $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
-        $0.setImage(GCMSAsset.Images.gcmsGoogleLogo.image.downSample(size: .init(width: 5.5, height: 5.5)), for: .normal)
-        $0.backgroundColor = GCMSAsset.Colors.gcmsOnBoardingMainColor.color
-        $0.layer.cornerRadius = 9
-        if #available(iOS 15.0, *) {
-            $0.configuration = .plain()
-            $0.configuration?.imagePadding = 5
-            $0.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-                var outgoing = incoming
-                outgoing.font = .systemFont(ofSize: 20)
-                return outgoing
-            }
-        } else {
-            $0.contentEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 5)
-        }
-    }
     private let appleSigninButton = ASAuthorizationAppleIDButton(type: .continue, style: .white)
     private let guestSigninButton = UIButton().then {
         $0.setTitle("게스트로 로그인하기", for: .normal)
@@ -61,7 +43,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     
     // MARK: - UI
     override func addView() {
-        view.addSubViews(headerLabel, logoImageView, googleSigninButton, appleSigninButton, guestSigninButton, termsOfServiceButton, betweenButtonView, privacyButton)
+        view.addSubViews(headerLabel, logoImageView, appleSigninButton, guestSigninButton, termsOfServiceButton, betweenButtonView, privacyButton)
     }
     override func setLayout() {
         logoImageView.snp.makeConstraints {
@@ -82,16 +64,6 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         guestSigninButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(appleSigninButton.snp.bottom).offset(7.5)
-        }
-        googleSigninButton.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.height.equalTo(51)
-            $0.bottom.equalTo(appleSigninButton.snp.top).offset(-12)
-            $0.leading.trailing.equalToSuperview().inset(15)
-        }
-        termsOfServiceButton.snp.makeConstraints {
-            $0.bottom.equalTo(googleSigninButton.snp.top).offset(-24)
-            $0.trailing.equalTo(view.snp.centerX).offset(-8)
         }
         privacyButton.snp.makeConstraints {
             $0.bottom.equalTo(termsOfServiceButton.snp.bottom)
@@ -116,7 +88,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             AnimationType.from(direction: .top, offset: 100)
         ], initialAlpha: 0, finalAlpha: 1, delay: 0.3, duration: 1.25)
         UIView.animate(views: [
-            googleSigninButton, appleSigninButton, termsOfServiceButton, privacyButton, betweenButtonView
+            appleSigninButton, termsOfServiceButton, privacyButton, betweenButtonView
         ], animations: [
             AnimationType.from(direction: .left, offset: 200)
         ], delay: 1.8, duration: 1, usingSpringWithDamping: 1, initialSpringVelocity: 0.7, options: .curveEaseInOut)
@@ -139,12 +111,6 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     }
     
     override func bindView(reactor: OnBoardingReactor) {
-        googleSigninButton.rx.tap
-            .withUnretained(self)
-            .map { Reactor.Action.googleSigninButtonDidTap($0.0) }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
         appleSigninButton.rx.controlEvent(.touchUpInside)
             .bind(with: self) { owner, _ in
                 owner.appleSigninMessage()

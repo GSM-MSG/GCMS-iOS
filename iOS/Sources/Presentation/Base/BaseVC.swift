@@ -13,7 +13,7 @@ import Service
 class BaseVC<T: Reactor>: UIViewController{
     let bound = UIScreen.main.bounds
     var disposeBag: DisposeBag = .init()
-    private lazy var indicator = AnimationView(name: "GCMS-Indicator").then {
+    private lazy var indicator = LottieAnimationView(name: "GCMS-Indicator").then {
         $0.center = view.center
         $0.contentMode = .scaleAspectFit
         $0.loopMode = .loop

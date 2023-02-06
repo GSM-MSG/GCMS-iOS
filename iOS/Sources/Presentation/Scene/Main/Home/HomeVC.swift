@@ -29,7 +29,7 @@ final class HomeVC: TabmanViewController, View {
                                                        style: .plain,
                                                        target: nil,
                                                        action: nil)
-    private lazy var indicator = AnimationView(name: "GCMS-Indicator").then {
+    private lazy var indicator = LottieAnimationView(name: "GCMS-Indicator").then {
         $0.contentMode = .scaleAspectFit
         $0.loopMode = .loop
         $0.stop()

@@ -67,7 +67,7 @@ public struct GCMSFontConvertible {
 
   fileprivate var url: URL? {
     // swiftlint:disable:next implicit_return
-    return BundleToken.bundle.url(forResource: path, withExtension: nil)
+    return Bundle.module.url(forResource: path, withExtension: nil)
   }
 }
 
@@ -86,13 +86,5 @@ public extension GCMSFontConvertible.Font {
     self.init(name: font.name, size: size)
   }
 }
-
-// swiftlint:disable convenience_type
-private final class BundleToken {
-  static let bundle: Bundle = {
-    Bundle(for: BundleToken.self)
-  }()
-}
-// swiftlint:enable convenience_type
 // swiftlint:enable all
 // swiftformat:enable all
