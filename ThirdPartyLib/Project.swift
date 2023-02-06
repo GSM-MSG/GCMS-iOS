@@ -3,7 +3,10 @@ import ProjectDescriptionHelpers
 
 let project = Project.dynamicFramework(
     name: "ThirdPartyLib",
-    packages: [],
+    packages: [
+        .Realm,
+        .Firebase
+    ],
     deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
     dependencies: [
         .SPM.Then,
@@ -29,7 +32,6 @@ let project = Project.dynamicFramework(
         .SPM.RxKeyboard,
         .SPM.Loaf,
         .SPM.ParkedTextField,
-        .SPM.GoogleSignIn,
         .SPM.Inject,
         .SPM.Realm,
         .SPM.RealmSwift,

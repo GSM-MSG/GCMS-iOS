@@ -42,7 +42,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
     private let activityHeaderLabel = HeaderLabel(title: "동아리 활동")
     private let activityView = BTImageView(aligns: [2,2], axis: .horizontal).then {
         $0.spacing = 15
-        $0.cornerRadius = 10
+        $0.layer.cornerRadius = 10
     }
     private let memberHeaderLabel = HeaderLabel(title: "구성원")
     private let memberCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
