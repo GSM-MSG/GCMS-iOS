@@ -1,25 +1,27 @@
 import Foundation
 
 struct MemberDTO: Codable {
-    let email: String
-    let name: String
-    let grade: Int
-    let `class`: Int
-    let num: Int
-    let userImg: String
-    let scope: MemberScope
+        let uuid: UUID
+        let email: String
+        let name: String
+        let grade: Int
+        let classNum: Int
+        let number: Int
+        let profileImg: String
+        let scope: MemberScope
 }
 
 extension MemberDTO {
     func toDomain() -> Member {
         return .init(
+            uuid: uuid,
             email: email,
             name: name,
             grade: grade,
-            class: `class`,
-            number: num,
+            classNum: classNum,
+            number: number,
             scope: scope,
-            profileImageUrl: userImg
+            profileImg: profileImg
         )
     }
 }

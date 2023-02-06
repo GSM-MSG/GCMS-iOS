@@ -1,33 +1,36 @@
 import UIKit
 
 public struct Member: Equatable {
-    public init(email: String, name: String, grade: Int, class: Int, number: Int, scope: MemberScope, profileImageUrl: String?) {
+    public init(uuid: UUID, email: String, name: String, grade: Int, classNum: Int, number: Int, scope: MemberScope, profileImg: String?) {
+        self.uuid = uuid
         self.email = email
         self.name = name
         self.grade = grade
-        self.class = `class`
+        self.classNum = classNum
         self.number = number
         self.scope = scope
-        self.profileImageUrl = profileImageUrl
+        self.profileImg = profileImg
     }
     
+    public let uuid : UUID
     public let email: String
     public let name: String
     public let grade: Int
-    public let `class`: Int
+    public let classNum: Int
     public let number: Int
     public let scope: MemberScope
-    public let profileImageUrl: String?
+    public let profileImg: String?
 }
 
 public extension Member {
     static let dummy = Member(
+        uuid: UUID(),
         email: "s21038",
-        name: "Baek",
+        name: "Beak",
         grade: 2,
-        class: 1,
+        classNum: 1,
         number: 18,
         scope: .member,
-        profileImageUrl: "https://avatars.githubusercontent.com/u/74440939?v=4"
+        profileImg: "https://avatars.githubusercontent.com/u/74440939?v=4"
     )
 }
