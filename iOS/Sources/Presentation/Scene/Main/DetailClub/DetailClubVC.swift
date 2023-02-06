@@ -42,7 +42,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
     private let activityHeaderLabel = HeaderLabel(title: "동아리 활동")
     private let activityView = BTImageView(aligns: [2,2], axis: .horizontal).then {
         $0.spacing = 15
-        $0.cornerRadius = 10
+        $0.layer.cornerRadius = 10
     }
     private let memberHeaderLabel = HeaderLabel(title: "구성원")
     private let memberCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
@@ -216,8 +216,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                     owner.applyButton.setTitle(item.isOpen ? "동아리 신청 마감하기" : "동아리 신청 받기", for: .normal)
                     owner.navigationItem.setRightBarButton(owner.statusButton, animated: true)
                 case .member:
-                    owner.applyButton.isHidden = item.isOpen
-                    if !item.isOpen { owner.setClosedButton() }
+                    owner.applyButton.isHidden = true
                     owner.navigationItem.setRightBarButton(owner.statusButton, animated: true)
                 case .`default`:
                     if item.isOpen {
@@ -229,8 +228,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                         owner.setClosedButton()
                     }
                 case .other:
-                    owner.applyButton.isHidden = item.isOpen
-                    if !item.isOpen { owner.setClosedButton() }
+                    owner.applyButton.isHidden = true
                 }
                 owner.headView.bind(user: item.head)
                 if let teacher = item.teacher, !teacher.isEmpty {

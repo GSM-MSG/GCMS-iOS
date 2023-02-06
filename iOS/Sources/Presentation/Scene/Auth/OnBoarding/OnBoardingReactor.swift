@@ -1,8 +1,8 @@
 import ReactorKit
+import UIKit
 import RxFlow
 import RxSwift
 import RxRelay
-import GoogleSignIn
 import FirebaseCore
 import Service
 
@@ -17,8 +17,6 @@ final class OnBoardingReactor: Reactor, Stepper {
     
     // MARK: - Reactor
     enum Action {
-        case googleSigninButtonDidTap(UIViewController)
-        case googleSigninCompleted
         case appleSigninCompleted
         case appleIdTokenReceived(idToken: String, code: String)
         case signinFailed(message: String?)
@@ -52,14 +50,10 @@ final class OnBoardingReactor: Reactor, Stepper {
 extension OnBoardingReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case let .googleSigninButtonDidTap(vc):
-            return googleSigninButtonDidTap(vc: vc)
         case .appleSigninCompleted, .guestSigninButtonDidTap:
             return appleSigninCompleted()
         case let .signinFailed(message):
             return signinFailed(message: message)
-        case .googleSigninCompleted:
-            return googleSigninCompleted()
         case .termsOfServiceButtonDidTap:
             UIApplication.shared.open(URL(string: "https://shy-trust-424.notion.site/f4b4084f6235444bbcc164f7c5d86fb2") ?? .init(string: "https://www.google.com")!)
         case .privacyButtonDidTap:
@@ -84,44 +78,6 @@ extension OnBoardingReactor {
 
 // MARK: - Method
 private extension OnBoardingReactor {
-    func googleSigninButtonDidTap(vc: UIViewController) -> Observable<Mutation> {
-        self.steps.accept(GCMSStep.alert(title: "gsm.hs.kr 계정으로 로그인해주세요.", message: "이외 계정은 로그인되지 않습니다.", style: .alert, actions: [
-            .init(title: "확인", style: .default, handler: { [weak self] _ in
-                let config = GIDConfiguration(clientID: FirebaseApp.app()?.options.clientID ?? "")
-                GIDSignIn.sharedInstance.signIn(with: config, presenting: vc) { [weak self] user, err in
-                    if let err = err {
-                        self?.action.onNext(.signinFailed(message: err.asGCMSError?.localizedDescription))
-                        return
-                    }
-                    
-                    user?.authentication.do({ auth in
-                        if let idToken = auth.idToken {
-                            self?.googleSigninTokenReceived(token: idToken)
-                        }
-                    })
-                }
-            }),
-            .init(title: "취소", style: .cancel)
-        ]))
-        
-        return .empty()
-    }
-    func googleSigninTokenReceived(token: String) {
-        UserDefaultsLocal.shared.isGuest = false
-        loginUseCase.execute(idToken: token)
-            .andThen(.just(()))
-            .map { Action.googleSigninCompleted }
-            .subscribe(with: self, onNext: { owner, action in
-                owner.action.onNext(action)
-            }, onError: { owner, e in
-                owner.action.onNext(.signinFailed(message: e.asGCMSError?.errorDescription))
-            })
-            .disposed(by: disposeBag)
-    }
-    func googleSigninCompleted() -> Observable<Mutation> {
-        steps.accept(GCMSStep.clubListIsRequired)
-        return .empty()
-    }
     func appleSigninCompleted() -> Observable<Mutation> {
         UserDefaultsLocal.shared.isGuest = true
         steps.accept(GCMSStep.clubListIsRequired)

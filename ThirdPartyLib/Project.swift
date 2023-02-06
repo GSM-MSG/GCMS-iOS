@@ -4,33 +4,8 @@ import ProjectDescriptionHelpers
 let project = Project.dynamicFramework(
     name: "ThirdPartyLib",
     packages: [
-        .RxSwift,
-        .RxFlow,
-        .Firebase,
-        .Moya,
-        .IQKeyboardManager,
-        .ReactorKit,
-        .SnapKit,
-        .Swinject,
-        .Then,
-        .Kingfisher,
-        .RxDataSources,
-        .Lottie,
-        .Reusable,
-        .BTImageView,
-        .RxGesture,
-        .PanModal,
-        .ViewAnimator,
-        .Quick,
-        .Nimble,
-        .DPOTPView,
-        .Tabman,
-        .RxKeyboard,
-        .Loaf,
-        .ParkedTextField,
-        .GoogleSignIn,
-        .Inject,
-        .Realm
+        .Realm,
+        .Firebase
     ],
     deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
     dependencies: [
@@ -57,9 +32,9 @@ let project = Project.dynamicFramework(
         .SPM.RxKeyboard,
         .SPM.Loaf,
         .SPM.ParkedTextField,
-        .SPM.GoogleSignIn,
         .SPM.Inject,
         .SPM.Realm,
         .SPM.RealmSwift,
+        .SPM.MSGLayout
     ]
 )
