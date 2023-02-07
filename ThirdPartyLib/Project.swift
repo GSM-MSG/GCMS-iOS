@@ -36,5 +36,11 @@ let project = Project.dynamicFramework(
         .SPM.Realm,
         .SPM.RealmSwift,
         .SPM.MSGLayout
-    ]
+    ],
+    settings: .settings(base: SettingsDictionary(),
+                        configurations: [
+                            .debug(name: .debug, xcconfig: .relativeToXCConfig(type: .debug, name: "ThirdPartyLib")),
+                            .release(name: .release, xcconfig: .relativeToXCConfig(type: .release, name: "ThirdPartyLib"))
+                        ],
+                        defaultSettings: .recommended)
 )

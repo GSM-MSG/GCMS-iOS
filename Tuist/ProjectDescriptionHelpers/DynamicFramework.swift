@@ -9,7 +9,8 @@ extension Project{
         deploymentTarget: DeploymentTarget,
         dependencies: [TargetDependency] = [
             .project(target: "ThirdPartyLib", path: Path("../ThirdPartyLib"))
-        ]
+        ],
+        settings: Settings? = nil
     ) -> Project {
         return Project(
             name: name,
@@ -24,7 +25,8 @@ extension Project{
                     deploymentTarget: deploymentTarget,
                     infoPlist: infoPlist,
                     sources: ["Sources/**"],
-                    dependencies: dependencies
+                    dependencies: dependencies,
+                    settings: settings
                 )
             ]
         )
