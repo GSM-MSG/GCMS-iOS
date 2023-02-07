@@ -15,7 +15,7 @@ extension ClubMemberAPI: GCMSAPI {
     
     var urlPath: String {
         switch self {
-        case .clubMember(let clubID), .userKick(let clubID, _), .delegation(let clubID, _):
+        case let .clubMember(clubID), let .userKick(clubID, _), let .delegation(clubID, _):
             return "/\(clubID)"
         }
     }
@@ -24,8 +24,10 @@ extension ClubMemberAPI: GCMSAPI {
         switch self {
         case .clubMember:
             return .get
+            
         case .userKick:
             return .post
+            
         case .delegation:
             return .patch
         }
@@ -35,9 +37,11 @@ extension ClubMemberAPI: GCMSAPI {
         switch self {
         case .clubMember:
             return .requestPlain
-        case .userKick(_, uuid: let uuid):
+            
+        case let .userKick(_,uuid):
             return .requestParameters(parameters: ["uuid": uuid], encoding: JSONEncoding.default)
-        case .delegation(_, uuid: let uuid):
+            
+        case let .delegation(_,uuid):
             return .requestParameters(parameters: ["uuid": uuid], encoding: JSONEncoding.default)
         }
     }
@@ -58,6 +62,7 @@ extension ClubMemberAPI: GCMSAPI {
                 404: .notFoundClub,
                 500: .serverError
             ]
+            
         case .userKick:
             return [
                 401: .unauthorized,
@@ -65,6 +70,7 @@ extension ClubMemberAPI: GCMSAPI {
                 404: .notFoundClub,
                 500: .serverError
             ]
+            
         case .delegation:
             return [
                 400: .kickMyself,
