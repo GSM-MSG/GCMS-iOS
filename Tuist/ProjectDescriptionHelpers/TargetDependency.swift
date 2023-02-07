@@ -39,11 +39,10 @@ public extension TargetDependency.SPM{
 public extension Package {
     static let Realm = Package.remote(
         url: "https://github.com/realm/realm-swift.git",
-        requirement: .upToNextMajor(from: "10.34.1")
+        requirement: .exact("10.34.1")
     )
-    
     static let Firebase = Package.remote(
         url: "https://github.com/firebase/firebase-ios-sdk.git",
-        requirement: .upToNextMajor(from: "10.4.0")
+        requirement: .exact("10.4.0")
     )
 }
