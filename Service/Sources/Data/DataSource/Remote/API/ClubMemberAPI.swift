@@ -2,9 +2,9 @@ import Moya
 import Foundation
 
 enum ClubMemberAPI {
-    case clubMember(club_id: String)
-    case userKick(club_id: String, uuid: UUID)
-    case delegation(club_id: String, uuid: UUID)
+    case clubMember(clubID: String)
+    case userKick(clubID: String, uuid: UUID)
+    case delegation(clubID: String, uuid: UUID)
 }
 
 extension ClubMemberAPI: GCMSAPI {
@@ -15,8 +15,8 @@ extension ClubMemberAPI: GCMSAPI {
     
     var urlPath: String {
         switch self {
-        case .clubMember(let club_id), .userKick(let club_id, _), .delegation(let club_id, _):
-            return "/\(club_id)"
+        case .clubMember(let clubID), .userKick(let clubID, _), .delegation(let clubID, _):
+            return "/\(clubID)"
         }
     }
     
