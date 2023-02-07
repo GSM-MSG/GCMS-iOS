@@ -18,7 +18,7 @@ let dependencies = Dependencies(
             .remote(url: "https://github.com/baekteun/BTImageView.git",requirement: .exact("1.1.2")),
             .remote(url: "https://github.com/RxSwiftCommunity/RxGesture.git",requirement: .exact("4.0.4")),
             .remote(url: "https://github.com/slackhq/PanModal.git",requirement: .exact("1.2.7")),
-            .remote(url: "https://github.com/airbnb/lottie-spm",requirement: .exact("4.1.2")),
+            .remote(url: "https://github.com/airbnb/lottie-ios.git",requirement: .exact("4.1.2")),
             .remote(url: "https://github.com/marcosgriselli/ViewAnimator.git",requirement: .exact("3.1.0")),
             .remote(url: "https://github.com/Quick/Quick.git",requirement: .exact("6.1.0")),
             .remote(url: "https://github.com/Quick/Nimble.git",requirement: .exact("11.2.1")),
@@ -29,6 +29,10 @@ let dependencies = Dependencies(
             .remote(url: "https://github.com/gmertk/ParkedTextField",requirement: .exact("1.0.0")),
             .remote(url: "https://github.com/krzysztofzablocki/Inject.git",requirement: .exact("1.2.2")),
             .remote(url: "https://github.com/GSM-MSG/MSGLayout.git",requirement: .exact("1.0.2"))
+        ],
+        productTypes: [
+            "ReactorKit": .framework,
+            "ReactorKitRuntime": .framework
         ],
         baseSettings: .settings(
             configurations: [
