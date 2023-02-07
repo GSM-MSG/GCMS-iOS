@@ -29,11 +29,9 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray4.color, for: .normal)
         $0.setUnderline()
     }
-    
     private let betweenButtonView = UIView().then {
         $0.backgroundColor = GCMSAsset.Colors.gcmsGray4.color
     }
-    
     private let privacyButton = UIButton().then {
         $0.setTitle("개인정보 처리 방침", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: 14)
