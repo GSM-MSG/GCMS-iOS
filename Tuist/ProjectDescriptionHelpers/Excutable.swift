@@ -15,7 +15,10 @@ extension Project{
             settings: .settings(base: .codeSign.merging([
                 "MARKETING_VERSION": "1.0",
                 "CURRENT_PROJECT_VERSION": "1.0"
-            ])),
+            ]), configurations: [
+                .debug(name: .debug, xcconfig: .relativeToXCConfig(type: .debug, name: name)),
+                .release(name: .release, xcconfig: .relativeToXCConfig(type: .release, name: name))
+            ]),
             targets: [
                 Target(
                     name: name,

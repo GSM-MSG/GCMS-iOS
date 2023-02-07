@@ -9,13 +9,15 @@ extension Project{
         deploymentTarget: DeploymentTarget,
         dependencies: [TargetDependency] = [
             .project(target: "ThirdPartyLib", path: Path("../ThirdPartyLib"))
-        ],
-        settings: Settings? = nil
+        ]
     ) -> Project {
         return Project(
             name: name,
             packages: packages,
-            settings: .settings(base: .codeSign),
+            settings: .settings(base: .codeSign, configurations: [
+                .debug(name: .debug, xcconfig: .relativeToXCConfig(type: .debug, name: name)),
+                .release(name: .release, xcconfig: .relativeToXCConfig(type: .release, name: name))
+            ]),
             targets: [
                 Target(
                     name: name,
@@ -25,8 +27,8 @@ extension Project{
                     deploymentTarget: deploymentTarget,
                     infoPlist: infoPlist,
                     sources: ["Sources/**"],
-                    dependencies: dependencies,
-                    settings: settings
+                    resources: ["Resources/**"],
+                    dependencies: dependencies
                 )
             ]
         )
