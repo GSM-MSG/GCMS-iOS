@@ -6,16 +6,13 @@ enum ClubAPI {
     case createNewClub(req: NewClubRequest)
     case updateClub(req: UpdateClubRequest)
     case deleteClub(query: ClubRequestQuery)
-    case clubMember(query: ClubRequestQuery)
     case clubApplicant(query: ClubRequestQuery)
     case userAccept(query: ClubRequestQuery, userId: String)
     case userReject(query: ClubRequestQuery, userId: String)
     case clubOpen(query: ClubRequestQuery)
     case clubClose(query: ClubRequestQuery)
-    case userKick(query: ClubRequestQuery, userId: String)
     case apply(query: ClubRequestQuery)
     case cancel(query: ClubRequestQuery)
-    case delegation(query: ClubRequestQuery, userId: String)
 }
 
 extension ClubAPI: GCMSAPI {
@@ -32,8 +29,6 @@ extension ClubAPI: GCMSAPI {
             return "/"
         case .deleteClub:
             return "/delete"
-        case .clubMember:
-            return "/members"
         case .clubApplicant:
             return "/applicant"
         case .userAccept:
@@ -44,23 +39,19 @@ extension ClubAPI: GCMSAPI {
             return "/open"
         case .clubClose:
             return "/close"
-        case .userKick:
-            return "/kick"
         case .apply:
             return "/apply"
         case .cancel:
             return "/cancel"
-        case .delegation:
-            return "/delegation"
         }
     }
     var method: Method {
         switch self {
-        case .clubList, .clubDetail, .clubMember, .clubApplicant:
+        case .clubList, .clubDetail, .clubApplicant:
             return .get
-        case .userAccept, .userReject, .apply, .cancel, .createNewClub, .deleteClub, .userKick:
+        case .userAccept, .userReject, .apply, .cancel, .createNewClub, .deleteClub:
             return .post
-        case .updateClub, .clubOpen, .clubClose, .delegation:
+        case .updateClub, .clubOpen, .clubClose:
             return .put
         }
     }
@@ -70,7 +61,7 @@ extension ClubAPI: GCMSAPI {
             return .requestParameters(parameters: [
                 "type": type.rawValue
             ], encoding: URLEncoding.queryString)
-        case let .clubDetail(q), let .clubMember(q), let .clubApplicant(q):
+        case let .clubDetail(q), let .clubApplicant(q):
             return .requestParameters(parameters: [
                 "q": q.q,
                 "type": q.type.rawValue
@@ -79,7 +70,7 @@ extension ClubAPI: GCMSAPI {
             return .requestJSONEncodable(req)
         case let .deleteClub(query), let .clubOpen(query), let .clubClose(query):
             return .requestJSONEncodable(query)
-        case let .userAccept(query, userId), let .userReject(query, userId), let .userKick(query, userId):
+        case let .userAccept(query, userId), let .userReject(query, userId):
             return .requestParameters(parameters: [
                 "q": query.q,
                 "type": query.type.rawValue,
@@ -91,12 +82,6 @@ extension ClubAPI: GCMSAPI {
             return .requestJSONEncodable(query)
         case let .cancel(query):
             return .requestJSONEncodable(query)
-        case let .delegation(query, userId):
-            return .requestParameters(parameters: [
-                "q": query.q,
-                "type": query.type.rawValue,
-                "userId": userId
-            ], encoding: JSONEncoding.default)
         }
     }
     var jwtTokenType: JWTTokenType? {
@@ -138,11 +123,6 @@ extension ClubAPI: GCMSAPI {
                 403: .notClubHead,
                 404: .notFoundClub
             ]
-        case .clubMember:
-            return [
-                401: .unauthorized,
-                406: .notExistInClub
-            ]
         case .clubApplicant:
             return [
                 401: .unauthorized,
@@ -165,11 +145,6 @@ extension ClubAPI: GCMSAPI {
                 401: .unauthorized,
                 403: .notClubHead
             ]
-        case .userKick:
-            return [
-                401: .unauthorized,
-                403: .cannotKickHeadOrNotClubHead
-            ]
         case .apply:
             return [
                 401: .unauthorized,
@@ -180,12 +155,6 @@ extension ClubAPI: GCMSAPI {
             return [
                 401: .unauthorized,
                 404: .notFoundInApplyUserOrNotFoundClub
-            ]
-        case .delegation:
-            return [
-                401: .unauthorized,
-                403: .notClubHead,
-                404: .notFoundUser
             ]
         }
     }
