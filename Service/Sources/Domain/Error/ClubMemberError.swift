@@ -5,7 +5,6 @@ public enum ClubMemberError: Error {
     
     //MARK: - 400
     case kickMyself
-    case wrongId
     case delegationMyself
     
     // MARK: - 401
@@ -29,8 +28,8 @@ extension ClubMemberError: LocalizedError {
         case let .error(message, _) :
             return message
         case .kickMyself:
-            return "자기 자신을 방출할 수 없습니다"
-        case .wrongId, .unauthorized, .serverError:
+            return "자기 자신은 방출할 수 없습니다"
+        case .unauthorized, .serverError:
             return "알수없는 에러가 발생했습니다. 잠시 후 다시 시도해 주세요."
         case .delegationMyself:
             return "자기 자신에게 부장을 위임할 수 없습니다"

@@ -4,7 +4,6 @@ import Foundation
 protocol GCMSAPI: TargetType, JWTTokenAuthorizable {
     var domain: GCMSDomain { get }
     var urlPath: String { get }
-    var errorMapper: [Int: GCMSError]? { get }
 }
 
 extension GCMSAPI {
