@@ -1,14 +1,14 @@
 import Foundation
 
 struct MemberDTO: Codable {
-        let uuid: UUID
-        let email: String
-        let name: String
-        let grade: Int
-        let classNum: Int
-        let number: Int
-        let profileImg: String
-        let scope: MemberScope
+    let uuid: UUID
+    let email: String
+    let name: String
+    let grade: Int
+    let classNum: Int
+    let number: Int
+    let profileImg: String?
+    let scope: MemberScope
 }
 
 extension MemberDTO {
