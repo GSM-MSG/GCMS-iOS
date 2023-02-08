@@ -64,6 +64,7 @@ extension ClubMemberAPI: GCMSAPI {
             
         case .userKick:
             return [
+                400: ClubMemberError.kickMyself,
                 401: ClubMemberError.unauthorized,
                 403: ClubMemberError.notClubHead,
                 404: ClubMemberError.notFoundClub,
@@ -72,7 +73,7 @@ extension ClubMemberAPI: GCMSAPI {
             
         case .delegation:
             return [
-                400: ClubMemberError.kickMyself,
+                400: ClubMemberError.delegationMyself,
                 401: ClubMemberError.unauthorized,
                 403: ClubMemberError.notClubHead,
                 404: ClubMemberError.notFoundClub,
