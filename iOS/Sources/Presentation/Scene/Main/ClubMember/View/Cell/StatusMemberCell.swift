@@ -95,7 +95,7 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
     }
     
     override func bind(_ model: Member) {
-        if let url = model.profileImageUrl, !url.isEmpty {
+        if let url = model.profileImg, !url.isEmpty {
             profileImageView.kf.setImage(with: URL(string: url) ?? .none,
                                          placeholder: UIImage(),
                                          options: [])
@@ -103,7 +103,7 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
             profileImageView.image = UIImage(systemName: "person.crop.circle")
         }
         nameLabel.text = model.name
-        infoLabel.text = "\(model.grade)학년\(model.class)반\(model.number)번"
+        infoLabel.text = "\(model.grade)학년\(model.classNum)반\(model.number)번"
         [delegationButton, kickButton].forEach {
             $0.isHidden = (!isHead || model.scope == .head)
         }
