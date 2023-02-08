@@ -10,6 +10,7 @@ extension Project{
         packages: [Package] = [],
         infoPlist: InfoPlist = .default,
         deploymentTarget: DeploymentTarget,
+        resources: ResourceFileElements? = nil,
         dependencies: [TargetDependency] = [
             .project(target: "ThirdPartyLib", path: Path("../ThirdPartyLib"))
         ]
@@ -35,7 +36,7 @@ extension Project{
                     deploymentTarget: deploymentTarget,
                     infoPlist: infoPlist,
                     sources: ["Sources/**"],
-                    resources: ["Resources/**"],
+                    resources: resources,
                     dependencies: dependencies
                 )
             ]
