@@ -48,7 +48,7 @@ public final class UseCaseAssembly: Assembly {
         }
         container.register(FetchClubMemberUseCase.self) { r in
              FetchClubMemberUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
+                clubMemberRepository: r.resolve(ClubMemberRepository.self)!
             )
         }
         container.register(FetchClubApplicantUseCase.self) { r in
@@ -73,7 +73,7 @@ public final class UseCaseAssembly: Assembly {
         }
         container.register(UserKickUseCase.self) { r in
              UserKickUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
+                clubMemberRepository: r.resolve(ClubMemberRepository.self)!
             )
         }
         container.register(ClubApplyUseCase.self) { r in
@@ -88,7 +88,7 @@ public final class UseCaseAssembly: Assembly {
         }
         container.register(ClubDelegationUseCase.self) { r in
              ClubDelegationUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
+                clubMemberRepository: r.resolve(ClubMemberRepository.self)!
             )
         }
         container.register(UpdateClubUseCase.self) { r in
