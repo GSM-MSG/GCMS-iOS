@@ -8,7 +8,6 @@ enum ClubMemberAPI {
 }
 
 extension ClubMemberAPI: GCMSAPI {
-    
     var domain: GCMSDomain {
         return .clubMember
     }
@@ -53,7 +52,7 @@ extension ClubMemberAPI: GCMSAPI {
         }
     }
     
-    var errorMapper: [Int : Error]? {
+    var errorMapper: [Int: Error]? {
         switch self {
         case .clubMember:
             return [

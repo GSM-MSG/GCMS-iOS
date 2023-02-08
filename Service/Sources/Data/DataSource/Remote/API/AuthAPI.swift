@@ -6,7 +6,6 @@ enum AuthAPI {
 }
 
 extension AuthAPI: GCMSAPI {
-    
     var domain: GCMSDomain {
         return .auth
     }
