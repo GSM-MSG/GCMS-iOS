@@ -1,16 +1,17 @@
 import RxSwift
+import Foundation
 
 public final class UserKickUseCase {
-    public init(clubRepository: ClubRepository) {
-        self.clubRepository = clubRepository
+    public init(clubMemberRepository: ClubMemberRepository) {
+        self.clubMemberRepository = clubMemberRepository
     }
     
-    private let clubRepository: ClubRepository
+    private let clubMemberRepository: ClubMemberRepository
     
     public func execute(
-        query: ClubRequestQuery,
-        userId: String
+        clubID: String,
+        uuid: UUID
     ) -> Completable{
-        clubRepository.userKick(query: query, userId: userId)
+        clubMemberRepository.userKick(clubID: clubID, uuid: uuid)
     }
 }
