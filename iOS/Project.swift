@@ -7,5 +7,6 @@ let project = Project.excutable(
     deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
     dependencies: [
         .project(target: "Service", path: "../Service")
-    ]
+    ],
+    resources: ["Resources/**"]
 )

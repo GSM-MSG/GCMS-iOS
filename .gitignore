@@ -224,4 +224,5 @@ xcuserdata
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 Derived/
+XCConfig/
 # End of https://www.toptal.com/developers/gitignore/api/xcode,swift,objective-c,macos,swiftpackagemanager,swiftpm,cocoapods,git,fastlane,homebrew
