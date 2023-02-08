@@ -4,6 +4,7 @@ import SnapKit
 import AuthenticationServices
 import RxSwift
 import ViewAnimator
+import GAuthSignin
 
 final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     // MARK: - Properties
@@ -38,10 +39,11 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray4.color, for: .normal)
         $0.setUnderline()
     }
+    private let gAuthSigninButton = GAuthButton(auth: .signin, color: .white, rounded: .default)
     
     // MARK: - UI
     override func addView() {
-        view.addSubViews(headerLabel, logoImageView, appleSigninButton, guestSigninButton, termsOfServiceButton, betweenButtonView, privacyButton)
+        view.addSubViews(headerLabel, logoImageView, appleSigninButton, guestSigninButton, termsOfServiceButton, betweenButtonView, privacyButton, gAuthSigninButton)
     }
     override func setLayout() {
         logoImageView.snp.makeConstraints {
@@ -73,9 +75,17 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             $0.width.equalTo(2)
             $0.height.equalTo(16)
         }
+        gAuthSigninButton.snp.makeConstraints {
+            $0.bottom.equalTo(appleSigninButton.snp.top).offset(-24)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(50)
+        }
     }
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
+        gAuthSigninButton.prepare(clientID: "0ad96633cfa14b86bb2adc42aa51ced07f661f5340a54fc489ed46778efcec01", redirectURI: "https://gcms.com/login", presenting: self) { code in
+            print(code)
+        }
     }
     override func configureNavigation() {
         self.navigationController?.navigationBar.setClear()
