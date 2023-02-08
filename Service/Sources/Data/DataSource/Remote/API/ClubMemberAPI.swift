@@ -53,31 +53,31 @@ extension ClubMemberAPI: GCMSAPI {
         }
     }
     
-    var errorMapper: [Int : ClubMemberError]? {
+    var errorMapper: [Int : Error]? {
         switch self {
         case .clubMember:
             return [
-                401: .unauthorized,
-                403: .notClubMember,
-                404: .notFoundClub,
-                500: .serverError
+                401: ClubMemberError.unauthorized,
+                403: ClubMemberError.notClubMember,
+                404: ClubMemberError.notFoundClub,
+                500: ClubMemberError.serverError
             ]
             
         case .userKick:
             return [
-                401: .unauthorized,
-                403: .notClubHead,
-                404: .notFoundClub,
-                500: .serverError
+                401: ClubMemberError.unauthorized,
+                403: ClubMemberError.notClubHead,
+                404: ClubMemberError.notFoundClub,
+                500: ClubMemberError.serverError
             ]
             
         case .delegation:
             return [
-                400: .kickMyself,
-                401: .unauthorized,
-                403: .notClubHead,
-                404: .notFoundClub,
-                500: .serverError
+                400: ClubMemberError.kickMyself,
+                401: ClubMemberError.unauthorized,
+                403: ClubMemberError.notClubHead,
+                404: ClubMemberError.notFoundClub,
+                500: ClubMemberError.serverError
             ]
         }
     }

@@ -6,6 +6,7 @@ enum AuthAPI {
 }
 
 extension AuthAPI: GCMSAPI {
+    
     var domain: GCMSDomain {
         return .auth
     }
@@ -29,6 +30,7 @@ extension AuthAPI: GCMSAPI {
             return .requestParameters(parameters: [
                 "idToken": req
             ], encoding: JSONEncoding.default)
+            
         case .refresh:
             return .requestPlain
         }
@@ -37,18 +39,20 @@ extension AuthAPI: GCMSAPI {
         switch self {
         case .refresh:
             return .refreshToken
+            
         default:
             return JWTTokenType.none
         }
     }
-    var errorMapper: [Int: GCMSError]?{
+    var errorMapper: [Int : Error]? {
         switch self {
         case .login:
             return [
-                400: .invalidToken,
-                403: .notGSMAccount,
-                404: .notFoundInGSMOrEmail
+                400: GCMSError.invalidToken,
+                403: GCMSError.notGSMAccount,
+                404: GCMSError.notFoundInGSMOrEmail
             ]
+            
         case .refresh:
             return .none
         }

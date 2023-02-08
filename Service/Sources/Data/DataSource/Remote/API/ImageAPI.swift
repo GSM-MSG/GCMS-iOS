@@ -40,6 +40,7 @@ extension ImageAPI: GCMSAPI {
         switch self {
         case .uploadImages:
             return .accessToken
+            
         default:
             return JWTTokenType.none
         }
@@ -48,7 +49,7 @@ extension ImageAPI: GCMSAPI {
         return ["Content-type" : "multipart/form-data"]
     }
     
-    var errorMapper: [Int : GCMSError]? {
+    var errorMapper: [Int : Error]? {
         return .none
     }
 }
