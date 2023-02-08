@@ -43,7 +43,7 @@ extension AuthAPI: GCMSAPI {
             return JWTTokenType.none
         }
     }
-    var errorMapper: [Int : Error]? {
+    var errorMapper: [Int: Error]? {
         switch self {
         case .login:
             return [

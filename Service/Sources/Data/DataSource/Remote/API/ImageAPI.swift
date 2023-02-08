@@ -45,11 +45,11 @@ extension ImageAPI: GCMSAPI {
             return JWTTokenType.none
         }
     }
-    var headers: [String : String]? {
+    var headers: [String: String]? {
         return ["Content-type" : "multipart/form-data"]
     }
     
-    var errorMapper: [Int : Error]? {
+    var errorMapper: [Int: Error]? {
         return .none
     }
 }
