@@ -29,7 +29,7 @@ let dependencies = Dependencies(
             .remote(url: "https://github.com/gmertk/ParkedTextField",requirement: .exact("1.0.0")),
             .remote(url: "https://github.com/krzysztofzablocki/Inject.git",requirement: .exact("1.2.2")),
             .remote(url: "https://github.com/GSM-MSG/MSGLayout.git",requirement: .exact("1.0.2")),
-            .remote(url: "https://github.com/GSM-MSG/GAuthSignin-Swift.git", requirement: .exact("0.0.1"))
+            .remote(url: "https://github.com/GSM-MSG/GAuthSignin-Swift.git", requirement: .exact("0.0.3"))
         ],
         productTypes: [
             "ReactorKit": .framework,
