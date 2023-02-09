@@ -77,6 +77,7 @@ private extension JWTPlugin {
     func setToken(token: TokenDTO) {
         KeychainLocal.shared.saveAccessToken(token.accessToken)
         KeychainLocal.shared.saveRefreshToken(token.refreshToken)
-        KeychainLocal.shared.saveExpiredAt(token.expiredAt)
+        KeychainLocal.shared.saveAccessExp(token.accessExp)
+        KeychainLocal.shared.saveRefreshExp(token.refreshExp)
     }
 }
