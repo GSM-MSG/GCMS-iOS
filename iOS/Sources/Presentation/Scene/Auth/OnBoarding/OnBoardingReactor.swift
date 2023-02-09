@@ -17,7 +17,7 @@ final class OnBoardingReactor: Reactor, Stepper {
     
     // MARK: - Reactor
     enum Action {
-        case gauthSignginCompleted(code: String)
+        case gauthSigninCompleted(code: String)
         case appleSigninCompleted
         case appleIdTokenReceived(idToken: String, code: String)
         case signinFailed(message: String?)
@@ -51,7 +51,7 @@ final class OnBoardingReactor: Reactor, Stepper {
 extension OnBoardingReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case let .gauthSignginCompleted(code):
+        case let .gauthSigninCompleted(code):
             return gauthSigninCompleted(code: code)
         case .appleSigninCompleted, .guestSigninButtonDidTap:
             return appleSigninCompleted()

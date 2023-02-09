@@ -39,11 +39,11 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray4.color, for: .normal)
         $0.setUnderline()
     }
-    private let gAuthSigninButton = GAuthButton(auth: .signin, color: .white, rounded: .default)
+    private let gauthSigninButton = GAuthButton(auth: .signin, color: .white, rounded: .default)
     
     // MARK: - UI
     override func addView() {
-        view.addSubViews(headerLabel, logoImageView, appleSigninButton, guestSigninButton, termsOfServiceButton, betweenButtonView, privacyButton, gAuthSigninButton)
+        view.addSubViews(headerLabel, logoImageView, appleSigninButton, guestSigninButton, termsOfServiceButton, betweenButtonView, privacyButton, gauthSigninButton)
     }
     override func setLayout() {
         logoImageView.snp.makeConstraints {
@@ -75,19 +75,19 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             $0.width.equalTo(2)
             $0.height.equalTo(16)
         }
-        gAuthSigninButton.snp.makeConstraints {
+        gauthSigninButton.snp.makeConstraints {
             $0.bottom.equalTo(appleSigninButton.snp.top).offset(-24)
             $0.leading.trailing.equalToSuperview().inset(16)
             $0.height.equalTo(50)
         }
     }
     override func setup() {
-        gAuthSigninButton.prepare(
+        gauthSigninButton.prepare(
             clientID: Bundle.main.object(forInfoDictionaryKey: "CLIENT_ID") as? String ?? "",
             redirectURI: Bundle.main.object(forInfoDictionaryKey: "REDIREDCT_URI") as? String ?? "",
             presenting: self
         ) { [weak self] code in
-            self?.reactor?.action.onNext(.gauthSignginCompleted(code: code))
+            self?.reactor?.action.onNext(.gauthSigninCompleted(code: code))
         }
     }
     override func configureVC() {
@@ -102,7 +102,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             AnimationType.from(direction: .top, offset: 100)
         ], initialAlpha: 0, finalAlpha: 1, delay: 0.3, duration: 1.25)
         UIView.animate(views: [
-            gAuthSigninButton, appleSigninButton, termsOfServiceButton, privacyButton, betweenButtonView
+            gauthSigninButton, appleSigninButton, termsOfServiceButton, privacyButton, betweenButtonView
         ], animations: [
             AnimationType.from(direction: .left, offset: 200)
         ], delay: 1.8, duration: 1, usingSpringWithDamping: 1, initialSpringVelocity: 0.7, options: .curveEaseInOut)
