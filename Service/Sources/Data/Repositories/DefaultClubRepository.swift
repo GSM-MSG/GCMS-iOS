@@ -23,9 +23,6 @@ final class DefaultClubRepository: ClubRepository {
     func deleteClub(query: ClubRequestQuery) -> Completable {
         clubRemote.deleteClub(query: query)
     }
-    func fetchClubMember(query: ClubRequestQuery) -> Single<[Member]> {
-        clubRemote.fetchClubMember(query: query)
-    }
     func fetchClubApplicant(query: ClubRequestQuery) -> Single<[User]> {
         clubRemote.fetchClubApplicant(query: query)
     }
@@ -41,16 +38,10 @@ final class DefaultClubRepository: ClubRepository {
     func clubClose(query: ClubRequestQuery) -> Completable {
         clubRemote.clubClose(query: query)
     }
-    func userKick(query: ClubRequestQuery, userId: String) -> Completable {
-        clubRemote.userKick(query: query, userId: userId)
-    }
     func apply(query: ClubRequestQuery) -> Completable {
         clubRemote.apply(query: query)
     }
     func cancel(query: ClubRequestQuery) -> Completable {
         clubRemote.cancel(query: query)
-    }
-    func delegation(query: ClubRequestQuery, userId: String) -> Completable {
-        clubRemote.delegation(query: query, userId: userId)
     }
 }

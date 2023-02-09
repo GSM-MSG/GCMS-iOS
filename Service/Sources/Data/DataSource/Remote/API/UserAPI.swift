@@ -68,25 +68,29 @@ extension UserAPI: GCMSAPI {
         }
     }
     
-    var errorMapper: [Int: GCMSError]?{
+    var errorMapper: [Int: Error]?{
         switch self {
         case .myProfile:
             return .none
+            
         case .editProfile:
             return .none
+            
         case .search:
             return .none
+            
         case .exit:
             return [
-                401: .unauthorized,
-                403: .canNotLeaveTheClub,
-                404: .notFoundClub,
-                406: .notExistInClub
+                401: GCMSError.unauthorized,
+                403: GCMSError.canNotLeaveTheClub,
+                404: GCMSError.notFoundClub,
+                406: GCMSError.notExistInClub
             ]
+            
         case .withdrawal:
             return [
-                401: .unauthorized,
-                403: .notExistUser
+                401: GCMSError.unauthorized,
+                403: GCMSError.notExistUser
             ]
         }
     }

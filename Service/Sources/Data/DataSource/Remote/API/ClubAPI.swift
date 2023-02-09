@@ -6,16 +6,13 @@ enum ClubAPI {
     case createNewClub(req: NewClubRequest)
     case updateClub(req: UpdateClubRequest)
     case deleteClub(query: ClubRequestQuery)
-    case clubMember(query: ClubRequestQuery)
     case clubApplicant(query: ClubRequestQuery)
     case userAccept(query: ClubRequestQuery, userId: String)
     case userReject(query: ClubRequestQuery, userId: String)
     case clubOpen(query: ClubRequestQuery)
     case clubClose(query: ClubRequestQuery)
-    case userKick(query: ClubRequestQuery, userId: String)
     case apply(query: ClubRequestQuery)
     case cancel(query: ClubRequestQuery)
-    case delegation(query: ClubRequestQuery, userId: String)
 }
 
 extension ClubAPI: GCMSAPI {
@@ -32,8 +29,6 @@ extension ClubAPI: GCMSAPI {
             return "/"
         case .deleteClub:
             return "/delete"
-        case .clubMember:
-            return "/members"
         case .clubApplicant:
             return "/applicant"
         case .userAccept:
@@ -44,23 +39,19 @@ extension ClubAPI: GCMSAPI {
             return "/open"
         case .clubClose:
             return "/close"
-        case .userKick:
-            return "/kick"
         case .apply:
             return "/apply"
         case .cancel:
             return "/cancel"
-        case .delegation:
-            return "/delegation"
         }
     }
     var method: Method {
         switch self {
-        case .clubList, .clubDetail, .clubMember, .clubApplicant:
+        case .clubList, .clubDetail, .clubApplicant:
             return .get
-        case .userAccept, .userReject, .apply, .cancel, .createNewClub, .deleteClub, .userKick:
+        case .userAccept, .userReject, .apply, .cancel, .createNewClub, .deleteClub:
             return .post
-        case .updateClub, .clubOpen, .clubClose, .delegation:
+        case .updateClub, .clubOpen, .clubClose:
             return .put
         }
     }
@@ -70,7 +61,7 @@ extension ClubAPI: GCMSAPI {
             return .requestParameters(parameters: [
                 "type": type.rawValue
             ], encoding: URLEncoding.queryString)
-        case let .clubDetail(q), let .clubMember(q), let .clubApplicant(q):
+        case let .clubDetail(q), let .clubApplicant(q):
             return .requestParameters(parameters: [
                 "q": q.q,
                 "type": q.type.rawValue
@@ -79,7 +70,7 @@ extension ClubAPI: GCMSAPI {
             return .requestJSONEncodable(req)
         case let .deleteClub(query), let .clubOpen(query), let .clubClose(query):
             return .requestJSONEncodable(query)
-        case let .userAccept(query, userId), let .userReject(query, userId), let .userKick(query, userId):
+        case let .userAccept(query, userId), let .userReject(query, userId):
             return .requestParameters(parameters: [
                 "q": query.q,
                 "type": query.type.rawValue,
@@ -91,12 +82,6 @@ extension ClubAPI: GCMSAPI {
             return .requestJSONEncodable(query)
         case let .cancel(query):
             return .requestJSONEncodable(query)
-        case let .delegation(query, userId):
-            return .requestParameters(parameters: [
-                "q": query.q,
-                "type": query.type.rawValue,
-                "userId": userId
-            ], encoding: JSONEncoding.default)
         }
     }
     var jwtTokenType: JWTTokenType? {
@@ -105,87 +90,81 @@ extension ClubAPI: GCMSAPI {
             return .accessToken
         }
     }
-    var errorMapper: [Int: GCMSError]?{
+    var errorMapper: [Int: Error]?{
         switch self {
         case .clubList:
             return [
-                400: .clubTypeError,
-                401: .unauthorized
+                400: GCMSError.clubTypeError,
+                401: GCMSError.unauthorized
             ]
+            
         case .clubDetail:
             return [
-                400: .noMebmerClub,
-                401: .unauthorized,
-                404: .notFoundClub
+                400: GCMSError.noMebmerClub,
+                401: GCMSError.unauthorized,
+                404: GCMSError.notFoundClub
             ]
+            
         case .createNewClub:
             return [
-                400: .alreadyExistClubOrBelongOtherClub,
-                401: .unauthorized,
-                404: .notFoundUser,
-                409: .alreadyExistClubOrBelongOtherClub
+                400: GCMSError.alreadyExistClubOrBelongOtherClub,
+                401: GCMSError.unauthorized,
+                404: GCMSError.notFoundUser,
+                409: GCMSError.alreadyExistClubOrBelongOtherClub
             ]
+            
         case .updateClub:
             return [
-                400: .invalidInput,
-                401: .unauthorized,
-                403: .notClubHead,
-                404: .notFoundClub
+                400: GCMSError.invalidInput,
+                401: GCMSError.unauthorized,
+                403: GCMSError.notClubHead,
+                404: GCMSError.notFoundClub
             ]
+            
         case .deleteClub:
             return [
-                401: .unauthorized,
-                403: .notClubHead,
-                404: .notFoundClub
+                401: GCMSError.unauthorized,
+                403: GCMSError.notClubHead,
+                404: GCMSError.notFoundClub
             ]
-        case .clubMember:
-            return [
-                401: .unauthorized,
-                406: .notExistInClub
-            ]
+            
         case .clubApplicant:
             return [
-                401: .unauthorized,
-                404: .notFoundClub,
-                406: .notExistInClub
+                401: GCMSError.unauthorized,
+                404: GCMSError.notFoundClub,
+                406: GCMSError.notExistInClub
             ]
+            
         case .userAccept, .userReject:
             return [
-                403: .notClubHead,
-                404: .notFoundInApplyUserOrNotFoundClub,
-                409: .belongOtherClubOrBelongClub
+                403: GCMSError.notClubHead,
+                404: GCMSError.notFoundInApplyUserOrNotFoundClub,
+                409: GCMSError.belongOtherClubOrBelongClub
             ]
+            
         case .clubOpen:
             return [
-                401: .unauthorized,
-                403: .notClubHead
+                401: GCMSError.unauthorized,
+                403: GCMSError.notClubHead
             ]
+            
         case .clubClose:
             return [
-                401: .unauthorized,
-                403: .notClubHead
+                401: GCMSError.unauthorized,
+                403: GCMSError.notClubHead
             ]
-        case .userKick:
-            return [
-                401: .unauthorized,
-                403: .cannotKickHeadOrNotClubHead
-            ]
+            
         case .apply:
             return [
-                401: .unauthorized,
-                404: .notFoundClub,
-                409: .appliedToAnotherClubOrBelongClub
+                401: GCMSError.unauthorized,
+                404: GCMSError.notFoundClub,
+                409: GCMSError.appliedToAnotherClubOrBelongClub
             ]
+            
         case .cancel:
             return [
-                401: .unauthorized,
-                404: .notFoundInApplyUserOrNotFoundClub
-            ]
-        case .delegation:
-            return [
-                401: .unauthorized,
-                403: .notClubHead,
-                404: .notFoundUser
+                401: GCMSError.unauthorized,
+                404: GCMSError.notFoundInApplyUserOrNotFoundClub
             ]
         }
     }

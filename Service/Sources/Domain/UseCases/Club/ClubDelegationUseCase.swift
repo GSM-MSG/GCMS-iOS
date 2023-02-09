@@ -1,13 +1,14 @@
 import RxSwift
+import Foundation
 
 public struct ClubDelegationUseCase {
-    public init(clubRepository: ClubRepository) {
-        self.clubRepository = clubRepository
+    public init(clubMemberRepository: ClubMemberRepository) {
+        self.clubMemberRepository = clubMemberRepository
     }
     
-    private let clubRepository: ClubRepository
+    private let clubMemberRepository: ClubMemberRepository
     
-    public func execute(query: ClubRequestQuery, userId: String) -> Completable {
-        clubRepository.delegation(query: query, userId: userId)
+    public func execute(clubID: String, uuid: UUID) -> Completable {
+        clubMemberRepository.delegation(clubID: clubID, uuid: uuid)
     }
 }
