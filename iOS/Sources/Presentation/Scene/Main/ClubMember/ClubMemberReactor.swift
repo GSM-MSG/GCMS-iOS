@@ -35,6 +35,7 @@ final class ClubMemberReactor: Reactor, Stepper {
     }
     let initialState: State
     private let query: ClubRequestQuery
+    private let clubID: String = ""
     
     private let fetchClubMemberUseCase: FetchClubMemberUseCase
     private let fetchClubApplicantUseCase: FetchClubApplicantUseCase
@@ -131,7 +132,7 @@ private extension ClubMemberReactor {
             .just(Mutation.setIsLoading(true)),
             .just(.setUsers([]))
         ])
-        let member = fetchClubMemberUseCase.execute(query: query)
+        let member = fetchClubMemberUseCase.execute(clubID: clubID)
             .asObservable()
             .map { ExpandableMemberSection(header: "구성원", items: $0.map { MemberSectionType.member($0) }, isOpened: false) }
             .flatMap { Observable.concat([
@@ -192,7 +193,7 @@ private extension ClubMemberReactor {
         self.steps.accept(GCMSStep.alert(title: "위임하기", message: "정말 '\(user.name)'님을 부장으로 위임하시겠습니까?", style: .alert, actions: [
             .init(title: "위임", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
-                self.clubDelegationUseCase.execute(query: self.query, userId: user.email)
+                self.clubDelegationUseCase.execute(clubID: self.clubID, uuid: user.uuid)
                     .andThen(Observable.just(()))
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.popToRoot)
@@ -210,7 +211,7 @@ private extension ClubMemberReactor {
         self.steps.accept(GCMSStep.alert(title: "추방하기", message: "정말 '\(user.name)'님을 추방하시겠습니까?", style: .alert, actions: [
             .init(title: "추방", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
-                self.userKickUseCase.execute(query: self.query, userId: user.email)
+                self.userKickUseCase.execute(clubID: self.clubID, uuid: user.uuid)
                     .andThen(Observable.just(()))
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님을 추방했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))

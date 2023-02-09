@@ -4,7 +4,7 @@ import Foundation
 protocol GCMSAPI: TargetType, JWTTokenAuthorizable {
     var domain: GCMSDomain { get }
     var urlPath: String { get }
-    var errorMapper: [Int: GCMSError]? { get }
+    var errorMapper: [Int: Error]? { get }
 }
 
 extension GCMSAPI {
@@ -40,6 +40,7 @@ enum GCMSDomain: String {
     case user
     case club
     case guest
+    case clubMember = "club-member"
 }
 
 extension GCMSDomain {
