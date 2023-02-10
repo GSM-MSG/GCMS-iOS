@@ -11,37 +11,25 @@ final class DefaultClubRepository: ClubRepository {
             .doOnNeedRefresh { self.clubLocal.deleteClubList(); self.clubLocal.saveClubList(clubList: $0) }
             .createObservable()
     }
-    func fetchDetailClub(query: ClubRequestQuery) -> Single<Club> {
-        clubRemote.fetchDetailClub(query: query)
+    func fetchDetailClub(clubID: String) -> Single<Club> {
+        clubRemote.fetchDetailClub(clubID: clubID)
     }
     func createNewClub(req: NewClubRequest) -> Completable {
         clubRemote.createNewClub(req: req)
     }
-    func updateClub(req: UpdateClubRequest) -> Completable {
-        clubRemote.updateClub(req: req)
+    func updateClub(clubID: String, req: UpdateClubRequest) -> Completable {
+        clubRemote.updateClub(clubID: clubID, req: req)
     }
-    func deleteClub(query: ClubRequestQuery) -> Completable {
-        clubRemote.deleteClub(query: query)
+    func deleteClub(clubID: String) -> Completable {
+        clubRemote.deleteClub(clubID: clubID)
     }
-    func fetchClubApplicant(query: ClubRequestQuery) -> Single<[User]> {
-        clubRemote.fetchClubApplicant(query: query)
+    func clubOpen(clubID: String) -> Completable {
+        clubRemote.clubOpen(clubID: clubID)
     }
-    func userAccept(query: ClubRequestQuery, userId: String) -> Completable {
-        clubRemote.userAccept(query: query, userId: userId)
+    func clubClose(clubID: String) -> Completable {
+        clubRemote.clubClose(clubID: clubID)
     }
-    func userReject(query: ClubRequestQuery, userId: String) -> Completable {
-        clubRemote.userReject(query: query, userId: userId)
-    }
-    func clubOpen(query: ClubRequestQuery) -> Completable {
-        clubRemote.clubOpen(query: query)
-    }
-    func clubClose(query: ClubRequestQuery) -> Completable {
-        clubRemote.clubClose(query: query)
-    }
-    func apply(query: ClubRequestQuery) -> Completable {
-        clubRemote.apply(query: query)
-    }
-    func cancel(query: ClubRequestQuery) -> Completable {
-        clubRemote.cancel(query: query)
+    func exitClub(clubID: String) -> Completable {
+        clubRemote.exitClub(clubID: clubID)
     }
 }
