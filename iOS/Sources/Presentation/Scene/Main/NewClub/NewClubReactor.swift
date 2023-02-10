@@ -17,8 +17,8 @@ final class NewClubReactor: Reactor, Stepper {
         case clubTypeDidTap(ClubType)
         
         //Second
-        case updateTitle(String)
-        case updateDescription(String)
+        case updateName(String)
+        case updateContent(String)
         case updateNotionLink(String)
         case updateTeacher(String?)
         case updateContact(String)
@@ -39,8 +39,8 @@ final class NewClubReactor: Reactor, Stepper {
         case createNewClub(state: State)
     }
     enum Mutation {
-        case setTitle(String)
-        case setDescription(String)
+        case setName(String)
+        case setContent(String)
         case setNotionLink(String)
         case setTeacher(String?)
         case setContact(String)
@@ -53,16 +53,16 @@ final class NewClubReactor: Reactor, Stepper {
         case setIsLoading(Bool)
     }
     struct State {
-        var title: String
-        var description: String
+        var name: String
+        var content: String
         var notionLink: String
         var contact: String
         var teacher: String?
-        var isBanner: Bool
-        var imageData: Data?
-        var activitiesData: [Data]
+        var bannerImg: Data?
+        var activityImgs: [Data]
         var members: [User]
         var clubType: ClubType
+        var isBanner: Bool
         var isLoading: Bool
     }
     let initialState: State
@@ -75,12 +75,12 @@ final class NewClubReactor: Reactor, Stepper {
         uploadImagesUseCase: UploadImagesUseCase
     ) {
         initialState = State(
-            title: "",
-            description: "",
+            name: "",
+            content: "",
             notionLink: "",
             contact: "",
             isBanner: false,
-            activitiesData: [],
+            activityImgs: [],
             members: [],
             clubType: .major,
             isLoading: false
@@ -95,12 +95,12 @@ final class NewClubReactor: Reactor, Stepper {
 extension NewClubReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case let .updateTitle(title):
-            return .just(.setTitle(title))
+        case let .updateName(name):
+            return .just(.setName(name))
         case .completeButtonDidTap:
             return completeButtonDidTap()
-        case let .updateDescription(desc):
-            return .just(.setDescription(desc))
+        case let .updateContent(content):
+            return .just(.setContent(content))
         case let .updateNotionLink(link):
             return .just(.setNotionLink(link))
         case let .updateContact(cont):
@@ -143,21 +143,21 @@ extension NewClubReactor {
         var newState = state
         
         switch mutation {
-        case let .setTitle(title):
-            newState.title = title
-        case let .setDescription(desc):
-            newState.description = desc
+        case let .setTitle(name):
+            newState.name = name
+        case let .setDescription(content):
+            newState.content = content
         case let .setNotionLink(link):
             newState.notionLink = link
         case let .setContact(cont):
             newState.contact = cont
         case let .setTeacher(teac):
             newState.teacher = teac
-        case let .setImageData(data):
+        case let setImageData(data):
             if currentState.isBanner {
-                newState.imageData = data
+                newState.bannerImg = data
             } else {
-                if currentState.activitiesData.count > 3 {
+                if currentState.activityImgs.count > 3 {
                     steps.accept(GCMSStep.alert(title: "GCMS",
                                                 message: "동아리 사진을 5개이상 추가할 수 없습니다!",
                                                 style: .alert,
@@ -165,7 +165,7 @@ extension NewClubReactor {
                                                     .init(title: "확인", style: .cancel, handler: nil)
                                                 ]))
                 } else {
-                    newState.activitiesData.append(data)
+                    newState.activityImgs.append(data)
                 }
             }
         case let .setIsBanner(status):
@@ -191,10 +191,10 @@ extension NewClubReactor {
 private extension NewClubReactor {
     func secondNextButtonDidTap() -> Observable<Mutation> {
         var errorMessage = ""
-        if currentState.title.isEmpty {
+        if currentState.name.isEmpty {
             errorMessage = "동아리 이름을 입력해주세요!"
         }
-        else if currentState.description.isEmpty || currentState.description == "동아리 설명을 입력해주세요." {
+        else if currentState.content.isEmpty || currentState.content == "동아리 설명을 입력해주세요." {
             errorMessage = "동아리 설명을 입력해주세요!"
         }
         else if currentState.contact.isEmpty {
@@ -229,19 +229,19 @@ private extension NewClubReactor {
     func createNewClub(state: State) -> Observable<Mutation> {
         let start = Observable.just(Mutation.setIsLoading(true))
         let task = Observable.zip(
-            uploadImagesUseCase.execute(images: [state.imageData ?? Data()]).compactMap(\.first).asObservable(),
-            uploadImagesUseCase.execute(images: state.activitiesData).asObservable()
+            uploadImagesUseCase.execute(images: [state.bannerImg ?? Data()]).compactMap(\.first).asObservable(),
+            uploadImagesUseCase.execute(images: state.activityImgs).asObservable()
         ).withUnretained(self).flatMap { owner, urls -> Observable<Mutation> in
             return owner.createNewClubUseCase.execute(
                 req: .init(
                     type: state.clubType,
-                    title: state.title.clubTitleRegex(),
-                    description: state.description,
-                    bannerUrl: urls.0,
+                    name: state.name.clubTitleRegex(),
+                    content: state.content,
+                    bannerImg: urls.0,
                     contact: state.contact,
                     notionLink: state.notionLink,
                     teacher: state.teacher,
-                    activities: urls.1,
+                    activityImgs: urls.1,
                     member: state.members.map(\.userId)
                 )
             )

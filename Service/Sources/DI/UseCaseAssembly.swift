@@ -51,41 +51,41 @@ public final class UseCaseAssembly: Assembly {
                 clubMemberRepository: r.resolve(ClubMemberRepository.self)!
             )
         }
-        container.register(FetchClubApplicantUseCase.self) { r in
-             FetchClubApplicantUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
-            )
-        }
+//        container.register(FetchClubApplicantUseCase.self) { r in
+//             FetchClubApplicantUseCase(
+//                clubRepository: r.resolve(ClubRepository.self)!
+//            )
+//        }
         container.register(FetchDetailClubUseCase.self) { r in
              FetchDetailClubUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
-        container.register(UserAcceptUseCase.self) { r in
-             UserAcceptUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
-            )
-        }
-        container.register(UserRejectUseCase.self) { r in
-             UserRejectUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
-            )
-        }
+//        container.register(UserAcceptUseCase.self) { r in
+//             UserAcceptUseCase(
+//                clubRepository: r.resolve(ClubRepository.self)!
+//            )
+//        }
+//        container.register(UserRejectUseCase.self) { r in
+//             UserRejectUseCase(
+//                clubRepository: r.resolve(ClubRepository.self)!
+//            )
+//        }
         container.register(UserKickUseCase.self) { r in
              UserKickUseCase(
                 clubMemberRepository: r.resolve(ClubMemberRepository.self)!
             )
         }
-        container.register(ClubApplyUseCase.self) { r in
-             ClubApplyUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
-            )
-        }
-        container.register(ClubCancelUseCase.self) { r in
-             ClubCancelUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
-            )
-        }
+//        container.register(ClubApplyUseCase.self) { r in
+//             ClubApplyUseCase(
+//                clubRepository: r.resolve(ClubRepository.self)!
+//            )
+//        }
+//        container.register(ClubCancelUseCase.self) { r in
+//             ClubCancelUseCase(
+//                clubRepository: r.resolve(ClubRepository.self)!
+//            )
+//        }
         container.register(ClubDelegationUseCase.self) { r in
              ClubDelegationUseCase(
                 clubMemberRepository: r.resolve(ClubMemberRepository.self)!
