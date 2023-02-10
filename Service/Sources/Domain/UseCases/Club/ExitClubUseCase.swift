@@ -1,13 +1,13 @@
 import RxSwift
 
-public struct ClubOpenUseCase {
+public struct ExitClubUseCase {
     public init(clubRepository: ClubRepository) {
         self.clubRepository = clubRepository
     }
     
     private let clubRepository: ClubRepository
     
-    public func execute(clubID: String) -> Completable{
-        clubRepository.clubOpen(clubID: clubID)
+    public func exitClub(clubID: String) -> Completable{
+        clubRepository.exitClub(clubID: clubID)
     }
 }
