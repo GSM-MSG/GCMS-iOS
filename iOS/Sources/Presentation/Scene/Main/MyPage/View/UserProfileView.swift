@@ -70,7 +70,7 @@ final class UserProfileView: UIView {
             userProfileImageView.image = UIImage(systemName: "person.crop.circle")
         }
         userNameLabel.text = user.name
-        userInfoLabel.text = "\(user.grade)학년 \(user.class)반 \(user.number)번"
+        userInfoLabel.text = "\(user.grade)학년 \(user.classNum)반 \(user.number)번"
     }
 }
 

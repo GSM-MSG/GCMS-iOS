@@ -5,14 +5,13 @@ struct UserMyProfileResponse: Codable {
 
 extension UserMyProfileResponse {
     func toDomain() -> UserProfile {
-        return .init(
-            userId: userData.email,
-            profileImageUrl: userData.userImg,
-            name: userData.name,
-            grade: userData.grade,
-            class: userData.`class`,
-            number: userData.num,
-            joinedClub: clubs.map { $0.toDomain() }
-        )
+        return .init(uuid: userData.uuid,
+                     email: userData.email,
+                     name: userData.name,
+                     grade: userData.grade,
+                     classNum: userData.classNum,
+                     number: userData.number,
+                     profileImg: userData.profileImg ?? "",
+                     clubs: clubs.map { $0.toDomain() })
     }
 }

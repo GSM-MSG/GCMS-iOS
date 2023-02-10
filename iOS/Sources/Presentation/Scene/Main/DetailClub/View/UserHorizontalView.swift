@@ -26,7 +26,7 @@ final class UserHorizontalView: UIView {
     }
     
     public func bind(user: User) {
-        if let url = user.profileImageUrl {
+        if let url = user.profileImg {
             profileImageView.kf.setImage(with: URL(string: url) ?? .none,
                                          placeholder: UIImage(),
                                          options: [])

@@ -16,8 +16,8 @@ final class ClubMemberReactor: Reactor, Stepper {
         case viewDidLoad
         case delegationButtonDidTap(Member)
         case kickButtonDidTap(Member)
-        case acceptButtonDidTap(User)
-        case rejectButtonDidTap(User)
+        case acceptButtonDidTap(Member)
+        case rejectButtonDidTap(Member)
         case clubOpenCloseButtonDidTap
         case clubIsOpenedChange(Bool)
     }
@@ -145,7 +145,7 @@ private extension ClubMemberReactor {
             }
         let applicant = fetchClubApplicantUseCase.execute(clubID: clubID)
             .asObservable()
-            .map { ExpandableMemberSection(header: "가입 대기자 명단", items: $0.map { MemberSectionType.applicant($0) }, isOpened: false) }
+            .map { ExpandableMemberSection(header: "가입 대기자 명단", items: $0.map { MemberSectionType.member($0) }, isOpened: false) }
             .flatMap { Observable.concat([
                 Observable.just(Mutation.setIsLoading(false)),
                 .just(.appendUsers($0))
@@ -225,7 +225,7 @@ private extension ClubMemberReactor {
         ]))
         return .empty()
     }
-    func acceptButtonDidTap(user: User) -> Observable<Mutation> {
+    func acceptButtonDidTap(user: Member) -> Observable<Mutation> {
         self.steps.accept(GCMSStep.alert(title: "가입 승인하기", message: "정말 '\(user.name)'님의 가입을 승인하시겠습니까?", style: .alert, actions: [
             .init(title: "승인", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
@@ -243,7 +243,7 @@ private extension ClubMemberReactor {
         ]))
         return .empty()
     }
-    func rejectButtonDidTap(user: User) -> Observable<Mutation> {
+    func rejectButtonDidTap(user: Member) -> Observable<Mutation> {
         self.steps.accept(GCMSStep.alert(title: "가입 거절하기", message: "정말 '\(user.name)'님의 가입을 거절하시겠습니까?", style: .alert, actions: [
             .init(title: "거절", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }

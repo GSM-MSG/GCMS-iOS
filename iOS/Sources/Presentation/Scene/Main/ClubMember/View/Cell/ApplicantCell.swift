@@ -93,7 +93,7 @@ final class ApplicantCell: BaseTableViewCell<User> {
     }
     
     override func bind(_ model: User) {
-        if let url = model.profileImageUrl, !url.isEmpty {
+        if let url = model.profileImg, !url.isEmpty {
             profileImageView.kf.setImage(with: URL(string: url) ?? .none,
                                          placeholder: UIImage(),
                                          options: [])

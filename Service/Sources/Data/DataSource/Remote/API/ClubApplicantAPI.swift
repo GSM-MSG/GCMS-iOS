@@ -3,7 +3,7 @@ import Foundation
 
 enum ClubApplicantAPI{
     case applicantList(clubID: String)
-    case apply(clubID: String)
+    case apply
     case userAccept(clubID: String, uuid: UUID)
     case userReject(clubID: String, uuid: UUID)
 }
@@ -16,8 +16,10 @@ extension ClubApplicantAPI: GCMSAPI{
     
     var urlPath: String{
         switch self {
-        case let .applicantList(clubID), let .apply(clubID), let .userAccept(clubID, _), let .userReject(clubID, _):
+        case let .applicantList(clubID), let .userAccept(clubID, _), let .userReject(clubID, _):
             return "/\(clubID)"
+        case .apply:
+            return ""
         }
     }
     

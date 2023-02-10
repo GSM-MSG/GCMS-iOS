@@ -1,34 +1,35 @@
 import Foundation
 
 public struct User: Equatable {
-    public init(userId: String, profileImageUrl: String?, name: String, grade: Int, class: Int, number: Int) {
-        self.userId = userId
-        self.profileImageUrl = profileImageUrl
+    public init(uuid: UUID, email: String, name: String, grade: Int, classNum: Int, number: Int, profileImg: String) {
+        self.uuid = uuid
+        self.email = email
         self.name = name
         self.grade = grade
-        self.class = `class`
+        self.classNum = classNum
         self.number = number
+        self.profileImg = profileImg
     }
     
     public static func == (lhs: User, rhs: User) -> Bool {
-        return lhs.userId == rhs.userId
+        return lhs.email == rhs.email
     }
     
-    public let userId: String
-    public let profileImageUrl: String?
+    public let uuid: UUID
+    public let email: String
     public let name: String
     public let grade: Int
-    public let `class`: Int
+    public let classNum: Int
     public let number: Int
+    public let profileImg: String?
 }
 
 public extension User {
-    static let dummy = User(
-        userId: "s21073",
-        profileImageUrl: "https://avatars.githubusercontent.com/u/74440939?v=4",
-        name: "Baekteun",
-        grade: 2,
-        class: 1,
-        number: 18
-    )
+    static let dummy = User(uuid: UUID(),
+                            email: "s21058",
+                            name: "김성훈",
+                            grade: 2,
+                            classNum: 1,
+                            number: 3,
+                            profileImg: "https://avatars.githubusercontent.com/u/74440939?v=4")
 }

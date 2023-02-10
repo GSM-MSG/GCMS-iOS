@@ -37,7 +37,7 @@ final class ClubMemberCell: BaseCollectionViewCell<User> {
     }
     
     override func bind(_ model: User) {
-        if let url = model.profileImageUrl {
+        if let url = model.profileImg {
             profileImageView.kf.setImage(with: URL(string: url) ?? .none,
                                          placeholder: UIImage(),
                                          options: [])

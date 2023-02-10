@@ -28,7 +28,10 @@ final class DetailClubReactor: Reactor, Stepper {
         var clubDetail: Club?
         var isLoading: Bool
     }
+    
     let initialState: State
+    private let clubID: String = ""
+    
     private let query: ClubRequestQuery
     private let deleteClubUseCase: DeleteClubUseCase
     private let fetchDetailClubUseCase: FetchDetailClubUseCase
