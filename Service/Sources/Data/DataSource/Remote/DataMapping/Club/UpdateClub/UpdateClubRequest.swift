@@ -1,27 +1,25 @@
-import UIKit
+import Foundation
 
 public struct UpdateClubRequest: Encodable {
-    public init(q: String, type: ClubType, title: String, description: String, bannerUrl: String, contact: String, notionLink: String, teacher: String?, newActivityUrls: [String], deleteActivityUrls: [String]) {
-        self.q = q
+    public init(type: ClubType, name: String, content: String, bannerImg: String, contact: String, notionLink: String, teacher: String?, activityImgs: [String], member: [UUID]) {
         self.type = type
-        self.title = title
-        self.description = description
-        self.bannerUrl = bannerUrl
+        self.name = name
+        self.content = content
+        self.bannerImg = bannerImg
         self.contact = contact
         self.notionLink = notionLink
         self.teacher = teacher
-        self.newActivityUrls = newActivityUrls
-        self.deleteActivityUrls = deleteActivityUrls
+        self.activityImgs = activityImgs
+        self.member = member
     }
     
-    public let q: String
     public let type: ClubType
-    public let title: String
-    public let description: String
-    public let bannerUrl: String
+    public let name: String
+    public let content: String
+    public let bannerImg: String
     public let contact: String
     public let notionLink: String
     public let teacher: String?
-    public let newActivityUrls: [String]
-    public let deleteActivityUrls: [String]
+    public let activityImgs: [String]
+    public let member: [UUID]
 }
