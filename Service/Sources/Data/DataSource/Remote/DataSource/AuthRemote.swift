@@ -4,8 +4,8 @@ final class AuthRemote: BaseRemote<AuthAPI> {
     static let shared = AuthRemote()
     private override init() {}
     
-    func login(idToken: String) -> Single<TokenDTO> {
-        return request(.login(idToken: idToken))
+    func login(code: String) -> Single<TokenDTO> {
+        return request(.login(code: code))
             .map(TokenDTO.self)
     }
     func refresh() -> Completable {

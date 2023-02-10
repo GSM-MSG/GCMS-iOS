@@ -1,7 +1,7 @@
 import Moya
 
 enum AuthAPI {
-    case login(idToken: String)
+    case login(code: String)
     case refresh
 }
 
@@ -12,7 +12,7 @@ extension AuthAPI: GCMSAPI {
     var urlPath: String {
         switch self {
         case .login:
-            return "/mobile"
+            return ""
         case .refresh:
             return "/refresh"
         }
@@ -27,7 +27,7 @@ extension AuthAPI: GCMSAPI {
         switch self {
         case let .login(req):
             return .requestParameters(parameters: [
-                "idToken": req
+                "code": req
             ], encoding: JSONEncoding.default)
             
         case .refresh:
@@ -46,12 +46,8 @@ extension AuthAPI: GCMSAPI {
     var errorMapper: [Int: Error]? {
         switch self {
         case .login:
-            return [
-                400: GCMSError.invalidToken,
-                403: GCMSError.notGSMAccount,
-                404: GCMSError.notFoundInGSMOrEmail
-            ]
-            
+            return .none
+
         case .refresh:
             return .none
         }

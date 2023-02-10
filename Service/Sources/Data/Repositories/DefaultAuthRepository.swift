@@ -4,8 +4,8 @@ import FirebaseMessaging
 final class DefaultAuthRepository: AuthRepository {
     private let authRemote = AuthRemote.shared
     private let keychainLocal = KeychainLocal.shared
-    func login(idToken: String) -> Completable {
-        return authRemote.login(idToken: idToken)
+    func login(code: String) -> Completable {
+        return authRemote.login(code: code)
             .asCompletable()
     }
     func refresh() -> Completable {
@@ -14,7 +14,8 @@ final class DefaultAuthRepository: AuthRepository {
     func logout() -> Completable {
         keychainLocal.deleteAccessToken()
         keychainLocal.deleteRefreshToken()
-        keychainLocal.deleteExpiredAt()
+        keychainLocal.deleteAccessExp()
+        keychainLocal.deleteRefreshExp()
         return Completable.create { completable in            
             completable(.completed)
             return Disposables.create()

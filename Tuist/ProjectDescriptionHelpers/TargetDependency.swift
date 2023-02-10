@@ -34,6 +34,7 @@ public extension TargetDependency.SPM{
     static let Realm = TargetDependency.package(product: "Realm")
     static let RealmSwift = TargetDependency.package(product: "RealmSwift")
     static let MSGLayout = TargetDependency.external(name: "MSGLayout")
+    static let GAuthSignin = TargetDependency.external(name: "GAuthSignin")
 }
 
 public extension Package {

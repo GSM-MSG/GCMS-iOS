@@ -4,6 +4,7 @@ import SnapKit
 import AuthenticationServices
 import RxSwift
 import ViewAnimator
+import GAuthSignin
 
 final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     // MARK: - Properties
@@ -29,21 +30,20 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray4.color, for: .normal)
         $0.setUnderline()
     }
-    
     private let betweenButtonView = UIView().then {
         $0.backgroundColor = GCMSAsset.Colors.gcmsGray4.color
     }
-    
     private let privacyButton = UIButton().then {
         $0.setTitle("개인정보 처리 방침", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: 14)
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray4.color, for: .normal)
         $0.setUnderline()
     }
+    private let gauthSigninButton = GAuthButton(auth: .signin, color: .white, rounded: .default)
     
     // MARK: - UI
     override func addView() {
-        view.addSubViews(headerLabel, logoImageView, appleSigninButton, guestSigninButton, termsOfServiceButton, betweenButtonView, privacyButton)
+        view.addSubViews(headerLabel, logoImageView, appleSigninButton, guestSigninButton, termsOfServiceButton, betweenButtonView, privacyButton, gauthSigninButton)
     }
     override func setLayout() {
         logoImageView.snp.makeConstraints {
@@ -75,6 +75,20 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             $0.width.equalTo(2)
             $0.height.equalTo(16)
         }
+        gauthSigninButton.snp.makeConstraints {
+            $0.bottom.equalTo(appleSigninButton.snp.top).offset(-24)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(50)
+        }
+    }
+    override func setup() {
+        gauthSigninButton.prepare(
+            clientID: Bundle.main.object(forInfoDictionaryKey: "CLIENT_ID") as? String ?? "",
+            redirectURI: Bundle.main.object(forInfoDictionaryKey: "REDIREDCT_URI") as? String ?? "",
+            presenting: self
+        ) { [weak self] code in
+            self?.reactor?.action.onNext(.gauthSigninCompleted(code: code))
+        }
     }
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
@@ -88,7 +102,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             AnimationType.from(direction: .top, offset: 100)
         ], initialAlpha: 0, finalAlpha: 1, delay: 0.3, duration: 1.25)
         UIView.animate(views: [
-            appleSigninButton, termsOfServiceButton, privacyButton, betweenButtonView
+            gauthSigninButton, appleSigninButton, termsOfServiceButton, privacyButton, betweenButtonView
         ], animations: [
             AnimationType.from(direction: .left, offset: 200)
         ], delay: 1.8, duration: 1, usingSpringWithDamping: 1, initialSpringVelocity: 0.7, options: .curveEaseInOut)

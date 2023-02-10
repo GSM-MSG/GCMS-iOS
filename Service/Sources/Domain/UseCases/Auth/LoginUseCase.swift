@@ -7,7 +7,7 @@ public struct LoginUseCase {
     
     private let repository: AuthRepository
     
-    public func execute(idToken: String) -> Completable {
-        repository.login(idToken: idToken)
+    public func execute(code: String) -> Completable {
+        repository.login(code: code)
     }
 }

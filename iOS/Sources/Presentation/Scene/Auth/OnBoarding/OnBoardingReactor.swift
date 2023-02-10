@@ -17,6 +17,7 @@ final class OnBoardingReactor: Reactor, Stepper {
     
     // MARK: - Reactor
     enum Action {
+        case gauthSigninCompleted(code: String)
         case appleSigninCompleted
         case appleIdTokenReceived(idToken: String, code: String)
         case signinFailed(message: String?)
@@ -50,6 +51,8 @@ final class OnBoardingReactor: Reactor, Stepper {
 extension OnBoardingReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case let .gauthSigninCompleted(code):
+            return gauthSigninCompleted(code: code)
         case .appleSigninCompleted, .guestSigninButtonDidTap:
             return appleSigninCompleted()
         case let .signinFailed(message):
@@ -78,6 +81,17 @@ extension OnBoardingReactor {
 
 // MARK: - Method
 private extension OnBoardingReactor {
+    func gauthSigninCompleted(code: String) -> Observable<Mutation> {
+        loginUseCase.execute(code: code)
+            .andThen(Observable.just(()))
+            .subscribe(with: self) { owner, _ in
+                owner.steps.accept(GCMSStep.clubListIsRequired)
+            } onError: { owner, e in
+                owner.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription, action: []))
+            }
+            .disposed(by: disposeBag)
+        return .empty()
+    }
     func appleSigninCompleted() -> Observable<Mutation> {
         UserDefaultsLocal.shared.isGuest = true
         steps.accept(GCMSStep.clubListIsRequired)

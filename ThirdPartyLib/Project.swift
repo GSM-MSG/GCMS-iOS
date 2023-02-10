@@ -35,6 +35,7 @@ let project = Project.dynamicFramework(
         .SPM.Inject,
         .SPM.Realm,
         .SPM.RealmSwift,
-        .SPM.MSGLayout
+        .SPM.MSGLayout,
+        .SPM.GAuthSignin
     ]
 )
