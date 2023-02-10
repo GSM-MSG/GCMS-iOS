@@ -143,7 +143,7 @@ private extension ClubMemberReactor {
                 self?.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription, action: []))
                 return .just(.setIsLoading(false))
             }
-        let applicant = fetchClubApplicantUseCase.execute(query: query)
+        let applicant = fetchClubApplicantUseCase.execute(clubID: clubID)
             .asObservable()
             .map { ExpandableMemberSection(header: "가입 대기자 명단", items: $0.map { MemberSectionType.applicant($0) }, isOpened: false) }
             .flatMap { Observable.concat([
@@ -229,7 +229,7 @@ private extension ClubMemberReactor {
         self.steps.accept(GCMSStep.alert(title: "가입 승인하기", message: "정말 '\(user.name)'님의 가입을 승인하시겠습니까?", style: .alert, actions: [
             .init(title: "승인", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
-                self.userAcceptUseCase.execute(query: self.query, userId: user.userId)
+                self.userAcceptUseCase.execute(clubID: self.clubID, uuid: user.uuid)
                     .andThen(Observable.just(()))
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님의 가입을 승인했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))
@@ -247,7 +247,7 @@ private extension ClubMemberReactor {
         self.steps.accept(GCMSStep.alert(title: "가입 거절하기", message: "정말 '\(user.name)'님의 가입을 거절하시겠습니까?", style: .alert, actions: [
             .init(title: "거절", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
-                self.userRejectUseCase.execute(query: self.query, userId: user.userId)
+                self.userRejectUseCase.execute(clubID: self.clubID, uuid: user.uuid)
                     .andThen(Observable.just(()))
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님의 가입을 거절했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))
