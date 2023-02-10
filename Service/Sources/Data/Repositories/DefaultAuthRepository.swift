@@ -16,10 +16,7 @@ final class DefaultAuthRepository: AuthRepository {
         keychainLocal.deleteRefreshToken()
         keychainLocal.deleteAccessExp()
         keychainLocal.deleteRefreshExp()
-        return Completable.create { completable in            
-            completable(.completed)
-            return Disposables.create()
-        }
+        return authRemote.logout()
     }
 }
 

@@ -3,6 +3,7 @@ import Moya
 enum AuthAPI {
     case login(code: String)
     case refresh
+    case logout
 }
 
 extension AuthAPI: GCMSAPI {
@@ -14,13 +15,19 @@ extension AuthAPI: GCMSAPI {
         case .login:
             return ""
         case .refresh:
-            return "/refresh"
+            return ""
+        case .logout:
+            return ""
         }
     }
     var method: Method {
         switch self {
-        case .login, .refresh:
+        case .login:
             return .post
+        case .refresh:
+            return .patch
+        case .logout:
+            return .delete
         }
     }
     var task: Task {
@@ -30,12 +37,15 @@ extension AuthAPI: GCMSAPI {
                 "code": req
             ], encoding: JSONEncoding.default)
             
-        case .refresh:
+        case .refresh, .logout:
             return .requestPlain
         }
     }
     var jwtTokenType: JWTTokenType? {
         switch self {
+        case .logout:
+            return .accessToken
+
         case .refresh:
             return .refreshToken
             
@@ -49,7 +59,14 @@ extension AuthAPI: GCMSAPI {
             return .none
 
         case .refresh:
-            return .none
+            return [
+                404: GCMSError.notFoundUser
+            ]
+        case .logout:
+            return [
+                401: GCMSError.expriedOrDeteriorationToken,
+                404: GCMSError.notFoundUser
+            ]
         }
     }
     

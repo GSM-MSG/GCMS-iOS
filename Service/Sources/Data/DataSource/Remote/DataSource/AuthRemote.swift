@@ -12,4 +12,8 @@ final class AuthRemote: BaseRemote<AuthAPI> {
         return request(.refresh)
             .asCompletable()
     }
+    func logout() -> Completable {
+        return request(.logout)
+            .asCompletable()
+    }
 }
