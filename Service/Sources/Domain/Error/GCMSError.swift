@@ -39,9 +39,12 @@ public enum GCMSError: Error {
     
     // MARK: - 409
     // MARK: Club
-    case alreadyExistClubOrBelongOtherClub
+    case alreadyExistClub
     case belongOtherClubOrBelongClub
     case appliedToAnotherClubOrBelongClub
+    
+    //MARK: - 500
+    case serverError
 }
 
 extension GCMSError: LocalizedError {
@@ -49,7 +52,7 @@ extension GCMSError: LocalizedError {
         switch self {
         case let .error(message, _) :
             return message
-        case .invalidToken, .unauthorized, .clubTypeError, .notFoundUser, .notExistUser, .invalidInput, .noMebmerClub:
+        case .invalidToken, .unauthorized, .clubTypeError, .notFoundUser, .notExistUser, .invalidInput, .noMebmerClub, .serverError:
             return "알수없는 에러가 발생했습니다. 잠시 후 다시 시도해 주세요."
         case .noInternet:
             return "인터넷 연결이 원활하지 않습니다"
@@ -77,8 +80,8 @@ extension GCMSError: LocalizedError {
         case .notExistInClub:
             return "동아리에 속해있지 않습니다"
         // MARK: - 409
-        case .alreadyExistClubOrBelongOtherClub:
-            return "이미 존재하는 동아리이거나 다른 동아리에 속해있습니다"
+        case .alreadyExistClub:
+            return "이미 존재하는 동아리입니다."
         case .belongOtherClubOrBelongClub:
             return "이미 어떤 동아리에 소속 또는 신청되어있습니다"
         case .appliedToAnotherClubOrBelongClub:

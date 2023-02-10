@@ -2,17 +2,13 @@ import Moya
 
 enum ClubAPI {
     case clubList(type: ClubType)
-    case clubDetail(query: ClubRequestQuery)
+    case clubDetail(clubID: String)
     case createNewClub(req: NewClubRequest)
-    case updateClub(req: UpdateClubRequest)
-    case deleteClub(query: ClubRequestQuery)
-    case clubApplicant(query: ClubRequestQuery)
-    case userAccept(query: ClubRequestQuery, userId: String)
-    case userReject(query: ClubRequestQuery, userId: String)
-    case clubOpen(query: ClubRequestQuery)
-    case clubClose(query: ClubRequestQuery)
-    case apply(query: ClubRequestQuery)
-    case cancel(query: ClubRequestQuery)
+    case updateClub(clubID: String, req: UpdateClubRequest)
+    case deleteClub(clubID: String)
+    case clubOpen(clubID: String)
+    case clubClose(clubID: String)
+    case exitClub(clubID: String)
 }
 
 extension ClubAPI: GCMSAPI {
@@ -21,38 +17,35 @@ extension ClubAPI: GCMSAPI {
     }
     var urlPath: String {
         switch self {
-        case .clubList:
-            return "/list"
-        case .clubDetail:
-            return "/detail"
-        case .createNewClub, .updateClub:
+        case .clubList, .createNewClub:
             return "/"
-        case .deleteClub:
-            return "/delete"
-        case .clubApplicant:
-            return "/applicant"
-        case .userAccept:
-            return "/accept"
-        case .userReject:
-            return "/reject"
-        case .clubOpen:
-            return "/open"
-        case .clubClose:
-            return "/close"
-        case .apply:
-            return "/apply"
-        case .cancel:
-            return "/cancel"
+            
+        case let .clubDetail(clubID), let .updateClub(clubID, _), let .deleteClub(clubID):
+            return "/\(clubID)"
+            
+        case let .clubOpen(clubID):
+            return "/\(clubID)/open"
+            
+        case let .clubClose(clubID):
+            return "/\(clubID)/close"
+            
+        case let .exitClub(clubID):
+            return "/\(clubID)/exit"
         }
     }
     var method: Method {
         switch self {
-        case .clubList, .clubDetail, .clubApplicant:
+        case .clubList, .clubDetail:
             return .get
-        case .userAccept, .userReject, .apply, .cancel, .createNewClub, .deleteClub:
+            
+        case .createNewClub:
             return .post
+            
         case .updateClub, .clubOpen, .clubClose:
-            return .put
+            return .patch
+            
+        case .deleteClub, .exitClub:
+            return .delete
         }
     }
     var task: Task {
@@ -61,27 +54,15 @@ extension ClubAPI: GCMSAPI {
             return .requestParameters(parameters: [
                 "type": type.rawValue
             ], encoding: URLEncoding.queryString)
-        case let .clubDetail(q), let .clubApplicant(q):
-            return .requestParameters(parameters: [
-                "q": q.q,
-                "type": q.type.rawValue
-            ], encoding: URLEncoding.queryString)
+            
+        case .clubDetail, .clubOpen, .clubClose, .exitClub, .deleteClub:
+            return .requestPlain
+        
         case let .createNewClub(req):
             return .requestJSONEncodable(req)
-        case let .deleteClub(query), let .clubOpen(query), let .clubClose(query):
-            return .requestJSONEncodable(query)
-        case let .userAccept(query, userId), let .userReject(query, userId):
-            return .requestParameters(parameters: [
-                "q": query.q,
-                "type": query.type.rawValue,
-                "userId": userId
-            ], encoding: JSONEncoding.default)
-        case let .updateClub(req):
+            
+        case let .updateClub(_, req):
             return .requestJSONEncodable(req)
-        case let .apply(query):
-            return .requestJSONEncodable(query)
-        case let .cancel(query):
-            return .requestJSONEncodable(query)
         }
     }
     var jwtTokenType: JWTTokenType? {
@@ -94,23 +75,24 @@ extension ClubAPI: GCMSAPI {
         switch self {
         case .clubList:
             return [
-                400: GCMSError.clubTypeError,
-                401: GCMSError.unauthorized
+                400: GCMSError.invalidInput,
+                401: GCMSError.unauthorized,
+                500: GCMSError.serverError
             ]
             
         case .clubDetail:
             return [
-                400: GCMSError.noMebmerClub,
                 401: GCMSError.unauthorized,
-                404: GCMSError.notFoundClub
+                404: GCMSError.notFoundUserOrNotFoundClub,
+                500: GCMSError.serverError
             ]
             
         case .createNewClub:
             return [
-                400: GCMSError.alreadyExistClubOrBelongOtherClub,
+                400: GCMSError.invalidInput,
                 401: GCMSError.unauthorized,
-                404: GCMSError.notFoundUser,
-                409: GCMSError.alreadyExistClubOrBelongOtherClub
+                409: GCMSError.alreadyExistClub,
+                500: GCMSError.serverError
             ]
             
         case .updateClub:
@@ -118,53 +100,40 @@ extension ClubAPI: GCMSAPI {
                 400: GCMSError.invalidInput,
                 401: GCMSError.unauthorized,
                 403: GCMSError.notClubHead,
-                404: GCMSError.notFoundClub
+                404: GCMSError.notFoundClub,
+                500: GCMSError.serverError
             ]
             
         case .deleteClub:
             return [
                 401: GCMSError.unauthorized,
                 403: GCMSError.notClubHead,
-                404: GCMSError.notFoundClub
-            ]
-            
-        case .clubApplicant:
-            return [
-                401: GCMSError.unauthorized,
                 404: GCMSError.notFoundClub,
-                406: GCMSError.notExistInClub
-            ]
-            
-        case .userAccept, .userReject:
-            return [
-                403: GCMSError.notClubHead,
-                404: GCMSError.notFoundInApplyUserOrNotFoundClub,
-                409: GCMSError.belongOtherClubOrBelongClub
+                500: GCMSError.serverError
             ]
             
         case .clubOpen:
             return [
                 401: GCMSError.unauthorized,
-                403: GCMSError.notClubHead
+                403: GCMSError.notClubHead,
+                404: GCMSError.notFoundClub,
+                500: GCMSError.serverError
             ]
             
         case .clubClose:
             return [
                 401: GCMSError.unauthorized,
-                403: GCMSError.notClubHead
+                403: GCMSError.notClubHead,
+                404: GCMSError.notFoundClub,
+                500: GCMSError.serverError
             ]
             
-        case .apply:
+        case .exitClub:
             return [
+                400: GCMSError.noMebmerClub,
                 401: GCMSError.unauthorized,
                 404: GCMSError.notFoundClub,
-                409: GCMSError.appliedToAnotherClubOrBelongClub
-            ]
-            
-        case .cancel:
-            return [
-                401: GCMSError.unauthorized,
-                404: GCMSError.notFoundInApplyUserOrNotFoundClub
+                500: GCMSError.serverError
             ]
         }
     }
