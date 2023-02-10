@@ -26,29 +26,12 @@ final class ClubRemote: BaseRemote<ClubAPI> {
         request(.deleteClub(query: query))
             .asCompletable()
     }
-    func fetchClubApplicant(query: ClubRequestQuery) -> Single<[User]> {
-        request(.clubApplicant(query: query))
-            .map(UserListDTO.self)
-            .map { $0.toDomain() }
-    }
-    func userAccept(query: ClubRequestQuery, userId: String) -> Completable {
-        request(.userAccept(query: query, userId: userId))
-            .asCompletable()
-    }
-    func userReject(query: ClubRequestQuery, userId: String) -> Completable {
-        request(.userReject(query: query, userId: userId))
-            .asCompletable()
-    }
     func clubOpen(query: ClubRequestQuery) -> Completable {
         request(.clubOpen(query: query))
             .asCompletable()
     }
     func clubClose(query: ClubRequestQuery) -> Completable {
         request(.clubClose(query: query))
-            .asCompletable()
-    }
-    func apply(query: ClubRequestQuery) -> Completable {
-        request(.apply(query: query))
             .asCompletable()
     }
     func cancel(query: ClubRequestQuery) -> Completable {

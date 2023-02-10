@@ -23,23 +23,11 @@ final class DefaultClubRepository: ClubRepository {
     func deleteClub(query: ClubRequestQuery) -> Completable {
         clubRemote.deleteClub(query: query)
     }
-    func fetchClubApplicant(query: ClubRequestQuery) -> Single<[User]> {
-        clubRemote.fetchClubApplicant(query: query)
-    }
-    func userAccept(query: ClubRequestQuery, userId: String) -> Completable {
-        clubRemote.userAccept(query: query, userId: userId)
-    }
-    func userReject(query: ClubRequestQuery, userId: String) -> Completable {
-        clubRemote.userReject(query: query, userId: userId)
-    }
     func clubOpen(query: ClubRequestQuery) -> Completable {
         clubRemote.clubOpen(query: query)
     }
     func clubClose(query: ClubRequestQuery) -> Completable {
         clubRemote.clubClose(query: query)
-    }
-    func apply(query: ClubRequestQuery) -> Completable {
-        clubRemote.apply(query: query)
     }
     func cancel(query: ClubRequestQuery) -> Completable {
         clubRemote.cancel(query: query)

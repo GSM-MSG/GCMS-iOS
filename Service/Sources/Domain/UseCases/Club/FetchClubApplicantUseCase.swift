@@ -1,13 +1,14 @@
 import RxSwift
+import Foundation
 
 public struct FetchClubApplicantUseCase {
-    public init(clubRepository: ClubRepository) {
-        self.clubRepository = clubRepository
+    public init(clubApplicantRepository: ClubApplicantRepository) {
+        self.clubApplicantRepository = clubApplicantRepository
     }
     
-    private let clubRepository: ClubRepository
+    private let clubApplicantRepository: ClubApplicantRepository
     
-    public func execute(query: ClubRequestQuery) -> Single<[User]> {
-        clubRepository.fetchClubApplicant(query: query)
+    public func execute(clubID: String) -> Single<[Member]>{
+        clubApplicantRepository.fetchClubApplicant(clubID: clubID)
     }
 }
