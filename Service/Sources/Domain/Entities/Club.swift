@@ -1,36 +1,36 @@
 public struct Club: Equatable {
-    public init(type: ClubType, bannerUrl: String, title: String, description: String, contact: String, head: User, notionLink: String, scope: MemberScope, isApplied: Bool, isOpen: Bool, activities: [String], member: [User], teacher: String?) {
+    public init(type: ClubType, bannerImg: String, name: String, content: String, contact: String, head: User, notionLink: String, scope: MemberScope, isApplied: Bool, isOpen: Bool, activityImgs: [String], member: [User], teacher: String?) {
         self.type = type
-        self.bannerUrl = bannerUrl
-        self.title = title
-        self.description = description
+        self.bannerImg = bannerImg
+        self.name = name
+        self.content = content
         self.contact = contact
         self.head = head
         self.notionLink = notionLink
         self.scope = scope
         self.isApplied = isApplied
         self.isOpen = isOpen
-        self.activities = activities
+        self.activityImgs = activityImgs
         self.member = member
         self.teacher = teacher
     }
     
     
     public static func == (lhs: Club, rhs: Club) -> Bool {
-        lhs.title == rhs.title && lhs.`type` == rhs.`type`
+        lhs.name == rhs.name && lhs.`type` == rhs.`type`
     }
     
     public var type: ClubType
-    public var bannerUrl: String
-    public var title: String
-    public var description: String
+    public var bannerImg: String
+    public var name: String
+    public var content: String
     public var contact: String
     public var head: User
     public var notionLink: String
     public var scope: MemberScope
     public var isApplied: Bool
     public var isOpen: Bool
-    public var activities: [String]
+    public var activityImgs: [String]
     public var member: [User]
     public var teacher: String?
 }

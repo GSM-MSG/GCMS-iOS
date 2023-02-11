@@ -18,8 +18,8 @@ final class UpdateClubReactor: Reactor, Stepper {
         case clubTypeDidTap(ClubType)
         
         //Second
-        case updateTitle(String)
-        case updateDescription(String)
+        case updatename(String)
+        case updatecontent(String)
         case updateTeacher(String)
         case updateNotionLink(String)
         case updateContact(String)
@@ -34,8 +34,8 @@ final class UpdateClubReactor: Reactor, Stepper {
         case completeButtonDidTap
     }
     enum Mutation {
-        case setTitle(String)
-        case setDescription(String)
+        case setName(String)
+        case setContent(String)
         case setNotionLink(String)
         case setTeacher(String?)
         case setContact(String)
@@ -46,17 +46,15 @@ final class UpdateClubReactor: Reactor, Stepper {
         case setIsLoading(Bool)
     }
     struct State {
-        var title: String
-        var description: String
+        var name: String
+        var content: String
         var notionLink: String
         var contact: String
         var teacher: String?
         var isBanner: Bool
-        var imageData: Data?
-        var activitiesData: [Data]
+        var bannerImg: Data?
+        var activityImgs: [Data]
         var clubType: ClubType
-        var addedImage: [Data]
-        var removedImage: [String]
         var isLoading: Bool
     }
     let initialState: State
@@ -72,27 +70,25 @@ final class UpdateClubReactor: Reactor, Stepper {
         updateClubUseCase: UpdateClubUseCase,
         uploadImagesUseCase: UploadImagesUseCase
     ) {
-        self.legacyBannerUrl = club.bannerUrl
+        self.legacyBannerUrl = club.bannerImg
         self.legacyBanner = try? Data(contentsOf: URL(string: club.bannerUrl)!)
-        var activitiesData = [Data]()
+        var activityImgs = [Data]()
         self.legacyImageUrl = club.activities.reduce(into: [Data:String](), { partialResult, url in
             if let data = try? Data(contentsOf: URL(string: url)!) {
                 partialResult[data] = url
-                activitiesData.append(data)
+                activityImgs.append(data)
             }
         })
         initialState = State(
-            title: club.title,
-            description: club.description,
+            name: club.name,
+            content: club.content,
             notionLink: club.notionLink,
             contact: club.contact,
             teacher: club.teacher,
             isBanner: true,
-            imageData: try? Data(contentsOf: URL(string: club.bannerUrl)!),
-            activitiesData: activitiesData,
+            bannerImg: try? Data(contentsOf: URL(string: club.bannerImg)!),
+            activityImgs: activityImgs,
             clubType: club.type,
-            addedImage: [],
-            removedImage: [],
             isLoading: false
         )
         self.updateClubUseCase = updateClubUseCase
@@ -106,12 +102,12 @@ final class UpdateClubReactor: Reactor, Stepper {
 extension UpdateClubReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case let .updateTitle(title):
-            return .just(.setTitle(title))
+        case let .updatename(name):
+            return .just(.setName(name))
         case .completeButtonDidTap:
             return completeButtonDidTap()
-        case let .updateDescription(desc):
-            return .just(.setDescription(desc))
+        case let .updatecontent(content):
+            return .just(.setContent(desc))
         case let .updateNotionLink(link):
             return .just(.setNotionLink(link))
         case let .updateContact(cont):
@@ -143,10 +139,10 @@ extension UpdateClubReactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
-        case let .setTitle(title):
-            newState.title = title
-        case let .setDescription(desc):
-            newState.description = desc
+        case let .setName(name):
+            newState.name = name
+        case let .setContent(content):
+            newState.content = content
         case let .setNotionLink(link):
             newState.notionLink = link
         case let .setContact(cont):
@@ -155,9 +151,9 @@ extension UpdateClubReactor {
             newState.teacher = teac
         case let .setImageData(data):
             if currentState.isBanner {
-                newState.imageData = data
+                newState.bannerImg = data
             } else {
-                if currentState.activitiesData.count > 3 {
+                if currentState.activityImgs.count > 3 {
                     steps.accept(GCMSStep.alert(title: "GCMS",
                                                 message: "동아리 사진을 5개이상 추가할 수 없습니다!",
                                                 style: .alert,
@@ -165,7 +161,7 @@ extension UpdateClubReactor {
                                                     .init(title: "확인", style: .cancel, handler: nil)
                                                 ]))
                 } else {
-                    newState.activitiesData.append(data)
+                    newState.activityImgs.append(data)
                     newState.addedImage.append(data)
                 }
             }
@@ -191,10 +187,10 @@ extension UpdateClubReactor {
 private extension UpdateClubReactor {
     func secondNextButtonDidTap() -> Observable<Mutation> {
         var errorMessage = ""
-        if currentState.title.isEmpty {
+        if currentState.name.isEmpty {
             errorMessage = "동아리 이름을 입력해주세요!"
         }
-        else if currentState.description.isEmpty || currentState.description == "동아리 설명을 입력해주세요." {
+        else if currentState.content.isEmpty || currentState.content == "동아리 설명을 입력해주세요." {
             errorMessage = "동아리 설명을 입력해주세요!"
         }
         else if currentState.contact.isEmpty {
@@ -217,16 +213,15 @@ private extension UpdateClubReactor {
         let current = self.currentState
         self.updateClubUseCase.execute(
             req: .init(
-                q: initial.title,
                 type: initial.clubType,
-                title: current.title.clubTitleRegex(),
-                description: current.description,
-                bannerUrl: banner,
+                name: current.name.clubTitleRegex(),
+                content: current.content,
+                bannerImg: banner,
                 contact: current.contact,
                 notionLink: current.notionLink,
                 teacher: current.teacher,
-                newActivityUrls: added,
-                deleteActivityUrls: current.removedImage
+                activityImgs: current.activityImgs,
+                member: current.member,
             )
         )
         .andThen(Observable.just(()))
@@ -241,7 +236,7 @@ private extension UpdateClubReactor {
             .disposed(by: self.disposeBag)
     }
     func completeButtonDidTap() -> Observable<Mutation> {
-        guard (currentState.imageData != nil)  else {
+        guard (currentState.bannerImg != nil)  else {
             steps.accept(GCMSStep.failureAlert(title: "동아리 배너 이미지를 넣어주세요!", message: nil))
             return .empty()
         }
