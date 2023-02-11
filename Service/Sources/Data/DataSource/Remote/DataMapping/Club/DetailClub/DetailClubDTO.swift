@@ -1,10 +1,10 @@
 struct DetailClubDTO: Codable {
-    let title: String
-    let description: String
+    let name: String
+    let content: String
     let contact: String
     let teacher: String?
     let isOpened: Bool
     let type: ClubType
-    let bannerUrl: String
+    let bannerImg: String
     let notionLink: String
 }
