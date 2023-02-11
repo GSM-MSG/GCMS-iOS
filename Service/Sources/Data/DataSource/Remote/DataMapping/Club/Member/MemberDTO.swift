@@ -2,6 +2,7 @@ import Foundation
 
 struct MemberDTO: Codable {
     let uuid: UUID
+    let clubID: Int
     let email: String
     let name: String
     let grade: Int
@@ -15,6 +16,7 @@ extension MemberDTO {
     func toDomain() -> Member {
         return .init(
             uuid: uuid,
+            clubID: clubID,
             email: email,
             name: name,
             grade: grade,
