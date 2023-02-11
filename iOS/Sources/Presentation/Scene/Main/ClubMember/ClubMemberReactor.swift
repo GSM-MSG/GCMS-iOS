@@ -35,7 +35,7 @@ final class ClubMemberReactor: Reactor, Stepper {
     }
     let initialState: State
     private let query: ClubRequestQuery
-    private let clubID: String = ""
+    private let clubID: Int = ""
     
     private let fetchClubMemberUseCase: FetchClubMemberUseCase
     private let fetchClubApplicantUseCase: FetchClubApplicantUseCase
