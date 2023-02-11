@@ -7,7 +7,7 @@ public struct ExitClubUseCase {
     
     private let clubRepository: ClubRepository
     
-    public func exitClub(clubID: String) -> Completable{
+    public func exitClub(clubID: Int) -> Completable{
         clubRepository.exitClub(clubID: clubID)
     }
 }

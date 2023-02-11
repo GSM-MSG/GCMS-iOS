@@ -7,7 +7,7 @@ public struct FetchDetailClubUseCase {
     
     private let clubRepository: ClubRepository
     
-    public func execute(clubID: String) -> Single<Club> {
+    public func execute(clubID: Int) -> Single<Club> {
         clubRepository.fetchDetailClub(clubID: clubID)
     }
 }
