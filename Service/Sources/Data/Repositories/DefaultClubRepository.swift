@@ -11,25 +11,25 @@ final class DefaultClubRepository: ClubRepository {
             .doOnNeedRefresh { self.clubLocal.deleteClubList(); self.clubLocal.saveClubList(clubList: $0) }
             .createObservable()
     }
-    func fetchDetailClub(clubID: String) -> Single<Club> {
+    func fetchDetailClub(clubID: Int) -> Single<Club> {
         clubRemote.fetchDetailClub(clubID: clubID)
     }
     func createNewClub(req: NewClubRequest) -> Completable {
         clubRemote.createNewClub(req: req)
     }
-    func updateClub(clubID: String, req: UpdateClubRequest) -> Completable {
+    func updateClub(clubID: Int, req: UpdateClubRequest) -> Completable {
         clubRemote.updateClub(clubID: clubID, req: req)
     }
-    func deleteClub(clubID: String) -> Completable {
+    func deleteClub(clubID: Int) -> Completable {
         clubRemote.deleteClub(clubID: clubID)
     }
-    func clubOpen(clubID: String) -> Completable {
+    func clubOpen(clubID: Int) -> Completable {
         clubRemote.clubOpen(clubID: clubID)
     }
-    func clubClose(clubID: String) -> Completable {
+    func clubClose(clubID: Int) -> Completable {
         clubRemote.clubClose(clubID: clubID)
     }
-    func exitClub(clubID: String) -> Completable {
+    func exitClub(clubID: Int) -> Completable {
         clubRemote.exitClub(clubID: clubID)
     }
 }

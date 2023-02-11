@@ -2,13 +2,13 @@ import Moya
 
 enum ClubAPI {
     case clubList(type: ClubType)
-    case clubDetail(clubID: String)
+    case clubDetail(clubID: Int)
     case createNewClub(req: NewClubRequest)
-    case updateClub(clubID: String, req: UpdateClubRequest)
-    case deleteClub(clubID: String)
-    case clubOpen(clubID: String)
-    case clubClose(clubID: String)
-    case exitClub(clubID: String)
+    case updateClub(clubID: Int, req: UpdateClubRequest)
+    case deleteClub(clubID: Int)
+    case clubOpen(clubID: Int)
+    case clubClose(clubID: Int)
+    case exitClub(clubID: Int)
 }
 
 extension ClubAPI: GCMSAPI {
