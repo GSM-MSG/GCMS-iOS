@@ -16,17 +16,18 @@ struct DetailClubResponse: Codable {
 extension DetailClubResponse {
     func toDomain() -> Club {
         return .init(
+            clubID: club.id,
             type: club.type,
-            bannerUrl: club.bannerUrl,
-            title: club.title,
-            description: club.description,
+            bannerImg: club.bannerImg,
+            name: club.name,
+            content: club.content,
             contact: club.contact,
             head: head.toDomain(),
             notionLink: club.notionLink,
             scope: scope,
             isApplied: isApplied,
             isOpen: club.isOpened,
-            activities: activities,
+            activityImgs: club.activityImgs,
             member: member.map { $0.toDomain() },
             teacher: club.teacher
         )
