@@ -27,8 +27,8 @@ final class NewClubReactor: Reactor, Stepper {
         // Third
         case imageDidSelect(Data)
         case bannerDidTap
-        case activityAppendButtonDidTap
-        case activityDeleteDidTap(Int)
+        case activityImgsAppendButtonDidTap
+        case activityImgsDeleteDidTap(Int)
         case memberAppendButtonDidTap
         case memberDidSelected([User])
         case memberRemove(Int)
@@ -153,7 +153,7 @@ extension NewClubReactor {
             newState.contact = cont
         case let .setTeacher(teac):
             newState.teacher = teac
-        case let setImageData(data):
+        case let .setImageData(data):
             if currentState.isBanner {
                 newState.bannerImg = data
             } else {

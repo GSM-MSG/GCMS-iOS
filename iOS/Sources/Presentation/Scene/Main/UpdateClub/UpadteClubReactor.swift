@@ -18,8 +18,8 @@ final class UpdateClubReactor: Reactor, Stepper {
         case clubTypeDidTap(ClubType)
         
         //Second
-        case updatename(String)
-        case updatecontent(String)
+        case updateName(String)
+        case updateContent(String)
         case updateTeacher(String)
         case updateNotionLink(String)
         case updateContact(String)
@@ -28,8 +28,8 @@ final class UpdateClubReactor: Reactor, Stepper {
         // Third
         case imageDidSelect(Data)
         case bannerDidTap
-        case activityAppendButtonDidTap
-        case activityDeleteDidTap(Int)
+        case activityImgsAppendButtonDidTap
+        case activityImgsDeleteDidTap(Int)
         case updateLoading(Bool)
         case completeButtonDidTap
     }
@@ -102,11 +102,11 @@ final class UpdateClubReactor: Reactor, Stepper {
 extension UpdateClubReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case let .updatename(name):
+        case let .updateName(name):
             return .just(.setName(name))
         case .completeButtonDidTap:
             return completeButtonDidTap()
-        case let .updatecontent(content):
+        case let .updateContent(content):
             return .just(.setContent(desc))
         case let .updateNotionLink(link):
             return .just(.setNotionLink(link))
@@ -162,16 +162,15 @@ extension UpdateClubReactor {
                                                 ]))
                 } else {
                     newState.activityImgs.append(data)
-                    newState.addedImage.append(data)
                 }
             }
         case let .setIsBanner(status):
             newState.isBanner = status
         case let .removeImageData(index):
-            let removed = newState.activitiesData.remove(at: index)
-            newState.addedImage.removeAll(where: { $0 == removed } )
+            let removed = newState.activityImgs.remove(at: index)
+            newState.activityImgs.removeAll(where: { $0 == removed } )
             if let legacy = legacyImageUrl[removed] {
-                newState.removedImage.append(legacy)
+                newState.activityImgs.append(legacy)
             }
         case let .setClubType(type):
             newState.clubType = type
@@ -244,9 +243,9 @@ private extension UpdateClubReactor {
         steps.accept(GCMSStep.alert(title: "정말로 완료하시겠습니까?", message: nil, style: .alert, actions: [
             .init(title: "예", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
-                if current.imageData != self.legacyBanner {
+                if current.bannerImg != self.legacyBanner {
                     Observable.zip(
-                        self.uploadImagesUseCase.execute(images: [current.imageData ?? .init()]).compactMap(\.first).asObservable(),
+                        self.uploadImagesUseCase.execute(images: [current.bannerImg ?? .init()]).compactMap(\.first).asObservable(),
                         self.uploadImagesUseCase.execute(images: current.addedImage).asObservable()
                     )
                     .subscribe(onNext: { (banner, added) in
@@ -256,7 +255,7 @@ private extension UpdateClubReactor {
                     })
                     .disposed(by: self.disposeBag)
                 } else {
-                    self.uploadImagesUseCase.execute(images: current.addedImage).asObservable()
+                    self.uploadImagesUseCase.execute(images: current.activityImgs).asObservable()
                         .subscribe { added in
                             self.updateClub(added: added)
                         } onError: { e in
