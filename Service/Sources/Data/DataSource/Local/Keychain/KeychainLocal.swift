@@ -30,27 +30,27 @@ final class KeychainLocal {
     }
     
     func saveAccessExp(_ date: String) {
-        keychain.save(type: .expiredAt, value: date)
+        keychain.save(type: .accessExp, value: date)
     }
     
     func fetchAccessExp() throws -> String {
-        return try keychain.load(type: .expiredAt)
+        return try keychain.load(type: .accessExp)
     }
     
     func deleteAccessExp() {
-        keychain.delete(type: .expiredAt)
+        keychain.delete(type: .accessExp)
     }
 
     func saveRefreshExp(_ date: String) {
-        keychain.save(type: .expiredAt, value: date)
+        keychain.save(type: .refreshExp, value: date)
     }
     
     func fetchRefreshExp() throws -> String {
-        return try keychain.load(type: .expiredAt)
+        return try keychain.load(type: .refreshExp)
     }
     
     func deleteRefreshExp() {
-        keychain.delete(type: .expiredAt)
+        keychain.delete(type: .refreshExp)
     }
     
     func saveGuestRefreshToken(_ token: String) {

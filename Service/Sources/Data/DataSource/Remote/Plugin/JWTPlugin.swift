@@ -25,7 +25,7 @@ final class JWTPlugin: PluginType {
         var req = request
         
         let token = "Bearer \(getToken(type: tokenType))"
-        req.addValue(token, forHTTPHeaderField: "Authorization")
+        req.addValue(token, forHTTPHeaderField: tokenType == .accessToken ? "Authorization" : "Refresh-Token")
         return req
     }
     

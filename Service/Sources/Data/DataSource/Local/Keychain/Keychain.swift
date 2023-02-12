@@ -1,9 +1,10 @@
 import Foundation
 
 enum KeychainAccountType: String {
-    case accessToken = "ACCESS-TOKEN"
-    case refreshToken = "REFRESH-TOKEN"
-    case expiredAt = "EXPIRED-AT"
+    case accessToken = "Authorization"
+    case refreshToken = "Refresh-Token"
+    case accessExp = "accessExp"
+    case refreshExp = "refreshExp"
     case guestRefresh = "GUEST-REFRESH-TOKEN"
 }
 final class Keychain {
