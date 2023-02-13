@@ -1,13 +1,13 @@
 import RxSwift
 
-public struct FetchDetailClubUseCase {
+public struct ClubApplyUseCase {
     public init(clubRepository: ClubRepository) {
         self.clubRepository = clubRepository
     }
-    
+
     private let clubRepository: ClubRepository
-    
-    public func execute(clubID: Int) -> Single<Club> {
-        clubRepository.fetchDetailClub(clubID: clubID)
+
+    public func execute(query: ClubRequestQuery) -> Completable {
+        clubRepository.apply(query: query)
     }
 }

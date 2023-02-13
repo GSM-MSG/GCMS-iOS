@@ -1,24 +1,24 @@
 import RealmSwift
 
 final class ClubListRealmEntity: Object {
-    @Persisted(primaryKey: true) var title: String = ""
+    @Persisted(primaryKey: true) var name: String = ""
     @Persisted var type: String = ""
-    @Persisted var bannerUrl: String = ""
+    @Persisted var bannerImg: String = ""
 }
 
 extension ClubListRealmEntity {
     func setup(clubList: ClubList) {
-        self.title = clubList.title
+        self.name = clubList.name
         self.type = clubList.type.rawValue
-        self.bannerUrl = clubList.bannerUrl
+        self.bannerImg = clubList.bannerImg
     }
 }
 
 extension ClubListRealmEntity {
     func toDomain() -> ClubList {
         return .init(
-            bannerUrl: bannerUrl,
-            title: title,
+            bannerImg: bannerImg,
+            name: name,
             type: ClubType(rawValue: type) ?? .major
         )
     }

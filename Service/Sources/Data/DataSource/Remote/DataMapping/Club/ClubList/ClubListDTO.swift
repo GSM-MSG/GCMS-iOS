@@ -1,14 +1,14 @@
 struct ClubListDTO: Codable {
-    let title: String
+    let name: String
     let type: ClubType
-    let bannerUrl: String
+    let bannerImg: String
 }
 
 extension ClubListDTO {
     func toDomain() -> ClubList {
         return .init(
-            bannerUrl: bannerUrl,
-            title: title,
+            bannerImg: bannerImg,
+            name: name,
             type: type)
     }
 }

@@ -7,7 +7,7 @@ public struct DeleteClubUseCase {
     
     private let clubRepository: ClubRepository
     
-    public func execute(query: ClubRequestQuery) -> Completable{
-        clubRepository.deleteClub(query: query)
+    public func execute(clubID: Int) -> Completable{
+        clubRepository.deleteClub(clubID: clubID)
     }
 }
