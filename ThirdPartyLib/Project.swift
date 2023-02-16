@@ -5,7 +5,8 @@ let project = Project.dynamicFramework(
     name: "ThirdPartyLib",
     packages: [
         .Realm,
-        .Firebase
+        .Firebase,
+        .IQKeyboardManager
     ],
     deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
     dependencies: [

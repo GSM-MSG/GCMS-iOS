@@ -9,7 +9,7 @@ class BaseRemote<API: GCMSAPI> {
     public var testStatus = false
     public var successStatus = true
     #if DEBUG
-    private let provider = MoyaProvider<API>(plugins: [JWTPlugin(), NetworkLoggerPlugin()])
+    private let provider = MoyaProvider<API>(plugins: [JWTPlugin(), GCMSLoggingPlugin()])
     #else
     private let provider = MoyaProvider<API>(plugins: [JWTPlugin()])
     #endif

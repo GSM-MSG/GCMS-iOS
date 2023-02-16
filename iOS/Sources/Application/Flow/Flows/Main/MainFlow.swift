@@ -98,9 +98,10 @@ private extension MainFlow{
         return .none
     }
     func navigateToFirstNewClub() -> FlowContributors {
-        let vc = AppDelegate.container.resolve(FirstNewClubVC.self)!
+        let reactor = AppDelegate.container.resolve(NewClubReactor.self, arguments: false, Optional<Int>.none)!
+        let vc = FirstNewClubVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
     func navigateToSecondNewClub(reactor: NewClubReactor?) -> FlowContributors {
         let vc = AppDelegate.container.resolve(SecondNewClubVC.self, argument: reactor)!

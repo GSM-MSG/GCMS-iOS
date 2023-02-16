@@ -83,8 +83,8 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     }
     override func setup() {
         gauthSigninButton.prepare(
-            clientID: Bundle.main.object(forInfoDictionaryKey: "CLIENT_ID") as? String ?? "",
-            redirectURI: Bundle.main.object(forInfoDictionaryKey: "REDIREDCT_URI") as? String ?? "",
+            clientID: Bundle.module.object(forInfoDictionaryKey: "CLIENT_ID") as? String ?? "",
+            redirectURI: Bundle.module.object(forInfoDictionaryKey: "REDIREDCT_URI") as? String ?? "",
             presenting: self
         ) { [weak self] code in
             self?.reactor?.action.onNext(.gauthSigninCompleted(code: code))
