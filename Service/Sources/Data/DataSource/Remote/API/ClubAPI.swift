@@ -15,10 +15,11 @@ extension ClubAPI: GCMSAPI {
     var domain: GCMSDomain {
         return .club
     }
+    
     var urlPath: String {
         switch self {
         case .clubList, .createNewClub:
-            return "/"
+            return ""
             
         case let .clubDetail(clubID), let .updateClub(clubID, _), let .deleteClub(clubID):
             return "/\(clubID)"
@@ -33,6 +34,7 @@ extension ClubAPI: GCMSAPI {
             return "/\(clubID)/exit"
         }
     }
+    
     var method: Method {
         switch self {
         case .clubList, .clubDetail:
@@ -48,6 +50,7 @@ extension ClubAPI: GCMSAPI {
             return .delete
         }
     }
+    
     var task: Task {
         switch self {
         case let .clubList(type):
@@ -57,7 +60,7 @@ extension ClubAPI: GCMSAPI {
             
         case .clubDetail, .clubOpen, .clubClose, .exitClub, .deleteClub:
             return .requestPlain
-        
+            
         case let .createNewClub(req):
             return .requestJSONEncodable(req)
             
@@ -65,13 +68,15 @@ extension ClubAPI: GCMSAPI {
             return .requestJSONEncodable(req)
         }
     }
+    
     var jwtTokenType: JWTTokenType? {
         switch self {
         default:
             return .accessToken
         }
     }
-    var errorMapper: [Int: Error]?{
+    
+    var errorMapper: [Int: Error]? {
         switch self {
         case .clubList:
             return [

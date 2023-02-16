@@ -3,8 +3,8 @@ import Foundation
 
 enum ClubApplicantAPI{
     case applicantList(clubID: Int)
-    case apply
-    case cancel
+    case apply(clubID: Int)
+    case cancel(clubID: Int)
     case userAccept(clubID: Int, uuid: UUID)
     case userReject(clubID: Int, uuid: UUID)
 }
@@ -17,10 +17,8 @@ extension ClubApplicantAPI: GCMSAPI{
     
     var urlPath: String{
         switch self {
-        case let .applicantList(clubID), let .userAccept(clubID, _), let .userReject(clubID, _):
+        case let .applicantList(clubID), let .userAccept(clubID, _), let .userReject(clubID, _), let .apply(clubID), let .cancel(clubID):
             return "/\(clubID)"
-        case .apply, .cancel:
-            return ""
         }
     }
     
@@ -29,17 +27,11 @@ extension ClubApplicantAPI: GCMSAPI{
         case .applicantList:
             return .get
             
-        case .apply:
+        case .apply, .userAccept, .userReject:
             return .post
             
         case .cancel:
             return .delete
-            
-        case .userAccept:
-            return .post
-            
-        case .userReject:
-            return .post
         }
     }
     
@@ -55,15 +47,15 @@ extension ClubApplicantAPI: GCMSAPI{
             return .requestParameters(parameters: ["uuid": uuid], encoding: JSONEncoding.default)
         }
     }
-    
+
     var jwtTokenType: JWTTokenType?{
         switch self{
         default:
             return .accessToken
         }
     }
-    
-    var errorMapper: [Int : Error]?{
+
+    var errorMapper: [Int: Error]? {
         switch self {
         case .applicantList:
             return[

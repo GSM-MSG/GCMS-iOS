@@ -4,7 +4,7 @@ enum UserAPI {
     case myProfile
     case editProfile(url: String)
     case search(name: String, type: ClubType)
-    case exit(ClubRequestQuery)
+    case miniProfile
     case withdrawal
 }
 
@@ -12,81 +12,69 @@ extension UserAPI: GCMSAPI {
     var domain: GCMSDomain {
         return .user
     }
+
     var urlPath: String {
         switch self {
-        case .myProfile:
-            return "/my"
-        case .editProfile:
-            return "/profile"
+        case .myProfile, .editProfile, .withdrawal:
+            return ""
+
         case .search:
             return "/search"
-        case .exit:
-            return "/exit"
-        case .withdrawal:
-            return "/withdrawal"
+
+        case .miniProfile:
+            return "/profile"
         }
     }
+
     var method: Method {
         switch self {
-        case .myProfile, .search:
+        case .myProfile, .search, .miniProfile:
             return .get
-        case .exit:
-            return .post
+
         case .editProfile:
-            return .put
+            return .patch
+
         case .withdrawal:
             return .delete
         }
     }
+
     var task: Task {
         switch self {
         case let .editProfile(url):
             return .requestParameters(parameters: [
-                "url": url
+                "profileImg": url
             ], encoding: JSONEncoding.default)
+
         case let .search(name, type):
             return .requestParameters(parameters: [
                 "name": name,
                 "type": type.rawValue
             ], encoding: URLEncoding.queryString)
 
-        case let .exit(query):
-            return .requestParameters(parameters: [
-                "q": query.q,
-                "type": query.type.rawValue
-            ], encoding: JSONEncoding.default)
         default:
             return .requestPlain
         }
     }
+
     var jwtTokenType: JWTTokenType? {
         switch self {
-        case .myProfile, .editProfile, .search, .exit, .withdrawal:
-            return .accessToken
         default:
-            return JWTTokenType.none
+            return .accessToken
         }
     }
-    
+
     var errorMapper: [Int: Error]?{
         switch self {
         case .myProfile:
             return .none
-            
+
         case .editProfile:
             return .none
-            
+
         case .search:
             return .none
-            
-        case .exit:
-            return [
-                401: GCMSError.unauthorized,
-                403: GCMSError.canNotLeaveTheClub,
-                404: GCMSError.notFoundClub,
-                406: GCMSError.notExistInClub
-            ]
-            
+
         case .withdrawal:
             return [
                 401: GCMSError.unauthorized,

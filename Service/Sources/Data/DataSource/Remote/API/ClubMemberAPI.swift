@@ -11,14 +11,14 @@ extension ClubMemberAPI: GCMSAPI {
     var domain: GCMSDomain {
         return .clubMember
     }
-    
+
     var urlPath: String {
         switch self {
         case let .clubMember(clubID), let .userKick(clubID, _), let .delegation(clubID, _):
             return "/\(clubID)"
         }
     }
-    
+
     var method: Moya.Method {
         switch self {
         case .clubMember:
@@ -31,7 +31,7 @@ extension ClubMemberAPI: GCMSAPI {
             return .patch
         }
     }
-    
+
     var task: Moya.Task {
         switch self {
         case .clubMember:
@@ -44,14 +44,14 @@ extension ClubMemberAPI: GCMSAPI {
             return .requestParameters(parameters: ["uuid": uuid], encoding: JSONEncoding.default)
         }
     }
-    
+
     var jwtTokenType: JWTTokenType? {
         switch self {
         default:
             return .accessToken
         }
     }
-    
+
     var errorMapper: [Int: Error]? {
         switch self {
         case .clubMember:

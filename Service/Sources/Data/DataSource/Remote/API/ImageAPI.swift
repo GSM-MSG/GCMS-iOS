@@ -13,7 +13,7 @@ extension ImageAPI: GCMSAPI {
     var urlPath: String {
         switch self {
         case .uploadImages:
-            return "/"
+            return ""
         }
     }
     var method: Moya.Method {
@@ -29,7 +29,7 @@ extension ImageAPI: GCMSAPI {
                 let uuid = UUID().uuidString
                 return MultipartFormData(
                     provider: .data(data),
-                    name: "files",
+                    name: "file",
                     fileName: "\(uuid).png"
                 )
             }

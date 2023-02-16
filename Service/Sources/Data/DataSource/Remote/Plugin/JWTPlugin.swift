@@ -5,10 +5,10 @@ protocol JWTTokenAuthorizable {
     var jwtTokenType: JWTTokenType? { get }
 }
 
-enum JWTTokenType {
-    case accessToken
-    case refreshToken
-    case none
+enum JWTTokenType: String {
+    case accessToken = "Authorization"
+    case refreshToken = "Refresh-Token"
+    case none = ""
 }
 
 final class JWTPlugin: PluginType {
@@ -25,7 +25,7 @@ final class JWTPlugin: PluginType {
         var req = request
         
         let token = "Bearer \(getToken(type: tokenType))"
-        req.addValue(token, forHTTPHeaderField: "Authorization")
+        req.addValue(token, forHTTPHeaderField: tokenType.rawValue)
         return req
     }
     
@@ -60,7 +60,6 @@ private extension JWTPlugin {
         do {
             return try KeychainLocal.shared.fetchAccessToken()
         } catch {
-            print(error.localizedDescription)
             return ""
         }
     }
@@ -69,7 +68,6 @@ private extension JWTPlugin {
         do {
             return try KeychainLocal.shared.fetchRefreshToken()
         } catch {
-            print(error.localizedDescription)
             return ""
         }
     }
