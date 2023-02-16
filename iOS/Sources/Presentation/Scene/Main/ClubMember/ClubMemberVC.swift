@@ -138,11 +138,11 @@ extension ClubMemberVC: MemberHeaderViewDelegate {
 }
 
 extension ClubMemberVC: ApplicantCellDelegate, StatusMemberCellDelegate {
-    func acceptButtonDidTap(user: Member) {
+    func acceptButtonDidTap(user: User) {
         reactor?.action.onNext(.acceptButtonDidTap(user))
     }
     
-    func rejectButtonDidTap(user: Member) {
+    func rejectButtonDidTap(user: User) {
         reactor?.action.onNext(.rejectButtonDidTap(user))
     }
     

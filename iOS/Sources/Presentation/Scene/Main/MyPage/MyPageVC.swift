@@ -137,7 +137,7 @@ final class MyPageVC: BaseVC<MyPageReactor> {
         
         sharedState
             .compactMap { $0.user }
-            .compactMap { $0.joinedClub.filter { $0.type == .editorial } }
+            .compactMap { $0.clubs.filter { $0.type == .editorial } }
             .map { [ClubListSection.init(header: "", items: $0)] }
             .do(onNext: { [weak self] item in
                 self?.editorialLabel.isHidden = item.isEmpty
@@ -147,7 +147,7 @@ final class MyPageVC: BaseVC<MyPageReactor> {
         
         sharedState
             .compactMap { $0.user }
-            .map { $0.joinedClub.first(where: { $0.type == .major } ) }
+            .map { $0.clubs.first(where: { $0.type == .major } ) }
             .bind(with: self) { owner, major in
                 owner.majorClubView.setClub(club: major)
                 owner.majorLabel.isHidden = major == nil
@@ -156,7 +156,7 @@ final class MyPageVC: BaseVC<MyPageReactor> {
         
         sharedState
             .compactMap { $0.user }
-            .map { $0.joinedClub.first(where: { $0.type == .freedom } ) }
+            .map { $0.clubs.first(where: { $0.type == .freedom } ) }
             .bind(with: self) { owner, free in
                 owner.freedomClubView.setClub(club: free)
                 owner.freedomLabel.isHidden = free == nil
@@ -218,7 +218,7 @@ extension MyPageVC: PHPickerViewControllerDelegate {
         
         item?.loadDataRepresentation(forTypeIdentifier: "public.image", completionHandler: { [weak self] data, err in
             if let err = err {
-                print(err.asGCMSError?.errorDescription)
+                print(err.asGCMSError?.errorDescription ?? "")
                 return
             }
             if let data = data {

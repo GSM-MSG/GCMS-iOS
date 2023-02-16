@@ -12,8 +12,8 @@ final class ClubApplicantRemote: BaseRemote<ClubApplicantAPI>{
             .map { $0.toDomain() }
     }
     
-    func apply(clubID: String) -> Single<[User]> {
-        request(.applicantList(clubID: clubID))
+    func apply() -> Single<[User]> {
+        request(.apply)
             .map(ClubApplicantResponse.self)
             .map { $0.toDomain() }
     }

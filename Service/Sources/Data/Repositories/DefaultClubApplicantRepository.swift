@@ -8,8 +8,8 @@ final class DefaultClubApplicantRepository: ClubApplicantRepository {
     func fetchClubApplicant(clubID: String) -> Single<[User]> {
         clubApplicantRemote.fetchClubApplicant(clubID: clubID)
     }
-    func apply(clubID: String) -> Single<[User]> {
-        clubApplicantRemote.apply(clubID: clubID)
+    func apply() -> Single<[User]> {
+        clubApplicantRemote.apply()
     }
     func userAccept(clubID: String, uuid: UUID) -> Completable {
         clubApplicantRemote.userAccept(clubID: clubID, uuid: uuid)

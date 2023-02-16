@@ -55,6 +55,6 @@ final class StudentCell: BaseTableViewCell<User> {
             profileImageView.image = .init(systemName: "person.crop.circle")
         }
         nameLabel.text = model.name
-        classLabel.text = "\(model.grade)학년 \(model.class)반 \(model.number)번"
+        classLabel.text = "\(model.grade)학년 \(model.classNum)반 \(model.number)번"
     }
 }

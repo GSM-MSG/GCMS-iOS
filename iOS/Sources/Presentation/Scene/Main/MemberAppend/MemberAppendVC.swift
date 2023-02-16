@@ -147,7 +147,7 @@ final class MemberAppendVC: BaseVC<MemberAppendReactor> {
 // MARK: - Extension
 extension MemberAppendVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return AddedUserCell.fittingSize(availableHeight: 20, user: reactor?.currentState.addedUsers[indexPath.row] ?? .init(userId: "", profileImageUrl: "", name: "", grade: 1, class: 1, number: 1))
+        return AddedUserCell.fittingSize(availableHeight: 20, user: reactor?.currentState.addedUsers[indexPath.row] ?? .init(uuid: UUID(), email: "", name: "", grade: 1, classNum: 1, number: 1, profileImg: ""))
     }
 }
 

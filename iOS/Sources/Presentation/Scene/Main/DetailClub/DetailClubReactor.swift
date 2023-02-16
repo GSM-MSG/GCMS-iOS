@@ -250,8 +250,7 @@ private extension DetailClubReactor {
         self.steps.accept(GCMSStep.alert(title: "신청하기", message: "정말 '\(query.q)' 동아리에 가입하실 건가요?", style: .alert, actions: [
             .init(title: "신청", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
-                self.clubApplyUseCase.execute(clubID: clubID)
-                    .andThen(Observable.just(()))
+                self.clubApplyUseCase.execute()
                     .subscribe { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 성공하였습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
                         self.action.onNext(.updateClub(self.currentState.clubDetail?.copyForChange(isApplied: true)))

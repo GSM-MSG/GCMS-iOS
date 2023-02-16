@@ -101,7 +101,7 @@ final class ApplicantCell: BaseTableViewCell<User> {
             profileImageView.image = UIImage(systemName: "person.crop.circle")
         }
         nameLabel.text = model.name
-        infoLabel.text = "\(model.grade)학년\(model.class)반\(model.number)번"
+        infoLabel.text = "\(model.grade)학년\(model.classNum)반\(model.number)번"
         
         acceptButton.rx.tap
             .compactMap { [weak self] in self?.model }

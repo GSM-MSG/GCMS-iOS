@@ -242,7 +242,7 @@ private extension NewClubReactor {
                     notionLink: state.notionLink,
                     teacher: state.teacher,
                     activities: urls.1,
-                    member: state.members.map(\.userId)
+                    member: state.members.map(\.email)
                 )
             )
             .do(afterCompleted: {
