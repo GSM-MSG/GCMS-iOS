@@ -44,6 +44,8 @@ final class ReactorAssembly: Assembly {
                 isUpdate: isUpdate,
                 clubID: clubID,
                 createNewClubUseCase: r.resolve(CreateNewClubUseCase.self)!,
+                fetchDetailClubUseCase: r.resolve(FetchDetailClubUseCase.self)!,
+                updateNewClubUseCase: r.resolve(UpdateClubUseCase.self)!,
                 uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!
             )
         }

@@ -15,6 +15,7 @@ final class NewClubReactor: Reactor, Stepper {
     enum Action {
         // First
         case clubTypeDidTap(ClubType)
+        case viewDidLoad
         
         //Second
         case updateName(String)
@@ -45,6 +46,7 @@ final class NewClubReactor: Reactor, Stepper {
         case setTeacher(String?)
         case setContact(String)
         case setImageData(Data)
+        case setImageDatas([Data])
         case setIsBanner(Bool)
         case removeImageData(Int)
         case appendMember([User])
@@ -69,6 +71,8 @@ final class NewClubReactor: Reactor, Stepper {
     private let isUpdate: Bool
     private let clubID: Int?
     private let createNewClubUseCase: CreateNewClubUseCase
+    private let fetchDetailClubUseCase: FetchDetailClubUseCase
+    private let updateNewClubUseCase: UpdateClubUseCase
     private let uploadImagesUseCase: UploadImagesUseCase
     
     // MARK: - Init
@@ -76,6 +80,8 @@ final class NewClubReactor: Reactor, Stepper {
         isUpdate: Bool = false,
         clubID: Int? = nil,
         createNewClubUseCase: CreateNewClubUseCase,
+        fetchDetailClubUseCase: FetchDetailClubUseCase,
+        updateNewClubUseCase: UpdateClubUseCase,
         uploadImagesUseCase: UploadImagesUseCase
     ) {
         initialState = State(
@@ -94,6 +100,8 @@ final class NewClubReactor: Reactor, Stepper {
         self.isUpdate = isUpdate
         self.clubID = clubID
         self.createNewClubUseCase = createNewClubUseCase
+        self.fetchDetailClubUseCase = fetchDetailClubUseCase
+        self.updateNewClubUseCase = updateNewClubUseCase
         self.uploadImagesUseCase = uploadImagesUseCase
     }
     
@@ -103,6 +111,8 @@ final class NewClubReactor: Reactor, Stepper {
 extension NewClubReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .viewDidLoad:
+            return viewDidLoad()
         case let .updateName(name):
             return .just(.setName(name))
         case .completeButtonDidTap:
@@ -176,6 +186,19 @@ extension NewClubReactor {
                     newState.activityImgs.append(data)
                 }
             }
+        case let .setImageDatas(datas):
+            for data in datas {
+                if currentState.activityImgs.count > 3 {
+                    steps.accept(GCMSStep.alert(title: "GCMS",
+                                                message: "동아리 사진을 5개이상 추가할 수 없습니다!",
+                                                style: .alert,
+                                                actions: [
+                                                    .init(title: "확인", style: .cancel, handler: nil)
+                                                ]))
+                } else {
+                    newState.activityImgs.append(data)
+                }
+            }
         case let .setIsBanner(status):
             newState.isBanner = status
         case let .removeImageData(index):
@@ -197,6 +220,44 @@ extension NewClubReactor {
 
 // MARK: - Method
 private extension NewClubReactor {
+    func viewDidLoad() -> Observable<Mutation> {
+        guard !isUpdate, let clubID else { return .empty() }
+        let club = fetchDetailClubUseCase.execute(clubID: clubID)
+            .asObservable()
+            .share(replay: 3)
+        let startLoadingObservable = Observable.just(Mutation.setIsLoading(true))
+        let clubInfoObservable = club.flatMap { club in
+            Observable.concat(
+                .just(Mutation.setName(club.name)),
+                .just(.setClubType(club.type)),
+                .just(.setContent(club.content)),
+                .just(.setNotionLink(club.notionLink)),
+                .just(.setTeacher(club.teacher)),
+                .just(.setContact(club.contact)),
+                .just(.appendMember(club.member))
+            )
+        }
+        let bannerObservable = club
+            .map(\.bannerImg)
+            .compactMap { URL(string: $0) }
+            .compactMap { try? Data(contentsOf: $0) }
+            .map { Mutation.setImageData($0) }
+            
+
+        let activitiesData = club
+            .map(\.activityImgs)
+            .compactMap { $0.compactMap { URL(string: $0) } }
+            .compactMap { $0.compactMap { try? Data(contentsOf: $0) } }
+            .map { Mutation.setImageDatas($0) }
+        
+        return .concat([
+            startLoadingObservable,
+            clubInfoObservable,
+            bannerObservable,
+            activitiesData
+        ])
+    }
+
     func secondNextButtonDidTap() -> Observable<Mutation> {
         var errorMessage = ""
         if currentState.name.isEmpty {
@@ -239,29 +300,47 @@ private extension NewClubReactor {
         let task = Observable.zip(
             uploadImagesUseCase.execute(images: [state.bannerImg ?? Data()]).compactMap(\.first).asObservable(),
             uploadImagesUseCase.execute(images: state.activityImgs).asObservable()
-        ).withUnretained(self).flatMap { owner, urls -> Observable<Mutation> in
-            return owner.createNewClubUseCase.execute(
-                req: .init(
-                    type: state.clubType,
-                    name: state.name.clubTitleRegex(),
-                    content: state.content,
-                    bannerImg: urls.0,
-                    contact: state.contact,
-                    notionLink: state.notionLink,
-                    teacher: state.teacher,
-                    activityImgs: urls.1,
-                    member: state.members.map(\.uuid)
+        )
+            .withUnretained(self)
+            .flatMap { owner, urls -> Observable<Mutation> in
+                let completable = owner.isUpdate ?
+                owner.updateNewClubUseCase.execute(
+                    clubID: owner.clubID ?? 0,
+                    req: .init(
+                        type: state.clubType,
+                        name: state.name.clubTitleRegex(),
+                        content: state.contact,
+                        bannerImg: urls.0,
+                        contact: state.contact,
+                        notionLink: state.notionLink,
+                        teacher: state.teacher,
+                        activityImgs: urls.1,
+                        member: state.members.map(\.uuid)
+                    )
+                ) :
+                owner.createNewClubUseCase.execute(
+                    req: .init(
+                        type: state.clubType,
+                        name: state.name.clubTitleRegex(),
+                        content: state.content,
+                        bannerImg: urls.0,
+                        contact: state.contact,
+                        notionLink: state.notionLink,
+                        teacher: state.teacher,
+                        activityImgs: urls.1,
+                        member: state.members.map(\.uuid)
+                    )
                 )
-            )
-            .do(afterCompleted: {
-                owner.steps.accept(GCMSStep.popToRoot)
-            })
-            .andThen(Observable.just(Mutation.setIsLoading(false)))
-                .catch { e in
-                    self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
-                    return .just(.setIsLoading(false))
-                }
-        }
+                return completable
+                    .do(afterCompleted: {
+                        owner.steps.accept(GCMSStep.popToRoot)
+                    })
+                        .andThen(Observable.just(Mutation.setIsLoading(false)))
+                        .catch { e in
+                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
+                            return .just(.setIsLoading(false))
+                        }
+            }
             .catch { e in
                 self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
                 return .just(.setIsLoading(false))
