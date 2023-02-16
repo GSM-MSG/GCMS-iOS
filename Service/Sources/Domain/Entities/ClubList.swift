@@ -1,24 +1,22 @@
 
 public struct ClubList: Equatable {
-    public let bannerImg: String
-    public let name: String
+    public let id: Int
     public let type: ClubType
-    
-    public init(
-        bannerImg: String,
-        name: String,
-        type: ClubType
-    ) {
-        self.bannerImg = bannerImg
-        self.name = name
-        self.type = type
-    }
-}
+    public let name: String
+    public let content: String
+    public let bannerImg: String
 
-public extension ClubList {
-    static let dummy = ClubList(
-        bannerImg: "https://avatars.githubusercontent.com/u/95753750?s=64&v=4",
-        name: "GCMS",
-        type: .freedom
-    )
+    public init(
+        id: Int,
+        type: ClubType,
+        name: String,
+        content: String,
+        bannerImg: String
+    ) {
+        self.id = id
+        self.type = type
+        self.name = name
+        self.content = content
+        self.bannerImg = bannerImg
+    }
 }

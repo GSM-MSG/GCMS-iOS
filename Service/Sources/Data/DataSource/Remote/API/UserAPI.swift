@@ -64,16 +64,10 @@ extension UserAPI: GCMSAPI {
         }
     }
 
-    var errorMapper: [Int: Error]?{
+    var errorMapper: [Int: Error]? {
         switch self {
-        case .myProfile:
-            return .none
-
-        case .editProfile:
-            return .none
-
-        case .search:
-            return .none
+        case .myProfile, .editProfile, .search, .miniProfile:
+            return [:]
 
         case .withdrawal:
             return [

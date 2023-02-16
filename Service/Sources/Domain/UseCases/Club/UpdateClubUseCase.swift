@@ -7,7 +7,7 @@ public struct UpdateClubUseCase {
     
     private let clubRepository: ClubRepository
     
-    public func execute(clubID: Int, req: UpdateClubRequest) -> Completable{
+    public func execute(clubID: Int, req: UpdateClubRequest) -> Completable {
         clubRepository.updateClub(clubID: clubID, req: req)
     }
 }

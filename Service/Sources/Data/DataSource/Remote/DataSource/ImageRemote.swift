@@ -6,6 +6,7 @@ import Foundation
      private override init() {}
      func uploadPictures(datas: [Data]) -> Single<[String]> {
          return request(.uploadImages(datas))
-             .map([String].self)
+             .map(UploadImagesResponse.self)
+             .map(\.images)
      }
  }

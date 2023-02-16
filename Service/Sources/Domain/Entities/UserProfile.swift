@@ -1,7 +1,7 @@
 import Foundation
 
 public struct UserProfile: Equatable {
-    public init(uuid: UUID, email: String, name: String, grade: Int, classNum: Int, number: Int, profileImg: String, clubs: [ClubList]) {
+    public init(uuid: UUID, email: String, name: String, grade: Int, classNum: Int, number: Int, profileImg: String?, clubs: [ClubList]) {
         self.uuid = uuid
         self.email = email
         self.name = name
@@ -27,13 +27,3 @@ public struct UserProfile: Equatable {
     public let clubs: [ClubList]
 }
 
-public extension UserProfile {
-    static let dummy = UserProfile(uuid: UUID(),
-                                   email: "s21060",
-                                   name: "변찬우",
-                                   grade: 2,
-                                   classNum: 1,
-                                   number: 9,
-                                   profileImg: "https://avatars.githubusercontent.com/u/74440939?v=4",
-                                   clubs: [.dummy])
-}

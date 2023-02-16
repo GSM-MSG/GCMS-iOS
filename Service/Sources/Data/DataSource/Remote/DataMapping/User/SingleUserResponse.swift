@@ -1,6 +1,6 @@
 import Foundation
 
-struct MemberDTO: Codable {
+struct SingleUserResponse: Decodable {
     let uuid: UUID
     let email: String
     let name: String
@@ -8,19 +8,17 @@ struct MemberDTO: Codable {
     let classNum: Int
     let number: Int
     let profileImg: String?
-    let scope: MemberScope
 }
 
-extension MemberDTO {
-    func toDomain() -> Member {
-        return .init(
+extension SingleUserResponse {
+    func toDomain() -> User {
+        User(
             uuid: uuid,
             email: email,
             name: name,
             grade: grade,
             classNum: classNum,
             number: number,
-            scope: scope,
             profileImg: profileImg
         )
     }
