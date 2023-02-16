@@ -7,7 +7,7 @@ public struct ClubOpenUseCase {
     
     private let clubRepository: ClubRepository
     
-    public func execute(query: ClubRequestQuery) -> Completable{
-        clubRepository.clubOpen(query: query)
+    public func execute(clubID: Int) -> Completable{
+        clubRepository.clubOpen(clubID: clubID)
     }
 }

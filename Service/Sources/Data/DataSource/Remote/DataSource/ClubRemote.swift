@@ -9,8 +9,8 @@ final class ClubRemote: BaseRemote<ClubAPI> {
             .map([ClubListDTO].self)
             .map { $0.map { $0.toDomain() } }
     }
-    func fetchDetailClub(query: ClubRequestQuery) -> Single<Club> {
-        request(.clubDetail(query: query))
+    func fetchDetailClub(clubID: Int) -> Single<Club> {
+        request(.clubDetail(clubID: clubID))
             .map(DetailClubResponse.self)
             .map { $0.toDomain() }
     }
@@ -18,24 +18,24 @@ final class ClubRemote: BaseRemote<ClubAPI> {
         request(.createNewClub(req: req))
             .asCompletable()
     }
-    func updateClub(req: UpdateClubRequest) -> Completable {
-        request(.updateClub(req: req))
+    func updateClub(clubID: Int ,req: UpdateClubRequest) -> Completable {
+        request(.updateClub(clubID: clubID, req: req))
             .asCompletable()
     }
-    func deleteClub(query: ClubRequestQuery) -> Completable {
-        request(.deleteClub(query: query))
+    func deleteClub(clubID: Int) -> Completable {
+        request(.deleteClub(clubID: clubID))
             .asCompletable()
     }
-    func clubOpen(query: ClubRequestQuery) -> Completable {
-        request(.clubOpen(query: query))
+    func clubOpen(clubID: Int) -> Completable {
+        request(.clubOpen(clubID: clubID))
             .asCompletable()
     }
-    func clubClose(query: ClubRequestQuery) -> Completable {
-        request(.clubClose(query: query))
+    func clubClose(clubID: Int) -> Completable {
+        request(.clubClose(clubID: clubID))
             .asCompletable()
     }
-    func cancel(query: ClubRequestQuery) -> Completable {
-        request(.cancel(query: query))
+    func exitClub(clubID: Int) -> Completable {
+        request(.exitClub(clubID: clubID))
             .asCompletable()
     }
 }

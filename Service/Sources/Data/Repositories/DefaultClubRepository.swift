@@ -11,25 +11,25 @@ final class DefaultClubRepository: ClubRepository {
             .doOnNeedRefresh { self.clubLocal.deleteClubList(); self.clubLocal.saveClubList(clubList: $0) }
             .createObservable()
     }
-    func fetchDetailClub(query: ClubRequestQuery) -> Single<Club> {
-        clubRemote.fetchDetailClub(query: query)
+    func fetchDetailClub(clubID: Int) -> Single<Club> {
+        clubRemote.fetchDetailClub(clubID: clubID)
     }
     func createNewClub(req: NewClubRequest) -> Completable {
         clubRemote.createNewClub(req: req)
     }
-    func updateClub(req: UpdateClubRequest) -> Completable {
-        clubRemote.updateClub(req: req)
+    func updateClub(clubID: Int, req: UpdateClubRequest) -> Completable {
+        clubRemote.updateClub(clubID: clubID, req: req)
     }
-    func deleteClub(query: ClubRequestQuery) -> Completable {
-        clubRemote.deleteClub(query: query)
+    func deleteClub(clubID: Int) -> Completable {
+        clubRemote.deleteClub(clubID: clubID)
     }
-    func clubOpen(query: ClubRequestQuery) -> Completable {
-        clubRemote.clubOpen(query: query)
+    func clubOpen(clubID: Int) -> Completable {
+        clubRemote.clubOpen(clubID: clubID)
     }
-    func clubClose(query: ClubRequestQuery) -> Completable {
-        clubRemote.clubClose(query: query)
+    func clubClose(clubID: Int) -> Completable {
+        clubRemote.clubClose(clubID: clubID)
     }
-    func cancel(query: ClubRequestQuery) -> Completable {
-        clubRemote.cancel(query: query)
+    func exitClub(clubID: Int) -> Completable {
+        clubRemote.exitClub(clubID: clubID)
     }
 }

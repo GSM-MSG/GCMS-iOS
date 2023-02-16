@@ -1,13 +1,13 @@
 import RxSwift
 
-public struct FetchDetailClubUseCase {
+public struct ExitClubUseCase {
     public init(clubRepository: ClubRepository) {
         self.clubRepository = clubRepository
     }
     
     private let clubRepository: ClubRepository
     
-    public func execute(clubID: Int) -> Single<Club> {
-        clubRepository.fetchDetailClub(clubID: clubID)
+    public func exitClub(clubID: Int) -> Completable{
+        clubRepository.exitClub(clubID: clubID)
     }
 }
