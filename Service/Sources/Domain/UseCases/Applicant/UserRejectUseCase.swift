@@ -8,7 +8,7 @@ public struct UserRejectUseCase {
     
     private let clubApplicantRepository: ClubApplicantRepository
     
-    public func execute(clubID: Int, uuid: UUID) -> Completable{
+    public func execute(clubID: Int, uuid: UUID) -> Completable {
         clubApplicantRepository.userReject(clubID: clubID, uuid: uuid)
     }
 }

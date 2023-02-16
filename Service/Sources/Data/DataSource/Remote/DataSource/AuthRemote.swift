@@ -8,8 +8,14 @@ final class AuthRemote: BaseRemote<AuthAPI> {
         return request(.login(code: code))
             .map(TokenDTO.self)
     }
+
     func refresh() -> Completable {
         return request(.refresh)
+            .asCompletable()
+    }
+
+    func logout() -> Completable {
+        return request(.logout)
             .asCompletable()
     }
 }

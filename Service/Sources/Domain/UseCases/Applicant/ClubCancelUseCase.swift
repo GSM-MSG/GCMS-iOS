@@ -7,7 +7,7 @@ public struct ClubCancelUseCase {
     
     private let clubApplicantRepository: ClubApplicantRepository
     
-    public func execute() -> Completable {
-        clubApplicantRepository.cancel()
+    public func execute(clubID: Int) -> Completable {
+        clubApplicantRepository.cancel(clubID: clubID)
     }
 }
