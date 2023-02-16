@@ -8,5 +8,6 @@ public final class RepositoryAssembly: Assembly {
         container.register(ImageRepository.self) { _ in DefaultImageRepository() }
         container.register(UserRepository.self) { _ in DefaultUserRepository() }
         container.register(GuestRepository.self) { _ in DefaultGuestRepository() }
+        container.register(ClubApplicantRepository.self) { _ in DefaultClubApplicantRepository() }
     }
 }
