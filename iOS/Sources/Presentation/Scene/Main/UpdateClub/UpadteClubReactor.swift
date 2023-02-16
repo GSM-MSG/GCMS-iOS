@@ -71,9 +71,9 @@ final class UpdateClubReactor: Reactor, Stepper {
         uploadImagesUseCase: UploadImagesUseCase
     ) {
         self.legacyBannerUrl = club.bannerImg
-        self.legacyBanner = try? Data(contentsOf: URL(string: club.bannerUrl)!)
+        self.legacyBanner = try? Data(contentsOf: URL(string: club.bannerImg)!)
         var activityImgs = [Data]()
-        self.legacyImageUrl = club.activities.reduce(into: [Data:String](), { partialResult, url in
+        self.legacyImageUrl = club.activityImgs.reduce(into: [Data:String](), { partialResult, url in
             if let data = try? Data(contentsOf: URL(string: url)!) {
                 partialResult[data] = url
                 activityImgs.append(data)
@@ -107,7 +107,7 @@ extension UpdateClubReactor {
         case .completeButtonDidTap:
             return completeButtonDidTap()
         case let .updateContent(content):
-            return .just(.setContent(desc))
+            return .just(.setContent(content))
         case let .updateNotionLink(link):
             return .just(.setNotionLink(link))
         case let .updateContact(cont):
@@ -123,9 +123,9 @@ extension UpdateClubReactor {
             return .just(.setImageData(data))
         case .bannerDidTap:
             return .just(.setIsBanner(true))
-        case .activityAppendButtonDidTap:
+        case .activityImgsAppendButtonDidTap:
             return .just(.setIsBanner(false))
-        case let .activityDeleteDidTap(index):
+        case let .activityImgsDeleteDidTap(index):
             return .just(.removeImageData(index))
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
@@ -211,7 +211,7 @@ private extension UpdateClubReactor {
         let initial = self.initialState
         let current = self.currentState
         self.updateClubUseCase.execute(
-            req: .init(
+            clubID: 0, req: .init(
                 type: initial.clubType,
                 name: current.name.clubTitleRegex(),
                 content: current.content,
@@ -220,7 +220,7 @@ private extension UpdateClubReactor {
                 notionLink: current.notionLink,
                 teacher: current.teacher,
                 activityImgs: current.activityImgs,
-                member: current.member,
+                member: current.member
             )
         )
         .andThen(Observable.just(()))

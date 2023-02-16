@@ -2,9 +2,9 @@ import Moya
 import Foundation
 
 enum ClubMemberAPI {
-    case clubMember(clubID: String)
-    case userKick(clubID: String, uuid: UUID)
-    case delegation(clubID: String, uuid: UUID)
+    case clubMember(clubID: Int)
+    case userKick(clubID: Int, uuid: UUID)
+    case delegation(clubID: Int, uuid: UUID)
 }
 
 extension ClubMemberAPI: GCMSAPI {

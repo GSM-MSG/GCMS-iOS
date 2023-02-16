@@ -8,7 +8,7 @@ public struct ClubDelegationUseCase {
     
     private let clubMemberRepository: ClubMemberRepository
     
-    public func execute(clubID: String, uuid: UUID) -> Completable {
+    public func execute(clubID: Int, uuid: UUID) -> Completable {
         clubMemberRepository.delegation(clubID: clubID, uuid: uuid)
     }
 }

@@ -7,7 +7,7 @@ public struct FetchClubMemberUseCase {
     
     private let clubMemberRepository: ClubMemberRepository
     
-    public func execute(clubID: String) -> Single<[Member]> {
+    public func execute(clubID: Int) -> Single<[Member]> {
         clubMemberRepository.fetchClubMember(clubID: clubID)
     }
 }

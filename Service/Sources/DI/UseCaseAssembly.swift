@@ -83,7 +83,7 @@ public final class UseCaseAssembly: Assembly {
         }
         container.register(ClubCancelUseCase.self) { r in
              ClubCancelUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
+                clubApplicantRepository: r.resolve(ClubApplicantRepository.self)!
             )
         }
         container.register(ClubDelegationUseCase.self) { r in

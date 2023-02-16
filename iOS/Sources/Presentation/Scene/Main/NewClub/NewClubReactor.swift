@@ -79,10 +79,12 @@ final class NewClubReactor: Reactor, Stepper {
             content: "",
             notionLink: "",
             contact: "",
-            isBanner: false,
+            teacher: "",
+            bannerImg: .empty,
             activityImgs: [],
             members: [],
             clubType: .major,
+            isBanner: false,
             isLoading: false
         )
         self.createNewClubUseCase = createNewClubUseCase
@@ -116,9 +118,9 @@ extension NewClubReactor {
             return .just(.setImageData(data))
         case .bannerDidTap:
             return .just(.setIsBanner(true))
-        case .activityAppendButtonDidTap:
+        case .activityImgsAppendButtonDidTap:
             return .just(.setIsBanner(false))
-        case let .activityDeleteDidTap(index):
+        case let .activityImgsDeleteDidTap(index):
             return .just(.removeImageData(index))
         case .memberAppendButtonDidTap:
             steps.accept(GCMSStep.memberAppendIsRequired(closure: { [weak self] users in
@@ -143,9 +145,9 @@ extension NewClubReactor {
         var newState = state
         
         switch mutation {
-        case let .setTitle(name):
+        case let .setName(name):
             newState.name = name
-        case let .setDescription(content):
+        case let .setContent(content):
             newState.content = content
         case let .setNotionLink(link):
             newState.notionLink = link
@@ -171,7 +173,7 @@ extension NewClubReactor {
         case let .setIsBanner(status):
             newState.isBanner = status
         case let .removeImageData(index):
-            newState.activitiesData.remove(at: index)
+            newState.activityImgs.remove(at: index)
         case let .appendMember(users):
             newState.members.append(contentsOf: users)
             newState.members.removeDuplicates()
@@ -242,7 +244,7 @@ private extension NewClubReactor {
                     notionLink: state.notionLink,
                     teacher: state.teacher,
                     activityImgs: urls.1,
-                    member: state.members.map(\.userId)
+                    member: state.members.map(\.uuid)
                 )
             )
             .do(afterCompleted: {

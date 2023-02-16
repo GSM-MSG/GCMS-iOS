@@ -9,7 +9,7 @@ public final class UserKickUseCase {
     private let clubMemberRepository: ClubMemberRepository
     
     public func execute(
-        clubID: String,
+        clubID: Int,
         uuid: UUID
     ) -> Completable{
         clubMemberRepository.userKick(clubID: clubID, uuid: uuid)

@@ -35,7 +35,7 @@ final class ClubMemberReactor: Reactor, Stepper {
     }
     let initialState: State
     private let query: ClubRequestQuery
-    private let clubID: String = ""
+    private let clubID: Int = 0
     
     private let fetchClubMemberUseCase: FetchClubMemberUseCase
     private let fetchClubApplicantUseCase: FetchClubApplicantUseCase
@@ -143,7 +143,7 @@ private extension ClubMemberReactor {
                 self?.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription, action: []))
                 return .just(.setIsLoading(false))
             }
-        let applicant = fetchClubApplicantUseCase.execute(clubID: clubID)
+        let applicant = fetchClubApplicantUseCase.execute(clubID: self.clubID)
             .asObservable()
             .map { ExpandableMemberSection(header: "가입 대기자 명단", items: $0.map { MemberSectionType.applicant($0) }, isOpened: false) }
             .flatMap { Observable.concat([
@@ -158,7 +158,7 @@ private extension ClubMemberReactor {
             self.steps.accept(GCMSStep.alert(title: "마감하기", message: "동아리 신청을 마감하시겠습니까?", style: .alert, actions: [
                 .init(title: "마감", style: .default, handler: { [weak self] _ in
                     guard let self = self else { return }
-                    self.clubCloseUseCase.execute(query: self.query)
+                    self.clubCloseUseCase.execute(clubID: self.clubID)
                         .andThen(Observable.just(()))
                         .subscribe { _ in
                             self.action.onNext(.clubIsOpenedChange(false))
@@ -174,7 +174,7 @@ private extension ClubMemberReactor {
             self.steps.accept(GCMSStep.alert(title: "신청받기", message: "동아리 신청을 받겠습니까?", style: .alert, actions: [
                 .init(title: "받기", style: .default, handler: { [weak self] _ in
                     guard let self = self else { return }
-                    self.clubOpenUseCase.execute(query: self.query)
+                    self.clubOpenUseCase.execute(clubID: self.clubID)
                         .andThen(Observable.just(()))
                         .subscribe { _ in
                             self.action.onNext(.clubIsOpenedChange(true))

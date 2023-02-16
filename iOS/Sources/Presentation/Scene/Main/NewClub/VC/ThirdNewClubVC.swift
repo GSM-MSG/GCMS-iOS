@@ -158,14 +158,14 @@ final class ThirdNewClubVC: BaseVC<NewClubReactor> {
         
         clubActivityAppendButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.reactor?.action.onNext(.activityAppendButtonDidTap)
+                owner.reactor?.action.onNext(.activityImgsAppendButtonDidTap)
                 owner.present(owner.activityPHPickerController, animated: true)
             }
             .disposed(by: disposeBag)
         
         clubActivitiesCollectionView.rx.itemSelected
             .map(\.row)
-            .map(Reactor.Action.activityDeleteDidTap)
+            .map(Reactor.Action.activityImgsDeleteDidTap)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         

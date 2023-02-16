@@ -6,24 +6,28 @@ final class ClubApplicantRemote: BaseRemote<ClubApplicantAPI>{
     static let shared = ClubApplicantRemote()
     private override init() {}
     
-    func fetchClubApplicant(clubID: String) -> Single<[User]> {
+    func fetchClubApplicant(clubID: Int) -> Single<[User]> {
         request(.applicantList(clubID: clubID))
             .map(ClubApplicantResponse.self)
             .map { $0.toDomain() }
     }
     
-    func apply() -> Single<[User]> {
+    func apply() -> Completable {
         request(.apply)
-            .map(ClubApplicantResponse.self)
-            .map { $0.toDomain() }
+            .asCompletable()
     }
     
-    func userAccept(clubID: String, uuid: UUID) -> Completable {
+    func cancel() -> Completable {
+        request(.cancel)
+            .asCompletable()
+    }
+    
+    func userAccept(clubID: Int, uuid: UUID) -> Completable {
         request(.userAccept(clubID: clubID, uuid: uuid))
             .asCompletable()
     }
     
-    func userReject(clubID: String, uuid: UUID) -> Completable {
+    func userReject(clubID: Int, uuid: UUID) -> Completable {
         request(.userReject(clubID: clubID, uuid: uuid))
             .asCompletable()
     }

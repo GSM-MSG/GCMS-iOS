@@ -2,10 +2,11 @@ import Moya
 import Foundation
 
 enum ClubApplicantAPI{
-    case applicantList(clubID: String)
+    case applicantList(clubID: Int)
     case apply
-    case userAccept(clubID: String, uuid: UUID)
-    case userReject(clubID: String, uuid: UUID)
+    case cancel
+    case userAccept(clubID: Int, uuid: UUID)
+    case userReject(clubID: Int, uuid: UUID)
 }
 
 extension ClubApplicantAPI: GCMSAPI{
@@ -18,7 +19,7 @@ extension ClubApplicantAPI: GCMSAPI{
         switch self {
         case let .applicantList(clubID), let .userAccept(clubID, _), let .userReject(clubID, _):
             return "/\(clubID)"
-        case .apply:
+        case .apply, .cancel:
             return ""
         }
     }
@@ -31,6 +32,9 @@ extension ClubApplicantAPI: GCMSAPI{
         case .apply:
             return .post
             
+        case .cancel:
+            return .delete
+            
         case .userAccept:
             return .post
             
@@ -41,7 +45,7 @@ extension ClubApplicantAPI: GCMSAPI{
     
     var task: Moya.Task{
         switch self {
-        case .applicantList, .apply:
+        case .applicantList, .apply, .cancel:
             return .requestPlain
             
         case let .userAccept(_, uuid):
@@ -73,6 +77,13 @@ extension ClubApplicantAPI: GCMSAPI{
             return[
                 401: ClubApplicantError.unauthorized,
                 403: ClubApplicantError.alreadyClubMember,
+                404: ClubApplicantError.notFoundClub,
+                500: ClubApplicantError.serverError
+            ]
+            
+        case .cancel:
+            return[
+                401: ClubApplicantError.unauthorized,
                 404: ClubApplicantError.notFoundClub,
                 500: ClubApplicantError.serverError
             ]
