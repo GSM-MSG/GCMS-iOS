@@ -16,19 +16,15 @@ enum GCMSStep: Step {
     
     // MARK: Main
     case clubListIsRequired
-    case clubDetailIsRequired(query: ClubRequestQuery)
+    case clubDetailIsRequired(clubID: Int)
     
     // MARK: NewClub
-    case firstNewClubIsRequired
+    case firstNewClubIsRequired(isUpdate: Bool = false, clubID: Int? = nil)
     case secondNewClubIsRequired(reactor: NewClubReactor)
     case thirdNewClubIsRequired(reactor: NewClubReactor)
     
-    // MARK: UpdateClub
-    case firstUpdateClubIsRequired(club: Club)
-    case secondUpdateClubIsRequired(reactor: UpdateClubReactor)
-    
     case memberAppendIsRequired(closure: (([User]) -> Void), clubType: ClubType)
-    case clubStatusIsRequired(query: ClubRequestQuery, isHead: Bool, isOpened: Bool)
+    case clubStatusIsRequired(clubID: Int, isHead: Bool, isOpened: Bool)
     
     // MARK: Administrator
     case myPageIsRequired

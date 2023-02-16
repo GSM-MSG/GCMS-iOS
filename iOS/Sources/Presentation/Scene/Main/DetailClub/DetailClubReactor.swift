@@ -30,13 +30,11 @@ final class DetailClubReactor: Reactor, Stepper {
     }
     
     let initialState: State
-    private let clubID: Int = 0
+    private let clubID: Int
     
-    private let query: ClubRequestQuery
     private let deleteClubUseCase: DeleteClubUseCase
     private let fetchDetailClubUseCase: FetchDetailClubUseCase
-    private let fetchGuestDetailClubUseCase: FetchGuestDeatilClubUseCase
-    private let clubExitUseCase: ClubExitUseCase
+    private let exitClubUseCase: ExitClubUseCase
     private let clubApplyUseCase: ClubApplyUseCase
     private let clubCancelUseCase: ClubCancelUseCase
     private let clubOpenUseCase: ClubOpenUseCase
@@ -44,11 +42,10 @@ final class DetailClubReactor: Reactor, Stepper {
     
     // MARK: - Init
     init(
-        query: ClubRequestQuery,
+        clubID: Int,
         deleteClubUseCase: DeleteClubUseCase,
         fetchDetailClubUseCase: FetchDetailClubUseCase,
-        fetchGuestDetailClubUseCase: FetchGuestDeatilClubUseCase,
-        clubExitUseCase: ClubExitUseCase,
+        exitClubUseCase: ExitClubUseCase,
         clubApplyUseCase: ClubApplyUseCase,
         clubCancelUseCase: ClubCancelUseCase,
         clubOpenUseCase: ClubOpenUseCase,
@@ -57,11 +54,10 @@ final class DetailClubReactor: Reactor, Stepper {
         initialState = State(
             isLoading: false
         )
-        self.query = query
+        self.clubID = clubID
         self.deleteClubUseCase = deleteClubUseCase
         self.fetchDetailClubUseCase = fetchDetailClubUseCase
-        self.fetchGuestDetailClubUseCase = fetchGuestDetailClubUseCase
-        self.clubExitUseCase = clubExitUseCase
+        self.exitClubUseCase = exitClubUseCase
         self.clubApplyUseCase = clubApplyUseCase
         self.clubCancelUseCase = clubCancelUseCase
         self.clubOpenUseCase = clubOpenUseCase
@@ -111,10 +107,7 @@ extension DetailClubReactor {
 private extension DetailClubReactor {
     func viewDidLoad() -> Observable<Mutation> {
         let start = Observable.just(Mutation.setIsLoading(true))
-        let task: Single<Club>
-        task = UserDefaultsLocal.shared.isGuest
-        ? fetchGuestDetailClubUseCase.execute(query: query)
-        : fetchDetailClubUseCase.execute(clubID: clubID)
+        let task: Single<Club> = fetchDetailClubUseCase.execute(clubID: clubID)
         
         let res = task
             .asObservable()
@@ -154,13 +147,12 @@ private extension DetailClubReactor {
         var actions: [UIAlertAction] = []
         actions.append(.init(title: "동아리 멤버 관리", style: .default, handler: { [weak self] _ in
             guard let self = self else { return }
-            self.steps.accept(GCMSStep.clubStatusIsRequired(query: self.query , isHead: isHead, isOpened: self.currentState.clubDetail?.isOpen ?? false))
+            self.steps.accept(GCMSStep.clubStatusIsRequired(clubID: self.clubID, isHead: isHead, isOpened: self.currentState.clubDetail?.isOpen ?? false))
         }))
         if isHead {
             actions.append(.init(title: "동아리 수정하기", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
-                guard let club = self.currentState.clubDetail else { return }
-                self.steps.accept(GCMSStep.firstUpdateClubIsRequired(club: club))
+                self.steps.accept(GCMSStep.firstNewClubIsRequired(isUpdate: true, clubID: self.clubID))
             }))
         }
         actions.append(.init(title: title, style: .destructive, handler: { [weak self] _ in
@@ -195,8 +187,9 @@ private extension DetailClubReactor {
     }
     func clubExit() {
         self.steps.accept(GCMSStep.alert(title: "정말로 동아리를 탈퇴하시겠습니까?", message: "이 선택은 되돌릴 수 없습니다.", style: .alert, actions: [
-            .init(title: "확인", style: .destructive, handler: { _ in
-                self.clubExitUseCase.execute(query: self.query)
+            .init(title: "확인", style: .destructive, handler: { [weak self] _ in
+                guard let self = self else { return }
+                self.exitClubUseCase.execute(clubID: self.clubID)
                     .andThen(Observable.just(()))
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.popToRoot)
@@ -247,28 +240,33 @@ private extension DetailClubReactor {
         return .empty()
     }
     func clubApply() -> Observable<Mutation> {
-        self.steps.accept(GCMSStep.alert(title: "신청하기", message: "정말 '\(query.q)' 동아리에 가입하실 건가요?", style: .alert, actions: [
-            .init(title: "신청", style: .default, handler: { [weak self] _ in
-                guard let self = self else { return }
-                self.clubApplyUseCase.execute()
-                    .andThen(Observable.just(()))
-                    .subscribe { _ in
-                        self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 성공하였습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
-                        self.action.onNext(.updateClub(self.currentState.clubDetail?.copyForChange(isApplied: true)))
-                    } onError: { e in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
-                    }
-                    .disposed(by: self.disposeBag)
-            }),
-            .init(title: "취소", style: .cancel)
-        ]))
+        self.steps.accept(GCMSStep.alert(
+            title: "신청하기",
+            message: "정말 '\(self.currentState.clubDetail?.name ?? "")' 동아리에 가입하실 건가요?",
+            style: .alert,
+            actions: [
+                .init(title: "신청", style: .default, handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    self.clubApplyUseCase.execute(clubID: self.clubID)
+                        .andThen(Observable.just(()))
+                        .subscribe { _ in
+                            self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 성공하였습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
+                            self.action.onNext(.updateClub(self.currentState.clubDetail?.copyForChange(isApplied: true)))
+                        } onError: { e in
+                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
+                        }
+                        .disposed(by: self.disposeBag)
+                }),
+                .init(title: "취소", style: .cancel)
+            ]
+        ))
         return .empty()
     }
     func clubCancel() -> Observable<Mutation> {
         self.steps.accept(GCMSStep.alert(title: "신청 취소하기", message: "정말 신청을 취소하실건가요?", style: .alert, actions: [
             .init(title: "취소", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
-                self.clubCancelUseCase.execute()
+                self.clubCancelUseCase.execute(clubID: self.clubID)
                     .andThen(Observable.just(()))
                     .subscribe { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 취소되었습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))

@@ -16,12 +16,12 @@ final class ReactorAssembly: Assembly {
             )
         }
         
-        container.register(DetailClubReactor.self) { r, query in
+        container.register(DetailClubReactor.self) { (r: Resolver, clubID: Int) in
              DetailClubReactor(
-                query: query,
+                clubID: clubID,
                 deleteClubUseCase: r.resolve(DeleteClubUseCase.self)!,
                 fetchDetailClubUseCase: r.resolve(FetchDetailClubUseCase.self)!,
-                clubExitUseCase: r.resolve(ClubExitUseCase.self)!,
+                exitClubUseCase: r.resolve(ExitClubUseCase.self)!,
                 clubApplyUseCase: r.resolve(ClubApplyUseCase.self)!,
                 clubCancelUseCase: r.resolve(ClubCancelUseCase.self)!,
                 clubOpenUseCase: r.resolve(ClubOpenUseCase.self)!,
@@ -39,8 +39,10 @@ final class ReactorAssembly: Assembly {
             )
         }
         
-        container.register(NewClubReactor.self) { r in
+        container.register(NewClubReactor.self) { r, isUpdate, clubID in
              NewClubReactor(
+                isUpdate: isUpdate,
+                clubID: clubID,
                 createNewClubUseCase: r.resolve(CreateNewClubUseCase.self)!,
                 uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!
             )
@@ -54,9 +56,9 @@ final class ReactorAssembly: Assembly {
             )
         }
         
-        container.register(ClubMemberReactor.self) { r, query, isOpened in
+        container.register(ClubMemberReactor.self) { r, clubID, isOpened in
             ClubMemberReactor(
-                query: query,
+                clubID: clubID,
                 isOpened: isOpened,
                 fetchClubMemberUseCase: r.resolve(FetchClubMemberUseCase.self)!,
                 fetchClubApplicantUseCase: r.resolve(FetchClubApplicantUseCase.self)!,
@@ -66,14 +68,6 @@ final class ReactorAssembly: Assembly {
                 userRejectUseCase: r.resolve(UserRejectUseCase.self)!,
                 clubOpenUseCase: r.resolve(ClubOpenUseCase.self)!,
                 clubCloseUseCase: r.resolve(ClubCloseUseCase.self)!
-            )
-        }
-        
-        container.register(UpdateClubReactor.self) { r, club in
-             UpdateClubReactor(
-                club: club,
-                updateClubUseCase: r.resolve(UpdateClubUseCase.self)!,
-                uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!
             )
         }
     }

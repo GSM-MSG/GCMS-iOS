@@ -34,8 +34,8 @@ final class MainFlow: Flow{
             return .end(forwardToParentFlowWithStep: GCMSStep.onBoardingIsRequired)
         case .clubListIsRequired:
             return coordinateToClubList()
-        case let .clubDetailIsRequired(query):
-            return navigateToDetailClub(query: query)
+        case let .clubDetailIsRequired(clubID):
+            return navigateToDetailClub(clubID: clubID)
         case .myPageIsRequired:
             return navigateToMyPage()
         case let .alert(title, message, style, actions):
@@ -46,11 +46,6 @@ final class MainFlow: Flow{
             return popToRoot()
         case .dismiss:
             return dismiss()
-        // MARK: UpdateClub
-        case let .firstUpdateClubIsRequired(club):
-            return navigateToFirstUpdateClub(club: club)
-        case let .secondUpdateClubIsRequired(reactor):
-            return navigateToSecondUpdateClub(reactor: reactor)
         // MARK: NewClub
         case .firstNewClubIsRequired:
             return navigateToFirstNewClub()
@@ -60,8 +55,8 @@ final class MainFlow: Flow{
             return navigateToThirdNewClub(reactor: reactor)
         case let .failureAlert(title, message, action):
             return presentToFailureAlert(title: title, message: message, action: action)
-        case let .clubStatusIsRequired(query, isHead, isOpened):
-            return navigateToClubMembers(query: query, isHead: isHead, isOpened: isOpened)
+        case let .clubStatusIsRequired(clubID, isHead, isOpened):
+            return navigateToClubMembers(clubID: clubID, isHead: isHead, isOpened: isOpened)
         default:
             return .none
         }
@@ -75,20 +70,9 @@ private extension MainFlow{
         self.rootVC.setViewControllers([vc], animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
     }
-    func navigateToDetailClub(query: ClubRequestQuery) -> FlowContributors {
-        let reactor = AppDelegate.container.resolve(DetailClubReactor.self, argument: query)!
+    func navigateToDetailClub(clubID: Int) -> FlowContributors {
+        let reactor = AppDelegate.container.resolve(DetailClubReactor.self, argument: clubID)!
         let vc = DetailClubVC(reactor: reactor)
-        self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
-    }
-    func navigateToFirstUpdateClub(club: Club) -> FlowContributors {
-        let reactor = AppDelegate.container.resolve(UpdateClubReactor.self, argument: club)!
-        let vc = FirstUpdateClubVC(reactor: reactor)
-        self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
-    }
-    func navigateToSecondUpdateClub(reactor: UpdateClubReactor) -> FlowContributors {
-        let vc = SecondUpdateClubVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
@@ -138,8 +122,8 @@ private extension MainFlow{
         self.rootVC.topViewController?.present(alert, animated: true)
         return .none
     }
-    func navigateToClubMembers(query: ClubRequestQuery, isHead: Bool, isOpened: Bool) -> FlowContributors {
-        let reactor = AppDelegate.container.resolve(ClubMemberReactor.self, arguments: query, isOpened)!
+    func navigateToClubMembers(clubID: Int, isHead: Bool, isOpened: Bool) -> FlowContributors {
+        let reactor = AppDelegate.container.resolve(ClubMemberReactor.self, arguments: clubID, isOpened)!
         let vc = ClubMemberVC(reactor: reactor, isHead: isHead)
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))

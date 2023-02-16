@@ -34,8 +34,7 @@ final class ClubMemberReactor: Reactor, Stepper {
         var isOpened: Bool
     }
     let initialState: State
-    private let query: ClubRequestQuery
-    private let clubID: Int = 0
+    private let clubID: Int
     
     private let fetchClubMemberUseCase: FetchClubMemberUseCase
     private let fetchClubApplicantUseCase: FetchClubApplicantUseCase
@@ -48,7 +47,7 @@ final class ClubMemberReactor: Reactor, Stepper {
     
     // MARK: - Init
     init(
-        query: ClubRequestQuery,
+        clubID: Int,
         isOpened: Bool,
         fetchClubMemberUseCase: FetchClubMemberUseCase,
         fetchClubApplicantUseCase: FetchClubApplicantUseCase,
@@ -73,7 +72,7 @@ final class ClubMemberReactor: Reactor, Stepper {
             isLoading: false,
             isOpened: isOpened
         )
-        self.query = query
+        self.clubID = clubID
     }
     
 }
@@ -133,6 +132,7 @@ private extension ClubMemberReactor {
             .just(.setUsers([]))
         ])
         let member = fetchClubMemberUseCase.execute(clubID: clubID)
+            .map(\.1)
             .asObservable()
             .map { ExpandableMemberSection(header: "구성원", items: $0.map { MemberSectionType.member($0) }, isOpened: false) }
             .flatMap { Observable.concat([
@@ -144,6 +144,7 @@ private extension ClubMemberReactor {
                 return .just(.setIsLoading(false))
             }
         let applicant = fetchClubApplicantUseCase.execute(clubID: self.clubID)
+            .map(\.1)
             .asObservable()
             .map { ExpandableMemberSection(header: "가입 대기자 명단", items: $0.map { MemberSectionType.applicant($0) }, isOpened: false) }
             .flatMap { Observable.concat([

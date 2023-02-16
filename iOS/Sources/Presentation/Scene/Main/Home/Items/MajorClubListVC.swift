@@ -34,7 +34,8 @@ final class MajorClubListVC: BaseVC<HomeReactor> {
     // MARK: - Reactor
     override func bindView(reactor: HomeReactor) {
         clubListCollectionView.rx.modelSelected(ClubList.self)
-            .map { Reactor.Action.clubDidTap(.init(name: $0.title, type: $0.type)) }
+            .map(\.id)
+            .map(Reactor.Action.clubDidTap)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         

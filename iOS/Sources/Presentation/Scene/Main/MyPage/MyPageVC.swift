@@ -172,21 +172,24 @@ final class MyPageVC: BaseVC<MyPageReactor> {
     }
     override func bindView(reactor: MyPageReactor) {
         editorialCollectionView.rx.modelSelected(ClubList.self)
-            .map { Reactor.Action.clubDidTap(.init(name: $0.title, type: $0.type) ) }
+            .map(\.id)
+            .map(Reactor.Action.clubDidTap)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
         majorClubView.rx.tapGesture()
             .when(.recognized)
             .compactMap { [weak self] _ in self?.majorClubView.club }
-            .map { Reactor.Action.clubDidTap(.init(name: $0.title, type: $0.type) ) }
+            .map(\.id)
+            .map(Reactor.Action.clubDidTap)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
         freedomClubView.rx.tapGesture()
             .when(.recognized)
             .compactMap { [weak self] _ in self?.freedomClubView.club }
-            .map { Reactor.Action.clubDidTap(.init(name: $0.title, type: $0.type) ) }
+            .map(\.id)
+            .map(Reactor.Action.clubDidTap)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         

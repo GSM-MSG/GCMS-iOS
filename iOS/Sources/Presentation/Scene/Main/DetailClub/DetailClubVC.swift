@@ -193,15 +193,15 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         
         sharedState
             .compactMap(\.clubDetail)
-            .withUnretained(self)
-            .bind { owner, item in
-                owner.bannerImageView.kf.setImage(with: URL(string: item.bannerUrl) ?? .none,
-                                                  placeholder: UIImage())
-                owner.descriptionLabel.text = item.description
-                owner.activityView.setImages(urls: item.activities)
+            .bind(with: self) { owner, item in
+                owner.bannerImageView.kf.setImage(
+                    with: URL(string: item.bannerImg)
+                )
+                owner.descriptionLabel.text = item.content
+                owner.activityView.setImages(urls: item.activityImgs)
                 owner.notionLinkButton.setTitle(item.notionLink, for: .normal)
                 owner.notionLinkButton.isHidden = false
-                if item.activities.isEmpty {
+                if item.activityImgs.isEmpty {
                     owner.activityView.snp.updateConstraints {
                         $0.height.equalTo(0)
                     }
@@ -240,7 +240,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                     owner.teacherView.isHidden = true
                 }
                 owner.contactDescriptionLabel.text = item.contact
-                owner.navigationItem.configTitle(title: item.title)
+                owner.navigationItem.configTitle(title: item.name)
                 if UserDefaultsLocal.shared.isGuest {
                     owner.applyButton.isHidden = true
                 }

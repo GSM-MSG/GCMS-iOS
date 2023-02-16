@@ -142,7 +142,7 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
                         }
                     }
                 }
-            }).map(Reactor.Action.updateDescription)
+            }).map(Reactor.Action.updateContent)
                 .bind(to: reactor.action)
                 .disposed(by: disposeBag)
         
@@ -168,7 +168,7 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
     }
     override func bindView(reactor: NewClubReactor) {
         clubNameTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
-            .map(Reactor.Action.updateTitle)
+            .map(Reactor.Action.updateName)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         

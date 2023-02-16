@@ -16,7 +16,8 @@ final class MyPageReactor: Reactor, Stepper {
         case viewDidLoad
         case logoutButtonDidTap
         case updateLoading(Bool)
-        case clubDidTap(ClubRequestQuery)
+        case clubDidTap(Int
+        )
         case profileImageDidTap(Data)
         case withdrawalButtonDidTap
     }
@@ -65,8 +66,8 @@ extension MyPageReactor {
             return .just(.setIsLoading(load))
         case .logoutButtonDidTap:
             logoutButtonDidTap()
-        case let .clubDidTap(q):
-            steps.accept(GCMSStep.clubDetailIsRequired(query: q))
+        case let .clubDidTap(clubID):
+            steps.accept(GCMSStep.clubDetailIsRequired(clubID: clubID))
         case let .profileImageDidTap(data):
             return profileChange(data: data)
         case .withdrawalButtonDidTap:

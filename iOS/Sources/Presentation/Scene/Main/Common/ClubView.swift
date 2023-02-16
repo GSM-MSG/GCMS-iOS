@@ -41,10 +41,10 @@ final class ClubView: UIView {
         }
         self.isHidden = false
         self.club = club
-        clubBannerView.kf.setImage(with: URL(string: club.bannerUrl) ?? .none,
+        clubBannerView.kf.setImage(with: URL(string: club.bannerImg) ?? .none,
                                    placeholder: UIImage(),
                                    options: [])
-        nameLabel.text = club.title
+        nameLabel.text = club.name
     }
     public func cancelImageDownload() {
         clubBannerView.kf.cancelDownloadTask()

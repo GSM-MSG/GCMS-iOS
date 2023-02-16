@@ -66,11 +66,15 @@ final class NewClubReactor: Reactor, Stepper {
         var isLoading: Bool
     }
     let initialState: State
+    private let isUpdate: Bool
+    private let clubID: Int?
     private let createNewClubUseCase: CreateNewClubUseCase
     private let uploadImagesUseCase: UploadImagesUseCase
     
     // MARK: - Init
     init(
+        isUpdate: Bool = false,
+        clubID: Int? = nil,
         createNewClubUseCase: CreateNewClubUseCase,
         uploadImagesUseCase: UploadImagesUseCase
     ) {
@@ -87,6 +91,8 @@ final class NewClubReactor: Reactor, Stepper {
             isBanner: false,
             isLoading: false
         )
+        self.isUpdate = isUpdate
+        self.clubID = clubID
         self.createNewClubUseCase = createNewClubUseCase
         self.uploadImagesUseCase = uploadImagesUseCase
     }
@@ -213,7 +219,7 @@ private extension NewClubReactor {
         return .empty()
     }
     func completeButtonDidTap() -> Observable<Mutation> {
-        guard (currentState.imageData != nil)  else {
+        guard (currentState.bannerImg != nil)  else {
             steps.accept(GCMSStep.failureAlert(title: "동아리 배너 이미지를 넣어주세요!", message: nil))
             return .empty()
         }

@@ -201,14 +201,14 @@ final class ThirdNewClubVC: BaseVC<NewClubReactor> {
         }
         
         sharedState
-            .map(\.imageData)
+            .map(\.bannerImg)
             .compactMap { $0 }
             .map { UIImage(data: $0) }
             .bind(to: bannerImageView.rx.image)
             .disposed(by: disposeBag)
         
         sharedState
-            .map(\.activitiesData)
+            .map(\.activityImgs)
             .map { [ClubActivitySection.init(items: $0)] }
             .bind(to: clubActivitiesCollectionView.rx.items(dataSource: activityDS))
             .disposed(by: disposeBag)
