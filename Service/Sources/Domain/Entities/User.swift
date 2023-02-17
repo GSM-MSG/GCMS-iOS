@@ -23,13 +23,3 @@ public struct User: Equatable {
     public let number: Int
     public let profileImg: String?
 }
-
-public extension User {
-    static let dummy = User(uuid: UUID(),
-                            email: "s21058",
-                            name: "김성훈",
-                            grade: 2,
-                            classNum: 1,
-                            number: 3,
-                            profileImg: "https://avatars.githubusercontent.com/u/74440939?v=4")
-}

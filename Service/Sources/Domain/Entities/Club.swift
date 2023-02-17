@@ -38,27 +38,7 @@ public struct Club: Equatable {
 }
 
 public extension Club {
-    static let dummy = Club(
-        clubID: 1,
-        type: .major,
-        bannerImg: "https://avatars.githubusercontent.com/u/95753750?s=64&v=4",
-        name: "Dummy",
-        content: "대충 설명 대충 설명 대\n충 설명",
-        contact: "대충 연락처",
-        head: .dummy,
-        notionLink: "https://github.com/baekteun",
-        scope: .default,
-        isApplied: .random(),
-        isOpen: .random(),
-        activityImgs: [
-            "https://avatars.githubusercontent.com/u/57276315?s=70&v=4",
-            "https://avatars.githubusercontent.com/u/82383983?s=70&v=4"
-        ], member: [
-            .dummy,
-            .dummy
-        ], teacher: nil
-    )
-    public func copyForChange(
+    func copyForChange(
         clubID: Int? = nil,
         type: ClubType? = nil,
         bannerImg: String? = nil,
