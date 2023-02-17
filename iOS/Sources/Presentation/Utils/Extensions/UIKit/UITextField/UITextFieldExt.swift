@@ -49,4 +49,4 @@ extension UITextField {
         self.rightView = view
         self.rightViewMode = .always
     }
-} 
+}

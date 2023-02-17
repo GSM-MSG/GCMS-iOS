@@ -13,7 +13,7 @@ public extension TargetDependency.SPM{
     static let RxFlow = TargetDependency.external(name: "RxFlow")
     static let FCM = TargetDependency.package(product: "FirebaseMessaging")
     static let Then = TargetDependency.external(name: "Then")
-    static let IQKeyboardManager = TargetDependency.external(name: "IQKeyboardManagerSwift")
+    static let IQKeyboardManager = TargetDependency.package(product: "IQKeyboardManagerSwift")
     static let ReactorKit = TargetDependency.external(name: "ReactorKit")
     static let Kingfisher = TargetDependency.external(name: "Kingfisher")
     static let RxDataSources = TargetDependency.external(name: "RxDataSources")
@@ -45,5 +45,9 @@ public extension Package {
     static let Firebase = Package.remote(
         url: "https://github.com/firebase/firebase-ios-sdk.git",
         requirement: .exact("10.4.0")
+    )
+    static let IQKeyboardManager = Package.remote(
+        url: "https://github.com/hackiftekhar/IQKeyboardManager.git",
+        requirement: .exact("6.5.11")
     )
 }

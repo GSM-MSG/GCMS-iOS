@@ -11,12 +11,12 @@ import RxSwift
 import UIKit
 import Service
 
-struct AppStepper: Stepper{
+struct AppStepper: Stepper {
     let steps: PublishRelay<Step> = .init()
     private let disposeBag: DisposeBag = .init()
-    
+
     private let checkIsLoginedUseCase: CheckIsLoginedUseCase
-    
+
     func readyToEmitSteps() {
         checkIsLoginedUseCase.execute()
             .andThen(Single.just(GCMSStep.clubListIsRequired))
@@ -25,7 +25,7 @@ struct AppStepper: Stepper{
             .bind(to: steps)
             .disposed(by: disposeBag)
     }
-    
+
     init(
         checkIsLoginedUseCase: CheckIsLoginedUseCase = AppDelegate.container.resolve(CheckIsLoginedUseCase.self)!
     ) {
@@ -33,30 +33,30 @@ struct AppStepper: Stepper{
     }
 }
 
-final class AppFlow: Flow{
-    
+final class AppFlow: Flow {
+
     // MARK: - Properties
-    var root: Presentable{
+    var root: Presentable {
         return self.rootVC
     }
-    
+
     private lazy var rootVC: UIViewController = {
         let launchScreenStoryboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
         let launchScreen = launchScreenStoryboard.instantiateViewController(withIdentifier: "LaunchScreen")
         return launchScreen
     }()
-    
+
     // MARK: - Init    
-    deinit{
+    deinit {
         print("\(type(of: self)): \(#function)")
     }
-    
+
     // MARK: - Navigate
-    
+
     func navigate(to step: Step) -> FlowContributors {
         guard let step = step.asGCMSStep else { return .none }
-        
-        switch step{
+
+        switch step {
         case .onBoardingIsRequired:
             return coordinateToOnBoarding()
         case .clubListIsRequired:
@@ -69,7 +69,7 @@ final class AppFlow: Flow{
 
 // MARK: - Method
 
-private extension AppFlow{
+private extension AppFlow {
     func coordinateToOnBoarding() -> FlowContributors {
         let flow = OnBoardingFlow()
         Flows.use(

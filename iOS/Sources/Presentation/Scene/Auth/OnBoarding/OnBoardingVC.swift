@@ -40,7 +40,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         $0.setUnderline()
     }
     private let gauthSigninButton = GAuthButton(auth: .signin, color: .white, rounded: .default)
-    
+
     // MARK: - UI
     override func addView() {
         view.addSubViews(headerLabel, logoImageView, appleSigninButton, guestSigninButton, termsOfServiceButton, betweenButtonView, privacyButton, gauthSigninButton)
@@ -83,8 +83,8 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     }
     override func setup() {
         gauthSigninButton.prepare(
-            clientID: Bundle.main.object(forInfoDictionaryKey: "CLIENT_ID") as? String ?? "",
-            redirectURI: Bundle.main.object(forInfoDictionaryKey: "REDIREDCT_URI") as? String ?? "",
+            clientID: Bundle.module.object(forInfoDictionaryKey: "CLIENT_ID") as? String ?? "",
+            redirectURI: Bundle.module.object(forInfoDictionaryKey: "REDIREDCT_URI") as? String ?? "",
             presenting: self
         ) { [weak self] code in
             self?.reactor?.action.onNext(.gauthSigninCompleted(code: code))
@@ -109,13 +109,13 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         UIView.animate(views: [
             guestSigninButton
         ], animations: [
-        ],initialAlpha: 0, finalAlpha: 1, delay: 2.6)
+        ], initialAlpha: 0, finalAlpha: 1, delay: 2.6)
     }
-    
+
     // MARK: - Reactor
     override func bindState(reactor: OnBoardingReactor) {
         let sharedState = reactor.state.share(replay: 1).observe(on: MainScheduler.asyncInstance)
-        
+
         sharedState
             .map(\.isLoading)
             .bind(with: self) { owner, load in
@@ -123,24 +123,24 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             }
             .disposed(by: disposeBag)
     }
-    
+
     override func bindView(reactor: OnBoardingReactor) {
         appleSigninButton.rx.controlEvent(.touchUpInside)
             .bind(with: self) { owner, _ in
                 owner.appleSigninMessage()
             }
             .disposed(by: disposeBag)
-        
+
         guestSigninButton.rx.tap
             .map { Reactor.Action.guestSigninButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         termsOfServiceButton.rx.tap
             .map { Reactor.Action.termsOfServiceButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         privacyButton.rx.tap
             .map { Reactor.Action.privacyButtonDidTap }
             .bind(to: reactor.action)
@@ -161,7 +161,7 @@ private extension OnBoardingVC {
         let provider = ASAuthorizationAppleIDProvider()
         let req = provider.createRequest()
         req.requestedScopes = []
-        
+
         let authController = ASAuthorizationController(authorizationRequests: [req])
         authController.delegate = self
         authController.presentationContextProvider = self

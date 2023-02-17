@@ -1,38 +1,33 @@
 import Swinject
 import Service
 
-
 final class ReactorAssembly: Assembly {
     func assemble(container: Container) {
         container.register(OnBoardingReactor.self) { r in
              OnBoardingReactor(
-                loginUseCase: r.resolve(LoginUseCase.self)!,
-                issueGuestTokenUseCase: r.resolve(IssueGuestTokenUseCase.self)!
+                loginUseCase: r.resolve(LoginUseCase.self)!
             )
         }
-        
+
         container.register(HomeReactor.self) { r in
              HomeReactor(
-                fetchClubListsUseCase: r.resolve(FetchClubListUseCase.self)!,
-                fetchGuestClubListUseCase: r.resolve(FetchGuestClubListUseCase.self)!,
-                revokeGuestTokenUseCase: r.resolve(RevokeGuestTokenUseCase.self)!
+                fetchClubListsUseCase: r.resolve(FetchClubListUseCase.self)!
             )
         }
-        
-        container.register(DetailClubReactor.self) { r, query in
+
+        container.register(DetailClubReactor.self) { (r: Resolver, clubID: Int) in
              DetailClubReactor(
-                query: query,
+                clubID: clubID,
                 deleteClubUseCase: r.resolve(DeleteClubUseCase.self)!,
                 fetchDetailClubUseCase: r.resolve(FetchDetailClubUseCase.self)!,
-                fetchGuestDetailClubUseCase: r.resolve(FetchGuestDeatilClubUseCase.self)!,
-                clubExitUseCase: r.resolve(ClubExitUseCase.self)!,
+                exitClubUseCase: r.resolve(ExitClubUseCase.self)!,
                 clubApplyUseCase: r.resolve(ClubApplyUseCase.self)!,
                 clubCancelUseCase: r.resolve(ClubCancelUseCase.self)!,
                 clubOpenUseCase: r.resolve(ClubOpenUseCase.self)!,
                 clubCloseUseCase: r.resolve(ClubCloseUseCase.self)!
             )
         }
-        
+
         container.register(MyPageReactor.self) { r in
              MyPageReactor(
                 logoutUseCase: r.resolve(LogoutUseCase.self)!,
@@ -42,14 +37,18 @@ final class ReactorAssembly: Assembly {
                 withdrawalUseCase: r.resolve(WithdrawalUseCase.self)!
             )
         }
-        
-        container.register(NewClubReactor.self) { r in
+
+        container.register(NewClubReactor.self) { r, isUpdate, clubID in
              NewClubReactor(
+                isUpdate: isUpdate,
+                clubID: clubID,
                 createNewClubUseCase: r.resolve(CreateNewClubUseCase.self)!,
+                fetchDetailClubUseCase: r.resolve(FetchDetailClubUseCase.self)!,
+                updateNewClubUseCase: r.resolve(UpdateClubUseCase.self)!,
                 uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!
             )
         }
-        
+
         container.register(MemberAppendReactor.self) { r, closure, clubType in
              MemberAppendReactor(
                 closure: closure,
@@ -57,10 +56,10 @@ final class ReactorAssembly: Assembly {
                 searchUserUseCase: r.resolve(SearchUserUseCase.self)!
             )
         }
-        
-        container.register(ClubMemberReactor.self) { r, query, isOpened in
+
+        container.register(ClubMemberReactor.self) { r, clubID, isOpened in
             ClubMemberReactor(
-                query: query,
+                clubID: clubID,
                 isOpened: isOpened,
                 fetchClubMemberUseCase: r.resolve(FetchClubMemberUseCase.self)!,
                 fetchClubApplicantUseCase: r.resolve(FetchClubApplicantUseCase.self)!,
@@ -70,14 +69,6 @@ final class ReactorAssembly: Assembly {
                 userRejectUseCase: r.resolve(UserRejectUseCase.self)!,
                 clubOpenUseCase: r.resolve(ClubOpenUseCase.self)!,
                 clubCloseUseCase: r.resolve(ClubCloseUseCase.self)!
-            )
-        }
-        
-        container.register(UpdateClubReactor.self) { r, club in
-             UpdateClubReactor(
-                club: club,
-                updateClubUseCase: r.resolve(UpdateClubUseCase.self)!,
-                uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!
             )
         }
     }

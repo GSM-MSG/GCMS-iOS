@@ -16,7 +16,7 @@ final class MemberHeaderView: BaseTableViewHeaderFooterView<String> {
         $0.font = .init(font: GCMSFontFamily.Inter.medium, size: 18)
     }
     private let isOpenedImageView = UIImageView(image: .init(systemName: "chevron.down")?.tintColor(.white))
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         model = nil
@@ -37,13 +37,13 @@ final class MemberHeaderView: BaseTableViewHeaderFooterView<String> {
             $0.size.equalTo(20)
         }
     }
-    
+
     override func bind(_ model: String) {
         titleLabel.text = model
-        
+
         self.rx.tapGesture()
             .when(.recognized)
-            .bind(with: self) { owner, gesture in
+            .bind(with: self) { owner, _ in
                 owner.delegate?.toggleSection(header: owner, section: owner.section)
             }
             .disposed(by: disposeBag)

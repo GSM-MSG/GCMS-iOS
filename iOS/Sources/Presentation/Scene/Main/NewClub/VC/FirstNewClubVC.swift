@@ -11,7 +11,7 @@ final class FirstNewClubVC: BaseVC<NewClubReactor> {
     private let majorButton = ClubTypeCardButton(type: .major)
     private let freedomButton = ClubTypeCardButton(type: .freedom)
     private let editorialButton = ClubTypeCardButton(type: .editorial)
-    
+
     // MARK: - UI
     override func addView() {
         view.addSubViews(scrollView)
@@ -50,19 +50,24 @@ final class FirstNewClubVC: BaseVC<NewClubReactor> {
     override func configureNavigation() {
         self.navigationItem.configBack()
     }
-    
+
     // MARK: - Reactor
     override func bindView(reactor: NewClubReactor) {
+        self.rx.viewDidLoad
+            .map { Reactor.Action.viewDidLoad }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
         majorButton.rx.tap
             .map { Reactor.Action.clubTypeDidTap(.major) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         freedomButton.rx.tap
             .map { Reactor.Action.clubTypeDidTap(.freedom) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         editorialButton.rx.tap
             .map { Reactor.Action.clubTypeDidTap(.editorial) }
             .bind(to: reactor.action)

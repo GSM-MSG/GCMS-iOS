@@ -8,9 +8,9 @@ enum KeychainAccountType: String {
 }
 final class Keychain {
     static let shared = Keychain()
-    
+
     private let service = Bundle.main.bundleIdentifier ?? ""
-    
+
     func save(type: KeychainAccountType, value: String) {
         let query: NSDictionary = [
             kSecClass: kSecClassGenericPassword,
@@ -21,7 +21,7 @@ final class Keychain {
         SecItemDelete(query)
         SecItemAdd(query, nil)
     }
-    
+
     func load(type: KeychainAccountType) throws -> String {
         let query: NSDictionary = [
             kSecClass: kSecClassGenericPassword,
@@ -40,7 +40,7 @@ final class Keychain {
             throw KeychainError.noData
         }
     }
-    
+
     func delete(type: KeychainAccountType) {
         let query: NSDictionary = [
             kSecClass: kSecClassGenericPassword,

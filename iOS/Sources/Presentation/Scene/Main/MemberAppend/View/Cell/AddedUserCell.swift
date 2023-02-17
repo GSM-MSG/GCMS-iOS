@@ -11,7 +11,7 @@ final class AddedUserCell: BaseCollectionViewCell<User> {
         $0.textColor = GCMSAsset.Colors.gcmsGray6.color
         $0.font = UIFont(font: GCMSFontFamily.Inter.semiBold, size: 12)
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         model = nil
@@ -32,7 +32,7 @@ final class AddedUserCell: BaseCollectionViewCell<User> {
     override func bind(_ model: User) {
         nameLabel.text = model.name
     }
-    
+
     static func fittingSize(availableHeight: CGFloat, user: User) -> CGSize {
         let cell = AddedUserCell()
         cell.model = user

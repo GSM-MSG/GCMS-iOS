@@ -11,7 +11,7 @@ class BaseTableViewCell<T>: UITableViewCell, Reusable {
         setLayout()
         configureCell()
     }
-    
+
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -20,12 +20,12 @@ class BaseTableViewCell<T>: UITableViewCell, Reusable {
         super.layoutSubviews()
         setLayoutSubviews()
     }
-    func addView(){}
-    func setLayout(){}
-    func setLayoutSubviews(){}
-    func configureCell(){}
+    func addView() {}
+    func setLayout() {}
+    func setLayoutSubviews() {}
+    func configureCell() {}
     var model: T? {
         didSet { if let model = model { bind(model) } }
     }
-    func bind(_ model: T){}
+    func bind(_ model: T) {}
 }

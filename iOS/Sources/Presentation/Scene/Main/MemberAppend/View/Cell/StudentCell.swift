@@ -20,7 +20,7 @@ final class StudentCell: BaseTableViewCell<User> {
         $0.axis = .vertical
         $0.spacing = 0
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         model = nil
@@ -47,7 +47,7 @@ final class StudentCell: BaseTableViewCell<User> {
         contentView.backgroundColor = .clear
     }
     override func bind(_ model: User) {
-        if let url = model.profileImageUrl {
+        if let url = model.profileImg {
             profileImageView.kf.setImage(with: URL(string: url) ?? .none,
                                          placeholder: UIImage(),
                                          options: [])
@@ -55,6 +55,6 @@ final class StudentCell: BaseTableViewCell<User> {
             profileImageView.image = .init(systemName: "person.crop.circle")
         }
         nameLabel.text = model.name
-        classLabel.text = "\(model.grade)학년 \(model.class)반 \(model.number)번"
+        classLabel.text = "\(model.grade)학년 \(model.classNum)반 \(model.number)번"
     }
 }

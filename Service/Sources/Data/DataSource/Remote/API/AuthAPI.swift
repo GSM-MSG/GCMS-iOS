@@ -3,24 +3,31 @@ import Moya
 enum AuthAPI {
     case login(code: String)
     case refresh
+    case logout
 }
 
 extension AuthAPI: GCMSAPI {
     var domain: GCMSDomain {
         return .auth
     }
+
     var urlPath: String {
         switch self {
-        case .login:
+        case .login, .refresh, .logout:
             return ""
-        case .refresh:
-            return "/refresh"
         }
     }
+
     var method: Method {
         switch self {
-        case .login, .refresh:
+        case .login:
             return .post
+
+        case .refresh:
+            return .patch
+
+        case .logout:
+            return .delete
         }
     }
     var task: Task {
@@ -29,8 +36,8 @@ extension AuthAPI: GCMSAPI {
             return .requestParameters(parameters: [
                 "code": req
             ], encoding: JSONEncoding.default)
-            
-        case .refresh:
+
+        case .refresh, .logout:
             return .requestPlain
         }
     }
@@ -38,19 +45,19 @@ extension AuthAPI: GCMSAPI {
         switch self {
         case .refresh:
             return .refreshToken
-            
+
+        case .logout:
+            return .accessToken
+
         default:
             return JWTTokenType.none
         }
     }
     var errorMapper: [Int: Error]? {
         switch self {
-        case .login:
-            return .none
-
-        case .refresh:
-            return .none
+        case .login, .refresh, .logout:
+            return [:]
         }
     }
-    
+
 }

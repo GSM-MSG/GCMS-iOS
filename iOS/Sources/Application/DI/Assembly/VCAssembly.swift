@@ -5,7 +5,7 @@ final class VCAssembly: Assembly {
         container.register(OnBoardingVC.self) { r in
             OnBoardingVC(reactor: r.resolve(OnBoardingReactor.self))
         }
-        
+
         container.register(HomeVC.self) { r in
             let reactor = r.resolve(HomeReactor.self)
             let home = HomeVC(reactor: reactor)
@@ -16,19 +16,19 @@ final class VCAssembly: Assembly {
             ])
             return home
         }
-        
+
         container.register(MyPageVC.self) { r in
             MyPageVC(reactor: r.resolve(MyPageReactor.self))
         }
-        
+
         container.register(FirstNewClubVC.self) { r in
             FirstNewClubVC(reactor: r.resolve(NewClubReactor.self))
         }
-        
+
         container.register(SecondNewClubVC.self) { _, reactor in
             SecondNewClubVC(reactor: reactor)
         }
-        
+
         container.register(ThirdNewClubVC.self) { _, reactor in
             ThirdNewClubVC(reactor: reactor)
         }

@@ -4,13 +4,13 @@ import Service
 final class ClubListCell: BaseCollectionViewCell<ClubList> {
     // MARK: - Properties
     private let clubView = ClubView()
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         model = nil
         clubView.cancelImageDownload()
     }
-    
+
     // MARK: - UI
     override func addView() {
         addSubViews(clubView)

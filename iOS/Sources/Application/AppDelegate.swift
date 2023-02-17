@@ -21,11 +21,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             RepositoryAssembly(),
             UseCaseAssembly()
         ], container: AppDelegate.container)
-        
+
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.enableAutoToolbar = true
         IQKeyboardManager.shared.shouldResignOnTouchOutside = true
-        
+
         return true
     }
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
@@ -40,7 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
     }
-
 
 }
 
@@ -61,10 +60,10 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 }
 
 private extension AppDelegate {
-    func setFCM(_ application: UIApplication){
+    func setFCM(_ application: UIApplication) {
         UNUserNotificationCenter.current().delegate = self
         let authOption: UNAuthorizationOptions = [.alert, .badge, .sound]
-        UNUserNotificationCenter.current().requestAuthorization(options: authOption, completionHandler: { _,_ in } )
+        UNUserNotificationCenter.current().requestAuthorization(options: authOption, completionHandler: { _, _ in })
         application.registerForRemoteNotifications()
     }
 }

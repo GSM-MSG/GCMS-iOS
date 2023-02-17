@@ -7,13 +7,11 @@ import Service
 final class HomeReactor: Reactor, Stepper {
     // MARK: - Properties
     var steps: PublishRelay<Step> = .init()
-    
+
     private let disposeBag: DisposeBag = .init()
-    
+
     private let fetchClubListsUseCase: FetchClubListUseCase
-    private let fetchGuestClubListUseCase: FetchGuestClubListUseCase
-    private let revokeGuestTokenUseCase: RevokeGuestTokenUseCase
-    
+
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
@@ -21,7 +19,7 @@ final class HomeReactor: Reactor, Stepper {
         case myPageButtonDidTap
         case newClubButtonDidTap
         case updateLoading(Bool)
-        case clubDidTap(ClubRequestQuery)
+        case clubDidTap(Int)
         case guestLogoutButtonDidTap
         case appleExitButtonDidTap
         case refreshTrigger(ClubType)
@@ -41,12 +39,10 @@ final class HomeReactor: Reactor, Stepper {
         var isRefreshing: Bool
     }
     let initialState: State
-    
+
     // MARK: - Init
     init(
-        fetchClubListsUseCase: FetchClubListUseCase,
-        fetchGuestClubListUseCase: FetchGuestClubListUseCase,
-        revokeGuestTokenUseCase: RevokeGuestTokenUseCase
+        fetchClubListsUseCase: FetchClubListUseCase
     ) {
         initialState = State(
             majorClubList: [],
@@ -57,10 +53,8 @@ final class HomeReactor: Reactor, Stepper {
             isRefreshing: false
         )
         self.fetchClubListsUseCase = fetchClubListsUseCase
-        self.fetchGuestClubListUseCase = fetchGuestClubListUseCase
-        self.revokeGuestTokenUseCase = revokeGuestTokenUseCase
     }
-    
+
 }
 
 // MARK: - Mutate
@@ -70,13 +64,13 @@ extension HomeReactor {
         case .myPageButtonDidTap:
             steps.accept(GCMSStep.myPageIsRequired)
         case .newClubButtonDidTap:
-            steps.accept(GCMSStep.firstNewClubIsRequired)
+            steps.accept(GCMSStep.firstNewClubIsRequired())
         case let .updateLoading(load):
             return .just(.setIsLoading(load))
         case .viewDidLoad:
             return viewDidLoad()
-        case let .clubDidTap(query):
-            steps.accept(GCMSStep.clubDetailIsRequired(query: query))
+        case let .clubDidTap(clubID):
+            steps.accept(GCMSStep.clubDetailIsRequired(clubID: clubID))
         case .guestLogoutButtonDidTap:
             return guestLogoutButtonDidTap()
         case let .refreshTrigger(type):
@@ -96,7 +90,7 @@ extension HomeReactor {
         var newState = state
         switch mutation {
         case let .setClubList(type, lists):
-            switch type{
+            switch type {
             case .major: newState.majorClubList = lists
             case .freedom: newState.freedomClubList = lists
             case .editorial: newState.editorialClubList = lists
@@ -108,7 +102,7 @@ extension HomeReactor {
         case let .setIsRefreshing(refresh):
             newState.isRefreshing = refresh
         }
-        
+
         return newState
     }
 }
@@ -117,20 +111,11 @@ extension HomeReactor {
 private extension HomeReactor {
     func viewDidLoad() -> Observable<Mutation> {
         let start = Observable.just(Mutation.setIsLoading(true))
-        let clubs: Observable<([ClubList], [ClubList], [ClubList])>
-        if UserDefaultsLocal.shared.isGuest {
-            clubs = Observable.zip(
-                fetchGuestClubListUseCase.execute(type: .major).asObservable(),
-                fetchGuestClubListUseCase.execute(type: .editorial).asObservable(),
-                fetchGuestClubListUseCase.execute(type: .freedom).asObservable()
-            )
-        } else {
-            clubs = Observable.zip(
-                fetchClubListsUseCase.execute(type: .major).asObservable(),
-                fetchClubListsUseCase.execute(type: .editorial).asObservable(),
-                fetchClubListsUseCase.execute(type: .freedom).asObservable()
-            )
-        }
+        let clubs: Observable<([ClubList], [ClubList], [ClubList])> = Observable.zip(
+            fetchClubListsUseCase.execute(type: .major).asObservable(),
+            fetchClubListsUseCase.execute(type: .editorial).asObservable(),
+            fetchClubListsUseCase.execute(type: .freedom).asObservable()
+        )
         let res = clubs
             .flatMap { major, editorial, freedom in
                 return Observable.concat([
@@ -176,20 +161,5 @@ private extension HomeReactor {
         return .empty()
     }
     func revokeToken() {
-        revokeGuestTokenUseCase.execute()
-            .andThen(Observable.just(()))
-            .subscribe(with: self) { owner, _ in
-                owner.steps.accept(GCMSStep.alert(title: nil, message: "회원탈퇴에 성공했습니다.", style: .alert, actions: [
-                    .init(title: "확인", style: .default, handler: { _ in
-                        UserDefaultsLocal.shared.isApple = false
-                        UserDefaultsLocal.shared.isGuest = false
-                        owner.steps.accept(GCMSStep.onBoardingIsRequired)
-                    })
-                ]))
-            } onError: { owner, e in
-                owner.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription, action: []))
-            }
-            .disposed(by: disposeBag)
-
     }
 }

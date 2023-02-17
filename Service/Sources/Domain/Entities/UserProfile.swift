@@ -1,38 +1,27 @@
 import Foundation
 
 public struct UserProfile: Equatable {
-    public init(userId: String, profileImageUrl: String?, name: String, grade: Int, class: Int, number: Int, joinedClub: [ClubList]) {
-        self.userId = userId
-        self.profileImageUrl = profileImageUrl
+    public init(uuid: UUID, email: String, name: String, grade: Int, classNum: Int, number: Int, profileImg: String?, clubs: [ClubList]) {
+        self.uuid = uuid
+        self.email = email
         self.name = name
         self.grade = grade
-        self.class = `class`
+        self.classNum = classNum
         self.number = number
-        self.joinedClub = joinedClub
+        self.profileImg = profileImg
+        self.clubs = clubs
     }
-    
-    
+
     public static func == (lhs: UserProfile, rhs: UserProfile) -> Bool {
-        return lhs.userId == rhs.userId
+        return lhs.email == rhs.email
     }
-    
-    public let userId: String
-    public let profileImageUrl: String?
+
+    public let uuid: UUID
+    public let email: String
     public let name: String
     public let grade: Int
-    public let `class`: Int
+    public let classNum: Int
     public let number: Int
-    public let joinedClub: [ClubList]
-}
-
-public extension UserProfile {
-    static let dummy = UserProfile(
-        userId: "s21073",
-        profileImageUrl: "https://avatars.githubusercontent.com/u/74440939?v=4",
-        name: "Baekteun",
-        grade: 2,
-        class: 1,
-        number: 18,
-        joinedClub: [.dummy]
-    )
+    public let profileImg: String?
+    public let clubs: [ClubList]
 }

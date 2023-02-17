@@ -51,7 +51,7 @@ final class MyPageVC: BaseVC<MyPageReactor> {
     }()
     private lazy var PHPickerController = PHPickerViewController(configuration: PHConfiguration)
     private let withdrawalButton = UIBarButtonItem(image: .init(systemName: "gearshape.fill")?.tintColor(.white), style: .plain, target: nil, action: nil)
-    
+
     // MARK: - UI
     override func setup() {
         userProfileView.delegate = self
@@ -111,7 +111,7 @@ final class MyPageVC: BaseVC<MyPageReactor> {
         self.navigationItem.configBack()
         self.navigationItem.setRightBarButton(withdrawalButton, animated: true)
     }
-    
+
     // MARK: - Reactor
     override func bindAction(reactor: MyPageReactor) {
         self.rx.viewDidLoad
@@ -121,48 +121,48 @@ final class MyPageVC: BaseVC<MyPageReactor> {
     }
     override func bindState(reactor: MyPageReactor) {
         let sharedState = reactor.state.share(replay: 5).observe(on: MainScheduler.asyncInstance)
-        
+
         let ds = RxCollectionViewSectionedReloadDataSource<ClubListSection> { _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip) as ClubListCell
             cell.model = item
             return cell
         }
-        
+
         sharedState
             .compactMap { $0.user }
             .bind(with: self) { owner, user in
                 owner.userProfileView.setUser(user)
             }
             .disposed(by: disposeBag)
-        
+
         sharedState
             .compactMap { $0.user }
-            .compactMap { $0.joinedClub.filter { $0.type == .editorial } }
+            .compactMap { $0.clubs.filter { $0.type == .editorial } }
             .map { [ClubListSection.init(header: "", items: $0)] }
             .do(onNext: { [weak self] item in
                 self?.editorialLabel.isHidden = item.isEmpty
             })
             .bind(to: editorialCollectionView.rx.items(dataSource: ds))
             .disposed(by: disposeBag)
-        
+
         sharedState
             .compactMap { $0.user }
-            .map { $0.joinedClub.first(where: { $0.type == .major } ) }
+            .map { $0.clubs.first(where: { $0.type == .major }) }
             .bind(with: self) { owner, major in
                 owner.majorClubView.setClub(club: major)
                 owner.majorLabel.isHidden = major == nil
             }
             .disposed(by: disposeBag)
-        
+
         sharedState
             .compactMap { $0.user }
-            .map { $0.joinedClub.first(where: { $0.type == .freedom } ) }
+            .map { $0.clubs.first(where: { $0.type == .freedom }) }
             .bind(with: self) { owner, free in
                 owner.freedomClubView.setClub(club: free)
                 owner.freedomLabel.isHidden = free == nil
             }
             .disposed(by: disposeBag)
-        
+
         sharedState
             .map(\.isLoading)
             .bind(with: self) { owner, load in
@@ -172,24 +172,27 @@ final class MyPageVC: BaseVC<MyPageReactor> {
     }
     override func bindView(reactor: MyPageReactor) {
         editorialCollectionView.rx.modelSelected(ClubList.self)
-            .map { Reactor.Action.clubDidTap(.init(name: $0.title, type: $0.type) ) }
+            .map(\.id)
+            .map(Reactor.Action.clubDidTap)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         majorClubView.rx.tapGesture()
             .when(.recognized)
             .compactMap { [weak self] _ in self?.majorClubView.club }
-            .map { Reactor.Action.clubDidTap(.init(name: $0.title, type: $0.type) ) }
+            .map(\.id)
+            .map(Reactor.Action.clubDidTap)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         freedomClubView.rx.tapGesture()
             .when(.recognized)
             .compactMap { [weak self] _ in self?.freedomClubView.club }
-            .map { Reactor.Action.clubDidTap(.init(name: $0.title, type: $0.type) ) }
+            .map(\.id)
+            .map(Reactor.Action.clubDidTap)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         withdrawalButton.rx.tap
             .map { Reactor.Action.withdrawalButtonDidTap }
             .bind(to: reactor.action)
@@ -213,12 +216,12 @@ extension MyPageVC: PHPickerViewControllerDelegate {
         didFinishPicking results: [PHPickerResult]
     ) {
         let item = results.first?.itemProvider
-        
+
         picker.dismiss(animated: true)
-        
+
         item?.loadDataRepresentation(forTypeIdentifier: "public.image", completionHandler: { [weak self] data, err in
             if let err = err {
-                print(err.asGCMSError?.errorDescription)
+                print(err.asGCMSError?.errorDescription ?? "")
                 return
             }
             if let data = data {

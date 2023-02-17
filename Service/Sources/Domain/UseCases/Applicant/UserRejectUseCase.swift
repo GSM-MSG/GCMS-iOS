@@ -1,13 +1,14 @@
 import RxSwift
+import Foundation
 
 public struct UserRejectUseCase {
-    public init(clubRepository: ClubRepository) {
-        self.clubRepository = clubRepository
+    public init(clubApplicantRepository: ClubApplicantRepository) {
+        self.clubApplicantRepository = clubApplicantRepository
     }
-    
-    private let clubRepository: ClubRepository
-    
-    public func execute(query: ClubRequestQuery, userId: String) -> Completable{
-        clubRepository.userReject(query: query, userId: userId)
+
+    private let clubApplicantRepository: ClubApplicantRepository
+
+    public func execute(clubID: Int, uuid: UUID) -> Completable {
+        clubApplicantRepository.userReject(clubID: clubID, uuid: uuid)
     }
 }

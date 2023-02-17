@@ -12,7 +12,7 @@ protocol StatusMemberCellDelegate: AnyObject {
 final class StatusMemberCell: BaseTableViewCell<Member> {
     // MARK: - Properties
     weak var delegate: StatusMemberCellDelegate?
-    
+
     private let profileImageView = UIImageView().then {
         $0.layer.cornerRadius = 20
         $0.clipsToBounds = true
@@ -40,19 +40,19 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
         $0.backgroundColor = GCMSAsset.Colors.gcmsThemeColor.color
         $0.layer.cornerRadius = 4
     }
-    public var isHead: Bool = false{
+    public var isHead: Bool = false {
         didSet {
             [delegationButton, kickButton].forEach {
                 $0.isHidden = !isHead
             }
         }
     }
-    
+
     // MARK: - UI
     override func addView() {
         contentView.addSubViews(profileImageView, nameLabel, infoLabel, delegationButton, kickButton)
     }
-    
+
     override func setLayout() {
         profileImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
@@ -80,20 +80,20 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
             $0.height.equalTo(30)
             $0.width.equalTo(48)
         }
-        
+
     }
     override func configureCell() {
         backgroundColor = .clear
         selectionStyle = .none
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         model = nil
         disposeBag = DisposeBag()
         profileImageView.kf.cancelDownloadTask()
     }
-    
+
     override func bind(_ model: Member) {
         if let url = model.profileImg, !url.isEmpty {
             profileImageView.kf.setImage(with: URL(string: url) ?? .none,
@@ -107,14 +107,14 @@ final class StatusMemberCell: BaseTableViewCell<Member> {
         [delegationButton, kickButton].forEach {
             $0.isHidden = (!isHead || model.scope == .head)
         }
-        
+
         delegationButton.rx.tap
             .compactMap { [weak self] in self?.model }
             .bind(with: self) { owner, model in
                 owner.delegate?.delegationButtonDidTap(user: model)
             }
             .disposed(by: disposeBag)
-        
+
         kickButton.rx.tap
             .compactMap { [weak self] in self?.model }
             .bind(with: self) { owner, model in

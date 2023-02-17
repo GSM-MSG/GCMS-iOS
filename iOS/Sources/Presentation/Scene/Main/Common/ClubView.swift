@@ -20,19 +20,19 @@ final class ClubView: UIView {
         $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
     }
     public private(set) var club: ClubList?
-    
+
     // MARK: - UI
     init() {
         super.init(frame: .zero)
         addView()
         setLayout()
-        
+
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Method
     public func setClub(club: ClubList?) {
         guard let club = club else {
@@ -41,10 +41,10 @@ final class ClubView: UIView {
         }
         self.isHidden = false
         self.club = club
-        clubBannerView.kf.setImage(with: URL(string: club.bannerUrl) ?? .none,
+        clubBannerView.kf.setImage(with: URL(string: club.bannerImg) ?? .none,
                                    placeholder: UIImage(),
                                    options: [])
-        nameLabel.text = club.title
+        nameLabel.text = club.name
     }
     public func cancelImageDownload() {
         clubBannerView.kf.cancelDownloadTask()

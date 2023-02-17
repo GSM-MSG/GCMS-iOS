@@ -7,9 +7,9 @@ import Service
 final class ClubMemberReactor: Reactor, Stepper {
     // MARK: - Properties
     var steps: PublishRelay<Step> = .init()
-    
+
     private let disposeBag: DisposeBag = .init()
-    
+
     // MARK: - Reactor
     enum Action {
         case sectionDidTap(Int, Bool)
@@ -34,9 +34,8 @@ final class ClubMemberReactor: Reactor, Stepper {
         var isOpened: Bool
     }
     let initialState: State
-    private let query: ClubRequestQuery
-    private let clubID: String = ""
-    
+    private let clubID: Int
+
     private let fetchClubMemberUseCase: FetchClubMemberUseCase
     private let fetchClubApplicantUseCase: FetchClubApplicantUseCase
     private let userKickUseCase: UserKickUseCase
@@ -45,10 +44,10 @@ final class ClubMemberReactor: Reactor, Stepper {
     private let userRejectUseCase: UserRejectUseCase
     private let clubOpenUseCase: ClubOpenUseCase
     private let clubCloseUseCase: ClubCloseUseCase
-    
+
     // MARK: - Init
     init(
-        query: ClubRequestQuery,
+        clubID: Int,
         isOpened: Bool,
         fetchClubMemberUseCase: FetchClubMemberUseCase,
         fetchClubApplicantUseCase: FetchClubApplicantUseCase,
@@ -67,15 +66,15 @@ final class ClubMemberReactor: Reactor, Stepper {
         self.userRejectUseCase = userRejectUseCase
         self.clubOpenUseCase = clubOpenUseCase
         self.clubCloseUseCase = clubCloseUseCase
-        
+
         initialState = State(
             users: [],
             isLoading: false,
             isOpened: isOpened
         )
-        self.query = query
+        self.clubID = clubID
     }
-    
+
 }
 
 // MARK: - Mutate
@@ -107,7 +106,7 @@ extension ClubMemberReactor {
 extension ClubMemberReactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
-        
+
         switch mutation {
         case let .setClubIsOpened(isOpened):
             newState.isOpened = isOpened
@@ -120,7 +119,7 @@ extension ClubMemberReactor {
         case let .setIsLoading(load):
             newState.isLoading = load
         }
-        
+
         return newState
     }
 }
@@ -133,6 +132,7 @@ private extension ClubMemberReactor {
             .just(.setUsers([]))
         ])
         let member = fetchClubMemberUseCase.execute(clubID: clubID)
+            .map(\.1)
             .asObservable()
             .map { ExpandableMemberSection(header: "구성원", items: $0.map { MemberSectionType.member($0) }, isOpened: false) }
             .flatMap { Observable.concat([
@@ -143,7 +143,8 @@ private extension ClubMemberReactor {
                 self?.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription, action: []))
                 return .just(.setIsLoading(false))
             }
-        let applicant = fetchClubApplicantUseCase.execute(query: query)
+        let applicant = fetchClubApplicantUseCase.execute(clubID: self.clubID)
+            .map(\.1)
             .asObservable()
             .map { ExpandableMemberSection(header: "가입 대기자 명단", items: $0.map { MemberSectionType.applicant($0) }, isOpened: false) }
             .flatMap { Observable.concat([
@@ -158,7 +159,7 @@ private extension ClubMemberReactor {
             self.steps.accept(GCMSStep.alert(title: "마감하기", message: "동아리 신청을 마감하시겠습니까?", style: .alert, actions: [
                 .init(title: "마감", style: .default, handler: { [weak self] _ in
                     guard let self = self else { return }
-                    self.clubCloseUseCase.execute(query: self.query)
+                    self.clubCloseUseCase.execute(clubID: self.clubID)
                         .andThen(Observable.just(()))
                         .subscribe { _ in
                             self.action.onNext(.clubIsOpenedChange(false))
@@ -174,7 +175,7 @@ private extension ClubMemberReactor {
             self.steps.accept(GCMSStep.alert(title: "신청받기", message: "동아리 신청을 받겠습니까?", style: .alert, actions: [
                 .init(title: "받기", style: .default, handler: { [weak self] _ in
                     guard let self = self else { return }
-                    self.clubOpenUseCase.execute(query: self.query)
+                    self.clubOpenUseCase.execute(clubID: self.clubID)
                         .andThen(Observable.just(()))
                         .subscribe { _ in
                             self.action.onNext(.clubIsOpenedChange(true))
@@ -229,7 +230,7 @@ private extension ClubMemberReactor {
         self.steps.accept(GCMSStep.alert(title: "가입 승인하기", message: "정말 '\(user.name)'님의 가입을 승인하시겠습니까?", style: .alert, actions: [
             .init(title: "승인", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
-                self.userAcceptUseCase.execute(query: self.query, userId: user.userId)
+                self.userAcceptUseCase.execute(clubID: self.clubID, uuid: user.uuid)
                     .andThen(Observable.just(()))
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님의 가입을 승인했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))
@@ -247,7 +248,7 @@ private extension ClubMemberReactor {
         self.steps.accept(GCMSStep.alert(title: "가입 거절하기", message: "정말 '\(user.name)'님의 가입을 거절하시겠습니까?", style: .alert, actions: [
             .init(title: "거절", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
-                self.userRejectUseCase.execute(query: self.query, userId: user.userId)
+                self.userRejectUseCase.execute(clubID: self.clubID, uuid: user.uuid)
                     .andThen(Observable.just(()))
                     .subscribe(onNext: { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님의 가입을 거절했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))

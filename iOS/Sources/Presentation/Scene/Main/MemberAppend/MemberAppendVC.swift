@@ -40,7 +40,7 @@ final class MemberAppendVC: BaseVC<MemberAppendReactor> {
         $0.rowHeight = 50
         $0.backgroundColor = .clear
     }
-    
+
     // MARK: - UI
     override func setup() {
         currentUserListCollectionView.rx.setDelegate(self).disposed(by: disposeBag)
@@ -76,35 +76,35 @@ final class MemberAppendVC: BaseVC<MemberAppendReactor> {
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
-    
+
     // MARK: - Reactor
     override func bindState(reactor: MemberAppendReactor) {
         let sharedState = reactor.state.share(replay: 3).observe(on: MainScheduler.asyncInstance)
-        
+
         let studentDS = RxTableViewSectionedReloadDataSource<StudentSection> { _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip, cellType: StudentCell.self)
             cell.model = item
             return cell
         }
-        
+
         let memberDS = RxCollectionViewSectionedReloadDataSource<AddedUserSection> { _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip, cellType: AddedUserCell.self)
             cell.model = item
             return cell
         }
-        
+
         sharedState
             .map(\.users)
             .map { [StudentSection.init(items: $0)] }
             .bind(to: studentListTableView.rx.items(dataSource: studentDS))
             .disposed(by: disposeBag)
-        
+
         sharedState
             .map(\.addedUsers)
             .map { [AddedUserSection.init(items: $0)] }
             .bind(to: currentUserListCollectionView.rx.items(dataSource: memberDS))
             .disposed(by: disposeBag)
-        
+
         sharedState
             .map(\.isLoading)
             .bind(with: self) { owner, load in
@@ -117,23 +117,23 @@ final class MemberAppendVC: BaseVC<MemberAppendReactor> {
             .map { Reactor.Action.completeButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         cancelButton.rx.tap
             .map { Reactor.Action.cancelButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         currentUserListCollectionView.rx.itemSelected
             .map(\.row)
             .map(Reactor.Action.removeAddedUser)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         studentListTableView.rx.modelSelected(User.self)
             .map(Reactor.Action.userDidTap)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         searchTextField.rx.text
             .debounce(.milliseconds(300), scheduler: MainScheduler.asyncInstance)
             .compactMap { $0 == nil ? "" : $0 }
@@ -147,7 +147,7 @@ final class MemberAppendVC: BaseVC<MemberAppendReactor> {
 // MARK: - Extension
 extension MemberAppendVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return AddedUserCell.fittingSize(availableHeight: 20, user: reactor?.currentState.addedUsers[indexPath.row] ?? .init(userId: "", profileImageUrl: "", name: "", grade: 1, class: 1, number: 1))
+        return AddedUserCell.fittingSize(availableHeight: 20, user: reactor?.currentState.addedUsers[indexPath.row] ?? .init(uuid: UUID(), email: "", name: "", grade: 1, classNum: 1, number: 1, profileImg: ""))
     }
 }
 

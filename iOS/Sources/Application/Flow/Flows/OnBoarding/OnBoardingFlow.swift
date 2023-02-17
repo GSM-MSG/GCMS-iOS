@@ -5,32 +5,32 @@ import UIKit
 import Service
 import Loaf
 
-struct OnBoardingStepper: Stepper{
+struct OnBoardingStepper: Stepper {
     let steps: PublishRelay<Step> = .init()
-    
-    var initialStep: Step{
+
+    var initialStep: Step {
         return GCMSStep.onBoardingIsRequired
     }
 }
 
-final class OnBoardingFlow: Flow{
+final class OnBoardingFlow: Flow {
     // MARK: - Properties
-    var root: Presentable{
+    var root: Presentable {
         return self.rootVC
     }
-    
+
     let stepper: OnBoardingStepper = .init()
     private let rootVC = UINavigationController()
-    
+
     // MARK: - Init
     deinit {
         print("\(type(of: self)): \(#function)")
     }
-    
+
     // MARK: - Navigate
     func navigate(to step: Step) -> FlowContributors {
         guard let step = step.asGCMSStep else { return .none }
-        switch step{
+        switch step {
         case .onBoardingIsRequired:
             return coordinateToOnBoarding()
         case .clubListIsRequired:
@@ -50,7 +50,7 @@ final class OnBoardingFlow: Flow{
 }
 
 // MARK: - Method
-private extension OnBoardingFlow{
+private extension OnBoardingFlow {
     func coordinateToOnBoarding() -> FlowContributors {
         let vc = AppDelegate.container.resolve(OnBoardingVC.self)!
         self.rootVC.setViewControllers([vc], animated: true)

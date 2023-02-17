@@ -8,15 +8,15 @@ import UIKit
 final class MyPageReactor: Reactor, Stepper {
     // MARK: - Properties
     var steps: PublishRelay<Step> = .init()
-    
+
     private let disposeBag: DisposeBag = .init()
-    
+
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
         case logoutButtonDidTap
         case updateLoading(Bool)
-        case clubDidTap(ClubRequestQuery)
+        case clubDidTap(Int)
         case profileImageDidTap(Data)
         case withdrawalButtonDidTap
     }
@@ -34,7 +34,7 @@ final class MyPageReactor: Reactor, Stepper {
     private let uploadImagesUseCase: UploadImagesUseCase
     private let updateProfileImageUseCase: UpdateProfileImageUseCase
     private let withdrawalUseCase: WithdrawalUseCase
-    
+
     // MARK: - Init
     init(
         logoutUseCase: LogoutUseCase,
@@ -52,7 +52,7 @@ final class MyPageReactor: Reactor, Stepper {
         self.updateProfileImageUseCase = updateProfileImageUseCase
         self.withdrawalUseCase = withdrawalUseCase
     }
-    
+
 }
 
 // MARK: - Mutate
@@ -65,8 +65,8 @@ extension MyPageReactor {
             return .just(.setIsLoading(load))
         case .logoutButtonDidTap:
             logoutButtonDidTap()
-        case let .clubDidTap(q):
-            steps.accept(GCMSStep.clubDetailIsRequired(query: q))
+        case let .clubDidTap(clubID):
+            steps.accept(GCMSStep.clubDetailIsRequired(clubID: clubID))
         case let .profileImageDidTap(data):
             return profileChange(data: data)
         case .withdrawalButtonDidTap:
@@ -80,14 +80,14 @@ extension MyPageReactor {
 extension MyPageReactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
-        
+
         switch mutation {
         case let .setIsLoading(load):
             newState.isLoading = load
         case let .setUser(user):
             newState.user = user
         }
-        
+
         return newState
     }
 }
@@ -150,7 +150,7 @@ private extension MyPageReactor {
                         self.errorAlert(message: "알 수 없는 이유로 탈퇴가 실패했습니다")
                     })
                     .disposed(by: self.disposeBag)
-                    
+
             }),
             .init(title: "취소", style: .cancel)
         ]))

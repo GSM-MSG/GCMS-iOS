@@ -7,7 +7,7 @@ final class ClubActivityCell: BaseCollectionViewCell<Data> {
         $0.clipsToBounds = true
         $0.contentMode = .scaleAspectFill
     }
-    
+
     // MARK: - UI
     override func addView() {
         contentView.addSubViews(activityImageView)
@@ -21,7 +21,7 @@ final class ClubActivityCell: BaseCollectionViewCell<Data> {
         contentView.backgroundColor = .clear
         self.backgroundColor = .clear
     }
-    
+
     override func bind(_ model: Data) {
         activityImageView.image = UIImage(data: model)
     }

@@ -19,12 +19,12 @@ class BaseCollectionViewCell<T>: UICollectionViewCell, Reusable {
         super.layoutSubviews()
         setLayoutSubviews()
     }
-    func addView(){}
-    func setLayout(){}
-    func setLayoutSubviews(){}
-    func configureCell(){}
+    func addView() {}
+    func setLayout() {}
+    func setLayoutSubviews() {}
+    func configureCell() {}
     var model: T? {
         didSet { if let model = model { bind(model) } }
     }
-    func bind(_ model: T){}
+    func bind(_ model: T) {}
 }

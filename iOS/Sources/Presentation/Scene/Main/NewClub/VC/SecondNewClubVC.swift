@@ -3,6 +3,8 @@ import IQKeyboardManagerSwift
 import SnapKit
 import RxKeyboard
 import RxSwift
+import RxCocoa
+import Then
 
 final class SecondNewClubVC: BaseVC<NewClubReactor> {
     // MARK: - Metric
@@ -43,7 +45,7 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
         $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         IQKeyboardManager.shared.keyboardDistanceFromTextField = 56
@@ -52,7 +54,7 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
         super.viewDidDisappear(animated)
         IQKeyboardManager.shared.keyboardDistanceFromTextField = 10
     }
-    
+
     // MARK: - UI
     override func addView() {
         view.addSubViews(scrollView, nextButton)
@@ -114,7 +116,7 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
     override func configureNavigation() {
         self.navigationItem.configBack()
     }
-    
+
     // MARK: - Reactor
     override func bindAction(reactor: NewClubReactor) {
         RxKeyboard.instance.visibleHeight
@@ -128,24 +130,23 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
                 owner.view.layoutIfNeeded()
             }
             .disposed(by: disposeBag)
-        
+
         clubDescriptionTextView.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
             .do(onNext: { [weak self] _ in
                 let size = CGSize(width: self?.view.frame.width ?? 0, height: .infinity)
                 let esti = self?.clubDescriptionTextView.sizeThatFits(size) ?? .init()
-                
+
                 self?.clubDescriptionTextView.constraints.forEach { constraint in
-                    if esti.height < 90 {}
-                    else {
+                    if esti.height < 90 {} else {
                         if constraint.firstAttribute == .height {
                             constraint.constant = esti.height
                         }
                     }
                 }
-            }).map(Reactor.Action.updateDescription)
+            }).map(Reactor.Action.updateContent)
                 .bind(to: reactor.action)
                 .disposed(by: disposeBag)
-        
+
         clubDescriptionTextView.rx.didBeginEditing
             .asObservable()
             .bind(with: self) { owner, _ in
@@ -155,7 +156,7 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
                 }
             }
             .disposed(by: disposeBag)
-        
+
         clubDescriptionTextView.rx.didEndEditing
             .asObservable()
             .bind(with: self) { owner, _ in
@@ -168,25 +169,25 @@ final class SecondNewClubVC: BaseVC<NewClubReactor> {
     }
     override func bindView(reactor: NewClubReactor) {
         clubNameTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
-            .map(Reactor.Action.updateTitle)
+            .map(Reactor.Action.updateName)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         notionLinkTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
             .map(Reactor.Action.updateNotionLink)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         teacherTextField.rx.text.observe(on: MainScheduler.asyncInstance)
             .map(Reactor.Action.updateTeacher)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         contactTextField.rx.text.orEmpty.observe(on: MainScheduler.asyncInstance)
             .map(Reactor.Action.updateContact)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         nextButton.rx.tap
             .map { Reactor.Action.secondNextButtonDidTap }
             .bind(to: reactor.action)

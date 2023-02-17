@@ -7,9 +7,9 @@ import Service
 final class MemberAppendReactor: Reactor, Stepper {
     // MARK: - Properties
     var steps: PublishRelay<Step> = .init()
-    
+
     private let disposeBag: DisposeBag = .init()
-    
+
     // MARK: - Reactor
     enum Action {
         case updateQuery(String)
@@ -36,14 +36,14 @@ final class MemberAppendReactor: Reactor, Stepper {
     private let closure: (([User]) -> Void)
     private let clubType: ClubType
     private let searchUserUseCase: SearchUserUseCase
-    
+
     // MARK: - Init
     init(
         closure: @escaping (([User]) -> Void),
         clubType: ClubType,
         searchUserUseCase: SearchUserUseCase
     ) {
-        initialState = State(   
+        initialState = State(
             query: "",
             users: [],
             addedUsers: [],
@@ -53,7 +53,7 @@ final class MemberAppendReactor: Reactor, Stepper {
         self.clubType = clubType
         self.searchUserUseCase = searchUserUseCase
     }
-    
+
 }
 
 // MARK: - Mutate
@@ -82,7 +82,7 @@ extension MemberAppendReactor {
 extension MemberAppendReactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
-        
+
         switch mutation {
         case let .setQuery(q):
             newState.query = q

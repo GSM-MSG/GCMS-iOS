@@ -40,7 +40,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         $0.titleLabel?.textAlignment = .left
     }
     private let activityHeaderLabel = HeaderLabel(title: "동아리 활동")
-    private let activityView = BTImageView(aligns: [2,2], axis: .horizontal).then {
+    private let activityView = BTImageView(aligns: [2, 2], axis: .horizontal).then {
         $0.spacing = 15
         $0.layer.cornerRadius = 10
     }
@@ -58,7 +58,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
     private let teacherHeaderLabel = HeaderLabel(title: "선생님")
     private let teacherView = UserHorizontalView()
     private let contactHeaderLabel = HeaderLabel(title: "연락처")
-    private let contactDescriptionLabel = UILabel().then { 
+    private let contactDescriptionLabel = UILabel().then {
         $0.textColor = GCMSAsset.Colors.gcmsGray1.color
         $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 12)
     }
@@ -69,7 +69,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
     }
     private lazy var statusButton = UIBarButtonItem(image: .init(systemName: "gearshape")?.tintColor(.white), style: .plain, target: nil, action: nil)
-    
+
     // MARK: - UI
     override func addView() {
         view.addSubViews(contentView, applyButton)
@@ -164,19 +164,19 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
     override func configureNavigation() {
         self.navigationItem.configBack()
     }
-    
+
     // MARK: - Reactor
     override func bindView(reactor: DetailClubReactor) {
         statusButton.rx.tap
             .map { Reactor.Action.statusButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         notionLinkButton.rx.tap
             .map { Reactor.Action.linkButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         applyButton.rx.tap
             .map { Reactor.Action.bottomButtonDidTap }
             .bind(to: reactor.action)
@@ -190,18 +190,18 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
     }
     override func bindState(reactor: DetailClubReactor) {
         let sharedState = reactor.state.share(replay: 3).observe(on: MainScheduler.asyncInstance)
-        
+
         sharedState
             .compactMap(\.clubDetail)
-            .withUnretained(self)
-            .bind { owner, item in
-                owner.bannerImageView.kf.setImage(with: URL(string: item.bannerUrl) ?? .none,
-                                                  placeholder: UIImage())
-                owner.descriptionLabel.text = item.description
-                owner.activityView.setImages(urls: item.activities)
+            .bind(with: self) { owner, item in
+                owner.bannerImageView.kf.setImage(
+                    with: URL(string: item.bannerImg)
+                )
+                owner.descriptionLabel.text = item.content
+                owner.activityView.setImages(urls: item.activityImgs)
                 owner.notionLinkButton.setTitle(item.notionLink, for: .normal)
                 owner.notionLinkButton.isHidden = false
-                if item.activities.isEmpty {
+                if item.activityImgs.isEmpty {
                     owner.activityView.snp.updateConstraints {
                         $0.height.equalTo(0)
                     }
@@ -240,26 +240,26 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                     owner.teacherView.isHidden = true
                 }
                 owner.contactDescriptionLabel.text = item.contact
-                owner.navigationItem.configTitle(title: item.title)
+                owner.navigationItem.configTitle(title: item.name)
                 if UserDefaultsLocal.shared.isGuest {
                     owner.applyButton.isHidden = true
                 }
             }
             .disposed(by: disposeBag)
-        
+
         let ds = RxCollectionViewSectionedReloadDataSource<ClubMemberSection> { _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip) as ClubMemberCell
             cell.model = item
             return cell
         }
-        
+
         sharedState
             .map(\.clubDetail)
             .compactMap(\.?.member)
             .map { [ClubMemberSection(header: "", items: $0)] }
             .bind(to: memberCollectionView.rx.items(dataSource: ds))
             .disposed(by: disposeBag)
-            
+
         sharedState
             .map(\.isLoading)
             .bind(with: self) { owner, load in

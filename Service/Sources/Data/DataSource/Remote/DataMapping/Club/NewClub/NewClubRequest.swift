@@ -12,7 +12,7 @@ public struct NewClubRequest: Encodable {
         self.activityImgs = activityImgs
         self.member = member
     }
-    
+
     public let type: ClubType
     public let name: String
     public let content: String

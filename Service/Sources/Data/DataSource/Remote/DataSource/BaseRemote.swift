@@ -9,29 +9,11 @@ class BaseRemote<API: GCMSAPI> {
     public var testStatus = false
     public var successStatus = true
     #if DEBUG
-    private let provider = MoyaProvider<API>(plugins: [JWTPlugin(), NetworkLoggerPlugin()])
+    private let provider = MoyaProvider<API>(plugins: [JWTPlugin(), GCMSLoggingPlugin()])
     #else
     private let provider = MoyaProvider<API>(plugins: [JWTPlugin()])
     #endif
-    private let successTestEndpoint = { (target: API) -> Endpoint in
-        return Endpoint(
-            url: URL(target: target).absoluteString,
-            sampleResponseClosure: { .networkResponse(201, target.sampleData) },
-            method: target.method,
-            task: target.task,
-            httpHeaderFields: target.headers
-        )
-    }
-    private let failureTestEndPoint = { (target: API) -> Endpoint in
-        return Endpoint(
-            url: URL(target: target).absoluteString,
-            sampleResponseClosure: { .networkResponse(401, Data())},
-            method: target.method,
-            task: target.task,
-            httpHeaderFields: target.headers)
-    }
-    private var testingProvider: MoyaProvider<API>!
-    
+
     func request(_ api: API) -> Single<Response> {
         return .create { single in
             var disposables: [Disposable] = []
@@ -59,24 +41,19 @@ class BaseRemote<API: GCMSAPI> {
 
 private extension BaseRemote {
     func defaultRequest(_ api: API) -> Single<Response> {
-        if testStatus {
-            testingProvider = MoyaProvider<API>(endpointClosure: successStatus ? successTestEndpoint : failureTestEndPoint, stubClosure: MoyaProvider.delayedStub(1.5))
-        }
-        
-        return (testStatus ? testingProvider : provider).rx
+        return provider.rx
             .request(api)
             .timeout(.seconds(120), scheduler: MainScheduler.asyncInstance)
-            .do(onSuccess: {
-                print(try? $0.mapJSON()) /// TODO:  나중에 지우시길
-            })
             .catch { error in
-                if !(NetworkReachabilityManager(host: "http://3.36.15.183:4000")?.isReachable ?? false) == false{
+                guard let host = Bundle.module.object(forInfoDictionaryKey: "BASE_URL") as? String else {
+                    return .error(GCMSError.noInternet)
+                }
+                if !(NetworkReachabilityManager(host: host)?.isReachable ?? false) == false {
                     return .error(GCMSError.noInternet)
                 }
                 guard let code = (error as? MoyaError)?.response?.statusCode else {
                     return .error(error)
                 }
-                print(try? (error as? MoyaError)?.response?.mapJSON())
                 if code == 401 && API.self != AuthAPI.self {
                     return self.reissueToken()
                         .andThen(.error(TokenError.expired))
@@ -84,7 +61,7 @@ private extension BaseRemote {
                 return .error(api.errorMapper?[code] ?? GCMSError.error(message: (try? (error as? MoyaError)?.response?.mapJSON() as? NSDictionary)?["message"] as? String ?? "", errorBody: [:]))
             }
     }
-    
+
     func requestWithAccessToken(_ api: API) -> Single<Response> {
         return .deferred {
             do {
@@ -110,7 +87,7 @@ private extension BaseRemote {
                 }
         })
     }
-    
+
     func isApiNeedsAccessToken(_ api: API) -> Bool {
         return api.jwtTokenType == .accessToken
     }

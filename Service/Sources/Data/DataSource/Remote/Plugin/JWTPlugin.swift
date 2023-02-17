@@ -5,14 +5,14 @@ protocol JWTTokenAuthorizable {
     var jwtTokenType: JWTTokenType? { get }
 }
 
-enum JWTTokenType {
-    case accessToken
-    case refreshToken
-    case none
+enum JWTTokenType: String {
+    case accessToken = "Authorization"
+    case refreshToken = "Refresh-Token"
+    case none = ""
 }
 
 final class JWTPlugin: PluginType {
-    
+
     func prepare(
         _ request: URLRequest,
         target: TargetType
@@ -21,14 +21,14 @@ final class JWTPlugin: PluginType {
               let tokenType = authorizable.jwtTokenType,
               tokenType != .none
         else { return request }
-        
+
         var req = request
-        
+
         let token = "Bearer \(getToken(type: tokenType))"
-        req.addValue(token, forHTTPHeaderField: "Authorization")
+        req.addValue(token, forHTTPHeaderField: tokenType.rawValue)
         return req
     }
-    
+
     func didReceive(
         _ result: Result<Response, MoyaError>,
         target: TargetType
@@ -55,25 +55,23 @@ private extension JWTPlugin {
             return ""
         }
     }
-    
+
     func getAccessToken() -> String {
         do {
             return try KeychainLocal.shared.fetchAccessToken()
         } catch {
-            print(error.localizedDescription)
             return ""
         }
     }
-    
+
     func getRefreshToken() -> String {
         do {
             return try KeychainLocal.shared.fetchRefreshToken()
         } catch {
-            print(error.localizedDescription)
             return ""
         }
     }
-    
+
     func setToken(token: TokenDTO) {
         KeychainLocal.shared.saveAccessToken(token.accessToken)
         KeychainLocal.shared.saveRefreshToken(token.refreshToken)

@@ -11,11 +11,11 @@ extension GCMSAPI {
     var baseURL: URL {
         #if DEBUG
         return URL(
-            string: Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? ""
+            string: Bundle.module.object(forInfoDictionaryKey: "BASE_URL") as? String ?? ""
         ) ?? URL(string: "https://www.google.com")!
         #else
         return URL(
-            string: Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? ""
+            string: Bundle.module.object(forInfoDictionaryKey: "BASE_URL") as? String ?? ""
         ) ?? URL(string: "https://www.google.com")!
         #endif
     }
@@ -25,9 +25,9 @@ extension GCMSAPI {
     var validationType: ValidationType {
         return .successCodes
     }
-    var headers: [String : String]? {
+    var headers: [String: String]? {
         switch self {
-            
+
         default:
             return ["Content-Type": "application/json"]
         }
@@ -41,10 +41,17 @@ enum GCMSDomain: String {
     case club
     case guest
     case clubMember = "club-member"
+    case applicant
 }
 
 extension GCMSDomain {
     var url: String {
         return "/\(self.rawValue)"
     }
+}
+
+private class BundleFinder {}
+
+extension Foundation.Bundle {
+    static let module = Bundle(for: BundleFinder.self)
 }

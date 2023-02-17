@@ -1,13 +1,13 @@
 import RxSwift
 
 public struct ClubApplyUseCase {
-    public init(clubRepository: ClubRepository) {
-        self.clubRepository = clubRepository
+    public init(clubApplicantRepository: ClubApplicantRepository) {
+        self.clubApplicantRepository = clubApplicantRepository
     }
 
-    private let clubRepository: ClubRepository
+    private let clubApplicantRepository: ClubApplicantRepository
 
-    public func execute(query: ClubRequestQuery) -> Completable {
-        clubRepository.apply(query: query)
+    public func execute(clubID: Int) -> Completable {
+        clubApplicantRepository.apply(clubID: clubID)
     }
 }

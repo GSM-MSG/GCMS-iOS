@@ -9,12 +9,11 @@ import Service
 final class OnBoardingReactor: Reactor, Stepper {
     // MARK: - Properties
     var steps: PublishRelay<Step> = .init()
-    
+
     private let disposeBag: DisposeBag = .init()
-    
+
     private let loginUseCase: LoginUseCase
-    private let issueGuestTokenUseCase: IssueGuestTokenUseCase
-    
+
     // MARK: - Reactor
     enum Action {
         case gauthSigninCompleted(code: String)
@@ -32,19 +31,17 @@ final class OnBoardingReactor: Reactor, Stepper {
         var isLoading: Bool
     }
     let initialState: State
-    
+
     // MARK: - Init
     init(
-        loginUseCase: LoginUseCase,
-        issueGuestTokenUseCase: IssueGuestTokenUseCase
+        loginUseCase: LoginUseCase
     ) {
         initialState = State(
             isLoading: false
         )
         self.loginUseCase = loginUseCase
-        self.issueGuestTokenUseCase = issueGuestTokenUseCase
     }
-    
+
 }
 
 // MARK: - Mutate
@@ -102,16 +99,6 @@ private extension OnBoardingReactor {
         return .empty()
     }
     func appleTokenReceived(idToken: String, code: String) -> Observable<Mutation> {
-        issueGuestTokenUseCase.execute(idToken: idToken, code: code)
-            .andThen(Observable.just(()))
-            .subscribe(with: self) { owner, _ in
-                UserDefaultsLocal.shared.isGuest = true
-                UserDefaultsLocal.shared.isApple = true
-                owner.steps.accept(GCMSStep.clubListIsRequired)
-            } onError: { owner, e in
-                owner.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription, action: []))
-            }
-            .disposed(by: disposeBag)
         return .empty()
     }
 }

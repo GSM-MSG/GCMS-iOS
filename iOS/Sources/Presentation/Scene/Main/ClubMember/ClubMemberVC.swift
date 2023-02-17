@@ -23,16 +23,16 @@ final class ClubMemberVC: BaseVC<ClubMemberReactor> {
         $0.setTitleColor(.white, for: .normal)
     }
     private let isHead: Bool
-    
+
     init(reactor: ClubMemberReactor?, isHead: Bool) {
         self.isHead = isHead
         super.init(reactor: reactor)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - UI
     override func setup() {
         membersTableView.delegate = self
@@ -55,7 +55,7 @@ final class ClubMemberVC: BaseVC<ClubMemberReactor> {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
         clubOpenCloseButton.isHidden = !isHead
     }
-    
+
     // MARK: - Reactor
     override func bindAction(reactor: ClubMemberReactor) {
         self.rx.viewDidLoad
@@ -71,13 +71,13 @@ final class ClubMemberVC: BaseVC<ClubMemberReactor> {
     }
     override func bindState(reactor: ClubMemberReactor) {
         let sharedState = reactor.state.share(replay: 2).observe(on: MainScheduler.asyncInstance)
-        
+
         sharedState
             .map(\.isOpened)
             .map { $0 ? "동아리 신청 마감하기" : "동아리 신청 받기" }
             .bind(to: clubOpenCloseButton.rx.title())
             .disposed(by: disposeBag)
-        
+
         sharedState
             .map(\.users)
             .bind(with: self) { owner, _ in
@@ -132,7 +132,7 @@ extension ClubMemberVC: MemberHeaderViewDelegate {
         guard let reactor = reactor else { return  }
         let opened = !reactor.currentState.users[section].isOpened
         reactor.action.onNext(.sectionDidTap(section, opened))
-        
+
         membersTableView.reloadSections(.init([section]), with: .automatic)
     }
 }
@@ -141,18 +141,17 @@ extension ClubMemberVC: ApplicantCellDelegate, StatusMemberCellDelegate {
     func acceptButtonDidTap(user: User) {
         reactor?.action.onNext(.acceptButtonDidTap(user))
     }
-    
+
     func rejectButtonDidTap(user: User) {
         reactor?.action.onNext(.rejectButtonDidTap(user))
     }
-    
+
     func kicktButtonDidTap(user: Member) {
         reactor?.action.onNext(.kickButtonDidTap(user))
     }
-    
+
     func delegationButtonDidTap(user: Member) {
         reactor?.action.onNext(.delegationButtonDidTap(user))
     }
-    
-    
+
 }

@@ -6,14 +6,14 @@ enum ImageAPI {
 }
 
 extension ImageAPI: GCMSAPI {
-    
+
     var domain: GCMSDomain {
         return .image
     }
     var urlPath: String {
         switch self {
         case .uploadImages:
-            return "/"
+            return ""
         }
     }
     var method: Moya.Method {
@@ -29,7 +29,7 @@ extension ImageAPI: GCMSAPI {
                 let uuid = UUID().uuidString
                 return MultipartFormData(
                     provider: .data(data),
-                    name: "files",
+                    name: "file",
                     fileName: "\(uuid).png"
                 )
             }
@@ -40,15 +40,15 @@ extension ImageAPI: GCMSAPI {
         switch self {
         case .uploadImages:
             return .accessToken
-            
+
         default:
             return JWTTokenType.none
         }
     }
     var headers: [String: String]? {
-        return ["Content-type" : "multipart/form-data"]
+        return ["Content-type": "multipart/form-data"]
     }
-    
+
     var errorMapper: [Int: Error]? {
         return .none
     }

@@ -7,7 +7,7 @@ struct ClubActivitySection: SectionModelType {
 
 extension ClubActivitySection {
     typealias Item = Data
-    
+
     init(original: ClubActivitySection, items: [Data]) {
         self = original
         self.items = items
