@@ -21,16 +21,3 @@ public struct Member: Equatable {
     public let scope: MemberScope
     public let profileImg: String?
 }
-
-public extension Member {
-    static let dummy = Member(
-        uuid: UUID(),
-        email: "s21038",
-        name: "Beak",
-        grade: 2,
-        classNum: 1,
-        number: 18,
-        scope: .member,
-        profileImg: "https://avatars.githubusercontent.com/u/74440939?v=4"
-    )
-}
