@@ -45,7 +45,10 @@ private extension BaseRemote {
             .request(api)
             .timeout(.seconds(120), scheduler: MainScheduler.asyncInstance)
             .catch { error in
-                if !(NetworkReachabilityManager(host: "http://3.36.15.183:4000")?.isReachable ?? false) == false {
+                guard let host = Bundle.module.object(forInfoDictionaryKey: "BASE_URL") as? String else {
+                    return .error(GCMSError.noInternet)
+                }
+                if !(NetworkReachabilityManager(host: host)?.isReachable ?? false) == false {
                     return .error(GCMSError.noInternet)
                 }
                 guard let code = (error as? MoyaError)?.response?.statusCode else {
