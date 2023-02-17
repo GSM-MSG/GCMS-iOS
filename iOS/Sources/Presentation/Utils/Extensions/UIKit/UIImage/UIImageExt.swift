@@ -16,7 +16,7 @@ extension UIImage {
         let newImage = UIImage(cgImage: downSampledImage)
         return newImage
     }
-    func tintColor(_ color: UIColor) -> UIImage{
+    func tintColor(_ color: UIColor) -> UIImage {
         return self.withTintColor(color, renderingMode: .alwaysOriginal)
     }
 }

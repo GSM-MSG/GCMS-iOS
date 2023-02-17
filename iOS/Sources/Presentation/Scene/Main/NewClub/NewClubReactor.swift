@@ -8,23 +8,23 @@ import Service
 final class NewClubReactor: Reactor, Stepper {
     // MARK: - Properties
     var steps: PublishRelay<Step> = .init()
-    
+
     private let disposeBag: DisposeBag = .init()
-    
+
     // MARK: - Reactor
     enum Action {
         // First
         case clubTypeDidTap(ClubType)
         case viewDidLoad
-        
-        //Second
+
+        // Second
         case updateName(String)
         case updateContent(String)
         case updateNotionLink(String)
         case updateTeacher(String?)
         case updateContact(String)
         case secondNextButtonDidTap
-        
+
         // Third
         case imageDidSelect(Data)
         case bannerDidTap
@@ -35,7 +35,7 @@ final class NewClubReactor: Reactor, Stepper {
         case memberRemove(Int)
         case updateLoading(Bool)
         case completeButtonDidTap
-        
+
         // etc
         case createNewClub(state: State)
     }
@@ -74,7 +74,7 @@ final class NewClubReactor: Reactor, Stepper {
     private let fetchDetailClubUseCase: FetchDetailClubUseCase
     private let updateNewClubUseCase: UpdateClubUseCase
     private let uploadImagesUseCase: UploadImagesUseCase
-    
+
     // MARK: - Init
     init(
         isUpdate: Bool = false,
@@ -104,7 +104,7 @@ final class NewClubReactor: Reactor, Stepper {
         self.updateNewClubUseCase = updateNewClubUseCase
         self.uploadImagesUseCase = uploadImagesUseCase
     }
-    
+
 }
 
 // MARK: - Mutate
@@ -159,7 +159,7 @@ extension NewClubReactor {
 extension NewClubReactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
-        
+
         switch mutation {
         case let .setName(name):
             newState.name = name
@@ -213,7 +213,7 @@ extension NewClubReactor {
         case let .setIsLoading(load):
             newState.isLoading = load
         }
-        
+
         return newState
     }
 }
@@ -242,14 +242,13 @@ private extension NewClubReactor {
             .compactMap { URL(string: $0) }
             .compactMap { try? Data(contentsOf: $0) }
             .map { Mutation.setImageData($0) }
-            
 
         let activitiesData = club
             .map(\.activityImgs)
             .compactMap { $0.compactMap { URL(string: $0) } }
             .compactMap { $0.compactMap { try? Data(contentsOf: $0) } }
             .map { Mutation.setImageDatas($0) }
-        
+
         return .concat([
             startLoadingObservable,
             clubInfoObservable,
@@ -262,14 +261,11 @@ private extension NewClubReactor {
         var errorMessage = ""
         if currentState.name.isEmpty {
             errorMessage = "동아리 이름을 입력해주세요!"
-        }
-        else if currentState.content.isEmpty || currentState.content == "동아리 설명을 입력해주세요." {
+        } else if currentState.content.isEmpty || currentState.content == "동아리 설명을 입력해주세요." {
             errorMessage = "동아리 설명을 입력해주세요!"
-        }
-        else if currentState.contact.isEmpty {
+        } else if currentState.contact.isEmpty {
             errorMessage = "연락처를 입력해주세요!"
-        }
-        else if currentState.notionLink.isEmpty || !currentState.notionLink.hasPrefix("https://") {
+        } else if currentState.notionLink.isEmpty || !currentState.notionLink.hasPrefix("https://") {
             errorMessage = "노션 링크를 정확히 입력해주세요!"
         } else {
             steps.accept(GCMSStep.thirdNewClubIsRequired(reactor: self))
@@ -280,7 +276,7 @@ private extension NewClubReactor {
         return .empty()
     }
     func completeButtonDidTap() -> Observable<Mutation> {
-        guard (currentState.bannerImg != nil)  else {
+        guard currentState.bannerImg != nil  else {
             steps.accept(GCMSStep.failureAlert(title: "동아리 배너 이미지를 넣어주세요!", message: nil))
             return .empty()
         }

@@ -12,7 +12,7 @@ protocol ApplicantCellDelegate: AnyObject {
 final class ApplicantCell: BaseTableViewCell<User> {
     // MARK: - Properties
     weak var delegate: ApplicantCellDelegate?
-    
+
     private let profileImageView = UIImageView().then {
         $0.layer.cornerRadius = 20
         $0.clipsToBounds = true
@@ -47,7 +47,7 @@ final class ApplicantCell: BaseTableViewCell<User> {
             }
         }
     }
-    
+
     // MARK: - UI
     override func addView() {
         contentView.addSubViews(profileImageView, nameLabel, infoLabel, acceptButton, rejectButton)
@@ -84,14 +84,14 @@ final class ApplicantCell: BaseTableViewCell<User> {
         backgroundColor = .clear
         selectionStyle = .none
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         model = nil
         disposeBag = DisposeBag()
         profileImageView.kf.cancelDownloadTask()
     }
-    
+
     override func bind(_ model: User) {
         if let url = model.profileImg, !url.isEmpty {
             profileImageView.kf.setImage(with: URL(string: url) ?? .none,
@@ -102,14 +102,14 @@ final class ApplicantCell: BaseTableViewCell<User> {
         }
         nameLabel.text = model.name
         infoLabel.text = "\(model.grade)학년\(model.classNum)반\(model.number)번"
-        
+
         acceptButton.rx.tap
             .compactMap { [weak self] in self?.model }
             .bind(with: self) { owner, model in
                 owner.delegate?.acceptButtonDidTap(user: model)
             }
             .disposed(by: disposeBag)
-        
+
         rejectButton.rx.tap
             .compactMap { [weak self] in self?.model }
             .bind(with: self) { owner, model in

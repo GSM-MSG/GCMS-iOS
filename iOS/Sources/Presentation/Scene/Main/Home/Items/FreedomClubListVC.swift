@@ -10,7 +10,7 @@ final class FreedomClubListVC: BaseVC<HomeReactor> {
         $0.backgroundColor = .clear
     }
     private let refreshControl = UIRefreshControl()
-    
+
     // MARK: - UI
     override func setup() {
         let lay = GCMSLayout()
@@ -29,7 +29,7 @@ final class FreedomClubListVC: BaseVC<HomeReactor> {
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
-    
+
     // MARK: - Reactor
     override func bindView(reactor: HomeReactor) {
         clubListCollectionView.rx.modelSelected(ClubList.self)
@@ -37,7 +37,7 @@ final class FreedomClubListVC: BaseVC<HomeReactor> {
             .map(Reactor.Action.clubDidTap)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         refreshControl.rx.controlEvent(.valueChanged)
             .map { Reactor.Action.refreshTrigger(.freedom) }
             .bind(to: reactor.action)
@@ -50,7 +50,7 @@ final class FreedomClubListVC: BaseVC<HomeReactor> {
             return cell
         }
         let sharedState = reactor.state.share(replay: 2).observe(on: MainScheduler.asyncInstance)
-        
+
         sharedState
             .map(\.freedomClubList)
             .do(afterNext: { [weak self] _ in
@@ -60,7 +60,7 @@ final class FreedomClubListVC: BaseVC<HomeReactor> {
             .map { [ClubListSection.init(header: "", items: $0)] }
             .bind(to: clubListCollectionView.rx.items(dataSource: ds))
             .disposed(by: disposeBag)
-        
+
         sharedState
             .map(\.isRefreshing)
             .bind(to: refreshControl.rx.isRefreshing)

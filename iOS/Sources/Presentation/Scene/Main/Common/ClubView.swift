@@ -20,19 +20,19 @@ final class ClubView: UIView {
         $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
     }
     public private(set) var club: ClubList?
-    
+
     // MARK: - UI
     init() {
         super.init(frame: .zero)
         addView()
         setLayout()
-        
+
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Method
     public func setClub(club: ClubList?) {
         guard let club = club else {

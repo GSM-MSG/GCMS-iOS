@@ -8,7 +8,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     private let disposeBag: DisposeBag = .init()
     private let coordinator: FlowCoordinator = .init()
-    
+
     let appFlow = AppFlow()
     let appStepper = AppStepper()
 
@@ -18,17 +18,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard let s = (scene as? UIWindowScene) else { return }
-        
+
         window = UIWindow(windowScene: s)
-        
+
         coordinateLogger()
         coordinateToAppFlow(with: s)
     }
-    
-    private func coordinateToAppFlow(with scene: UIWindowScene){
+
+    private func coordinateToAppFlow(with scene: UIWindowScene) {
         let window = UIWindow(windowScene: scene)
         self.window = window
-        
+
         coordinator.coordinate(flow: appFlow, with: appStepper)
         Flows.use(
             appFlow,
@@ -38,8 +38,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self?.window?.makeKeyAndVisible()
         }
     }
-    
-    private func coordinateLogger(){
+
+    private func coordinateLogger() {
         coordinator.rx.willNavigate
             .subscribe(onNext: { flow, step in
                 let currentFlow = "\(flow)".split(separator: " ").last ?? "No Flow"
@@ -49,25 +49,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
-        
+
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        
+
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
-        
+
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
-        
+
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        
+
     }
 
-
 }
-

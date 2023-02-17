@@ -58,7 +58,7 @@ final class ThirdNewClubVC: BaseVC<NewClubReactor> {
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
         $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
     }
-    
+
     private var bannerPHConfiguration: PHPickerConfiguration = {
         var config = PHPickerConfiguration()
         config.filter = .images
@@ -66,7 +66,7 @@ final class ThirdNewClubVC: BaseVC<NewClubReactor> {
         return config
     }()
     private lazy var bannerPHPickerController = PHPickerViewController(configuration: bannerPHConfiguration)
-    
+
     private var activityPHConfiguration: PHPickerConfiguration = {
         var config = PHPickerConfiguration()
         config.filter = .images
@@ -74,7 +74,7 @@ final class ThirdNewClubVC: BaseVC<NewClubReactor> {
         return config
     }()
     private lazy var activityPHPickerController = PHPickerViewController(configuration: activityPHConfiguration)
-    
+
     // MARK: - UI
     override func setup() {
         [bannerPHPickerController, activityPHPickerController].forEach { $0.delegate = self }
@@ -145,7 +145,7 @@ final class ThirdNewClubVC: BaseVC<NewClubReactor> {
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
-    
+
     // MARK: - Reactor
     override func bindView(reactor: NewClubReactor) {
         bannerImageView.rx.tapGesture()
@@ -155,31 +155,31 @@ final class ThirdNewClubVC: BaseVC<NewClubReactor> {
                 owner.present(owner.bannerPHPickerController, animated: true)
             }
             .disposed(by: disposeBag)
-        
+
         clubActivityAppendButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.reactor?.action.onNext(.activityImgsAppendButtonDidTap)
                 owner.present(owner.activityPHPickerController, animated: true)
             }
             .disposed(by: disposeBag)
-        
+
         clubActivitiesCollectionView.rx.itemSelected
             .map(\.row)
             .map(Reactor.Action.activityImgsDeleteDidTap)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         clubMemberAppendButton.rx.tap
             .map { Reactor.Action.memberAppendButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         clubMemberCollectionView.rx.itemSelected
             .map(\.row)
             .map(Reactor.Action.memberRemove)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         completeButton.rx.tap
             .map { Reactor.Action.completeButtonDidTap }
             .bind(to: reactor.action)
@@ -187,32 +187,32 @@ final class ThirdNewClubVC: BaseVC<NewClubReactor> {
     }
     override func bindState(reactor: NewClubReactor) {
         let sharedState = reactor.state.share(replay: 4).observe(on: MainScheduler.asyncInstance)
-        
-        let activityDS = RxCollectionViewSectionedReloadDataSource<ClubActivitySection>{ _, tv, ip, item in
+
+        let activityDS = RxCollectionViewSectionedReloadDataSource<ClubActivitySection> { _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip, cellType: ClubActivityCell.self) as ClubActivityCell
             cell.model = item
             return cell
         }
-        
-        let memberDS = RxCollectionViewSectionedReloadDataSource<ClubMemberSection>{ _, tv, ip, item in
+
+        let memberDS = RxCollectionViewSectionedReloadDataSource<ClubMemberSection> { _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip, cellType: ClubMemberCell.self) as ClubMemberCell
             cell.model = item
             return cell
         }
-        
+
         sharedState
             .map(\.bannerImg)
             .compactMap { $0 }
             .map { UIImage(data: $0) }
             .bind(to: bannerImageView.rx.image)
             .disposed(by: disposeBag)
-        
+
         sharedState
             .map(\.activityImgs)
             .map { [ClubActivitySection.init(items: $0)] }
             .bind(to: clubActivitiesCollectionView.rx.items(dataSource: activityDS))
             .disposed(by: disposeBag)
-        
+
         sharedState
             .map(\.members)
             .do(onNext: { [weak self] item in
@@ -220,7 +220,7 @@ final class ThirdNewClubVC: BaseVC<NewClubReactor> {
             }).map { [ClubMemberSection.init(header: "", items: $0)] }
             .bind(to: clubMemberCollectionView.rx.items(dataSource: memberDS))
             .disposed(by: disposeBag)
-        
+
         sharedState
             .map(\.isLoading)
             .bind(with: self) { owner, load in

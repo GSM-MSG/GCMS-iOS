@@ -10,7 +10,7 @@ import ReactorKit
 import Lottie
 import Service
 
-class BaseVC<T: Reactor>: UIViewController{
+class BaseVC<T: Reactor>: UIViewController {
     let bound = UIScreen.main.bounds
     var disposeBag: DisposeBag = .init()
     private lazy var indicator = LottieAnimationView(name: "GCMS-Indicator").then {
@@ -24,7 +24,7 @@ class BaseVC<T: Reactor>: UIViewController{
         $0.isHidden = true
         $0.backgroundColor = .black.withAlphaComponent(0.4)
     }
-    
+
     @available(*, unavailable)
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,31 +36,31 @@ class BaseVC<T: Reactor>: UIViewController{
         configureNavigation()
         configureIndicator()
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         setLayoutSubviews()
     }
-    
-    init(reactor: T?){
+
+    init(reactor: T?) {
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    deinit{
+
+    deinit {
         print("\(type(of: self)): \(#function)")
     }
-    
-    func setup(){}
-    func addView(){}
-    func setLayout(){}
-    func setLayoutSubviews(){}
-    func configureVC(){}
-    func configureNavigation(){}
+
+    func setup() {}
+    func addView() {}
+    func setLayout() {}
+    func setLayoutSubviews() {}
+    func configureVC() {}
+    func configureNavigation() {}
     private func configureIndicator() {
         view.addSubViews(indicatorBackgroundView, indicator)
         indicatorBackgroundView.snp.makeConstraints {
@@ -71,7 +71,7 @@ class BaseVC<T: Reactor>: UIViewController{
             $0.size.equalTo(150)
         }
     }
-    
+
     func startIndicator() {
         indicatorBackgroundView.isHidden = false
         indicator.isHidden = false
@@ -82,13 +82,13 @@ class BaseVC<T: Reactor>: UIViewController{
         indicator.isHidden = true
         indicator.stop()
     }
-    
-    func bindView(reactor: T){}
-    func bindAction(reactor: T){}
-    func bindState(reactor: T){}
+
+    func bindView(reactor: T) {}
+    func bindAction(reactor: T) {}
+    func bindState(reactor: T) {}
 }
 
-extension BaseVC: View{
+extension BaseVC: View {
     func bind(reactor: T) {
         bindView(reactor: reactor)
         bindAction(reactor: reactor)

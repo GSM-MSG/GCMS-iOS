@@ -7,11 +7,11 @@ import Service
 final class HomeReactor: Reactor, Stepper {
     // MARK: - Properties
     var steps: PublishRelay<Step> = .init()
-    
+
     private let disposeBag: DisposeBag = .init()
-    
+
     private let fetchClubListsUseCase: FetchClubListUseCase
-    
+
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
@@ -39,7 +39,7 @@ final class HomeReactor: Reactor, Stepper {
         var isRefreshing: Bool
     }
     let initialState: State
-    
+
     // MARK: - Init
     init(
         fetchClubListsUseCase: FetchClubListUseCase
@@ -54,7 +54,7 @@ final class HomeReactor: Reactor, Stepper {
         )
         self.fetchClubListsUseCase = fetchClubListsUseCase
     }
-    
+
 }
 
 // MARK: - Mutate
@@ -90,7 +90,7 @@ extension HomeReactor {
         var newState = state
         switch mutation {
         case let .setClubList(type, lists):
-            switch type{
+            switch type {
             case .major: newState.majorClubList = lists
             case .freedom: newState.freedomClubList = lists
             case .editorial: newState.editorialClubList = lists
@@ -102,7 +102,7 @@ extension HomeReactor {
         case let .setIsRefreshing(refresh):
             newState.isRefreshing = refresh
         }
-        
+
         return newState
     }
 }

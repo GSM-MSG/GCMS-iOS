@@ -44,23 +44,23 @@ final class HomeVC: TabmanViewController, View {
         $0.font = .systemFont(ofSize: 28, weight: .black)
     }
     var disposeBag: DisposeBag = .init()
-    
+
     typealias Reactor = HomeReactor
-    
+
     init(reactor: HomeReactor?) {
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Method
     public func setViewControllers(_ vcs: [UIViewController]) {
         self.viewControllers = vcs
         self.dataSource = self
-        
+
         let bar = TMBar.ButtonBar()
         bar.layout.transitionStyle = .snap
         bar.layout.interButtonSpacing = 90
@@ -76,7 +76,7 @@ final class HomeVC: TabmanViewController, View {
         bar.systemBar().backgroundStyle = .clear
         addBar(bar, dataSource: self, at: .bottom)
     }
-    
+
     // MARK: - UI
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,7 +85,7 @@ final class HomeVC: TabmanViewController, View {
         configNavigation()
         bounces = false
     }
-    
+
     func bind(reactor: HomeReactor) {
         bindAction(reactor: reactor)
         bindView(reactor: reactor)
@@ -107,7 +107,7 @@ private extension HomeVC {
             $0.size.equalTo(150)
         }
     }
-    func configNavigation(){
+    func configNavigation() {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: titleLabel)
         if UserDefaultsLocal.shared.isGuest && UserDefaultsLocal.shared.isApple {
             self.navigationItem.setRightBarButtonItems([guestLogoutButton, guestExitButton], animated: true)
@@ -129,17 +129,17 @@ private extension HomeVC {
             .map { _ in Reactor.Action.myPageButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         newClubButton.rx.tap
             .map { _ in Reactor.Action.newClubButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         guestLogoutButton.rx.tap
             .map { _ in Reactor.Action.guestLogoutButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         guestExitButton.rx.tap
             .map { _ in Reactor.Action.appleExitButtonDidTap }
             .bind(to: reactor.action)
@@ -147,13 +147,13 @@ private extension HomeVC {
     }
     func bindState(reactor: HomeReactor) {
         let sharedState = reactor.state.share(replay: 2).observe(on: MainScheduler.asyncInstance)
-        
+
         sharedState
             .map(\.clubType)
             .map { "\($0.display)동아리" }
             .bind(to: titleLabel.rx.text)
             .disposed(by: disposeBag)
-        
+
         sharedState
             .map(\.isLoading)
             .bind(with: self) { owner, load in
@@ -177,17 +177,17 @@ extension HomeVC: PageboyViewControllerDataSource, TMBarDataSource {
     func numberOfViewControllers(in pageboyViewController: PageboyViewController) -> Int {
         return viewControllers.count
     }
-    
+
     func viewController(for pageboyViewController: PageboyViewController, at index: PageboyViewController.PageIndex) -> UIViewController? {
         return viewControllers[index]
     }
-    
+
     func defaultPage(for pageboyViewController: PageboyViewController) -> PageboyViewController.Page? {
         return .first
     }
     func barItem(for bar: TMBar, at index: Int) -> TMBarItemable {
         let clubCase = ClubType.allCases
-        
+
         return TMBarItem(title: clubCase[index].display)
     }
 }

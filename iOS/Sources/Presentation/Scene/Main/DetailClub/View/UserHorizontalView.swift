@@ -13,18 +13,18 @@ final class UserHorizontalView: UIView {
         $0.textColor = GCMSAsset.Colors.gcmsGray1.color
         $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 12)
     }
-    
+
     // MARK: - UI
     init() {
         super.init(frame: .zero)
         addView()
         setLayout()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     public func bind(user: User) {
         if let url = user.profileImg {
             profileImageView.kf.setImage(with: URL(string: url) ?? .none,

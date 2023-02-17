@@ -9,11 +9,11 @@ import Service
 final class OnBoardingReactor: Reactor, Stepper {
     // MARK: - Properties
     var steps: PublishRelay<Step> = .init()
-    
+
     private let disposeBag: DisposeBag = .init()
-    
+
     private let loginUseCase: LoginUseCase
-    
+
     // MARK: - Reactor
     enum Action {
         case gauthSigninCompleted(code: String)
@@ -31,7 +31,7 @@ final class OnBoardingReactor: Reactor, Stepper {
         var isLoading: Bool
     }
     let initialState: State
-    
+
     // MARK: - Init
     init(
         loginUseCase: LoginUseCase
@@ -41,7 +41,7 @@ final class OnBoardingReactor: Reactor, Stepper {
         )
         self.loginUseCase = loginUseCase
     }
-    
+
 }
 
 // MARK: - Mutate

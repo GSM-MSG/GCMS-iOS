@@ -8,9 +8,9 @@ import UIKit
 final class DetailClubReactor: Reactor, Stepper {
     // MARK: - Properties
     var steps: PublishRelay<Step> = .init()
-    
+
     private let disposeBag: DisposeBag = .init()
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
@@ -28,10 +28,10 @@ final class DetailClubReactor: Reactor, Stepper {
         var clubDetail: Club?
         var isLoading: Bool
     }
-    
+
     let initialState: State
     private let clubID: Int
-    
+
     private let deleteClubUseCase: DeleteClubUseCase
     private let fetchDetailClubUseCase: FetchDetailClubUseCase
     private let exitClubUseCase: ExitClubUseCase
@@ -39,7 +39,7 @@ final class DetailClubReactor: Reactor, Stepper {
     private let clubCancelUseCase: ClubCancelUseCase
     private let clubOpenUseCase: ClubOpenUseCase
     private let clubCloseUseCase: ClubCloseUseCase
-    
+
     // MARK: - Init
     init(
         clubID: Int,
@@ -63,7 +63,7 @@ final class DetailClubReactor: Reactor, Stepper {
         self.clubOpenUseCase = clubOpenUseCase
         self.clubCloseUseCase = clubCloseUseCase
     }
-    
+
 }
 
 // MARK: - Mutate
@@ -91,14 +91,14 @@ extension DetailClubReactor {
 extension DetailClubReactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
-        
+
         switch mutation {
         case let .setClub(club):
             newState.clubDetail = club
         case let .setIsLoading(load):
             newState.isLoading = load
         }
-        
+
         return newState
     }
 }
@@ -108,7 +108,7 @@ private extension DetailClubReactor {
     func viewDidLoad() -> Observable<Mutation> {
         let start = Observable.just(Mutation.setIsLoading(true))
         let task: Single<Club> = fetchDetailClubUseCase.execute(clubID: clubID)
-        
+
         let res = task
             .asObservable()
             .flatMap { Observable.from([Mutation.setClub($0), .setIsLoading(false)]) }
@@ -116,7 +116,7 @@ private extension DetailClubReactor {
                 self?.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription, action: []))
                 return .just(.setIsLoading(false))
             }
-        
+
         return .concat([start, res])
     }
     func bottomButtonDidTap() -> Observable<Mutation> {

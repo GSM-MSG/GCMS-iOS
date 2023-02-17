@@ -7,7 +7,7 @@ final class NewClubTextField: UITextField {
         self.placeholder = placeholder
         configureView()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

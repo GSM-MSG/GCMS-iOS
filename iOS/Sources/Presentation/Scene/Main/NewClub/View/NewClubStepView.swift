@@ -13,7 +13,7 @@ final class NewClubStepView: UIView {
         $0.layer.cornerRadius = 2
     }
     private let shape = CAShapeLayer()
-    
+
     var selectedBackgroundColor = GCMSAsset.Colors.gcmsMainColor.color
     var unSelectedBackgroundColor = GCMSAsset.Colors.gcmsGray4.color
     var selectedLevelTintColor = GCMSAsset.Colors.gcmsGray1.color
@@ -23,7 +23,7 @@ final class NewClubStepView: UIView {
     var isSelected: Bool = false {
         didSet { update() }
     }
-    
+
     init(
         level: Int,
         title: String
@@ -35,16 +35,16 @@ final class NewClubStepView: UIView {
         self.levelLabel.text = "\(level)"
         self.titleLabel.text = title
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         drawPath(rect: rect)
     }
-    
+
 }
 
 private extension NewClubStepView {
@@ -54,7 +54,7 @@ private extension NewClubStepView {
         path.addLine(to: CGPoint(x: rect.width/2 - 4, y: rect.maxY))
         path.addLine(to: CGPoint(x: rect.width/2 + 4, y: rect.maxY))
         path.close()
-        
+
         shape.fillColor = isSelected ? selectedBackgroundColor.cgColor : unSelectedBackgroundColor.cgColor
         shape.path = path.cgPath
         self.layer.addSublayer(shape)

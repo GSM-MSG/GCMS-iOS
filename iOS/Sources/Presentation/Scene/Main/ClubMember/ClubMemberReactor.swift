@@ -7,9 +7,9 @@ import Service
 final class ClubMemberReactor: Reactor, Stepper {
     // MARK: - Properties
     var steps: PublishRelay<Step> = .init()
-    
+
     private let disposeBag: DisposeBag = .init()
-    
+
     // MARK: - Reactor
     enum Action {
         case sectionDidTap(Int, Bool)
@@ -35,7 +35,7 @@ final class ClubMemberReactor: Reactor, Stepper {
     }
     let initialState: State
     private let clubID: Int
-    
+
     private let fetchClubMemberUseCase: FetchClubMemberUseCase
     private let fetchClubApplicantUseCase: FetchClubApplicantUseCase
     private let userKickUseCase: UserKickUseCase
@@ -44,7 +44,7 @@ final class ClubMemberReactor: Reactor, Stepper {
     private let userRejectUseCase: UserRejectUseCase
     private let clubOpenUseCase: ClubOpenUseCase
     private let clubCloseUseCase: ClubCloseUseCase
-    
+
     // MARK: - Init
     init(
         clubID: Int,
@@ -66,7 +66,7 @@ final class ClubMemberReactor: Reactor, Stepper {
         self.userRejectUseCase = userRejectUseCase
         self.clubOpenUseCase = clubOpenUseCase
         self.clubCloseUseCase = clubCloseUseCase
-        
+
         initialState = State(
             users: [],
             isLoading: false,
@@ -74,7 +74,7 @@ final class ClubMemberReactor: Reactor, Stepper {
         )
         self.clubID = clubID
     }
-    
+
 }
 
 // MARK: - Mutate
@@ -106,7 +106,7 @@ extension ClubMemberReactor {
 extension ClubMemberReactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
-        
+
         switch mutation {
         case let .setClubIsOpened(isOpened):
             newState.isOpened = isOpened
@@ -119,7 +119,7 @@ extension ClubMemberReactor {
         case let .setIsLoading(load):
             newState.isLoading = load
         }
-        
+
         return newState
     }
 }

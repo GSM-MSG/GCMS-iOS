@@ -1,7 +1,6 @@
 import Swinject
 import Service
 
-
 final class ReactorAssembly: Assembly {
     func assemble(container: Container) {
         container.register(OnBoardingReactor.self) { r in
@@ -9,13 +8,13 @@ final class ReactorAssembly: Assembly {
                 loginUseCase: r.resolve(LoginUseCase.self)!
             )
         }
-        
+
         container.register(HomeReactor.self) { r in
              HomeReactor(
                 fetchClubListsUseCase: r.resolve(FetchClubListUseCase.self)!
             )
         }
-        
+
         container.register(DetailClubReactor.self) { (r: Resolver, clubID: Int) in
              DetailClubReactor(
                 clubID: clubID,
@@ -28,7 +27,7 @@ final class ReactorAssembly: Assembly {
                 clubCloseUseCase: r.resolve(ClubCloseUseCase.self)!
             )
         }
-        
+
         container.register(MyPageReactor.self) { r in
              MyPageReactor(
                 logoutUseCase: r.resolve(LogoutUseCase.self)!,
@@ -38,7 +37,7 @@ final class ReactorAssembly: Assembly {
                 withdrawalUseCase: r.resolve(WithdrawalUseCase.self)!
             )
         }
-        
+
         container.register(NewClubReactor.self) { r, isUpdate, clubID in
              NewClubReactor(
                 isUpdate: isUpdate,
@@ -49,7 +48,7 @@ final class ReactorAssembly: Assembly {
                 uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!
             )
         }
-        
+
         container.register(MemberAppendReactor.self) { r, closure, clubType in
              MemberAppendReactor(
                 closure: closure,
@@ -57,7 +56,7 @@ final class ReactorAssembly: Assembly {
                 searchUserUseCase: r.resolve(SearchUserUseCase.self)!
             )
         }
-        
+
         container.register(ClubMemberReactor.self) { r, clubID, isOpened in
             ClubMemberReactor(
                 clubID: clubID,

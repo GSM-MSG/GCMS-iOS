@@ -4,32 +4,32 @@ import RxSwift
 import UIKit
 import Service
 
-struct MainStepper: Stepper{
+struct MainStepper: Stepper {
     let steps: PublishRelay<Step> = .init()
-    
-    var initialStep: Step{
+
+    var initialStep: Step {
         return GCMSStep.clubListIsRequired
     }
 }
 
-final class MainFlow: Flow{
+final class MainFlow: Flow {
     // MARK: - Properties
-    var root: Presentable{
+    var root: Presentable {
         return self.rootVC
     }
-    
+
     let stepper: MainStepper = .init()
     private let rootVC = UINavigationController()
-    
+
     // MARK: - Init
     deinit {
         print("\(type(of: self)): \(#function)")
     }
-    
+
     // MARK: - Navigate
     func navigate(to step: Step) -> FlowContributors {
         guard let step = step.asGCMSStep else { return .none }
-        switch step{
+        switch step {
         case .onBoardingIsRequired:
             return .end(forwardToParentFlowWithStep: GCMSStep.onBoardingIsRequired)
         case .clubListIsRequired:
@@ -64,7 +64,7 @@ final class MainFlow: Flow{
 }
 
 // MARK: - Method
-private extension MainFlow{
+private extension MainFlow {
     func coordinateToClubList() -> FlowContributors {
         let vc = AppDelegate.container.resolve(HomeVC.self)!
         self.rootVC.setViewControllers([vc], animated: true)
@@ -115,7 +115,7 @@ private extension MainFlow{
     }
     func presentToFailureAlert(title: String?, message: String?, action: [UIAlertAction] = []) -> FlowContributors {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        if !action.isEmpty{
+        if !action.isEmpty {
             action.forEach(alert.addAction(_:))
         } else {
             alert.addAction(.init(title: "확인", style: .default))

@@ -9,7 +9,7 @@ final class NewClubAppendButton: UIButton {
         self.layer.borderColor = GCMSAsset.Colors.gcmsGray3.color.cgColor
         self.clipsToBounds = true
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

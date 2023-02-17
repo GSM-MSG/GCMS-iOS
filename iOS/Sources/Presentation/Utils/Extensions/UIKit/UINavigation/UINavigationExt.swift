@@ -17,7 +17,7 @@ extension UINavigationItem {
         iv.contentMode = .scaleAspectFit
         self.titleView = iv
     }
-    func configBack(title: String = "돌아가기"){
+    func configBack(title: String = "돌아가기") {
         let back = UIBarButtonItem(title: title, style: .plain, target: nil, action: nil)
         back.tintColor = GCMSAsset.Colors.gcmsGray1.color
         self.backBarButtonItem = back

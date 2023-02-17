@@ -20,7 +20,7 @@ final class StudentCell: BaseTableViewCell<User> {
         $0.axis = .vertical
         $0.spacing = 0
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         model = nil

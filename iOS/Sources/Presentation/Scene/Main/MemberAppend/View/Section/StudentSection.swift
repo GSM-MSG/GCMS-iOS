@@ -7,7 +7,7 @@ struct StudentSection: SectionModelType {
 
 extension StudentSection {
     typealias Item = User
-    
+
     init(original: StudentSection, items: [User]) {
         self = original
         self.items = items

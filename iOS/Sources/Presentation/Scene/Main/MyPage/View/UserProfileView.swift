@@ -47,7 +47,7 @@ final class UserProfileView: UIView {
         $0.tintColor = .black
     }
     private let disposeBag = DisposeBag()
-    
+
     // MARK: - Init
     init() {
         super.init(frame: .zero)
@@ -56,11 +56,11 @@ final class UserProfileView: UIView {
         configureUI()
         bindView()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Method
     public func setUser(_ user: UserProfile) {
         if let url = user.profileImg, !url.isEmpty {
@@ -120,14 +120,14 @@ private extension UserProfileView {
         self.backgroundColor = .white
         self.layer.cornerRadius = 10
     }
-    
+
     func bindView() {
         logoutButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.delegate?.logoutButtonDidTap()
             }
             .disposed(by: disposeBag)
-        
+
         userProfileImageView.rx.tapGesture()
             .when(.recognized)
             .bind(with: self) { owner, _ in

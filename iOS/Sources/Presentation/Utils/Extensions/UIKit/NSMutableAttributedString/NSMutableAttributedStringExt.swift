@@ -6,7 +6,7 @@ extension NSMutableAttributedString {
         self.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: range)
     }
     func setFontForText(textToFind: String, withFont font: UIFont) {
-        let range : NSRange = self.mutableString.range(of: textToFind,options: .caseInsensitive)
+        let range: NSRange = self.mutableString.range(of: textToFind, options: .caseInsensitive)
         self.addAttribute(NSAttributedString.Key.font, value: font, range: range)
     }
 }

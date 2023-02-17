@@ -13,13 +13,13 @@ final class ClubMemberCell: BaseCollectionViewCell<User> {
         $0.font = UIFont(font: GCMSFontFamily.Inter.medium, size: 12)
         $0.textAlignment = .center
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         model = nil
         profileImageView.kf.cancelDownloadTask()
     }
-    
+
     // MARK: - UI
     override func addView() {
         addSubViews(profileImageView, nameLabel)
@@ -35,7 +35,7 @@ final class ClubMemberCell: BaseCollectionViewCell<User> {
             $0.bottom.equalToSuperview()
         }
     }
-    
+
     override func bind(_ model: User) {
         if let url = model.profileImg {
             profileImageView.kf.setImage(with: URL(string: url) ?? .none,
@@ -45,6 +45,6 @@ final class ClubMemberCell: BaseCollectionViewCell<User> {
             profileImageView.image = .init(systemName: "person.crop.circle")
         }
         nameLabel.text = model.name
-        
+
     }
 }
