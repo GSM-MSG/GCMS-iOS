@@ -16,8 +16,7 @@ final class MyPageReactor: Reactor, Stepper {
         case viewDidLoad
         case logoutButtonDidTap
         case updateLoading(Bool)
-        case clubDidTap(Int
-        )
+        case clubDidTap(Int)
         case profileImageDidTap(Data)
         case withdrawalButtonDidTap
     }
