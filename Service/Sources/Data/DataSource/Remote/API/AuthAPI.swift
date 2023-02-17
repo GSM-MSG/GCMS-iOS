@@ -36,7 +36,7 @@ extension AuthAPI: GCMSAPI {
             return .requestParameters(parameters: [
                 "code": req
             ], encoding: JSONEncoding.default)
-            
+
         case .refresh, .logout:
             return .requestPlain
         }
@@ -48,7 +48,7 @@ extension AuthAPI: GCMSAPI {
 
         case .logout:
             return .accessToken
-            
+
         default:
             return JWTTokenType.none
         }
@@ -59,5 +59,5 @@ extension AuthAPI: GCMSAPI {
             return [:]
         }
     }
-    
+
 }

@@ -3,7 +3,7 @@ import Foundation
 struct FetchClubMemberResponse: Decodable {
     let scope: MemberScope
     let clubMember: [MemberResponse]
-    
+
     struct MemberResponse: Decodable {
         let uuid: UUID
         let email: String

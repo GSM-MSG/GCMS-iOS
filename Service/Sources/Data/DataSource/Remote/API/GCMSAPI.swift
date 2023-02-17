@@ -25,9 +25,9 @@ extension GCMSAPI {
     var validationType: ValidationType {
         return .successCodes
     }
-    var headers: [String : String]? {
+    var headers: [String: String]? {
         switch self {
-            
+
         default:
             return ["Content-Type": "application/json"]
         }

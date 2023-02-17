@@ -23,10 +23,10 @@ extension ClubMemberAPI: GCMSAPI {
         switch self {
         case .clubMember:
             return .get
-            
+
         case .userKick:
             return .post
-            
+
         case .delegation:
             return .patch
         }
@@ -36,11 +36,11 @@ extension ClubMemberAPI: GCMSAPI {
         switch self {
         case .clubMember:
             return .requestPlain
-            
-        case let .userKick(_,uuid):
+
+        case let .userKick(_, uuid):
             return .requestParameters(parameters: ["uuid": uuid], encoding: JSONEncoding.default)
-            
-        case let .delegation(_,uuid):
+
+        case let .delegation(_, uuid):
             return .requestParameters(parameters: ["uuid": uuid], encoding: JSONEncoding.default)
         }
     }
@@ -61,7 +61,7 @@ extension ClubMemberAPI: GCMSAPI {
                 404: ClubMemberError.notFoundClub,
                 500: ClubMemberError.serverError
             ]
-            
+
         case .userKick:
             return [
                 400: ClubMemberError.kickMyself,
@@ -70,7 +70,7 @@ extension ClubMemberAPI: GCMSAPI {
                 404: ClubMemberError.notFoundClub,
                 500: ClubMemberError.serverError
             ]
-            
+
         case .delegation:
             return [
                 400: ClubMemberError.delegationMyself,

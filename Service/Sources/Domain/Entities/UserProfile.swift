@@ -11,12 +11,11 @@ public struct UserProfile: Equatable {
         self.profileImg = profileImg
         self.clubs = clubs
     }
-    
-    
+
     public static func == (lhs: UserProfile, rhs: UserProfile) -> Bool {
         return lhs.email == rhs.email
     }
-    
+
     public let uuid: UUID
     public let email: String
     public let name: String
@@ -26,4 +25,3 @@ public struct UserProfile: Equatable {
     public let profileImg: String?
     public let clubs: [ClubList]
 }
-

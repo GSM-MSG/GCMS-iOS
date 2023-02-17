@@ -3,7 +3,7 @@ import RxSwift
 final class ClubRemote: BaseRemote<ClubAPI> {
     static let shared = ClubRemote()
     private override init() {}
-    
+
     func fetchClubList(type: ClubType) -> Single<[ClubList]> {
         request(.clubList(type: type))
             .map([SingleClubListResponse].self)
@@ -21,7 +21,7 @@ final class ClubRemote: BaseRemote<ClubAPI> {
             .asCompletable()
     }
 
-    func updateClub(clubID: Int ,req: UpdateClubRequest) -> Completable {
+    func updateClub(clubID: Int, req: UpdateClubRequest) -> Completable {
         request(.updateClub(clubID: clubID, req: req))
             .asCompletable()
     }

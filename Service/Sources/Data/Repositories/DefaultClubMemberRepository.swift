@@ -3,7 +3,7 @@ import Foundation
 
 final class DefaultClubMemberRepository: ClubMemberRepository {
     private let clubMemberRemote = ClubMemberRemote.shared
-    
+
     func fetchClubMember(clubID: Int) -> Single<(MemberScope, [Member])> {
         clubMemberRemote.fetchClubMember(clubID: clubID)
     }

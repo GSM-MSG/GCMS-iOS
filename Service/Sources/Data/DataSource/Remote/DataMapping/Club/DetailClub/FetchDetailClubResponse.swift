@@ -15,7 +15,7 @@ struct FetchDetailClubResponse: Decodable {
     let member: [UserDTO]
     let scope: MemberScope
     let isApplied: Bool
-    
+
     struct UserDTO: Decodable {
         let uuid: UUID
         let email: String

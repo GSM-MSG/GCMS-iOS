@@ -3,7 +3,7 @@ import RxSwift
 final class DefaultClubRepository: ClubRepository {
     private let clubRemote = ClubRemote.shared
     private let clubLocal = ClubLocal.shared
-    
+
     func fetchClubList(type: ClubType) -> Observable<[ClubList]> {
         OfflineCache<[ClubList]>()
             .localData { self.clubLocal.fetchClubList(type: type) }

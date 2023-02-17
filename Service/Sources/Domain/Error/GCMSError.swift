@@ -2,18 +2,18 @@ import Foundation
 
 public enum GCMSError: Error {
     case error(message: String = "에러가 발생했습니다.", errorBody: [String: Any] = [:])
-    
+
     case noInternet
-    //MARK: - 400
+    // MARK: - 400
     case invalidToken
     case clubTypeError
     case invalidInput
     case noMebmerClub
     case failedAppleLogin
-    
+
     // MARK: - 401
     case unauthorized
-    
+
     // MARK: - 403
     // MARK: Login
     case notGSMAccount
@@ -23,7 +23,7 @@ public enum GCMSError: Error {
     // MARK: User
     case canNotLeaveTheClub
     case notExistUser
-    
+
     // MARK: - 404
     // MARK: Login
     case notFoundInGSMOrEmail
@@ -32,25 +32,25 @@ public enum GCMSError: Error {
     case notFoundUser
     case notFoundInApplyUserOrNotFoundClub
     case notFoundUserOrNotFoundClub
-    
+
     // MARK: - 406
     // MARK: Club
     case notExistInClub
-    
+
     // MARK: - 409
     // MARK: Club
     case alreadyExistClub
     case belongOtherClubOrBelongClub
     case appliedToAnotherClubOrBelongClub
-    
-    //MARK: - 500
+
+    // MARK: - 500
     case serverError
 }
 
 extension GCMSError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case let .error(message, _) :
+        case let .error(message, _):
             return message
         case .invalidToken, .unauthorized, .clubTypeError, .notFoundUser, .notExistUser, .invalidInput, .noMebmerClub, .serverError:
             return "알수없는 에러가 발생했습니다. 잠시 후 다시 시도해 주세요."

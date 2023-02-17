@@ -1,4 +1,3 @@
-
 public enum ClubType: String, Codable, CaseIterable {
     case major = "MAJOR"
     case freedom = "FREEDOM"

@@ -4,7 +4,7 @@ import Foundation
 final class ClubMemberRemote: BaseRemote<ClubMemberAPI> {
     static let shared = ClubMemberRemote()
     private override init() {}
-    
+
     func fetchClubMember(clubID: Int) -> Single<(MemberScope, [Member])> {
         request(.clubMember(clubID: clubID))
             .map(FetchClubMemberResponse.self)

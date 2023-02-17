@@ -3,7 +3,7 @@ import RxSwift
 final class UserRemote: BaseRemote<UserAPI> {
     static let shared = UserRemote()
     private override init() {}
-    
+
     func fetchProfile() -> Single<UserProfile> {
         request(.myProfile)
             .map(FetchMyProfileResponse.self)

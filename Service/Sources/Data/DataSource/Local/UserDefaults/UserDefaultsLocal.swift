@@ -8,7 +8,7 @@ public final class UserDefaultsLocal {
     public static let shared = UserDefaultsLocal()
     private init() {}
     private let preferences = UserDefaults.standard
-    
+
     public var isGuest: Bool {
         get {
             preferences.bool(forKey: forKeys.isGuest)
@@ -26,4 +26,3 @@ public final class UserDefaultsLocal {
         }
     }
 }
-

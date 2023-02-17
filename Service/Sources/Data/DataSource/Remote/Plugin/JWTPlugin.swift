@@ -12,7 +12,7 @@ enum JWTTokenType: String {
 }
 
 final class JWTPlugin: PluginType {
-    
+
     func prepare(
         _ request: URLRequest,
         target: TargetType
@@ -21,14 +21,14 @@ final class JWTPlugin: PluginType {
               let tokenType = authorizable.jwtTokenType,
               tokenType != .none
         else { return request }
-        
+
         var req = request
-        
+
         let token = "Bearer \(getToken(type: tokenType))"
         req.addValue(token, forHTTPHeaderField: tokenType.rawValue)
         return req
     }
-    
+
     func didReceive(
         _ result: Result<Response, MoyaError>,
         target: TargetType
@@ -55,7 +55,7 @@ private extension JWTPlugin {
             return ""
         }
     }
-    
+
     func getAccessToken() -> String {
         do {
             return try KeychainLocal.shared.fetchAccessToken()
@@ -63,7 +63,7 @@ private extension JWTPlugin {
             return ""
         }
     }
-    
+
     func getRefreshToken() -> String {
         do {
             return try KeychainLocal.shared.fetchRefreshToken()
@@ -71,7 +71,7 @@ private extension JWTPlugin {
             return ""
         }
     }
-    
+
     func setToken(token: TokenDTO) {
         KeychainLocal.shared.saveAccessToken(token.accessToken)
         KeychainLocal.shared.saveRefreshToken(token.refreshToken)

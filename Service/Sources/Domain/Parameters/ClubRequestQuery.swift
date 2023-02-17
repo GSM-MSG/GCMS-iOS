@@ -3,7 +3,7 @@ public struct ClubRequestQuery: Encodable {
         self.q = name
         self.type = type
     }
-    
+
     public let q: String
     public let type: ClubType
 }

@@ -1,4 +1,3 @@
-
 public struct ClubList: Equatable {
     public let id: Int
     public let type: ClubType

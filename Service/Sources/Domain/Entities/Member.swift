@@ -11,8 +11,8 @@ public struct Member: Equatable {
         self.scope = scope
         self.profileImg = profileImg
     }
-    
-    public let uuid : UUID
+
+    public let uuid: UUID
     public let email: String
     public let name: String
     public let grade: Int

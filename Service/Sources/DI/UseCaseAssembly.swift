@@ -19,7 +19,7 @@ public final class UseCaseAssembly: Assembly {
                 authRepository: r.resolve(AuthRepository.self)!
             )
         }
-        
+
         // MARK: - Club
         container.register(ClubOpenUseCase.self) { r in
              ClubOpenUseCase(
@@ -96,7 +96,7 @@ public final class UseCaseAssembly: Assembly {
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
-        
+
         // MARK: - User
         container.register(FetchProfileUseCase.self) { r in
              FetchProfileUseCase(
@@ -118,7 +118,7 @@ public final class UseCaseAssembly: Assembly {
                 userRepository: r.resolve(UserRepository.self)!
             )
         }
-        
+
         // MARK: - Image
         container.register(UploadImagesUseCase.self) { r in
              UploadImagesUseCase(

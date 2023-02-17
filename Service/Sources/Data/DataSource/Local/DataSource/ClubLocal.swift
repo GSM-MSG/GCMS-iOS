@@ -3,11 +3,11 @@ import Then
 
 final class ClubLocal {
     static let shared = ClubLocal()
-    
+
     private let realm = RealmTask.shared
-    
+
     private init() {}
-    
+
     func fetchClubList(type: ClubType) -> Single<[ClubList]> {
         return realm.fetchObjects(
             for: ClubListRealmEntity.self,
@@ -16,7 +16,7 @@ final class ClubLocal {
             })
         ).map { $0.map { $0.toDomain() } }
     }
-    
+
     func saveClubList(clubList: [ClubList]) {
         let list = clubList.map { club in
             ClubListRealmEntity().then {
@@ -25,7 +25,7 @@ final class ClubLocal {
         }
         realm.set(list)
     }
-    
+
     func deleteClubList() {
         let list = realm.fetchObjectsResults(for: ClubListRealmEntity.self).toArray()
         realm.delete(list)

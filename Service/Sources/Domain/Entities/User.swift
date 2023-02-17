@@ -10,11 +10,11 @@ public struct User: Equatable {
         self.number = number
         self.profileImg = profileImg
     }
-    
+
     public static func == (lhs: User, rhs: User) -> Bool {
         return lhs.email == rhs.email
     }
-    
+
     public let uuid: UUID
     public let email: String
     public let name: String

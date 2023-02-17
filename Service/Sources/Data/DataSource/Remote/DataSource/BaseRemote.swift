@@ -13,7 +13,7 @@ class BaseRemote<API: GCMSAPI> {
     #else
     private let provider = MoyaProvider<API>(plugins: [JWTPlugin()])
     #endif
-    
+
     func request(_ api: API) -> Single<Response> {
         return .create { single in
             var disposables: [Disposable] = []
@@ -45,7 +45,7 @@ private extension BaseRemote {
             .request(api)
             .timeout(.seconds(120), scheduler: MainScheduler.asyncInstance)
             .catch { error in
-                if !(NetworkReachabilityManager(host: "http://3.36.15.183:4000")?.isReachable ?? false) == false{
+                if !(NetworkReachabilityManager(host: "http://3.36.15.183:4000")?.isReachable ?? false) == false {
                     return .error(GCMSError.noInternet)
                 }
                 guard let code = (error as? MoyaError)?.response?.statusCode else {
@@ -58,7 +58,7 @@ private extension BaseRemote {
                 return .error(api.errorMapper?[code] ?? GCMSError.error(message: (try? (error as? MoyaError)?.response?.mapJSON() as? NSDictionary)?["message"] as? String ?? "", errorBody: [:]))
             }
     }
-    
+
     func requestWithAccessToken(_ api: API) -> Single<Response> {
         return .deferred {
             do {
@@ -84,7 +84,7 @@ private extension BaseRemote {
                 }
         })
     }
-    
+
     func isApiNeedsAccessToken(_ api: API) -> Bool {
         return api.jwtTokenType == .accessToken
     }
