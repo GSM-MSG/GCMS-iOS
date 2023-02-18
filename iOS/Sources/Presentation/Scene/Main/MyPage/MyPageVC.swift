@@ -49,13 +49,13 @@ final class MyPageVC: BaseVC<MyPageReactor> {
         config.selectionLimit = 1
         return config
     }()
-    private lazy var PHPickerController = PHPickerViewController(configuration: PHConfiguration)
+    private lazy var phPickerController = PHPickerViewController(configuration: PHConfiguration)
     private let withdrawalButton = UIBarButtonItem(image: .init(systemName: "gearshape.fill")?.tintColor(.white), style: .plain, target: nil, action: nil)
 
     // MARK: - UI
     override func setup() {
         userProfileView.delegate = self
-        PHPickerController.delegate = self
+        phPickerController.delegate = self
     }
     override func addView() {
         view.addSubViews(scrollView)
@@ -206,7 +206,7 @@ extension MyPageVC: UserProfileViewDelegate {
         reactor?.action.onNext(.logoutButtonDidTap)
     }
     func profileImageButtonDidTap() {
-        self.present(PHPickerController, animated: true)
+        self.present(phPickerController, animated: true)
     }
 }
 
