@@ -264,7 +264,7 @@ private extension DetailClubReactor {
     }
     func clubCancel() -> Observable<Mutation> {
         self.steps.accept(GCMSStep.alert(title: "신청 취소하기", message: "정말 신청을 취소하실건가요?", style: .alert, actions: [
-            .init(title: "취소", style: .default, handler: { [weak self] _ in
+            .init(title: "신청 취소", style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
                 self.clubCancelUseCase.execute(clubID: self.clubID)
                     .andThen(Observable.just(()))

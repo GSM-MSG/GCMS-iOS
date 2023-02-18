@@ -103,16 +103,19 @@ private extension MyPageReactor {
         return .concat([start, task])
     }
     func logoutButtonDidTap() {
-        logoutUseCase.execute()
-            .subscribe(with: self, onCompleted: { owner in
-                owner.steps.accept(GCMSStep.alert(title: "로그아웃 하시겠습니까?", message: nil, style: .alert, actions: [
-                    .init(title: "확인", style: .default, handler: { _ in
+        steps.accept(GCMSStep.alert(title: "로그아웃하시겠습니까?", message: nil, style: .alert, actions: [
+            .init(title: "확인", style: .default) { [weak self] _ in
+                guard let self = self else { return }
+                self.logoutUseCase.execute()
+                    .subscribe(with: self, onCompleted: { owner in
                         owner.steps.accept(GCMSStep.onBoardingIsRequired)
-                    }),
-                    .init(title: "취소", style: .cancel)
-                ]))
-            })
-            .disposed(by: disposeBag)
+                    }, onError: { owner, error in
+                        owner.steps.accept(GCMSStep.failureAlert(title: "실패", message: error.localizedDescription))
+                    })
+                    .disposed(by: self.disposeBag)
+            },
+            .init(title: "취소", style: .cancel)
+        ]))
     }
     func profileChange(data: Data) -> Observable<Mutation> {
         let start = Observable.just(Mutation.setIsLoading(true))

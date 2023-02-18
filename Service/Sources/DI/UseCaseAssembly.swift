@@ -61,6 +61,11 @@ public final class UseCaseAssembly: Assembly {
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
+        container.register(ExitClubUseCase.self) { r in
+            ExitClubUseCase(
+                clubRepository: r.resolve(ClubRepository.self)!
+            )
+        }
         container.register(UserAcceptUseCase.self) { r in
              UserAcceptUseCase(
                 clubApplicantRepository: r.resolve(ClubApplicantRepository.self)!

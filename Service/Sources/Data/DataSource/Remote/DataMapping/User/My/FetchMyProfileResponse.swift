@@ -14,7 +14,6 @@ struct FetchMyProfileResponse: Decodable {
         let id: Int
         let type: ClubType
         let name: String
-        let content: String
         let bannerImg: String
     }
 }
@@ -40,7 +39,7 @@ extension FetchMyProfileResponse.ClubListResponse {
             id: id,
             type: type,
             name: name,
-            content: content,
+            content: "",
             bannerImg: bannerImg
         )
     }

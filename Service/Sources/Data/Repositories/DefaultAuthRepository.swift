@@ -15,11 +15,14 @@ final class DefaultAuthRepository: AuthRepository {
     }
 
     func logout() -> Completable {
-        keychainLocal.deleteAccessToken()
-        keychainLocal.deleteRefreshToken()
-        keychainLocal.deleteAccessExp()
-        keychainLocal.deleteRefreshExp()
         return authRemote.logout()
+            .do(onCompleted: { [weak self] in
+                guard let self = self else { return }
+                self.keychainLocal.deleteAccessToken()
+                self.keychainLocal.deleteRefreshToken()
+                self.keychainLocal.deleteAccessExp()
+                self.keychainLocal.deleteRefreshExp()
+            })
     }
 }
 
