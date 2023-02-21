@@ -94,6 +94,7 @@ private extension BaseRemote {
     func checkTokenIsValid() throws -> Bool {
         do {
             let expired = try KeychainLocal.shared.fetchAccessExp().toDateWithISO8601()
+            print(Date(), expired)
             return Date() < expired
         } catch {
             throw TokenError.noData

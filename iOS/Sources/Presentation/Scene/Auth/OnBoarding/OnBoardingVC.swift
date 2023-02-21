@@ -57,7 +57,7 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
                 .centerX(.toSuperview())
 
             tosStackView.layout
-                .bottom(.to(view).bottom, .equal(-24))
+                .bottom(.to(view.safeAreaLayoutGuide).bottom, .equal(-24))
                 .centerX(.toSuperview())
 
             gauthSigninButton.layout
