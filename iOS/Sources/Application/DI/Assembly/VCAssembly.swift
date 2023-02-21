@@ -20,17 +20,5 @@ final class VCAssembly: Assembly {
         container.register(MyPageVC.self) { r in
             MyPageVC(reactor: r.resolve(MyPageReactor.self))
         }
-
-        container.register(FirstNewClubVC.self) { r in
-            FirstNewClubVC(reactor: r.resolve(NewClubReactor.self))
-        }
-
-        container.register(SecondNewClubVC.self) { _, reactor in
-            SecondNewClubVC(reactor: reactor)
-        }
-
-        container.register(ThirdNewClubVC.self) { _, reactor in
-            ThirdNewClubVC(reactor: reactor)
-        }
     }
 }

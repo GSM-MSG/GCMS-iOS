@@ -151,8 +151,8 @@ private extension DetailClubReactor {
         }))
         if isHead {
             actions.append(.init(title: "동아리 수정하기", style: .default, handler: { [weak self] _ in
-                guard let self = self else { return }
-                self.steps.accept(GCMSStep.firstNewClubIsRequired(isUpdate: true, clubID: self.clubID))
+                guard let self = self, let club = self.currentState.clubDetail else { return }
+                self.steps.accept(GCMSStep.firstUpdateClubIsRequired(club: club))
             }))
         }
         actions.append(.init(title: title, style: .destructive, handler: { [weak self] _ in

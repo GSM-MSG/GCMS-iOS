@@ -53,6 +53,11 @@ final class MainFlow: Flow {
             return navigateToSecondNewClub(reactor: reactor)
         case let .thirdNewClubIsRequired(reactor):
             return navigateToThirdNewClub(reactor: reactor)
+        // MARK: UpdateClub
+        case let .firstUpdateClubIsRequired(club):
+            return navigateToFirstUpdateClub(club: club)
+        case let .secondUpdateClubIsRequired(reactor):
+            return navigateToSecondUpdateClub(reactor: reactor)
         case let .failureAlert(title, message, action):
             return presentToFailureAlert(title: title, message: message, action: action)
         case let .clubStatusIsRequired(clubID, isHead, isOpened):
@@ -98,20 +103,31 @@ private extension MainFlow {
         return .none
     }
     func navigateToFirstNewClub() -> FlowContributors {
-        let reactor = AppDelegate.container.resolve(NewClubReactor.self, arguments: false, Optional<Int>.none)!
+        let reactor = AppDelegate.container.resolve(NewClubReactor.self)!
         let vc = FirstNewClubVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
-    func navigateToSecondNewClub(reactor: NewClubReactor?) -> FlowContributors {
-        let vc = AppDelegate.container.resolve(SecondNewClubVC.self, argument: reactor)!
+    func navigateToSecondNewClub(reactor: NewClubReactor) -> FlowContributors {
+        let vc = SecondNewClubVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
-    func navigateToThirdNewClub(reactor: NewClubReactor?) -> FlowContributors {
-        let vc = AppDelegate.container.resolve(ThirdNewClubVC.self, argument: reactor)!
+    func navigateToThirdNewClub(reactor: NewClubReactor) -> FlowContributors {
+        let vc = ThirdNewClubVC(reactor: reactor)
         self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor!))
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
+    }
+    func navigateToFirstUpdateClub(club: Club) -> FlowContributors {
+        let reactor = AppDelegate.container.resolve(UpdateClubReactor.self, argument: club)!
+        let vc = FirstUpdateClubVC(reactor: reactor)
+        self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
+    }
+    func navigateToSecondUpdateClub(reactor: UpdateClubReactor) -> FlowContributors {
+        let vc = SecondUpdateClubVC(reactor: reactor)
+        self.rootVC.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
     func presentToFailureAlert(title: String?, message: String?, action: [UIAlertAction] = []) -> FlowContributors {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)

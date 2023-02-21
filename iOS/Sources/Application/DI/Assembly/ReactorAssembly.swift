@@ -38,13 +38,18 @@ final class ReactorAssembly: Assembly {
             )
         }
 
-        container.register(NewClubReactor.self) { r, isUpdate, clubID in
+        container.register(NewClubReactor.self) { r in
              NewClubReactor(
-                isUpdate: isUpdate,
-                clubID: clubID,
                 createNewClubUseCase: r.resolve(CreateNewClubUseCase.self)!,
+                uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!
+            )
+        }
+
+        container.register(UpdateClubReactor.self) { r, club in
+            UpdateClubReactor(
+                club: club,
                 fetchDetailClubUseCase: r.resolve(FetchDetailClubUseCase.self)!,
-                updateNewClubUseCase: r.resolve(UpdateClubUseCase.self)!,
+                updateClubUseCase: r.resolve(UpdateClubUseCase.self)!,
                 uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!
             )
         }

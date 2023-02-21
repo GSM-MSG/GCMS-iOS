@@ -53,11 +53,6 @@ final class FirstNewClubVC: BaseVC<NewClubReactor> {
 
     // MARK: - Reactor
     override func bindView(reactor: NewClubReactor) {
-        self.rx.viewDidLoad
-            .map { Reactor.Action.viewDidLoad }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
         majorButton.rx.tap
             .map { Reactor.Action.clubTypeDidTap(.major) }
             .bind(to: reactor.action)
