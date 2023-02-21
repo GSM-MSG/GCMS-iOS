@@ -84,7 +84,7 @@ final class UpdateClubReactor: Reactor, Stepper {
             notionLink: club.notionLink,
             contact: club.contact,
             activityImgs: [],
-            members: [],
+            members: club.member,
             clubType: club.type,
             isBanner: false,
             isLoading: false
