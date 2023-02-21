@@ -38,10 +38,14 @@ extension ClubMemberAPI: GCMSAPI {
             return .requestPlain
 
         case let .userKick(_, uuid):
-            return .requestParameters(parameters: ["uuid": uuid], encoding: JSONEncoding.default)
+            return .requestParameters(parameters: [
+                "uuid": "\(uuid)"
+            ], encoding: JSONEncoding.default)
 
         case let .delegation(_, uuid):
-            return .requestParameters(parameters: ["uuid": uuid], encoding: JSONEncoding.default)
+            return .requestParameters(parameters: [
+                "uuid": "\(uuid)"
+            ], encoding: JSONEncoding.default)
         }
     }
 

@@ -5,6 +5,7 @@ import AuthenticationServices
 import RxSwift
 import ViewAnimator
 import GAuthSignin
+import MSGLayout
 
 final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     // MARK: - Properties
@@ -18,11 +19,9 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     private let logoImageView = UIImageView().then {
         $0.image = GCMSAsset.Images.gcmsgLogo.image.withRenderingMode(.alwaysOriginal)
     }
-    private let appleSigninButton = ASAuthorizationAppleIDButton(type: .continue, style: .white)
-    private let guestSigninButton = UIButton().then {
-        $0.setTitle("게스트로 로그인하기", for: .normal)
-        $0.setTitleColor(GCMSAsset.Colors.gcmsGray4.color, for: .normal)
-        $0.titleLabel?.font = .systemFont(ofSize: 16)
+    private let tosStackView = UIStackView().then {
+        $0.spacing = 10
+        $0.axis = .horizontal
     }
     private let termsOfServiceButton = UIButton().then {
         $0.setTitle("서비스 이용약관", for: .normal)
@@ -43,42 +42,31 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
 
     // MARK: - UI
     override func addView() {
-        view.addSubViews(headerLabel, logoImageView, appleSigninButton, guestSigninButton, termsOfServiceButton, betweenButtonView, privacyButton, gauthSigninButton)
+        view.addSubViews(headerLabel, logoImageView, tosStackView, gauthSigninButton)
+        tosStackView.addArrangeSubviews(termsOfServiceButton, betweenButtonView, privacyButton)
     }
     override func setLayout() {
-        logoImageView.snp.makeConstraints {
-            $0.centerX.equalToSuperview().offset(-10)
-            $0.top.equalToSuperview().offset(bound.height*0.1439)
-            $0.size.equalTo(144)
-        }
-        headerLabel.snp.makeConstraints {
-            $0.top.equalTo(logoImageView.snp.bottom).offset(16)
-            $0.centerX.equalToSuperview()
-        }
-        appleSigninButton.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.height.equalTo(51)
-            $0.bottom.equalToSuperview().offset(-bound.height*0.074)
-            $0.leading.trailing.equalToSuperview().inset(15)
-        }
-        guestSigninButton.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(appleSigninButton.snp.bottom).offset(7.5)
-        }
-        privacyButton.snp.makeConstraints {
-            $0.bottom.equalTo(termsOfServiceButton.snp.bottom)
-            $0.leading.equalTo(view.snp.centerX).offset(8)
-        }
-        betweenButtonView.snp.makeConstraints {
-            $0.bottom.equalTo(termsOfServiceButton.snp.bottom).offset(-5)
-            $0.centerX.equalToSuperview()
-            $0.width.equalTo(2)
-            $0.height.equalTo(16)
-        }
-        gauthSigninButton.snp.makeConstraints {
-            $0.bottom.equalTo(appleSigninButton.snp.top).offset(-24)
-            $0.leading.trailing.equalToSuperview().inset(16)
-            $0.height.equalTo(50)
+        MSGLayout.buildLayout {
+            logoImageView.layout
+                .centerX(.toSuperview(), .equal(-10))
+                .top(.toSuperview(), .equal(bound.height * 0.1439))
+                .size(144)
+
+            headerLabel.layout
+                .top(.to(logoImageView).bottom, .equal(16))
+                .centerX(.toSuperview())
+
+            tosStackView.layout
+                .bottom(.to(view).bottom, .equal(-24))
+                .centerX(.toSuperview())
+
+            gauthSigninButton.layout
+                .bottom(.to(tosStackView).top, .equal(-8))
+                .horizontal(.toSuperview(), .equal(16))
+                .height(50)
+
+            betweenButtonView.layout
+                .size(width: .equal(2), height: .equal(16))
         }
     }
     override func setup() {
@@ -102,14 +90,10 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             AnimationType.from(direction: .top, offset: 100)
         ], initialAlpha: 0, finalAlpha: 1, delay: 0.3, duration: 1.25)
         UIView.animate(views: [
-            gauthSigninButton, appleSigninButton, termsOfServiceButton, privacyButton, betweenButtonView
+            gauthSigninButton, termsOfServiceButton, privacyButton, betweenButtonView
         ], animations: [
             AnimationType.from(direction: .left, offset: 200)
         ], delay: 1.8, duration: 1, usingSpringWithDamping: 1, initialSpringVelocity: 0.7, options: .curveEaseInOut)
-        UIView.animate(views: [
-            guestSigninButton
-        ], animations: [
-        ], initialAlpha: 0, finalAlpha: 1, delay: 2.6)
     }
 
     // MARK: - Reactor
@@ -125,17 +109,6 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
     }
 
     override func bindView(reactor: OnBoardingReactor) {
-        appleSigninButton.rx.controlEvent(.touchUpInside)
-            .bind(with: self) { owner, _ in
-                owner.appleSigninMessage()
-            }
-            .disposed(by: disposeBag)
-
-        guestSigninButton.rx.tap
-            .map { Reactor.Action.guestSigninButtonDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
         termsOfServiceButton.rx.tap
             .map { Reactor.Action.termsOfServiceButtonDidTap }
             .bind(to: reactor.action)
@@ -145,44 +118,5 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
             .map { Reactor.Action.privacyButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-    }
-}
-
-private extension OnBoardingVC {
-    func appleSigninMessage() {
-        self.reactor?.steps.accept(GCMSStep.alert(title: nil, message: "Apple로 로그인 시 게스트 로그인과 동일시 됩니다", style: .alert, actions: [
-            .init(title: "확인", style: .default, handler: { [weak self] _ in
-                self?.appleSignin()
-            }),
-            .init(title: "취소", style: .cancel)
-        ]))
-    }
-    func appleSignin() {
-        let provider = ASAuthorizationAppleIDProvider()
-        let req = provider.createRequest()
-        req.requestedScopes = []
-
-        let authController = ASAuthorizationController(authorizationRequests: [req])
-        authController.delegate = self
-        authController.presentationContextProvider = self
-        authController.performRequests()
-    }
-}
-
-extension OnBoardingVC: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
-    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        self.view.window ?? .init()
-    }
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        if let cred = authorization.credential as? ASAuthorizationAppleIDCredential {
-            let idToken = String(data: cred.identityToken ?? .init(), encoding: .utf8) ?? .init()
-            let code = String(data: cred.authorizationCode ?? .init(), encoding: .utf8) ?? .init()
-            self.reactor?.action.onNext(.appleIdTokenReceived(idToken: idToken, code: code))
-        } else {
-            self.reactor?.action.onNext(.appleSigninCompleted)
-        }
-    }
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        self.reactor?.action.onNext(.signinFailed(message: error.asGCMSError?.localizedDescription))
     }
 }

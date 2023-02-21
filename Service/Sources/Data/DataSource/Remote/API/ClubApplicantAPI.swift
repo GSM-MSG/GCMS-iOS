@@ -41,10 +41,14 @@ extension ClubApplicantAPI: GCMSAPI {
             return .requestPlain
 
         case let .userAccept(_, uuid):
-            return .requestParameters(parameters: ["uuid": uuid], encoding: JSONEncoding.default)
+            return .requestParameters(parameters: [
+                "uuid": "\(uuid)"
+            ], encoding: JSONEncoding.default)
 
         case let .userReject(_, uuid):
-            return .requestParameters(parameters: ["uuid": uuid], encoding: JSONEncoding.default)
+            return .requestParameters(parameters: [
+                "uuid": "\(uuid)"
+            ], encoding: JSONEncoding.default)
         }
     }
 

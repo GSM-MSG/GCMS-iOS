@@ -1,7 +1,7 @@
 import Foundation
 
 struct FetchClubApplicantResponse: Decodable {
-    let userScope: MemberScope
+    let scope: MemberScope
     let applicantList: [ApplicantResponse]
 
     struct ApplicantResponse: Decodable {
@@ -32,7 +32,7 @@ extension FetchClubApplicantResponse.ApplicantResponse {
 extension FetchClubApplicantResponse {
     func toDomain() -> (MemberScope, [User]) {
         (
-            userScope,
+            scope,
             applicantList
                 .map { $0.toDomain() }
         )

@@ -17,10 +17,7 @@ final class OnBoardingReactor: Reactor, Stepper {
     // MARK: - Reactor
     enum Action {
         case gauthSigninCompleted(code: String)
-        case appleSigninCompleted
-        case appleIdTokenReceived(idToken: String, code: String)
         case signinFailed(message: String?)
-        case guestSigninButtonDidTap
         case termsOfServiceButtonDidTap
         case privacyButtonDidTap
     }
@@ -50,16 +47,12 @@ extension OnBoardingReactor {
         switch action {
         case let .gauthSigninCompleted(code):
             return gauthSigninCompleted(code: code)
-        case .appleSigninCompleted, .guestSigninButtonDidTap:
-            return appleSigninCompleted()
         case let .signinFailed(message):
             return signinFailed(message: message)
         case .termsOfServiceButtonDidTap:
             UIApplication.shared.open(URL(string: "https://shy-trust-424.notion.site/f4b4084f6235444bbcc164f7c5d86fb2") ?? .init(string: "https://www.google.com")!)
         case .privacyButtonDidTap:
             UIApplication.shared.open(URL(string: "https://shy-trust-424.notion.site/252fc57341834617b7d3c1903286c730") ?? .init(string: "https://www.google.com")!)
-        case let .appleIdTokenReceived(token, code):
-            return appleTokenReceived(idToken: token, code: code)
         }
         return .empty()
     }
@@ -89,16 +82,8 @@ private extension OnBoardingReactor {
             .disposed(by: disposeBag)
         return .empty()
     }
-    func appleSigninCompleted() -> Observable<Mutation> {
-        UserDefaultsLocal.shared.isGuest = true
-        steps.accept(GCMSStep.clubListIsRequired)
-        return .empty()
-    }
     func signinFailed(message: String? = "로그인을 실패하였습니다") -> Observable<Mutation> {
         self.steps.accept(GCMSStep.failureAlert(title: nil, message: message))
-        return .empty()
-    }
-    func appleTokenReceived(idToken: String, code: String) -> Observable<Mutation> {
         return .empty()
     }
 }
