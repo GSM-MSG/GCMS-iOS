@@ -203,7 +203,7 @@ final class ThirdNewClubVC: BaseVC<NewClubReactor> {
         sharedState
             .map(\.bannerImg)
             .compactMap { $0 }
-            .map { UIImage(data: $0) }
+            .compactMap { UIImage(data: $0) }
             .bind(to: bannerImageView.rx.image)
             .disposed(by: disposeBag)
 
