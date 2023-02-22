@@ -15,7 +15,6 @@ final class UpdateSteppedProgressBar: UIView {
         [firstStepView, secondStepView][selectedIndex].isSelected = true
         addView()
         setLayout()
-        configureView()
     }
     
     required init?(coder: NSCoder) {
@@ -43,8 +42,5 @@ private extension UpdateSteppedProgressBar {
             $0.centerY.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
         }
-    }
-    func configureView() {
-        
     }
 }
