@@ -71,7 +71,7 @@ extension ClubMemberAPI: GCMSAPI {
                 400: ClubMemberError.kickMyself,
                 401: ClubMemberError.unauthorized,
                 403: ClubMemberError.notClubHead,
-                404: ClubMemberError.notFoundClub,
+                404: ClubMemberError.notFoundClubOrKickUser,
                 500: ClubMemberError.serverError
             ]
 

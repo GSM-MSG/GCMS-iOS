@@ -72,7 +72,7 @@ extension ClubApplicantAPI: GCMSAPI {
         case .apply:
             return[
                 401: ClubApplicantError.unauthorized,
-                403: ClubApplicantError.alreadyClubMember,
+                403: ClubApplicantError.alreadyClubMemberOrSameTypeClub,
                 404: ClubApplicantError.notFoundClub,
                 500: ClubApplicantError.serverError
             ]
@@ -89,7 +89,7 @@ extension ClubApplicantAPI: GCMSAPI {
                 400: ClubApplicantError.bodyIsNull,
                 401: ClubApplicantError.unauthorized,
                 403: ClubApplicantError.notClubHead,
-                404: ClubApplicantError.notFoundAcceptUser,
+                404: ClubApplicantError.notFoundAcceptUserOrClub,
                 500: ClubApplicantError.serverError
             ]
 
@@ -98,7 +98,7 @@ extension ClubApplicantAPI: GCMSAPI {
                 400: ClubApplicantError.bodyIsNull,
                 401: ClubApplicantError.unauthorized,
                 403: ClubApplicantError.notClubHead,
-                404: ClubApplicantError.notFoundRejectUser,
+                404: ClubApplicantError.notFoundRejectUserOrClub,
                 500: ClubApplicantError.serverError
             ]
         }

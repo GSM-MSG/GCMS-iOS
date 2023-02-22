@@ -17,6 +17,7 @@ public enum ClubMemberError: Error {
     // MARK: - 404
     case notFoundClub
     case notFoundKickUser
+    case notFoundClubOrKickUser
 
     // MARK: - 500
     case serverError
@@ -47,9 +48,9 @@ extension ClubMemberError: LocalizedError {
         // MARK: - 404
         case .notFoundClub:
             return "동아리를 찾을 수 없습니다"
-
-        case .notFoundKickUser:
-            return "방출하려는 유저를 찾을 수 없습니다"
+            
+        case .notFoundClubOrKickUser
+            return "동아리를 찾을 수 없거나 방출하려는 유저를 찾을 수 없습니다."
         }
     }
 }
