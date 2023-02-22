@@ -1,7 +1,8 @@
 import Foundation
 
 public struct UpdateClubRequest: Encodable {
-    public init(name: String, content: String, bannerImg: String, contact: String, notionLink: String, teacher: String?, activityImgs: [String], member: [UUID]) {
+    public init(type: ClubType, name: String, content: String, bannerImg: String, contact: String, notionLink: String, teacher: String?, activityImgs: [String], member: [UUID]) {
+        self.type = type
         self.name = name
         self.content = content
         self.bannerImg = bannerImg
@@ -12,6 +13,7 @@ public struct UpdateClubRequest: Encodable {
         self.member = member
     }
 
+    public let type: ClubType
     public let name: String
     public let content: String
     public let bannerImg: String

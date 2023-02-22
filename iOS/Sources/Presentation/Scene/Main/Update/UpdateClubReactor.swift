@@ -84,7 +84,7 @@ final class UpdateClubReactor: Reactor, Stepper {
             notionLink: club.notionLink,
             contact: club.contact,
             activityImgs: [],
-            members: [],
+            members: club.member,
             clubType: club.type,
             isBanner: false,
             isLoading: false
@@ -283,6 +283,7 @@ private extension UpdateClubReactor {
                 let completable = owner.updateClubUseCase.execute(
                     clubID: owner.club.clubID,
                     req: .init(
+                        type: state.clubType,
                         name: state.name,
                         content: state.content,
                         bannerImg: urls.0,
