@@ -283,7 +283,6 @@ private extension UpdateClubReactor {
                 let completable = owner.updateClubUseCase.execute(
                     clubID: owner.club.clubID,
                     req: .init(
-                        type: state.clubType,
                         name: state.name,
                         content: state.content,
                         bannerImg: urls.0,
