@@ -66,8 +66,26 @@ extension UserAPI: GCMSAPI {
 
     var errorMapper: [Int: Error]? {
         switch self {
-        case .myProfile, .editProfile, .search, .miniProfile:
-            return [:]
+        case .myProfile, .miniProfile:
+            return [
+                401: GCMSError.unauthorized,
+                404: GCMSError.notFoundUser,
+                500: GCMSError.serverError
+            ]
+            
+        case .editProfile:
+            return [
+                400: GCMSError.invalidInput,
+                401: GCMSError.unauthorized,
+                404: GCMSError.notFoundUser,
+                500: GCMSError.serverError
+            ]
+            
+        case .search:
+            return [
+                401: GCMSError.unauthorized,
+                500: GCMSError.serverError
+            ]
 
         case .withdrawal:
             return [

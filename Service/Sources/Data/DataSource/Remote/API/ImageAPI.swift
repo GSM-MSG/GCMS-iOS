@@ -50,6 +50,12 @@ extension ImageAPI: GCMSAPI {
     }
 
     var errorMapper: [Int: Error]? {
-        return .none
+        switch self {
+        case .uploadImages:
+            return[
+                400: GCMSError.overFourPhoto,
+                500: GCMSError.photoUploadFailed
+            ]
+        }
     }
 }
