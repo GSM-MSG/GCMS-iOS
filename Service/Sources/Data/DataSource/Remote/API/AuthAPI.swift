@@ -55,8 +55,23 @@ extension AuthAPI: GCMSAPI {
     }
     var errorMapper: [Int: Error]? {
         switch self {
-        case .login, .refresh, .logout:
-            return [:]
+        case .login:
+            return [
+                500: GCMSError.serverError
+            ]
+            
+        case .refresh:
+            return [
+                404: GCMSError.notFoundUser,
+                500: GCMSError.serverError
+            ]
+            
+        case .logout:
+            return [
+                401: GCMSError.unauthorized,
+                404: GCMSError.notFoundUser,
+                500: GCMSError.serverError
+            ]
         }
     }
 
