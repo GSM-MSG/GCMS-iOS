@@ -6,8 +6,6 @@ import AVFoundation
 import Alamofire
 
 class BaseRemote<API: GCMSAPI> {
-    public var testStatus = false
-    public var successStatus = true
     #if DEBUG
     private let provider = MoyaProvider<API>(plugins: [JWTPlugin(), GCMSLoggingPlugin()])
     #else
@@ -48,7 +46,7 @@ private extension BaseRemote {
                 guard let host = Bundle.module.object(forInfoDictionaryKey: "BASE_URL") as? String else {
                     return .error(GCMSError.noInternet)
                 }
-                if !(NetworkReachabilityManager(host: host)?.isReachable ?? false) == false {
+                if (NetworkReachabilityManager(host: host)?.isReachable ?? false) == false {
                     return .error(GCMSError.noInternet)
                 }
                 guard let code = (error as? MoyaError)?.response?.statusCode else {
