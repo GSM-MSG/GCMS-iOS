@@ -50,9 +50,9 @@ extension OnBoardingReactor {
         case let .signinFailed(message):
             return signinFailed(message: message)
         case .termsOfServiceButtonDidTap:
-            UIApplication.shared.open(URL(string: "https://shy-trust-424.notion.site/f4b4084f6235444bbcc164f7c5d86fb2") ?? .init(string: "https://www.google.com")!)
+            UIApplication.shared.open(URL(string: "https://matsogeum.notion.site/0f7c494b26114da098d0c8ea50bb5588") ?? .init(string: "https://www.google.com")!)
         case .privacyButtonDidTap:
-            UIApplication.shared.open(URL(string: "https://shy-trust-424.notion.site/252fc57341834617b7d3c1903286c730") ?? .init(string: "https://www.google.com")!)
+            UIApplication.shared.open(URL(string: "https://matsogeum.notion.site/db8c0669605e4685b036cc08293aceb7") ?? .init(string: "https://www.google.com")!)
         }
         return .empty()
     }
