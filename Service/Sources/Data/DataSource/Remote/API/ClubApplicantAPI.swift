@@ -17,8 +17,14 @@ extension ClubApplicantAPI: GCMSAPI {
 
     var urlPath: String {
         switch self {
-        case let .applicantList(clubID), let .userAccept(clubID, _), let .userReject(clubID, _), let .apply(clubID), let .cancel(clubID):
+        case let .applicantList(clubID), let .apply(clubID), let .cancel(clubID):
             return "/\(clubID)"
+
+        case let .userAccept(clubID, _):
+            return "/\(clubID)/accept"
+
+        case let .userReject(clubID, _):
+            return "/\(clubID)/reject"
         }
     }
 
@@ -59,47 +65,48 @@ extension ClubApplicantAPI: GCMSAPI {
         }
     }
 
-    var errorMapper: [Int: Error]? {
+    typealias ErrorType = ClubApplicantError
+    var errorMapper: [Int: ClubApplicantError]? {
         switch self {
         case .applicantList:
             return[
-                400: ClubApplicantError.notClubMember,
-                401: ClubApplicantError.unauthorized,
-                404: ClubApplicantError.notFoundClub,
-                500: ClubApplicantError.serverError
+                400: .notClubMember,
+                401: .unauthorized,
+                404: .notFoundClub,
+                500: .serverError
             ]
 
         case .apply:
             return[
-                401: ClubApplicantError.unauthorized,
-                403: ClubApplicantError.alreadyClubMemberOrSameTypeClub,
-                404: ClubApplicantError.notFoundClub,
-                500: ClubApplicantError.serverError
+                401: .unauthorized,
+                403: .alreadyClubMemberOrSameTypeClub,
+                404: .notFoundClub,
+                500: .serverError
             ]
 
         case .cancel:
             return[
-                401: ClubApplicantError.unauthorized,
-                404: ClubApplicantError.notFoundClub,
-                500: ClubApplicantError.serverError
+                401: .unauthorized,
+                404: .notFoundClub,
+                500: .serverError
             ]
 
         case .userAccept:
             return[
-                400: ClubApplicantError.bodyIsNull,
-                401: ClubApplicantError.unauthorized,
-                403: ClubApplicantError.notClubHead,
-                404: ClubApplicantError.notFoundAcceptUserOrClub,
-                500: ClubApplicantError.serverError
+                400: .bodyIsNull,
+                401: .unauthorized,
+                403: .notClubHead,
+                404: .notFoundAcceptUserOrClub,
+                500: .serverError
             ]
 
         case .userReject:
             return[
-                400: ClubApplicantError.bodyIsNull,
-                401: ClubApplicantError.unauthorized,
-                403: ClubApplicantError.notClubHead,
-                404: ClubApplicantError.notFoundRejectUserOrClub,
-                500: ClubApplicantError.serverError
+                400: .bodyIsNull,
+                401: .unauthorized,
+                403: .notClubHead,
+                404: .notFoundRejectUserOrClub,
+                500: .serverError
             ]
         }
     }

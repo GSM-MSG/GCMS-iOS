@@ -56,32 +56,33 @@ extension ClubMemberAPI: GCMSAPI {
         }
     }
 
-    var errorMapper: [Int: Error]? {
+    typealias ErrorType = ClubMemberError
+    var errorMapper: [Int: ClubMemberError]? {
         switch self {
         case .clubMember:
             return [
-                401: ClubMemberError.unauthorized,
-                403: ClubMemberError.notClubMember,
-                404: ClubMemberError.notFoundClub,
-                500: ClubMemberError.serverError
+                401: .unauthorized,
+                403: .notClubMember,
+                404: .notFoundClub,
+                500: .serverError
             ]
 
         case .userKick:
             return [
-                400: ClubMemberError.kickMyself,
-                401: ClubMemberError.unauthorized,
-                403: ClubMemberError.notClubHead,
-                404: ClubMemberError.notFoundClubOrKickUser,
-                500: ClubMemberError.serverError
+                400: .kickMyself,
+                401: .unauthorized,
+                403: .notClubHead,
+                404: .notFoundClubOrKickUser,
+                500: .serverError
             ]
 
         case .delegation:
             return [
-                400: ClubMemberError.delegationMyself,
-                401: ClubMemberError.unauthorized,
-                403: ClubMemberError.notClubHead,
-                404: ClubMemberError.notFoundClub,
-                500: ClubMemberError.serverError
+                400: .delegationMyself,
+                401: .unauthorized,
+                403: .notClubHead,
+                404: .notFoundClub,
+                500: .serverError
             ]
         }
     }

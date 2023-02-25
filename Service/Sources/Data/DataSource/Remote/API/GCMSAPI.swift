@@ -2,9 +2,10 @@ import Moya
 import Foundation
 
 protocol GCMSAPI: TargetType, JWTTokenAuthorizable {
+    associatedtype ErrorType: Error
     var domain: GCMSDomain { get }
     var urlPath: String { get }
-    var errorMapper: [Int: Error]? { get }
+    var errorMapper: [Int: ErrorType]? { get }
 }
 
 extension GCMSAPI {

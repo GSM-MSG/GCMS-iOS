@@ -76,69 +76,70 @@ extension ClubAPI: GCMSAPI {
         }
     }
 
-    var errorMapper: [Int: Error]? {
+    typealias ErrorType = GCMSError
+    var errorMapper: [Int: GCMSError]? {
         switch self {
         case .clubList:
             return [
-                400: GCMSError.invalidInput,
-                401: GCMSError.unauthorized,
-                500: GCMSError.serverError
+                400: .invalidInput,
+                401: .unauthorized,
+                500: .serverError
             ]
 
         case .clubDetail:
             return [
-                401: GCMSError.unauthorized,
-                404: GCMSError.notFoundUserOrNotFoundClub,
-                500: GCMSError.serverError
+                401: .unauthorized,
+                404: .notFoundUserOrNotFoundClub,
+                500: .serverError
             ]
 
         case .createNewClub:
             return [
-                400: GCMSError.invalidInput,
-                401: GCMSError.unauthorized,
-                409: GCMSError.alreadyExistClub,
-                500: GCMSError.serverError
+                400: .invalidInput,
+                401: .unauthorized,
+                409: .alreadyExistClub,
+                500: .serverError
             ]
 
         case .updateClub:
             return [
-                400: GCMSError.invalidInput,
-                401: GCMSError.unauthorized,
-                403: GCMSError.notClubHead,
-                404: GCMSError.notFoundClub,
-                500: GCMSError.serverError
+                400: .invalidInput,
+                401: .unauthorized,
+                403: .notClubHead,
+                404: .notFoundClub,
+                500: .serverError
             ]
 
         case .deleteClub:
             return [
-                401: GCMSError.unauthorized,
-                403: GCMSError.notClubHead,
-                404: GCMSError.notFoundClub,
-                500: GCMSError.serverError
+                401: .unauthorized,
+                403: .notClubHead,
+                404: .notFoundClub,
+                500: .serverError
             ]
 
         case .clubOpen:
             return [
-                401: GCMSError.unauthorized,
-                403: GCMSError.notClubHead,
-                404: GCMSError.notFoundClub,
-                500: GCMSError.serverError
+                401: .unauthorized,
+                403: .notClubHead,
+                404: .notFoundClub,
+                500: .serverError
             ]
 
         case .clubClose:
             return [
-                401: GCMSError.unauthorized,
-                403: GCMSError.notClubHead,
-                404: GCMSError.notFoundClub,
-                500: GCMSError.serverError
+                401: .unauthorized,
+                403: .notClubHead,
+                404: .notFoundClub,
+                500: .serverError
             ]
 
         case .exitClub:
             return [
-                400: GCMSError.noMebmerClub,
-                401: GCMSError.unauthorized,
-                404: GCMSError.notFoundClub,
-                500: GCMSError.serverError
+                400: .noMebmerClub,
+                401: .unauthorized,
+                404: .notFoundClub,
+                500: .serverError
             ]
         }
     }

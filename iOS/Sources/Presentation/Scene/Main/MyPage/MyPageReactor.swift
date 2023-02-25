@@ -132,7 +132,7 @@ private extension MyPageReactor {
                     .catchAndReturn(.setIsLoading(false))
             }
             .catch { [weak self] e in
-                self?.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription, action: []))
+                self?.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription, action: []))
                 return .just(.setIsLoading(false))
             }
         return .concat([start, task])

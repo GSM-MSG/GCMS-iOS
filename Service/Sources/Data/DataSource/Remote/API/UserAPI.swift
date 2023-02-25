@@ -64,33 +64,34 @@ extension UserAPI: GCMSAPI {
         }
     }
 
-    var errorMapper: [Int: Error]? {
+    typealias ErrorType = GCMSError
+    var errorMapper: [Int: GCMSError]? {
         switch self {
         case .myProfile, .miniProfile:
             return [
-                401: GCMSError.unauthorized,
-                404: GCMSError.notFoundUser,
-                500: GCMSError.serverError
+                401: .unauthorized,
+                404: .notFoundUser,
+                500: .serverError
             ]
             
         case .editProfile:
             return [
-                400: GCMSError.invalidInput,
-                401: GCMSError.unauthorized,
-                404: GCMSError.notFoundUser,
-                500: GCMSError.serverError
+                400: .invalidInput,
+                401: .unauthorized,
+                404: .notFoundUser,
+                500: .serverError
             ]
             
         case .search:
             return [
-                401: GCMSError.unauthorized,
-                500: GCMSError.serverError
+                401: .unauthorized,
+                500: .serverError
             ]
 
         case .withdrawal:
             return [
-                401: GCMSError.unauthorized,
-                403: GCMSError.notExistUser
+                401: .unauthorized,
+                403: .notExistUser
             ]
         }
     }
