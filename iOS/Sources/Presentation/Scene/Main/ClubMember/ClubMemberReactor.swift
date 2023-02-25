@@ -140,7 +140,7 @@ private extension ClubMemberReactor {
                 .just(.appendUsers($0))
             ]) }
             .catch { [weak self] e in
-                self?.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription, action: []))
+                self?.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription, action: []))
                 return .just(.setIsLoading(false))
             }
         let applicant = fetchClubApplicantUseCase.execute(clubID: self.clubID)
@@ -165,7 +165,7 @@ private extension ClubMemberReactor {
                             self.action.onNext(.clubIsOpenedChange(false))
                             self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 마감되었습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
                         } onError: { e in
-                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
+                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                         }
                         .disposed(by: self.disposeBag)
                 }),
@@ -181,7 +181,7 @@ private extension ClubMemberReactor {
                             self.action.onNext(.clubIsOpenedChange(true))
                             self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 열렸습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
                         } onError: { e in
-                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
+                            self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                         }
                         .disposed(by: self.disposeBag)
                 }),
@@ -200,7 +200,7 @@ private extension ClubMemberReactor {
                         self.steps.accept(GCMSStep.popToRoot)
                         self.action.onNext(.viewDidLoad)
                     }, onError: { e in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                     })
                     .disposed(by: self.disposeBag)
             }),
@@ -218,7 +218,7 @@ private extension ClubMemberReactor {
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님을 추방했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))
                         self.action.onNext(.viewDidLoad)
                     }, onError: { e in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                     })
                     .disposed(by: self.disposeBag)
             }),
@@ -236,7 +236,7 @@ private extension ClubMemberReactor {
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님의 가입을 승인했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))
                         self.action.onNext(.viewDidLoad)
                     }, onError: { e in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                     })
                     .disposed(by: self.disposeBag)
             }),
@@ -254,7 +254,7 @@ private extension ClubMemberReactor {
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "성공적으로 '\(user.name)'님의 가입을 거절했습니다", style: .alert, actions: [.init(title: "확인", style: .default)]))
                         self.action.onNext(.viewDidLoad)
                     }, onError: { e in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription))
+                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                     })
                     .disposed(by: self.disposeBag)
             }),

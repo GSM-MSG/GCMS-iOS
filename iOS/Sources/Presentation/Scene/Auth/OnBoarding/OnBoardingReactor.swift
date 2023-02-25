@@ -77,7 +77,7 @@ private extension OnBoardingReactor {
             .subscribe(with: self) { owner, _ in
                 owner.steps.accept(GCMSStep.clubListIsRequired)
             } onError: { owner, e in
-                owner.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.asGCMSError?.errorDescription, action: []))
+                owner.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription, action: []))
             }
             .disposed(by: disposeBag)
         return .empty()

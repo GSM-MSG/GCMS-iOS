@@ -49,7 +49,14 @@ extension ImageAPI: GCMSAPI {
         return ["Content-type": "multipart/form-data"]
     }
 
-    var errorMapper: [Int: Error]? {
-        return .none
+    typealias ErrorType = GCMSError
+    var errorMapper: [Int: GCMSError]? {
+        switch self {
+        case .uploadImages:
+            return[
+                400: .overFourPhoto,
+                500: .photoUploadFailed
+            ]
+        }
     }
 }

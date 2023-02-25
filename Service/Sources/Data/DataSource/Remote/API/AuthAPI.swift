@@ -7,6 +7,8 @@ enum AuthAPI {
 }
 
 extension AuthAPI: GCMSAPI {
+    typealias ErrorType = GCMSError
+
     var domain: GCMSDomain {
         return .auth
     }
@@ -30,6 +32,7 @@ extension AuthAPI: GCMSAPI {
             return .delete
         }
     }
+
     var task: Task {
         switch self {
         case let .login(req):
@@ -41,6 +44,7 @@ extension AuthAPI: GCMSAPI {
             return .requestPlain
         }
     }
+
     var jwtTokenType: JWTTokenType? {
         switch self {
         case .refresh:
@@ -53,10 +57,26 @@ extension AuthAPI: GCMSAPI {
             return JWTTokenType.none
         }
     }
-    var errorMapper: [Int: Error]? {
+
+    var errorMapper: [Int: GCMSError]? {
         switch self {
-        case .login, .refresh, .logout:
-            return [:]
+        case .login:
+            return [
+                500: .serverError
+            ]
+            
+        case .refresh:
+            return [
+                404: .notFoundUser,
+                500: .serverError
+            ]
+            
+        case .logout:
+            return [
+                401: .unauthorized,
+                404: .notFoundUser,
+                500: .serverError
+            ]
         }
     }
 

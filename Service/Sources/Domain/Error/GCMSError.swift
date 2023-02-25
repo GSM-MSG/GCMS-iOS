@@ -10,6 +10,7 @@ public enum GCMSError: Error {
     case invalidInput
     case noMebmerClub
     case failedAppleLogin
+    case overFourPhoto
 
     // MARK: - 401
     case unauthorized
@@ -45,6 +46,7 @@ public enum GCMSError: Error {
 
     // MARK: - 500
     case serverError
+    case photoUploadFailed
 }
 
 extension GCMSError: LocalizedError {
@@ -58,6 +60,8 @@ extension GCMSError: LocalizedError {
             return "인터넷 연결이 원활하지 않습니다"
         case .failedAppleLogin:
             return "애플 로그인을 실패 했습니다\n 잠시 후 다시 시도 해주세요"
+        case .overFourPhoto:
+            return "사진은 4개 이상 등록할 수 없습니다."
         // MARK: - 403
         case .notGSMAccount:
             return "*@gsm.hs.kr 계정이 아닙니다"
@@ -86,6 +90,9 @@ extension GCMSError: LocalizedError {
             return "이미 어떤 동아리에 소속 또는 신청되어있습니다"
         case .appliedToAnotherClubOrBelongClub:
             return "이미 어떤 동아리에 소속 또는 신청했습니다"
+        // MARK: - 500
+        case .photoUploadFailed:
+            return "사진 업로드에 실패했습니다."
         }
     }
 }
