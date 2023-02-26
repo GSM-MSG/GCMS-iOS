@@ -248,11 +248,22 @@ private extension NewClubReactor {
                 )
                 return completable
                     .do(afterCompleted: {
-                        owner.steps.accept(GCMSStep.popToRoot)
+                        owner.steps.accept(
+                            GCMSStep.alert(
+                                title: "성공",
+                                message: "동아리 개설 신청이 완료되었습니다. 수락을 기다려주세요!",
+                                style: .alert,
+                                actions: [
+                                    .init(title: "확인", style: .default, handler: { _ in
+                                              owner.steps.accept(GCMSStep.popToRoot)
+                                    })
+                                ]
+                            )
+                        )
                     })
                     .andThen(Observable.just(Mutation.setIsLoading(false)))
                     .catch { e in
-                        self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
+                        owner.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                         return .just(.setIsLoading(false))
                     }
             }
