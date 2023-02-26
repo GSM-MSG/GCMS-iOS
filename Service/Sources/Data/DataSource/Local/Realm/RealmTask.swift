@@ -39,7 +39,8 @@ final class RealmTask: RealmTaskType {
     }
 
     public init() {
-        guard let realm = try? Realm() else { fatalError() }
+        let realmConfiguration = RealmTask.migration()
+        guard let realm = try? Realm(configuration: realmConfiguration) else { fatalError() }
         self.realm = realm
     }
 
@@ -131,5 +132,27 @@ final class RealmTask: RealmTaskType {
         try? realm.safeWrite {
             realm.deleteAll()
         }
+    }
+}
+
+private extension RealmTask {
+    static func migration() -> Realm.Configuration {
+        let config = Realm.Configuration(
+            schemaVersion: 2,
+            migrationBlock: { migration, prevSchemaVersion in
+                if prevSchemaVersion < 2 {
+                    var pkID = 1
+                    migration.enumerateObjects(ofType: ClubListRealmEntity.className()) { oldObject, newObject in
+                        newObject?["id"] = pkID
+                        pkID += 1
+                        newObject?["bannerImg"] = oldObject?["bannerUrl"]
+                        newObject?["name"] = oldObject?["title"]
+                        newObject?["content"] = ""
+                    }
+                }
+            }
+        )
+
+        return config
     }
 }
