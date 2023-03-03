@@ -4,7 +4,6 @@ enum KeychainAccountType: String {
     case accessToken = "ACCESS-TOKEN"
     case refreshToken = "REFRESH-TOKEN"
     case expiredAt = "EXPIRED-AT"
-    case guestRefresh = "GUEST-REFRESH-TOKEN"
 }
 final class Keychain {
     static let shared = Keychain()

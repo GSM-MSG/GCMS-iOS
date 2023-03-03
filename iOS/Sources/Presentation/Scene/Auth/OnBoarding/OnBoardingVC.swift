@@ -1,7 +1,6 @@
 import UIKit
 import Then
 import SnapKit
-import AuthenticationServices
 import RxSwift
 import ViewAnimator
 import GAuthSignin

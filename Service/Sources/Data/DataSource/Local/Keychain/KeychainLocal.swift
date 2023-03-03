@@ -52,16 +52,4 @@ final class KeychainLocal {
     func deleteRefreshExp() {
         keychain.delete(type: .expiredAt)
     }
-
-    func saveGuestRefreshToken(_ token: String) {
-        keychain.save(type: .guestRefresh, value: token)
-    }
-
-    func fetchGuestRefreshToken() throws -> String {
-        return try keychain.load(type: .guestRefresh)
-    }
-
-    func deleteGuestRefreshToken() {
-        keychain.delete(type: .guestRefresh)
-    }
 }

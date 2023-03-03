@@ -20,8 +20,6 @@ final class HomeReactor: Reactor, Stepper {
         case newClubButtonDidTap
         case updateLoading(Bool)
         case clubDidTap(Int)
-        case guestLogoutButtonDidTap
-        case appleExitButtonDidTap
         case refreshTrigger(ClubType)
     }
     enum Mutation {
@@ -71,14 +69,10 @@ extension HomeReactor {
             return viewDidLoad()
         case let .clubDidTap(clubID):
             steps.accept(GCMSStep.clubDetailIsRequired(clubID: clubID))
-        case .guestLogoutButtonDidTap:
-            return guestLogoutButtonDidTap()
         case let .refreshTrigger(type):
             return refresh(type: type)
         case let .viewDidAppear(type):
             return .just(.setClubType(type))
-        case .appleExitButtonDidTap:
-            return appleExitButtonDidTap()
         }
         return .empty()
     }
@@ -127,16 +121,6 @@ private extension HomeReactor {
             }.catchAndReturn(Mutation.setIsLoading(false))
         return .concat([start, res])
     }
-    func guestLogoutButtonDidTap() -> Observable<Mutation> {
-        steps.accept(GCMSStep.alert(title: nil, message: "게스트 계정을 로그아웃 하시겠습니까?", style: .alert, actions: [
-            .init(title: "확인", style: .default, handler: { [weak self] _ in
-                UserDefaultsLocal.shared.isGuest = false
-                self?.steps.accept(GCMSStep.onBoardingIsRequired)
-            }),
-            .init(title: "취소", style: .cancel)
-        ]))
-        return .empty()
-    }
     func refresh(type: ClubType) -> Observable<Mutation> {
         let start = Observable.just(Mutation.setIsLoading(true))
         let task = fetchClubListsUseCase.execute(type: type)
@@ -150,16 +134,5 @@ private extension HomeReactor {
             }
             .catchAndReturn(Mutation.setIsLoading(false))
         return .concat([start, task])
-    }
-    func appleExitButtonDidTap() -> Observable<Mutation> {
-        self.steps.accept(GCMSStep.alert(title: "회원탈퇴", message: "정말로 탈퇴하시겠습니까?", style: .alert, actions: [
-            .init(title: "탈퇴", style: .destructive, handler: { [weak self] _ in
-                self?.revokeToken()
-            }),
-            .init(title: "취소", style: .cancel)
-        ]))
-        return .empty()
-    }
-    func revokeToken() {
     }
 }
