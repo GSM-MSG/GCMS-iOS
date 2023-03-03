@@ -40,7 +40,6 @@ enum GCMSDomain: String {
     case auth
     case user
     case club
-    case guest
     case clubMember = "club-member"
     case applicant
 }

@@ -9,7 +9,6 @@ public enum GCMSError: Error {
     case clubTypeError
     case invalidInput
     case noMebmerClub
-    case failedAppleLogin
     case overFourPhoto
 
     // MARK: - 401
@@ -58,8 +57,6 @@ extension GCMSError: LocalizedError {
             return "알수없는 에러가 발생했습니다. 잠시 후 다시 시도해 주세요."
         case .noInternet:
             return "인터넷 연결이 원활하지 않습니다"
-        case .failedAppleLogin:
-            return "애플 로그인을 실패 했습니다\n 잠시 후 다시 시도 해주세요"
         case .overFourPhoto:
             return "사진은 4개 이상 등록할 수 없습니다."
         // MARK: - 403
