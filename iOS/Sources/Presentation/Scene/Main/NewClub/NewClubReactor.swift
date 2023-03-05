@@ -196,7 +196,7 @@ private extension NewClubReactor {
         if currentState.name.isBlank() {
             errorMessage = "동아리 이름을 입력해주세요!"
         } else if currentState.content.isBlank() || currentState.content.trimmingCharacters(in: .whitespaces).hasPrefix("\n") || currentState.content == "동아리 설명을 입력해주세요."  {
-            errorMessage = "동아리 설명을 isBlank!"
+            errorMessage = "동아리 설명을 입력해주세요!"
         } else if currentState.contact.isBlank() {
             errorMessage = "연락처를 입력해주세요!"
         } else if currentState.notionLink.isBlank() || !currentState.notionLink.hasPrefix("https://") {
