@@ -193,13 +193,13 @@ extension NewClubReactor {
 private extension NewClubReactor {
     func secondNextButtonDidTap() -> Observable<Mutation> {
         var errorMessage = ""
-        if currentState.name.isEmpty {
+        if currentState.name.isBlank() {
             errorMessage = "동아리 이름을 입력해주세요!"
-        } else if currentState.content.isEmpty || currentState.content == "동아리 설명을 입력해주세요." {
+        } else if currentState.content.isBlank() || currentState.content.trimmingCharacters(in: .whitespaces).hasPrefix("\n") || currentState.content == "동아리 설명을 입력해주세요."  {
             errorMessage = "동아리 설명을 입력해주세요!"
-        } else if currentState.contact.isEmpty {
+        } else if currentState.contact.isBlank() {
             errorMessage = "연락처를 입력해주세요!"
-        } else if currentState.notionLink.isEmpty || !currentState.notionLink.hasPrefix("https://") {
+        } else if currentState.notionLink.isBlank() || !currentState.notionLink.hasPrefix("https://") {
             errorMessage = "노션 링크를 정확히 입력해주세요!"
         } else {
             steps.accept(GCMSStep.thirdNewClubIsRequired(reactor: self))
