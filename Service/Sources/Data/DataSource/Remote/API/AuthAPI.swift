@@ -67,6 +67,7 @@ extension AuthAPI: GCMSAPI {
             
         case .refresh:
             return [
+                401: .unauthorized,
                 404: .notFoundUser,
                 500: .serverError
             ]
