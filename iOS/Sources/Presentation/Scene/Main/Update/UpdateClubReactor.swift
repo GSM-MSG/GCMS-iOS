@@ -310,7 +310,7 @@ private extension UpdateClubReactor {
         return .concat([startLoadingObservable, updateObservable])
     }
     func completeButtonDidTap() -> Observable<Mutation> {
-        guard currentState.bannerImg != nil  else {
+        guard currentState.bannerImg != nil else {
             steps.accept(GCMSStep.failureAlert(title: "동아리 배너 이미지를 넣어주세요!", message: nil))
             return .empty()
         }
