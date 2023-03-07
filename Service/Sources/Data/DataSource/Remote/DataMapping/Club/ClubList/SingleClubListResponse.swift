@@ -15,7 +15,7 @@ extension SingleClubListResponse {
             type: type,
             name: name,
             content: content,
-            bannerImg: bannerImg
+            bannerImg: bannerImg.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         )
     }
 }

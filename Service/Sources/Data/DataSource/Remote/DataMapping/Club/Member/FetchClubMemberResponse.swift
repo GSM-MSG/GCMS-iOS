@@ -36,7 +36,7 @@ extension FetchClubMemberResponse.MemberResponse {
             classNum: classNum,
             number: number,
             scope: scope,
-            profileImg: profileImg
+            profileImg: profileImg?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         )
     }
 }

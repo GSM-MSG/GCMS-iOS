@@ -24,7 +24,7 @@ extension FetchClubApplicantResponse.ApplicantResponse {
             grade: grade,
             classNum: classNum,
             number: number,
-            profileImg: profileImg
+            profileImg: profileImg?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         )
     }
 }

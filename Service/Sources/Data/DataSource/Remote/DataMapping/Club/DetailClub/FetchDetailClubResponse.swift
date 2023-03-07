@@ -32,7 +32,7 @@ extension FetchDetailClubResponse {
         Club(
             clubID: id,
             type: type,
-            bannerImg: bannerImg,
+            bannerImg: bannerImg.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "",
             name: name,
             content: content,
             contact: contact,
@@ -41,7 +41,7 @@ extension FetchDetailClubResponse {
             scope: scope,
             isApplied: isApplied,
             isOpen: isOpened,
-            activityImgs: activityImgs,
+            activityImgs: activityImgs.compactMap { $0.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) },
             member: member.map { $0.toDomain() },
             teacher: teacher
         )
@@ -57,7 +57,7 @@ extension FetchDetailClubResponse.UserDTO {
             grade: grade,
             classNum: classNum,
             number: number,
-            profileImg: profileImg
+            profileImg: profileImg?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         )
     }
 }

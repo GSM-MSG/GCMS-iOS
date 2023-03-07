@@ -27,7 +27,7 @@ extension FetchMyProfileResponse {
             grade: grade,
             classNum: classNum,
             number: number,
-            profileImg: profileImg,
+            profileImg: profileImg?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
             clubs: clubs.map { $0.toDomain() }
         )
     }
