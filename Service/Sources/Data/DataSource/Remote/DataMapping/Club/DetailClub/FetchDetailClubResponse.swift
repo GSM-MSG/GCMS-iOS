@@ -57,7 +57,7 @@ extension FetchDetailClubResponse.UserDTO {
             grade: grade,
             classNum: classNum,
             number: number,
-            profileImg: profileImg?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            profileImg: profileImg?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         )
     }
 }
