@@ -1,8 +1,8 @@
 import Moya
 
 enum AuthAPI {
-    case login(code: String)
-    case refresh
+    case login(code: String, deviceToken: String)
+    case refresh(deviceToken: String)
     case logout
 }
 
@@ -35,12 +35,18 @@ extension AuthAPI: GCMSAPI {
 
     var task: Task {
         switch self {
-        case let .login(req):
+        case let .login(req, token):
             return .requestParameters(parameters: [
-                "code": req
+                "code": req,
+                "token": token
             ], encoding: JSONEncoding.default)
 
-        case .refresh, .logout:
+        case let .refresh(token):
+            return .requestParameters(parameters: [
+                "token": token
+            ], encoding: JSONEncoding.default)
+
+        case .logout:
             return .requestPlain
         }
     }

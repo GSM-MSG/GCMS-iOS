@@ -25,15 +25,3 @@ final class DefaultAuthRepository: AuthRepository {
             })
     }
 }
-
-private extension DefaultAuthRepository {
-    /// 디바이스 토큰 가져오는 API
-    func fetchDeviceToken() -> Single<String> {
-        return Single<String>.create { single in
-            Messaging.messaging().token { token, _ in
-                single(.success(token ?? ""))
-            }
-            return Disposables.create()
-        }
-    }
-}
