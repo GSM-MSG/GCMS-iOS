@@ -40,7 +40,7 @@ extension FetchMyProfileResponse.ClubListResponse {
             type: type,
             name: name,
             content: "",
-            bannerImg: bannerImg
+            bannerImg: bannerImg.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         )
     }
 }
