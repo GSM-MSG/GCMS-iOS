@@ -25,6 +25,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
         $0.backgroundColor = GCMSAsset.Colors.gcmsGray3.color
         $0.contentMode = .scaleAspectFill
     }
+    private let shadowView = UIView()
     private let descriptionHeaderLabel = HeaderLabel(title: "동아리 설명")
     private let descriptionLabel = UILabel().then {
         $0.numberOfLines = 0
@@ -72,7 +73,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
 
     // MARK: - UI
     override func addView() {
-        view.addSubViews(contentView, applyButton)
+        view.addSubViews(contentView, applyButton, shadowView)
         contentView.addSubViews(bannerImageView, containerView)
         containerView.addSubViews(descriptionHeaderLabel, descriptionLabel, notionLinkHeaderLabel, notionLinkButton, activityHeaderLabel, activityView, memberHeaderLabel, memberCollectionView, headHeaderLabel, headView, teacherHeaderLabel, teacherView, contactHeaderLabel, contactDescriptionLabel)
     }
@@ -82,7 +83,13 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
             $0.leading.trailing.bottom.equalToSuperview()
         }
         bannerImageView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(bound.width*0.5924)
+            $0.width.equalToSuperview()
+        }
+        shadowView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(-72)
             $0.height.equalTo(bound.width*0.5924)
             $0.width.equalToSuperview()
         }
@@ -197,6 +204,7 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                 owner.bannerImageView.kf.setImage(
                     with: URL(string: item.bannerImg)
                 )
+                owner.shadowView.addGradientWithColor(color: .black)
                 owner.descriptionLabel.text = item.content
                 owner.activityView.setImages(urls: item.activityImgs)
                 owner.notionLinkButton.setTitle(item.notionLink, for: .normal)

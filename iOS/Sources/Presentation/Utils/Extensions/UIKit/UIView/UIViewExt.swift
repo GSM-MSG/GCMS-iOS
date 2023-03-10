@@ -38,4 +38,12 @@ extension UIView {
 
         self.layer.add(animation, forKey: nil)
     }
+    func addGradientWithColor(color: UIColor) {
+        let gradient = CAGradientLayer()
+        gradient.frame = self.bounds
+        gradient.colors = [color.withAlphaComponent(0.8).cgColor, UIColor.clear.cgColor]
+        gradient.locations = [0.2, 0.7]
+
+        self.layer.insertSublayer(gradient, at: 0)
+    }
 }
