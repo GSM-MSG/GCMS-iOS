@@ -7,7 +7,7 @@ public struct FetchMiniProfileUseCase {
 
     private let userRepository: UserRepository
 
-    func execute() -> Single<MiniProfile> {
+    public func execute() -> Single<MiniProfile> {
         userRepository.fetchMiniProfile()
     }
 }
