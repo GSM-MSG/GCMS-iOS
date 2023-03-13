@@ -10,17 +10,16 @@ import ReactorKit
 import Pageboy
 import Lottie
 import Kingfisher
-import RxGesture
 
 final class HomeVC: TabmanViewController, View {
     // MARK: - Properties
     private var viewControllers: [UIViewController] = []
-    private let profileImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 25, height: 25)).then {
+    private let profileImageView = UIImageView(frame: CGRect(x: 0, y: 5, width: 25, height: 25)).then {
         $0.contentMode = .scaleAspectFill
         $0.layer.cornerRadius = 12.5
         $0.layer.masksToBounds = true
     }
-    private let containView = UIView(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
+    private let profileButton = UIButton()
     private let myPageButton = UIBarButtonItem(image: .init(systemName: "person.crop.circle")?.tintColor(GCMSAsset.Colors.gcmsGray4.color),
                                          style: .plain,
                                          target: nil,
@@ -96,8 +95,8 @@ final class HomeVC: TabmanViewController, View {
 // MARK: - Extension
 private extension HomeVC {
     func setup() {
-        containView.addSubview(profileImageView)
-        myPageButton.customView = containView
+        profileButton.addSubview(profileImageView)
+        myPageButton.customView = profileButton
     }
     func addView() {
         view.addSubViews(indicatorBackgroundView, indicator)
@@ -123,7 +122,7 @@ private extension HomeVC {
             .disposed(by: disposeBag)
     }
     func bindView(reactor: HomeReactor) {
-        profileImageView.rx.tapGesture()
+        profileButton.rx.tap
             .map { _ in Reactor.Action.myPageButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
