@@ -80,14 +80,12 @@ final class HomeVC: TabmanViewController, View {
     // MARK: - UI
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
         addView()
         setLayout()
         configNavigation()
-        containView.addSubview(imageView)
-        myPageButton.customView = containView
         bounces = false
     }
-
     func bind(reactor: HomeReactor) {
         bindAction(reactor: reactor)
         bindView(reactor: reactor)
@@ -97,6 +95,10 @@ final class HomeVC: TabmanViewController, View {
 
 // MARK: - Extension
 private extension HomeVC {
+    func setup() {
+        containView.addSubview(imageView)
+        myPageButton.customView = containView
+    }
     func addView() {
         view.addSubViews(indicatorBackgroundView, indicator)
     }
@@ -153,7 +155,6 @@ private extension HomeVC {
                 if !profile.isEmpty {
                     owner.imageView.kf.setImage(with: URL(string: profile) ?? .none,
                                                 placeholder: UIImage())
-                    
                 } else {
                     owner.imageView.image = .init(systemName: "person.crop.circle")?.tintColor(GCMSAsset.Colors.gcmsGray4.color)
                 }
