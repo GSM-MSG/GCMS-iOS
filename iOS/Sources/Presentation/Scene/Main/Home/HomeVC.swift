@@ -9,14 +9,21 @@ import Tabman
 import ReactorKit
 import Pageboy
 import Lottie
+import Kingfisher
 
 final class HomeVC: TabmanViewController, View {
     // MARK: - Properties
     private var viewControllers: [UIViewController] = []
-    private let myPageButton = UIBarButtonItem(image: .init(systemName: "person.circle")?.tintColor(GCMSAsset.Colors.gcmsGray4.color),
-                                               style: .plain,
-                                               target: nil,
-                                               action: nil)
+    private let profileImageView = UIImageView(frame: CGRect(x: 0, y: 5, width: 25, height: 25)).then {
+        $0.contentMode = .scaleAspectFill
+        $0.layer.cornerRadius = 12.5
+        $0.layer.masksToBounds = true
+    }
+    private let profileButton = UIButton()
+    private let myPageButton = UIBarButtonItem(image: .init(systemName: "person.crop.circle")?.tintColor(GCMSAsset.Colors.gcmsGray4.color),
+                                         style: .plain,
+                                         target: nil,
+                                         action: nil)
     private let newClubButton = UIBarButtonItem(image: .init(systemName: "plus.app")?.tintColor(GCMSAsset.Colors.gcmsGray4.color),
                                               style: .plain,
                                               target: nil,
@@ -72,12 +79,12 @@ final class HomeVC: TabmanViewController, View {
     // MARK: - UI
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
         addView()
         setLayout()
         configNavigation()
         bounces = false
     }
-
     func bind(reactor: HomeReactor) {
         bindAction(reactor: reactor)
         bindView(reactor: reactor)
@@ -87,6 +94,10 @@ final class HomeVC: TabmanViewController, View {
 
 // MARK: - Extension
 private extension HomeVC {
+    func setup() {
+        profileButton.addSubview(profileImageView)
+        myPageButton.customView = profileButton
+    }
     func addView() {
         view.addSubViews(indicatorBackgroundView, indicator)
     }
@@ -111,7 +122,7 @@ private extension HomeVC {
             .disposed(by: disposeBag)
     }
     func bindView(reactor: HomeReactor) {
-        myPageButton.rx.tap
+        profileButton.rx.tap
             .map { _ in Reactor.Action.myPageButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -122,7 +133,7 @@ private extension HomeVC {
             .disposed(by: disposeBag)
     }
     func bindState(reactor: HomeReactor) {
-        let sharedState = reactor.state.share(replay: 2).observe(on: MainScheduler.asyncInstance)
+        let sharedState = reactor.state.share(replay: 3).observe(on: MainScheduler.asyncInstance)
 
         sharedState
             .map(\.clubType)
@@ -134,6 +145,18 @@ private extension HomeVC {
             .map(\.isLoading)
             .bind(with: self) { owner, load in
                 load ? owner.startIndicator() : owner.stopIndicator()
+            }
+            .disposed(by: disposeBag)
+
+        sharedState
+            .map(\.profileImageURL)
+            .bind(with: self) { owner, profile in
+                if !profile.isEmpty {
+                    owner.profileImageView.kf.setImage(with: URL(string: profile) ?? .none,
+                                                placeholder: UIImage())
+                } else {
+                    owner.profileImageView.image = .init(systemName: "person.crop.circle")?.tintColor(GCMSAsset.Colors.gcmsGray4.color)
+                }
             }
             .disposed(by: disposeBag)
     }

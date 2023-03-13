@@ -11,6 +11,7 @@ final class HomeReactor: Reactor, Stepper {
     private let disposeBag: DisposeBag = .init()
 
     private let fetchClubListsUseCase: FetchClubListUseCase
+    private let fetchMiniProfileUseCase: FetchMiniProfileUseCase
 
     // MARK: - Reactor
     enum Action {
@@ -27,12 +28,14 @@ final class HomeReactor: Reactor, Stepper {
         case setIsLoading(Bool)
         case setClubType(ClubType)
         case setIsRefreshing(Bool)
+        case setProfile(String)
     }
     struct State {
         var majorClubList: [ClubList]
         var freedomClubList: [ClubList]
         var editorialClubList: [ClubList]
         var clubType: ClubType
+        var profileImageURL: String
         var isLoading: Bool
         var isRefreshing: Bool
     }
@@ -40,17 +43,20 @@ final class HomeReactor: Reactor, Stepper {
 
     // MARK: - Init
     init(
-        fetchClubListsUseCase: FetchClubListUseCase
+        fetchClubListsUseCase: FetchClubListUseCase,
+        fetchMiniProfileUseCase: FetchMiniProfileUseCase
     ) {
         initialState = State(
             majorClubList: [],
             freedomClubList: [],
             editorialClubList: [],
             clubType: .major,
+            profileImageURL: "",
             isLoading: false,
             isRefreshing: false
         )
         self.fetchClubListsUseCase = fetchClubListsUseCase
+        self.fetchMiniProfileUseCase = fetchMiniProfileUseCase
     }
 
 }
@@ -95,6 +101,8 @@ extension HomeReactor {
             newState.clubType = type
         case let .setIsRefreshing(refresh):
             newState.isRefreshing = refresh
+        case let .setProfile(profile):
+            newState.profileImageURL = profile
         }
 
         return newState
@@ -119,7 +127,15 @@ private extension HomeReactor {
                     .just(.setIsLoading(false))
                 ])
             }.catchAndReturn(Mutation.setIsLoading(false))
-        return .concat([start, res])
+        let profile = fetchMiniProfileUseCase.execute()
+            .asObservable()
+            .flatMap { mini in
+                return Observable.concat([
+                    .just(Mutation.setProfile(mini.profileImg)),
+                    .just(.setIsLoading(false))
+                ])
+            }
+        return .concat([start, res, profile])
     }
     func refresh(type: ClubType) -> Observable<Mutation> {
         let start = Observable.just(Mutation.setIsLoading(true))
