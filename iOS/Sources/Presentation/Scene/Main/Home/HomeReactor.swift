@@ -35,7 +35,7 @@ final class HomeReactor: Reactor, Stepper {
         var freedomClubList: [ClubList]
         var editorialClubList: [ClubList]
         var clubType: ClubType
-        var profile: String
+        var profileImageURL: String
         var isLoading: Bool
         var isRefreshing: Bool
     }
@@ -51,7 +51,7 @@ final class HomeReactor: Reactor, Stepper {
             freedomClubList: [],
             editorialClubList: [],
             clubType: .major,
-            profile: "",
+            profileImageURL: "",
             isLoading: false,
             isRefreshing: false
         )
@@ -102,7 +102,7 @@ extension HomeReactor {
         case let .setIsRefreshing(refresh):
             newState.isRefreshing = refresh
         case let .setProfile(profile):
-            newState.profile = profile
+            newState.profileImageURL = profile
         }
 
         return newState

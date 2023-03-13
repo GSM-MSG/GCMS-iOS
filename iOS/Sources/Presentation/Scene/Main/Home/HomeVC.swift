@@ -15,7 +15,7 @@ import RxGesture
 final class HomeVC: TabmanViewController, View {
     // MARK: - Properties
     private var viewControllers: [UIViewController] = []
-    private let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 25, height: 25)).then {
+    private let profileImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 25, height: 25)).then {
         $0.contentMode = .scaleAspectFill
         $0.layer.cornerRadius = 12.5
         $0.layer.masksToBounds = true
@@ -96,7 +96,7 @@ final class HomeVC: TabmanViewController, View {
 // MARK: - Extension
 private extension HomeVC {
     func setup() {
-        containView.addSubview(imageView)
+        containView.addSubview(profileImageView)
         myPageButton.customView = containView
     }
     func addView() {
@@ -123,7 +123,7 @@ private extension HomeVC {
             .disposed(by: disposeBag)
     }
     func bindView(reactor: HomeReactor) {
-        imageView.rx.tapGesture()
+        profileImageView.rx.tapGesture()
             .map { _ in Reactor.Action.myPageButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -150,13 +150,13 @@ private extension HomeVC {
             .disposed(by: disposeBag)
 
         sharedState
-            .map(\.profile)
+            .map(\.profileImageURL)
             .bind(with: self) { owner, profile in
                 if !profile.isEmpty {
-                    owner.imageView.kf.setImage(with: URL(string: profile) ?? .none,
+                    owner.profileImageView.kf.setImage(with: URL(string: profile) ?? .none,
                                                 placeholder: UIImage())
                 } else {
-                    owner.imageView.image = .init(systemName: "person.crop.circle")?.tintColor(GCMSAsset.Colors.gcmsGray4.color)
+                    owner.profileImageView.image = .init(systemName: "person.crop.circle")?.tintColor(GCMSAsset.Colors.gcmsGray4.color)
                 }
             }
             .disposed(by: disposeBag)
