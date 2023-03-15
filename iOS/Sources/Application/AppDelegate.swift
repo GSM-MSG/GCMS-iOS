@@ -45,6 +45,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
     ) {
         Messaging.messaging().apnsToken = deviceToken
+        _ = AppDelegate.container.resolve(CheckIsLoginedUseCase.self)!
+            .execute()
     }
 
     func messaging(
