@@ -19,16 +19,19 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
         $0.image = GCMSAsset.Images.gcmsgLogo.image.withRenderingMode(.alwaysOriginal)
     }
     private let tosStackView = UIStackView().then {
-        $0.spacing = 10
+        $0.spacing = 18
         $0.axis = .horizontal
+        $0.alignment = .center
     }
     private let termsOfServiceButton = UIButton().then {
         $0.setTitle("서비스 이용약관", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: 14)
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray4.color, for: .normal)
     }
-    private let betweenButtonView = UIView().then {
-        $0.backgroundColor = GCMSAsset.Colors.gcmsGray4.color
+    private let betweenButtonView = UILabel().then {
+        $0.text = "|"
+        $0.font = .boldSystemFont(ofSize: 14)
+        $0.textColor = GCMSAsset.Colors.gcmsGray4.color
     }
     private let privacyButton = UIButton().then {
         $0.setTitle("개인정보 처리 방침", for: .normal)
@@ -54,16 +57,13 @@ final class OnBoardingVC: BaseVC<OnBoardingReactor> {
                 .centerX(.toSuperview())
 
             tosStackView.layout
-                .bottom(.to(view.safeAreaLayoutGuide).bottom, .equal(-24))
+                .bottom(.to(view.safeAreaLayoutGuide).bottom, .equal(-18))
                 .centerX(.toSuperview())
 
             gauthSigninButton.layout
-                .bottom(.to(tosStackView).top, .equal(-8))
-                .horizontal(.toSuperview(), .equal(16))
+                .bottom(.to(tosStackView).top, .equal(-36))
+                .horizontal(.toSuperview(), .equal(20))
                 .height(50)
-
-            betweenButtonView.layout
-                .size(width: .equal(2), height: .equal(16))
         }
     }
     override func setup() {
