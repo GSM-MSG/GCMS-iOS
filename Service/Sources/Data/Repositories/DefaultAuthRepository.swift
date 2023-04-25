@@ -5,7 +5,7 @@ final class DefaultAuthRepository: AuthRepository {
     private let authRemote: any AuthRemoteProtocol
     private let keychainLocal: any KeychainLocalProtocol
 
-    public init(
+    init(
         authRemote: any AuthRemoteProtocol,
         keychainLocal: any KeychainLocalProtocol
     ) {
