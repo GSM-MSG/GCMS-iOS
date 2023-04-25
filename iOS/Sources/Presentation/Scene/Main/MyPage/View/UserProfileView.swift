@@ -31,6 +31,7 @@ final class UserProfileView: UIView {
     }
     private let userProfileImageView = UIImageView().then {
         $0.layer.cornerRadius = 28
+        $0.layer.masksToBounds = true
     }
     private let userNameLabel = UILabel().then {
         $0.font = UIFont(font: GCMSFontFamily.Inter.bold, size: 14)
