@@ -1,12 +1,18 @@
 import RxSwift
 import Then
 
-final class ClubLocal {
-    static let shared = ClubLocal()
+protocol ClubLocalProtocol {
+    func fetchClubList(type: ClubType) -> Single<[ClubList]>
+    func saveClubList(clubList: [ClubList])
+    func deleteClubList()
+}
 
-    private let realm = RealmTask.shared
+final class ClubLocal: ClubLocalProtocol {
+    private let realm: any RealmTaskType
 
-    private init() {}
+    public init(realmTask: RealmTaskType) {
+        self.realm = realmTask
+    }
 
     func fetchClubList(type: ClubType) -> Single<[ClubList]> {
         return realm.fetchObjects(

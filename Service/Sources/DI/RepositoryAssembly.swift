@@ -3,11 +3,29 @@ import Swinject
 public final class RepositoryAssembly: Assembly {
     public init() {}
     public func assemble(container: Container) {
-        container.register(AuthRepository.self) { _ in DefaultAuthRepository() }
-        container.register(ClubRepository.self) { _ in DefaultClubRepository() }
-        container.register(ImageRepository.self) { _ in DefaultImageRepository() }
-        container.register(UserRepository.self) { _ in DefaultUserRepository() }
-        container.register(ClubApplicantRepository.self) { _ in DefaultClubApplicantRepository() }
-        container.register(ClubMemberRepository.self) { _ in DefaultClubMemberRepository() }
+        container.register(AuthRepository.self) { r in
+            DefaultAuthRepository(
+                authRemote: r.resolve(AuthRemoteProtocol.self)!,
+                keychainLocal: r.resolve(KeychainLocalProtocol.self)!
+            )
+        }
+        container.register(ClubRepository.self) { r in
+            DefaultClubRepository(
+                clubRemote: r.resolve(ClubRemoteProtocol.self)!,
+                clubLocal: r.resolve(ClubLocalProtocol.self)!
+            )
+        }
+        container.register(ImageRepository.self) { r in
+            DefaultImageRepository(imageRemote: r.resolve(ImageRemoteProtocol.self)!)
+        }
+        container.register(UserRepository.self) { r in
+            DefaultUserRepository(userRemote: r.resolve(UserRemoteProtocol.self)!)
+        }
+        container.register(ClubApplicantRepository.self) { r in
+            DefaultClubApplicantRepository(clubApplicantRemote: r.resolve(ClubApplicantRemoteProtocol.self)!)
+        }
+        container.register(ClubMemberRepository.self) { r in
+            DefaultClubMemberRepository(clubMemberRemote: r.resolve(ClubMemberRemoteProtocol.self)!)
+        }
     }
 }

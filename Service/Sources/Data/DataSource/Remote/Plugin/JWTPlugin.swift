@@ -12,6 +12,11 @@ enum JWTTokenType: String {
 }
 
 final class JWTPlugin: PluginType {
+    private let keychainLocal: any KeychainLocalProtocol
+
+    init(keychainLocal: any KeychainLocalProtocol) {
+        self.keychainLocal = keychainLocal
+    }
 
     func prepare(
         _ request: URLRequest,
@@ -58,7 +63,7 @@ private extension JWTPlugin {
 
     func getAccessToken() -> String {
         do {
-            return try KeychainLocal.shared.fetchAccessToken()
+            return try keychainLocal.fetchAccessToken()
         } catch {
             return ""
         }
@@ -66,16 +71,16 @@ private extension JWTPlugin {
 
     func getRefreshToken() -> String {
         do {
-            return try KeychainLocal.shared.fetchRefreshToken()
+            return try keychainLocal.fetchRefreshToken()
         } catch {
             return ""
         }
     }
 
     func setToken(token: TokenDTO) {
-        KeychainLocal.shared.saveAccessToken(token.accessToken)
-        KeychainLocal.shared.saveRefreshToken(token.refreshToken)
-        KeychainLocal.shared.saveAccessExp(token.accessExp)
-        KeychainLocal.shared.saveRefreshExp(token.refreshExp)
+        keychainLocal.saveAccessToken(token.accessToken)
+        keychainLocal.saveRefreshToken(token.refreshToken)
+        keychainLocal.saveAccessExp(token.accessExp)
+        keychainLocal.saveRefreshExp(token.refreshExp)
     }
 }

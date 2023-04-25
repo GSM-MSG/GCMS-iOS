@@ -2,8 +2,16 @@ import RxSwift
 import FirebaseMessaging
 
 final class DefaultAuthRepository: AuthRepository {
-    private let authRemote = AuthRemote.shared
-    private let keychainLocal = KeychainLocal.shared
+    private let authRemote: any AuthRemoteProtocol
+    private let keychainLocal: any KeychainLocalProtocol
+
+    public init(
+        authRemote: any AuthRemoteProtocol,
+        keychainLocal: any KeychainLocalProtocol
+    ) {
+        self.authRemote = authRemote
+        self.keychainLocal = keychainLocal
+    }
 
     func login(code: String) -> Completable {
         return authRemote.login(code: code)

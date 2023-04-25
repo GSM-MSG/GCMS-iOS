@@ -19,6 +19,12 @@ protocol RealmTaskType: AnyObject {
         sortProperty: String?,
         ordering: OrderingType
     ) -> Single<[T]>
+    func fetchObjectsResults<T: Object>(
+        for type: T.Type,
+        filter: QueryFilter<T>?,
+        sortProperty: String?,
+        ordering: OrderingType
+    ) -> Results<T>
 
     func add(_ object: Object?)
     func add(_ objects: [Object]?)
@@ -28,10 +34,27 @@ protocol RealmTaskType: AnyObject {
     func delete(_ objects: [Object]?)
 }
 
+extension RealmTaskType {
+    func fetchObjects<T: Object>(
+        for type: T.Type,
+        filter: QueryFilter<T>? = nil,
+        sortProperty: String? = nil,
+        ordering: OrderingType = .ascending
+    ) -> Single<[T]> {
+        fetchObjects(for: type, filter: filter, sortProperty: sortProperty, ordering: ordering)
+    }
+
+    func fetchObjectsResults<T: Object>(
+        for type: T.Type,
+        filter: QueryFilter<T>? = nil,
+        sortProperty: String? = nil,
+        ordering: OrderingType = .ascending
+    ) -> Results<T> {
+        fetchObjectsResults(for: type, filter: filter, sortProperty: sortProperty, ordering: ordering)
+    }
+}
+
 final class RealmTask: RealmTaskType {
-
-    static let shared = RealmTask()
-
     private let realm: Realm
 
     public init(realm: Realm) {

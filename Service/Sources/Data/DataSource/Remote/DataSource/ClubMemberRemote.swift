@@ -1,10 +1,13 @@
 import RxSwift
 import Foundation
 
-final class ClubMemberRemote: BaseRemote<ClubMemberAPI> {
-    static let shared = ClubMemberRemote()
-    private override init() {}
+protocol ClubMemberRemoteProtocol {
+    func fetchClubMember(clubID: Int) -> Single<(MemberScope, [Member])>
+    func userKick(clubID: Int, uuid: UUID) -> Completable
+    func delegation(clubID: Int, uuid: UUID) -> Completable
+}
 
+final class ClubMemberRemote: BaseRemote<ClubMemberAPI>, ClubMemberRemoteProtocol {
     func fetchClubMember(clubID: Int) -> Single<(MemberScope, [Member])> {
         request(.clubMember(clubID: clubID))
             .map(FetchClubMemberResponse.self)
