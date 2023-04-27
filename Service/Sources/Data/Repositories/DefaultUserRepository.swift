@@ -2,7 +2,11 @@ import RxSwift
 import Foundation
 
 final class DefaultUserRepository: UserRepository {
-    private let userRemote = UserRemote.shared
+    private let userRemote: any UserRemoteProtocol
+
+    init(userRemote: any UserRemoteProtocol) {
+        self.userRemote = userRemote
+    }
 
     func fetchMyProfile() -> Single<UserProfile> {
         userRemote.fetchProfile()

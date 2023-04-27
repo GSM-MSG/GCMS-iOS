@@ -2,7 +2,11 @@ import RxSwift
 import Foundation
 
 final class DefaultClubMemberRepository: ClubMemberRepository {
-    private let clubMemberRemote = ClubMemberRemote.shared
+    private let clubMemberRemote: any ClubMemberRemoteProtocol
+
+    init(clubMemberRemote: any ClubMemberRemoteProtocol) {
+        self.clubMemberRemote = clubMemberRemote
+    }
 
     func fetchClubMember(clubID: Int) -> Single<(MemberScope, [Member])> {
         clubMemberRemote.fetchClubMember(clubID: clubID)

@@ -1,9 +1,14 @@
 import RxSwift
 
-final class UserRemote: BaseRemote<UserAPI> {
-    static let shared = UserRemote()
-    private override init() {}
+protocol UserRemoteProtocol {
+    func fetchProfile() -> Single<UserProfile>
+    func updateProfileImage(imageUrl: String) -> Completable
+    func fetchMiniProfile() -> Single<MiniProfile>
+    func fetchSearchUser(name: String, type: ClubType) -> Single<[User]>
+    func withdrawal() -> Completable
+}
 
+final class UserRemote: BaseRemote<UserAPI>, UserRemoteProtocol {
     func fetchProfile() -> Single<UserProfile> {
         request(.myProfile)
             .map(FetchMyProfileResponse.self)

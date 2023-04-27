@@ -1,8 +1,16 @@
 import RxSwift
 
 final class DefaultClubRepository: ClubRepository {
-    private let clubRemote = ClubRemote.shared
-    private let clubLocal = ClubLocal.shared
+    private let clubRemote: any ClubRemoteProtocol
+    private let clubLocal: any ClubLocalProtocol
+
+    init(
+        clubRemote: any ClubRemoteProtocol,
+        clubLocal: any ClubLocalProtocol
+    ) {
+        self.clubRemote = clubRemote
+        self.clubLocal = clubLocal
+    }
 
     func fetchClubList(type: ClubType) -> Observable<[ClubList]> {
         OfflineCache<[ClubList]>()

@@ -19,7 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             VCAssembly(),
             ReactorAssembly(),
             RepositoryAssembly(),
-            UseCaseAssembly()
+            UseCaseAssembly(),
+            DataSourceAssembly()
         ], container: AppDelegate.container)
 
         IQKeyboardManager.shared.enable = true
