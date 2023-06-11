@@ -1,10 +1,13 @@
 import RxSwift
 import FirebaseMessaging
 
-final class AuthRemote: BaseRemote<AuthAPI> {
-    static let shared = AuthRemote()
-    private override init() {}
+protocol AuthRemoteProtocol {
+    func login(code: String) -> Single<TokenDTO>
+    func refresh() -> Completable
+    func logout() -> Completable
+}
 
+final class AuthRemote: BaseRemote<AuthAPI>, AuthRemoteProtocol {
     func login(code: String) -> Single<TokenDTO> {
         return fetchDeviceToken()
             .flatMap { self.request(.login(code: code, deviceToken: $0)) }

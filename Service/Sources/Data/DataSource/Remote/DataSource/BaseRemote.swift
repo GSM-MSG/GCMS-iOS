@@ -6,11 +6,18 @@ import AVFoundation
 import Alamofire
 
 class BaseRemote<API: GCMSAPI> {
-    #if DEBUG
-    private let provider = MoyaProvider<API>(plugins: [JWTPlugin(), GCMSLoggingPlugin()])
-    #else
-    private let provider = MoyaProvider<API>(plugins: [JWTPlugin()])
-    #endif
+    private let keychainLocal: any KeychainLocalProtocol
+    
+    private let provider: MoyaProvider<API>
+
+    init(keychainLocal: any KeychainLocalProtocol) {
+        self.keychainLocal = keychainLocal
+#if DEBUG
+        self.provider = MoyaProvider<API>(plugins: [JWTPlugin(keychainLocal: keychainLocal), GCMSLoggingPlugin()])
+#else
+        self.provider = MoyaProvider<API>(plugins: [JWTPlugin()])
+#endif
+    }
 
     func request(_ api: API) -> Single<Response> {
         return .create { single in
@@ -97,7 +104,7 @@ private extension BaseRemote {
     }
     func checkTokenIsValid() throws -> Bool {
         do {
-            let expired = try KeychainLocal.shared.fetchAccessExp().toDateWithISO8601()
+            let expired = try keychainLocal.fetchAccessExp().toDateWithISO8601()
             print(Date(), expired)
             return Date() < expired
         } catch {
@@ -105,6 +112,6 @@ private extension BaseRemote {
         }
     }
     func reissueToken() -> Completable {
-        return AuthRemote.shared.refresh()
+        return AuthRemote(keychainLocal: keychainLocal).refresh()
     }
 }

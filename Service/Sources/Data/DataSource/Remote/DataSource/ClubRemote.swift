@@ -1,9 +1,17 @@
 import RxSwift
 
-final class ClubRemote: BaseRemote<ClubAPI> {
-    static let shared = ClubRemote()
-    private override init() {}
+protocol ClubRemoteProtocol {
+    func fetchClubList(type: ClubType) -> Single<[ClubList]>
+    func fetchDetailClub(clubID: Int) -> Single<Club>
+    func createNewClub(req: NewClubRequest) -> Completable
+    func updateClub(clubID: Int, req: UpdateClubRequest) -> Completable
+    func deleteClub(clubID: Int) -> Completable
+    func clubOpen(clubID: Int) -> Completable
+    func clubClose(clubID: Int) -> Completable
+    func exitClub(clubID: Int) -> Completable
+}
 
+final class ClubRemote: BaseRemote<ClubAPI>, ClubRemoteProtocol {
     func fetchClubList(type: ClubType) -> Single<[ClubList]> {
         request(.clubList(type: type))
             .map([SingleClubListResponse].self)

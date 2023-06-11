@@ -1,9 +1,23 @@
 import Foundation
 
-final class KeychainLocal {
-    static let shared = KeychainLocal()
+protocol KeychainLocalProtocol {
+    func saveAccessToken(_ token: String)
+    func fetchAccessToken() throws -> String
+    func deleteAccessToken()
+    func saveRefreshToken(_ token: String)
+    func fetchRefreshToken() throws -> String
+    func deleteRefreshToken()
+    func saveAccessExp(_ date: String)
+    func fetchAccessExp() throws -> String
+    func deleteAccessExp()
+    func saveRefreshExp(_ date: String)
+    func fetchRefreshExp() throws -> String
+    func deleteRefreshExp()
+}
+
+final class KeychainLocal: KeychainLocalProtocol {
     private let keychain = Keychain()
-    private init() {}
+    public init() {}
 
     func saveAccessToken(_ token: String) {
         keychain.save(type: .accessToken, value: token)
