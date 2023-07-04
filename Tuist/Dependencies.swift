@@ -11,7 +11,7 @@ let dependencies = Dependencies(
             .remote(url: "https://github.com/RxSwiftCommunity/RxFlow.git", requirement: .exact("2.13.0")),
             .remote(url: "https://github.com/ReactorKit/ReactorKit.git", requirement: .exact("3.2.0")),
             .remote(url: "https://github.com/devxoul/Then.git", requirement: .exact("3.0.0")),
-            .remote(url: "https://github.com/onevcat/Kingfisher.git", requirement: .exact("7.5.0")),
+            .remote(url: "https://github.com/onevcat/Kingfisher.git", requirement: .exact("7.6.2")),
             .remote(url: "https://github.com/RxSwiftCommunity/RxDataSources.git", requirement: .exact("5.0.2")),
             .remote(url: "https://github.com/AliSoftware/Reusable.git", requirement: .exact("4.1.2")),
             .remote(url: "https://github.com/baekteun/BTImageView.git", requirement: .exact("1.1.2")),
