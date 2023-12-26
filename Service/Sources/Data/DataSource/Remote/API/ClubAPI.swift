@@ -3,7 +3,6 @@ import Moya
 enum ClubAPI {
     case clubList(type: ClubType)
     case clubDetail(clubID: Int)
-    case createNewClub(req: NewClubRequest)
     case updateClub(clubID: Int, req: UpdateClubRequest)
     case deleteClub(clubID: Int)
     case clubOpen(clubID: Int)
@@ -18,7 +17,7 @@ extension ClubAPI: GCMSAPI {
 
     var urlPath: String {
         switch self {
-        case .clubList, .createNewClub:
+        case .clubList:
             return ""
 
         case let .clubDetail(clubID), let .updateClub(clubID, _), let .deleteClub(clubID):
@@ -40,9 +39,6 @@ extension ClubAPI: GCMSAPI {
         case .clubList, .clubDetail:
             return .get
 
-        case .createNewClub:
-            return .post
-
         case .updateClub, .clubOpen, .clubClose:
             return .patch
 
@@ -60,9 +56,6 @@ extension ClubAPI: GCMSAPI {
 
         case .clubDetail, .clubOpen, .clubClose, .exitClub, .deleteClub:
             return .requestPlain
-
-        case let .createNewClub(req):
-            return .requestJSONEncodable(req)
 
         case let .updateClub(_, req):
             return .requestJSONEncodable(req)
@@ -90,14 +83,6 @@ extension ClubAPI: GCMSAPI {
             return [
                 401: .unauthorized,
                 404: .notFoundUserOrNotFoundClub,
-                500: .serverError
-            ]
-
-        case .createNewClub:
-            return [
-                400: .invalidInput,
-                401: .unauthorized,
-                409: .alreadyExistClub,
                 500: .serverError
             ]
 
