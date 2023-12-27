@@ -24,10 +24,6 @@ final class HomeVC: TabmanViewController, View {
                                          style: .plain,
                                          target: nil,
                                          action: nil)
-    private let newClubButton = UIBarButtonItem(image: .init(systemName: "plus.app")?.tintColor(GCMSAsset.Colors.gcmsGray4.color),
-                                              style: .plain,
-                                              target: nil,
-                                              action: nil)
     private lazy var indicator = LottieAnimationView(name: "GCMS-Indicator").then {
         $0.contentMode = .scaleAspectFit
         $0.loopMode = .loop
@@ -112,7 +108,6 @@ private extension HomeVC {
     }
     func configNavigation() {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: titleLabel)
-        self.navigationItem.setRightBarButtonItems([myPageButton, newClubButton], animated: true)
         self.navigationItem.configBack()
     }
     func bindAction(reactor: HomeReactor) {
@@ -124,11 +119,6 @@ private extension HomeVC {
     func bindView(reactor: HomeReactor) {
         profileButton.rx.tap
             .map { _ in Reactor.Action.myPageButtonDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-        newClubButton.rx.tap
-            .map { _ in Reactor.Action.newClubButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
