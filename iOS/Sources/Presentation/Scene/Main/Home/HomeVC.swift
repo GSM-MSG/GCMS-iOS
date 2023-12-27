@@ -108,6 +108,7 @@ private extension HomeVC {
     }
     func configNavigation() {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: titleLabel)
+        self.navigationItem.rightBarButtonItem = myPageButton
         self.navigationItem.configBack()
     }
     func bindAction(reactor: HomeReactor) {
