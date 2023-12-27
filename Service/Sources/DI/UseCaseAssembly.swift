@@ -31,11 +31,6 @@ public final class UseCaseAssembly: Assembly {
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
-        container.register(CreateNewClubUseCase.self) { r in
-             CreateNewClubUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
-            )
-        }
         container.register(DeleteClubUseCase.self) { r in
              DeleteClubUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
