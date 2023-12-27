@@ -1,9 +1,15 @@
-//
-//  ClubActivitySection.swift
-//  GCMS
-//
-//  Created by 박준서 on 12/27/23.
-//  Copyright © 2023 com.msg. All rights reserved.
-//
+import UIKit
+import RxDataSources
 
-import Foundation
+struct ClubActivitySection: SectionModelType {
+    var items: [Data]
+}
+
+extension ClubActivitySection {
+    typealias Item = Data
+
+    init(original: ClubActivitySection, items: [Data]) {
+        self = original
+        self.items = items
+    }
+}
