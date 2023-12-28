@@ -39,27 +39,12 @@ final class ReactorAssembly: Assembly {
             )
         }
 
-        container.register(NewClubReactor.self) { r in
-             NewClubReactor(
-                createNewClubUseCase: r.resolve(CreateNewClubUseCase.self)!,
-                uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!
-            )
-        }
-
         container.register(UpdateClubReactor.self) { r, club in
             UpdateClubReactor(
                 club: club,
                 fetchDetailClubUseCase: r.resolve(FetchDetailClubUseCase.self)!,
                 updateClubUseCase: r.resolve(UpdateClubUseCase.self)!,
                 uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!
-            )
-        }
-
-        container.register(MemberAppendReactor.self) { r, closure, clubType in
-             MemberAppendReactor(
-                closure: closure,
-                clubType: clubType,
-                searchUserUseCase: r.resolve(SearchUserUseCase.self)!
             )
         }
 

@@ -8,7 +8,7 @@ final class UpdateSteppedProgressBar: UIView {
     private let lineView = UIView().then {
         $0.backgroundColor = UIColor(red: 0.454, green: 0.454, blue: 0.454, alpha: 1)
     }
-    
+
     // MARK: - UI
     init(selectedIndex: Int) {
         super.init(frame: .zero)
@@ -16,11 +16,11 @@ final class UpdateSteppedProgressBar: UIView {
         addView()
         setLayout()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
 }
 
 private extension UpdateSteppedProgressBar {

@@ -59,7 +59,7 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
         $0.setTitleColor(GCMSAsset.Colors.gcmsGray1.color, for: .normal)
         $0.backgroundColor = GCMSAsset.Colors.gcmsMainColor.color
     }
-    
+
     private var bannerPHConfiguration: PHPickerConfiguration = {
         var config = PHPickerConfiguration()
         config.filter = .images
@@ -67,7 +67,7 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
         return config
     }()
     private lazy var bannerPHPickerController = PHPickerViewController(configuration: bannerPHConfiguration)
-    
+
     private var activityPHConfiguration: PHPickerConfiguration = {
         var config = PHPickerConfiguration()
         config.filter = .images
@@ -75,7 +75,7 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
         return config
     }()
     private lazy var activityPHPickerController = PHPickerViewController(configuration: activityPHConfiguration)
-    
+
     // MARK: - UI
     override func setup() {
         [bannerPHPickerController, activityPHPickerController].forEach { $0.delegate = self }
@@ -148,7 +148,7 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
     override func configureVC() {
         view.backgroundColor = GCMSAsset.Colors.gcmsBackgroundColor.color
     }
-    
+
     // MARK: - Reactor
     override func bindView(reactor: UpdateClubReactor) {
         bannerImageView.rx.tapGesture()
@@ -158,22 +158,17 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
                 owner.present(owner.bannerPHPickerController, animated: true)
             }
             .disposed(by: disposeBag)
-        
+
         clubActivityAppendButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.reactor?.action.onNext(.activityAppendButtonDidTap)
                 owner.present(owner.activityPHPickerController, animated: true)
             }
             .disposed(by: disposeBag)
-        
+
         clubActivitiesCollectionView.rx.itemSelected
             .map(\.row)
             .map(Reactor.Action.activityDeleteDidTap)
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-        clubMemberAppendButton.rx.tap
-            .map { Reactor.Action.memberAppendButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
@@ -182,7 +177,7 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
             .map(Reactor.Action.memberRemove)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         completeButton.rx.tap
             .map { Reactor.Action.completeButtonDidTap }
             .bind(to: reactor.action)
@@ -190,7 +185,7 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
     }
     override func bindState(reactor: UpdateClubReactor) {
         let sharedState = reactor.state.share(replay: 4).observe(on: MainScheduler.asyncInstance)
-        
+
         let activityDS = RxCollectionViewSectionedReloadDataSource<ClubActivitySection>{ _, tv, ip, item in
             let cell = tv.dequeueReusableCell(for: ip, cellType: ClubActivityCell.self) as ClubActivityCell
             cell.model = item
@@ -202,14 +197,14 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
             cell.model = item
             return cell
         }
-        
+
         sharedState
             .map(\.bannerImg)
             .compactMap { $0 }
             .map { UIImage(data: $0) }
             .bind(to: bannerImageView.rx.image)
             .disposed(by: disposeBag)
-        
+
         sharedState
             .map(\.activityImgs)
             .map { [ClubActivitySection.init(items: $0)] }
@@ -223,7 +218,7 @@ final class SecondUpdateClubVC: BaseVC<UpdateClubReactor> {
             }).map { [ClubMemberSection.init(header: "", items: $0)] }
             .bind(to: clubMemberCollectionView.rx.items(dataSource: memberDS))
             .disposed(by: disposeBag)
-        
+
         sharedState
             .map(\.isLoading)
             .bind(with: self) { owner, load in

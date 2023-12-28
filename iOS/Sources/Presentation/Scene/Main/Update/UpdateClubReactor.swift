@@ -8,9 +8,9 @@ import Foundation
 final class UpdateClubReactor: Reactor, Stepper {
     // MARK: - Properties
     var steps: PublishRelay<Step> = .init()
-    
+
     private let disposeBag: DisposeBag = .init()
-    
+
     // MARK: - Reactor
     enum Action {
         case bannerBinding(Mutation)
@@ -28,7 +28,6 @@ final class UpdateClubReactor: Reactor, Stepper {
         case bannerDidTap
         case activityAppendButtonDidTap
         case activityDeleteDidTap(Int)
-        case memberAppendButtonDidTap
         case memberDidSelected([User])
         case memberRemove(Int)
         case updateLoading(Bool)
@@ -70,7 +69,7 @@ final class UpdateClubReactor: Reactor, Stepper {
     private let fetchDetailClubUseCase: FetchDetailClubUseCase
     private let updateClubUseCase: UpdateClubUseCase
     private let uploadImagesUseCase: UploadImagesUseCase
-    
+
     // MARK: - Init
     init(
         club: Club,
@@ -164,10 +163,6 @@ extension UpdateClubReactor {
             return .just(.setIsBanner(false))
         case let .activityDeleteDidTap(index):
             return .just(.removeImageData(index))
-        case .memberAppendButtonDidTap:
-            steps.accept(GCMSStep.memberAppendIsRequired(closure: { [weak self] users in
-                self?.action.onNext(.memberDidSelected(users))
-            }, clubType: currentState.clubType))
         case let .memberDidSelected(users):
             return .just(.appendMember(users))
         case let .memberRemove(index):
@@ -185,7 +180,7 @@ extension UpdateClubReactor {
 extension UpdateClubReactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
-        
+
         switch mutation {
         case let .setTitle(title):
             newState.name = title
@@ -243,7 +238,7 @@ extension UpdateClubReactor {
         case let .setIsLoading(load):
             newState.isLoading = load
         }
-        
+
         return newState
     }
 }

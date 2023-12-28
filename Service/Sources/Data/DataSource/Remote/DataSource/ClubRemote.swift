@@ -3,7 +3,6 @@ import RxSwift
 protocol ClubRemoteProtocol {
     func fetchClubList(type: ClubType) -> Single<[ClubList]>
     func fetchDetailClub(clubID: Int) -> Single<Club>
-    func createNewClub(req: NewClubRequest) -> Completable
     func updateClub(clubID: Int, req: UpdateClubRequest) -> Completable
     func deleteClub(clubID: Int) -> Completable
     func clubOpen(clubID: Int) -> Completable
@@ -22,11 +21,6 @@ final class ClubRemote: BaseRemote<ClubAPI>, ClubRemoteProtocol {
         request(.clubDetail(clubID: clubID))
             .map(FetchDetailClubResponse.self)
             .map { $0.toDomain() }
-    }
-
-    func createNewClub(req: NewClubRequest) -> Completable {
-        request(.createNewClub(req: req))
-            .asCompletable()
     }
 
     func updateClub(clubID: Int, req: UpdateClubRequest) -> Completable {

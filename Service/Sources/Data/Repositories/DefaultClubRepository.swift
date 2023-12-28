@@ -24,10 +24,6 @@ final class DefaultClubRepository: ClubRepository {
         clubRemote.fetchDetailClub(clubID: clubID)
     }
 
-    func createNewClub(req: NewClubRequest) -> Completable {
-        clubRemote.createNewClub(req: req)
-    }
-
     func updateClub(clubID: Int, req: UpdateClubRequest) -> Completable {
         clubRemote.updateClub(clubID: clubID, req: req)
     }
