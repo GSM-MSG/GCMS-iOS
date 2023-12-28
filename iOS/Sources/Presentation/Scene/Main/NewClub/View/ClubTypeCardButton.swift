@@ -5,6 +5,7 @@ import Service
 final class ClubTypeCardButton: UIButton {
     // MARK: - Properties
     private let type: ClubType
+
     // MARK: - Init
     init(type: ClubType, isGray: Bool = false) {
         self.type = type
@@ -18,11 +19,11 @@ final class ClubTypeCardButton: UIButton {
             setImage(isGray ? GCMSAsset.Images.gcmsEditorialGray.image : GCMSAsset.Images.gcmsEditorial.image, for: .normal)
         }
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     public func setImageState(isGray: Bool) {
         switch type {
         case .major:
