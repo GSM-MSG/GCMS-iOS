@@ -9,22 +9,18 @@ final class NewClubSteppedProgressBar: UIView {
     private let lineView = UIView().then {
         $0.backgroundColor = UIColor(red: 0.454, green: 0.454, blue: 0.454, alpha: 1)
     }
-    
     // MARK: - UI
     init(selectedIndex: Int) {
         super.init(frame: .zero)
         [firstStepView, secondStepView, thirdStepView][selectedIndex].isSelected = true
         addView()
         setLayout()
-        configureView()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
-
 private extension NewClubSteppedProgressBar {
     func addView() {
         addSubViews(lineView, firstStepView, secondStepView, thirdStepView)
@@ -49,8 +45,5 @@ private extension NewClubSteppedProgressBar {
             $0.centerY.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
         }
-    }
-    func configureView() {
-        
     }
 }
