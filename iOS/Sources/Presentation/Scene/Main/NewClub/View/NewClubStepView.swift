@@ -44,7 +44,7 @@ final class NewClubStepView: UIView {
         super.draw(rect)
         drawPath(rect: rect)
     }
-    
+
 }
 
 private extension NewClubStepView {
