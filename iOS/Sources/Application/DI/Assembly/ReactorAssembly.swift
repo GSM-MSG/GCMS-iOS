@@ -19,7 +19,6 @@ final class ReactorAssembly: Assembly {
         container.register(DetailClubReactor.self) { (r: Resolver, clubID: Int) in
              DetailClubReactor(
                 clubID: clubID,
-                deleteClubUseCase: r.resolve(DeleteClubUseCase.self)!,
                 fetchDetailClubUseCase: r.resolve(FetchDetailClubUseCase.self)!,
                 exitClubUseCase: r.resolve(ExitClubUseCase.self)!,
                 clubApplyUseCase: r.resolve(ClubApplyUseCase.self)!,
@@ -30,21 +29,12 @@ final class ReactorAssembly: Assembly {
         }
 
         container.register(MyPageReactor.self) { r in
-             MyPageReactor(
+            MyPageReactor(
                 logoutUseCase: r.resolve(LogoutUseCase.self)!,
                 fetchProfileUseCase: r.resolve(FetchProfileUseCase.self)!,
                 uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!,
                 updateProfileImageUseCase: r.resolve(UpdateProfileImageUseCase.self)!,
                 withdrawalUseCase: r.resolve(WithdrawalUseCase.self)!
-            )
-        }
-
-        container.register(UpdateClubReactor.self) { r, club in
-            UpdateClubReactor(
-                club: club,
-                fetchDetailClubUseCase: r.resolve(FetchDetailClubUseCase.self)!,
-                updateClubUseCase: r.resolve(UpdateClubUseCase.self)!,
-                uploadImagesUseCase: r.resolve(UploadImagesUseCase.self)!
             )
         }
 

@@ -32,7 +32,6 @@ final class DetailClubReactor: Reactor, Stepper {
     let initialState: State
     private let clubID: Int
 
-    private let deleteClubUseCase: DeleteClubUseCase
     private let fetchDetailClubUseCase: FetchDetailClubUseCase
     private let exitClubUseCase: ExitClubUseCase
     private let clubApplyUseCase: ClubApplyUseCase
@@ -43,7 +42,6 @@ final class DetailClubReactor: Reactor, Stepper {
     // MARK: - Init
     init(
         clubID: Int,
-        deleteClubUseCase: DeleteClubUseCase,
         fetchDetailClubUseCase: FetchDetailClubUseCase,
         exitClubUseCase: ExitClubUseCase,
         clubApplyUseCase: ClubApplyUseCase,
@@ -55,7 +53,6 @@ final class DetailClubReactor: Reactor, Stepper {
             isLoading: false
         )
         self.clubID = clubID
-        self.deleteClubUseCase = deleteClubUseCase
         self.fetchDetailClubUseCase = fetchDetailClubUseCase
         self.exitClubUseCase = exitClubUseCase
         self.clubApplyUseCase = clubApplyUseCase
@@ -158,7 +155,7 @@ private extension DetailClubReactor {
         actions.append(.init(title: title, style: .destructive, handler: { [weak self] _ in
             guard let self = self else { return }
             if isHead {
-                self.clubDelete()
+                
             } else {
                 self.clubExit()
             }
@@ -167,23 +164,6 @@ private extension DetailClubReactor {
         let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .phone ? .actionSheet : .alert
         steps.accept(GCMSStep.alert(title: nil, message: nil, style: style, actions: actions))
         return .empty()
-    }
-    func clubDelete() {
-        self.steps.accept(GCMSStep.alert(title: "정말로 동아리를 삭제하시겠습니까?", message: "이 선택은 되돌릴 수 없습니다.", style: .alert, actions: [
-            .init(title: "확인", style: .destructive, handler: { _ in
-                self.deleteClubUseCase.execute(clubID: self.clubID)
-                    .andThen(Observable.just(()))
-                    .subscribe(onNext: { _ in
-                        self.steps.accept(GCMSStep.popToRoot)
-                    }, onError: { e in
-                        self.steps.accept(GCMSStep.failureAlert(title: "알 수 없는 오류가 일어났습니다.", message: e.localizedDescription, action: [
-                            .init(title: "확인", style: .default)
-                        ]))
-                    })
-                    .disposed(by: self.disposeBag)
-            }),
-            .init(title: "취소", style: .cancel)
-        ]))
     }
     func clubExit() {
         self.steps.accept(GCMSStep.alert(title: "정말로 동아리를 탈퇴하시겠습니까?", message: "이 선택은 되돌릴 수 없습니다.", style: .alert, actions: [

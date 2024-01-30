@@ -45,10 +45,6 @@ final class MainFlow: Flow {
         case .dismiss:
             return dismiss()
         // MARK: UpdateClub
-        case let .firstUpdateClubIsRequired(club):
-            return navigateToFirstUpdateClub(club: club)
-        case let .secondUpdateClubIsRequired(reactor):
-            return navigateToSecondUpdateClub(reactor: reactor)
         case let .failureAlert(title, message, action):
             return presentToFailureAlert(title: title, message: message, action: action)
         case let .clubStatusIsRequired(clubID, isHead, isOpened):
@@ -86,17 +82,6 @@ private extension MainFlow {
     func dismiss() -> FlowContributors {
         self.rootVC.topViewController?.dismiss(animated: true)
         return .none
-    }
-    func navigateToFirstUpdateClub(club: Club) -> FlowContributors {
-        let reactor = AppDelegate.container.resolve(UpdateClubReactor.self, argument: club)!
-        let vc = FirstUpdateClubVC(reactor: reactor)
-        self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
-    }
-    func navigateToSecondUpdateClub(reactor: UpdateClubReactor) -> FlowContributors {
-        let vc = SecondUpdateClubVC(reactor: reactor)
-        self.rootVC.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
     }
     func presentToFailureAlert(title: String?, message: String?, action: [UIAlertAction] = []) -> FlowContributors {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)

@@ -31,10 +31,6 @@ public final class DataSourceAssembly: Assembly {
             ClubRemote(keychainLocal: r.resolve(KeychainLocalProtocol.self)!)
         }
 
-        container.register(ImageRemoteProtocol.self) { r in
-            ImageRemote(keychainLocal: r.resolve(KeychainLocalProtocol.self)!)
-        }
-
         container.register(UserRemoteProtocol.self) { r in
             UserRemote(keychainLocal: r.resolve(KeychainLocalProtocol.self)!)
         }
