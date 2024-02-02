@@ -113,12 +113,5 @@ public final class UseCaseAssembly: Assembly {
                 userRepository: r.resolve(UserRepository.self)!
             )
         }
-
-        // MARK: - Image
-        container.register(UploadImagesUseCase.self) { r in
-             UploadImagesUseCase(
-                imageRepository: r.resolve(ImageRepository.self)!
-            )
-        }
     }
 }
