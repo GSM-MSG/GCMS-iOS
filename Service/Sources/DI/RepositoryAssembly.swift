@@ -18,6 +18,9 @@ public final class RepositoryAssembly: Assembly {
         container.register(UserRepository.self) { r in
             DefaultUserRepository(userRemote: r.resolve(UserRemoteProtocol.self)!)
         }
+        container.register(ImageRepository.self) { r in
+            DefaultImageRepository(imageRemote: r.resolve(ImageRemoteProtocol.self)!)
+        }
         container.register(ClubApplicantRepository.self) { r in
             DefaultClubApplicantRepository(clubApplicantRemote: r.resolve(ClubApplicantRemoteProtocol.self)!)
         }
