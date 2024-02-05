@@ -5,54 +5,49 @@ public final class UseCaseAssembly: Assembly {
     public func assemble(container: Container) {
         // MARK: - Auth
         container.register(LoginUseCase.self) { r in
-             LoginUseCase(
+            LoginUseCase(
                 authRepository: r.resolve(AuthRepository.self)!
             )
         }
         container.register(CheckIsLoginedUseCase.self) { r in
-             CheckIsLoginedUseCase(
+            CheckIsLoginedUseCase(
                 authRepository: r.resolve(AuthRepository.self)!
             )
         }
         container.register(LogoutUseCase.self) { r in
-             LogoutUseCase(
+            LogoutUseCase(
                 authRepository: r.resolve(AuthRepository.self)!
             )
         }
-
+        
         // MARK: - Club
         container.register(ClubOpenUseCase.self) { r in
-             ClubOpenUseCase(
+            ClubOpenUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
         container.register(ClubCloseUseCase.self) { r in
-             ClubCloseUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
-            )
-        }
-        container.register(DeleteClubUseCase.self) { r in
-             DeleteClubUseCase(
+            ClubCloseUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
         container.register(FetchClubListUseCase.self) { r in
-             FetchClubListUseCase(
+            FetchClubListUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
         container.register(FetchClubMemberUseCase.self) { r in
-             FetchClubMemberUseCase(
+            FetchClubMemberUseCase(
                 clubMemberRepository: r.resolve(ClubMemberRepository.self)!
             )
         }
         container.register(FetchClubApplicantUseCase.self) { r in
-             FetchClubApplicantUseCase(
+            FetchClubApplicantUseCase(
                 clubApplicantRepository: r.resolve(ClubApplicantRepository.self)!
             )
         }
         container.register(FetchDetailClubUseCase.self) { r in
-             FetchDetailClubUseCase(
+            FetchDetailClubUseCase(
                 clubRepository: r.resolve(ClubRepository.self)!
             )
         }
@@ -62,54 +57,49 @@ public final class UseCaseAssembly: Assembly {
             )
         }
         container.register(UserAcceptUseCase.self) { r in
-             UserAcceptUseCase(
+            UserAcceptUseCase(
                 clubApplicantRepository: r.resolve(ClubApplicantRepository.self)!
             )
         }
         container.register(UserRejectUseCase.self) { r in
-             UserRejectUseCase(
+            UserRejectUseCase(
                 clubApplicantRepository: r.resolve(ClubApplicantRepository.self)!
             )
         }
         container.register(UserKickUseCase.self) { r in
-             UserKickUseCase(
+            UserKickUseCase(
                 clubMemberRepository: r.resolve(ClubMemberRepository.self)!
             )
         }
         container.register(ClubApplyUseCase.self) { r in
-             ClubApplyUseCase(
+            ClubApplyUseCase(
                 clubApplicantRepository: r.resolve(ClubApplicantRepository.self)!
             )
         }
         container.register(ClubCancelUseCase.self) { r in
-             ClubCancelUseCase(
+            ClubCancelUseCase(
                 clubApplicantRepository: r.resolve(ClubApplicantRepository.self)!
             )
         }
         container.register(ClubDelegationUseCase.self) { r in
-             ClubDelegationUseCase(
+            ClubDelegationUseCase(
                 clubMemberRepository: r.resolve(ClubMemberRepository.self)!
             )
         }
-        container.register(UpdateClubUseCase.self) { r in
-            UpdateClubUseCase(
-                clubRepository: r.resolve(ClubRepository.self)!
-            )
-        }
-
+        
         // MARK: - User
         container.register(FetchProfileUseCase.self) { r in
-             FetchProfileUseCase(
+            FetchProfileUseCase(
                 userRepository: r.resolve(UserRepository.self)!
             )
         }
         container.register(UpdateProfileImageUseCase.self) { r in
-             UpdateProfileImageUseCase(
+            UpdateProfileImageUseCase(
                 userRepository: r.resolve(UserRepository.self)!
             )
         }
         container.register(SearchUserUseCase.self) { r in
-             SearchUserUseCase(
+            SearchUserUseCase(
                 userRepository: r.resolve(UserRepository.self)!
             )
         }
@@ -123,10 +113,10 @@ public final class UseCaseAssembly: Assembly {
                 userRepository: r.resolve(UserRepository.self)!
             )
         }
-
+        
         // MARK: - Image
         container.register(UploadImagesUseCase.self) { r in
-             UploadImagesUseCase(
+            UploadImagesUseCase(
                 imageRepository: r.resolve(ImageRepository.self)!
             )
         }

@@ -6,7 +6,7 @@ enum ImageAPI {
 }
 
 extension ImageAPI: GCMSAPI {
-
+    
     var domain: GCMSDomain {
         return .image
     }
@@ -40,7 +40,7 @@ extension ImageAPI: GCMSAPI {
         switch self {
         case .uploadImages:
             return .accessToken
-
+            
         default:
             return JWTTokenType.none
         }
@@ -48,7 +48,7 @@ extension ImageAPI: GCMSAPI {
     var headers: [String: String]? {
         return ["Content-type": "multipart/form-data"]
     }
-
+    
     typealias ErrorType = GCMSError
     var errorMapper: [Int: GCMSError]? {
         switch self {

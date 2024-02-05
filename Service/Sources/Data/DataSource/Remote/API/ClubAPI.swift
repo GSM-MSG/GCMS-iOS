@@ -3,8 +3,6 @@ import Moya
 enum ClubAPI {
     case clubList(type: ClubType)
     case clubDetail(clubID: Int)
-    case updateClub(clubID: Int, req: UpdateClubRequest)
-    case deleteClub(clubID: Int)
     case clubOpen(clubID: Int)
     case clubClose(clubID: Int)
     case exitClub(clubID: Int)
@@ -20,7 +18,7 @@ extension ClubAPI: GCMSAPI {
         case .clubList:
             return ""
 
-        case let .clubDetail(clubID), let .updateClub(clubID, _), let .deleteClub(clubID):
+        case let .clubDetail(clubID):
             return "/\(clubID)"
 
         case let .clubOpen(clubID):
@@ -39,10 +37,10 @@ extension ClubAPI: GCMSAPI {
         case .clubList, .clubDetail:
             return .get
 
-        case .updateClub, .clubOpen, .clubClose:
+        case .clubOpen, .clubClose:
             return .patch
 
-        case .deleteClub, .exitClub:
+        case .exitClub:
             return .delete
         }
     }
@@ -54,11 +52,8 @@ extension ClubAPI: GCMSAPI {
                 "type": type.rawValue
             ], encoding: URLEncoding.queryString)
 
-        case .clubDetail, .clubOpen, .clubClose, .exitClub, .deleteClub:
+        case .clubDetail, .clubOpen, .clubClose, .exitClub:
             return .requestPlain
-
-        case let .updateClub(_, req):
-            return .requestJSONEncodable(req)
         }
     }
 
@@ -83,23 +78,6 @@ extension ClubAPI: GCMSAPI {
             return [
                 401: .unauthorized,
                 404: .notFoundUserOrNotFoundClub,
-                500: .serverError
-            ]
-
-        case .updateClub:
-            return [
-                400: .invalidInput,
-                401: .unauthorized,
-                403: .notClubHead,
-                404: .notFoundClub,
-                500: .serverError
-            ]
-
-        case .deleteClub:
-            return [
-                401: .unauthorized,
-                403: .notClubHead,
-                404: .notFoundClub,
                 500: .serverError
             ]
 
