@@ -221,13 +221,13 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                 owner.loadViewIfNeeded()
                 switch item.scope {
                 case .head:
-                    owner.applyButton.setTitle(item.isOpen ? "동아리 신청 마감하기" : "동아리 신청 받기", for: .normal)
+                    owner.applyButton.setTitle(item.isOpened ? "동아리 신청 마감하기" : "동아리 신청 받기", for: .normal)
                     owner.navigationItem.setRightBarButton(owner.statusButton, animated: true)
                 case .member:
                     owner.applyButton.isHidden = true
                     owner.navigationItem.setRightBarButton(owner.statusButton, animated: true)
                 case .`default`:
-                    if item.isOpen {
+                    if item.isOpened {
                         owner.applyButton.setTitle(item.isApplied ? "신청취소하기" : "동아리 신청하기", for: .normal)
                         owner.applyButton.backgroundColor = item.isApplied
                         ? GCMSAsset.Colors.gcmsThemeColor.color
@@ -237,6 +237,9 @@ final class DetailClubVC: BaseVC<DetailClubReactor> {
                     }
                 case .other:
                     owner.applyButton.isHidden = true
+                case .admin:
+                    owner.applyButton.setTitle(item.isOpened ? "동아리 신청 마감하기" : "동아리 신청 받기", for: .normal)
+                    owner.navigationItem.setRightBarButton(owner.statusButton, animated: true)
                 }
                 owner.headView.bind(user: item.head)
                 if let teacher = item.teacher, !teacher.isEmpty {
