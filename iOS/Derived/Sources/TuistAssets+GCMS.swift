@@ -43,6 +43,9 @@ public enum GCMSAsset {
     public static let gcmsMajor = GCMSImages(name: "GCMS_Major")
     public static let gcmsMajorGray = GCMSImages(name: "GCMS_Major_Gray")
     public static let gcmsNewClubPlaceholder = GCMSImages(name: "GCMS_NewClubPlaceholder")
+    public static let gcmsProfile = GCMSImages(name: "GCMS_Profile")
+    public static let gcmsRadioButton = GCMSImages(name: "GCMS_RadioButton")
+    public static let gcmsRadioButtonFill = GCMSImages(name: "GCMS_RadioButton_Fill")
     public static let gcmsWhaleLogo = GCMSImages(name: "GCMS_WhaleLogo")
   }
 }

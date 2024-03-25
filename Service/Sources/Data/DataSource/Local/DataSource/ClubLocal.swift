@@ -1,5 +1,5 @@
 import RxSwift
-import Then
+import Configure
 
 protocol ClubLocalProtocol {
     func fetchClubList(type: ClubType) -> Single<[ClubList]>

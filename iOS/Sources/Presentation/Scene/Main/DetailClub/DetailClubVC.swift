@@ -6,7 +6,7 @@ import RxDataSources
 import Kingfisher
 import Service
 import SnapKit
-import Then
+import Configure
 
 final class DetailClubVC: BaseVC<DetailClubReactor> {
     // MARK: - Metric
