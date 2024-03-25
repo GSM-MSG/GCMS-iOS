@@ -40,7 +40,7 @@ extension FetchDetailClubResponse {
             notionLink: notionLink,
             scope: scope,
             isApplied: isApplied,
-            isOpen: isOpened,
+            isOpened: isOpened,
             activityImgs: activityImgs.compactMap { $0.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) },
             member: member.map { $0.toDomain() },
             teacher: teacher
