@@ -12,7 +12,7 @@ final class DefaultClubAttendRepository: ClubAttendRepository {
         clubAttendRemote.fetchAttendList(clubID: clubID, date: date, period: period)
     }
 
-    func attendanceCreate(clubID: Int) -> Single<[ClubAttend]>{
+    func attendanceCreate(clubID: Int) -> Completable {
         clubAttendRemote.attendanceCreate(clubID: clubID)
     }
 

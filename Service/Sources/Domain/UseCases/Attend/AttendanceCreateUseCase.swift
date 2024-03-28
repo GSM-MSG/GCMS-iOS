@@ -8,7 +8,7 @@ public struct AttendanceCreateUseCase {
 
     private let clubAttendRepository: ClubAttendRepository
 
-    public func execute(clubID: Int) -> Single<[ClubAttend]> {
+    public func execute(clubID: Int) -> Completable {
         clubAttendRepository.attendanceCreate(clubID: clubID)
     }
 }

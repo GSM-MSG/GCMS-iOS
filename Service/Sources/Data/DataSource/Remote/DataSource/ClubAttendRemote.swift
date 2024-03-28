@@ -3,7 +3,7 @@ import Foundation
 
 protocol ClubAttendRemoteProtocol {
     func fetchAttendList(clubID: Int, date: String?, period: Period?) -> Single<[ClubAttend]>
-    func attendanceCreate(clubID: Int) -> Single<[ClubAttend]>
+    func attendanceCreate(clubID: Int) -> Completable
     func recordeExcelPrint() -> Completable
     func changeAttendStatus() -> Completable
     func statusAllApply() -> Completable
@@ -16,10 +16,9 @@ final class ClubAttendRemote: BaseRemote<ClubAttendAPI>, ClubAttendRemoteProtoco
             .map { $0.toDomain() }
     }
 
-    func attendanceCreate(clubID: Int) -> Single<[ClubAttend]> {
+    func attendanceCreate(clubID: Int) -> Completable {
         self.request(.attendanceCreate(clubID: clubID))
-            .map(FetchClubAttendListResponse.self)
-            .map { $0.toDomain() }
+            .asCompletable()
     }
 
     func recordeExcelPrint() -> Completable{
