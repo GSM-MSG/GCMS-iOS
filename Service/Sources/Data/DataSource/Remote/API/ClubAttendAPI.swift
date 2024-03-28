@@ -23,13 +23,13 @@ extension ClubAttendAPI: GCMSAPI {
             return "/\(clubID)/club"
 
         case .recordeExcelPrint:
-            return "attend/excel"
+            return "/attend/excel"
 
         case .changeAttendStatus:
             return ""
 
         case .statusAllApply:
-            return "batch"
+            return "/batch"
         }
     }
 
@@ -54,16 +54,10 @@ extension ClubAttendAPI: GCMSAPI {
                 "period": period
             ], encoding: URLEncoding.queryString)
 
-        case .attendanceCreate:
-            return .requestPlain
-
-        case .recordeExcelPrint:
-            return .requestPlain
-
-        case .changeAttendStatus:
-            return .requestPlain
-
-        case .statusAllApply:
+        case .attendanceCreate,
+             .recordeExcelPrint,
+             .changeAttendStatus,
+             .statusAllApply:
             return .requestPlain
         }
     }
