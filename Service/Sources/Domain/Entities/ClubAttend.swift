@@ -8,7 +8,7 @@ public struct ClubAttend: Equatable {
     public let classNum: Int
     public let number: Int
     public let attendanceStatus: AttendanceStatus
-    
+
     public init(
         uuid: UUID,
         attendanceID: String,

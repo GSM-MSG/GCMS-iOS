@@ -15,27 +15,25 @@ final class ClubAttendRemote: BaseRemote<ClubAttendAPI>, ClubAttendRemoteProtoco
             .map(FetchClubAttendListResponse.self)
             .map { $0.toDomain() }
     }
-    
+
     func attendanceCreate(clubID: Int) -> Single<[ClubAttend]> {
         self.request(.attendanceCreate(clubID: clubID))
             .map(FetchClubAttendListResponse.self)
             .map { $0.toDomain() }
     }
-    
+
     func recordeExcelPrint() -> Completable{
         self.request(.recordeExcelPrint)
             .asCompletable()
     }
-    
-    
+
     func changeAttendStatus() -> Completable {
         self.request(.changeAttendStatus)
             .asCompletable()
     }
-    
+
     func statusAllApply() -> Completable {
         self.request(.statusAllApply)
             .asCompletable()
     }
-    
 }

@@ -13,7 +13,7 @@ extension ClubAttendAPI: GCMSAPI {
     var domain: GCMSDomain {
         return .attend
     }
-    
+
     var urlPath: String {
         switch self {
         case let .fetchAttendList(clubID, date, period):
@@ -37,10 +37,10 @@ extension ClubAttendAPI: GCMSAPI {
         switch self {
         case .fetchAttendList, .recordeExcelPrint:
             return .get
-            
+
         case .changeAttendStatus, .statusAllApply:
             return .patch
-            
+
         case .attendanceCreate:
             return .post
         }
@@ -53,16 +53,16 @@ extension ClubAttendAPI: GCMSAPI {
                 "date": date,
                 "period": period
             ], encoding: URLEncoding.queryString)
-            
+
         case .attendanceCreate:
             return .requestPlain
-            
+
         case .recordeExcelPrint:
             return .requestPlain
-            
+
         case .changeAttendStatus:
             return .requestPlain
-            
+
         case .statusAllApply:
             return .requestPlain
         }

@@ -4,7 +4,7 @@ struct FetchClubAttendListResponse: Decodable {
     let date: String?
     let period: Period?
     let users: [UsersResponse]
-    
+
     struct UsersResponse: Decodable {
         let uuid: UUID
         let attendanceID: String
