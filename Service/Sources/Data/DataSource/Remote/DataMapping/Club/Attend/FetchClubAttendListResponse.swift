@@ -1,14 +1,13 @@
 import Foundation
-import
 
-struct FetchClubAttendResponse: Decodable {
+struct FetchClubAttendListResponse: Decodable {
     let date: String?
     let period: Period?
     let users: [UsersResponse]
     
     struct UsersResponse: Decodable {
-        let id: UUID
-        let attendanceId: String
+        let uuid: UUID
+        let attendanceID: String
         let name: String
         let grade: Int
         let classNum: Int
@@ -17,14 +16,22 @@ struct FetchClubAttendResponse: Decodable {
     }
 }
 
-extension FetchClubAttendResponse.UsersResponse {
-    func toDomain() -> {
-        
+extension FetchClubAttendListResponse.UsersResponse {
+    func toDomain() -> ClubAttend {
+        ClubAttend(
+            uuid: uuid,
+            attendanceID: attendanceID,
+            name: name,
+            grade: grade,
+            classNum: classNum,
+            number: number,
+            attendanceStatus: attendanceStatus
+        )
     }
 }
 
-extension FetchClubAttendResponse {
-    func toDomain() -> {
-        
+extension FetchClubAttendListResponse {
+    func toDomain() -> [ClubAttend] {
+        self.users.map { $0.toDomain() }
     }
 }
