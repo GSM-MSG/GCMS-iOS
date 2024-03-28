@@ -86,6 +86,31 @@ public final class UseCaseAssembly: Assembly {
                 clubMemberRepository: r.resolve(ClubMemberRepository.self)!
             )
         }
+        container.register(FetchClubAttendListUseCase.self) { r in
+            FetchClubAttendListUseCase(
+                clubAttendRepository: r.resolve(ClubAttendRepository.self)!
+            )
+        }
+        container.register(AttendanceCreateUseCase.self) { r in
+            AttendanceCreateUseCase(
+                clubAttendRepository: r.resolve(ClubAttendRepository.self)!
+            )
+        }
+        container.register(RecordExcelPrintUseCase.self) { r in
+            RecordExcelPrintUseCase(
+                clubAttendRepository: r.resolve(ClubAttendRepository.self)!
+            )
+        }
+        container.register(ChangeAttendStatusUseCase.self) { r in
+            ChangeAttendStatusUseCase(
+                clubAttendRepository: r.resolve(ClubAttendRepository.self)!
+            )
+        }
+        container.register(StatusAllApplyUseCase.self) { r in
+            StatusAllApplyUseCase(
+                clubAttendRepository: r.resolve(ClubAttendRepository.self)!
+            )
+        }
         
         // MARK: - User
         container.register(FetchProfileUseCase.self) { r in
