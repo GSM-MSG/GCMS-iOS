@@ -42,6 +42,7 @@ enum GCMSDomain: String {
     case club
     case clubMember = "club-member"
     case applicant
+    case attend
 }
 
 extension GCMSDomain {
