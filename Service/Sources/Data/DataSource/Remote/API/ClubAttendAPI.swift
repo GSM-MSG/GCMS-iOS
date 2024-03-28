@@ -20,7 +20,7 @@ extension ClubAttendAPI: GCMSAPI {
             return "/\(clubID)"
 
         case let .attendanceCreate(clubID):
-            return ""
+            return "/\(clubID)/club"
 
         case .recordeExcelPrint:
             return "attend/excel"
