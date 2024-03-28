@@ -1,8 +1,6 @@
-//
-//  AttendanceStatus.swift
-//  Service
-//
-//  Created by Mac on 3/26/24.
-//
-
-import Foundation
+public enum AttendanceStatus: String, Codable {
+    case attendance = "ATTENDANCE"
+    case late = "LATE"
+    case reasonableAbsent = "REASONABLE_ABSENT"
+    case absent = "ABSENT"
+}
