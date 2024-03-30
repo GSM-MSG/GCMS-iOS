@@ -2,7 +2,7 @@ import Foundation
 
 struct FetchClubAttendListResponse: Decodable {
     let date: String?
-    let period: Period?
+    let period: String?
     let users: [UsersResponse]
 
     struct UsersResponse: Decodable {
