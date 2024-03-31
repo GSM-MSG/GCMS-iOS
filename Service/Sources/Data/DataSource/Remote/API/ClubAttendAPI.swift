@@ -3,7 +3,7 @@ import Foundation
 
 enum ClubAttendAPI {
     case fetchAttendList(clubID: Int, date: String?, period: Period?)
-    case attendanceCreate(clubID: Int)
+    case createAttendance(clubID: Int)
     case recordeExcelPrint
     case changeAttendStatus
     case statusAllApply
@@ -19,7 +19,7 @@ extension ClubAttendAPI: GCMSAPI {
         case let .fetchAttendList(clubID, _, _):
             return "/\(clubID)"
 
-        case let .attendanceCreate(clubID):
+        case let .createAttendance(clubID):
             return "/\(clubID)/club"
 
         case .recordeExcelPrint:
@@ -41,7 +41,7 @@ extension ClubAttendAPI: GCMSAPI {
         case .changeAttendStatus, .statusAllApply:
             return .patch
 
-        case .attendanceCreate:
+        case .createAttendance:
             return .post
         }
     }
@@ -54,7 +54,7 @@ extension ClubAttendAPI: GCMSAPI {
                 "period": period
             ], encoding: URLEncoding.queryString)
 
-        case .attendanceCreate,
+        case .createAttendance,
              .recordeExcelPrint,
              .changeAttendStatus,
              .statusAllApply:
@@ -70,7 +70,7 @@ extension ClubAttendAPI: GCMSAPI {
     }
 
     typealias ErrorType = GCMSError
-    var errorMapper: [Int : GCMSError]? {
+    var errorMapper: [Int: GCMSError]? {
         switch self {
         case .fetchAttendList, .recordeExcelPrint, .statusAllApply:
             return [
@@ -81,7 +81,7 @@ extension ClubAttendAPI: GCMSAPI {
                 500: .serverError
             ]
 
-        case .attendanceCreate:
+        case .createAttendance:
             return [:]
 
         case .changeAttendStatus                              :
