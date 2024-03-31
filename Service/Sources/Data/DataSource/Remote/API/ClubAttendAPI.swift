@@ -16,7 +16,7 @@ extension ClubAttendAPI: GCMSAPI {
 
     var urlPath: String {
         switch self {
-        case let .fetchAttendList(clubID, date, period):
+        case let .fetchAttendList(clubID, _, _):
             return "/\(clubID)"
 
         case let .attendanceCreate(clubID):
@@ -48,7 +48,7 @@ extension ClubAttendAPI: GCMSAPI {
 
     var task: Task {
         switch self {
-        case let .fetchAttendList(_, date, period):
+        case let .fetchAttendList(clubID, date, period):
             return .requestParameters(parameters: [
                 "date": date,
                 "period": period
