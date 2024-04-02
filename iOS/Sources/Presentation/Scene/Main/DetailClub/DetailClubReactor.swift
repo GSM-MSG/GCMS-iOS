@@ -144,6 +144,10 @@ private extension DetailClubReactor {
         let isHead = (currentState.clubDetail?.scope ?? .member) == .head
         let title = "동아리 탈퇴하기"
         var actions: [UIAlertAction] = []
+        actions.append(.init(title: "동아리 출석 관리하기", style: .default, handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.steps.accept(GCMSStep.clubAttendIsRequired)
+        }))
         actions.append(.init(title: "동아리 멤버 관리", style: .default, handler: { [weak self] _ in
             guard let self = self else { return }
             self.steps.accept(GCMSStep.clubStatusIsRequired(clubID: self.clubID, isHead: isHead, isOpened: self.currentState.clubDetail?.isOpened ?? false))
