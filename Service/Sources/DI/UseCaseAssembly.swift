@@ -96,11 +96,6 @@ public final class UseCaseAssembly: Assembly {
                 clubAttendRepository: r.resolve(ClubAttendRepository.self)!
             )
         }
-        container.register(RecordExcelPrintUseCase.self) { r in
-            RecordExcelPrintUseCase(
-                clubAttendRepository: r.resolve(ClubAttendRepository.self)!
-            )
-        }
         container.register(ChangeAttendStatusUseCase.self) { r in
             ChangeAttendStatusUseCase(
                 clubAttendRepository: r.resolve(ClubAttendRepository.self)!

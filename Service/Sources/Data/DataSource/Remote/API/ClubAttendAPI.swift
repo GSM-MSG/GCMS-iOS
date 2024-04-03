@@ -4,7 +4,6 @@ import Foundation
 enum ClubAttendAPI {
     case fetchAttendList(clubID: Int, date: String?, period: Period?)
     case createAttendance(clubID: Int)
-    case recordeExcelPrint
     case changeAttendStatus
     case statusAllApply
 }
@@ -22,9 +21,6 @@ extension ClubAttendAPI: GCMSAPI {
         case let .createAttendance(clubID):
             return "/\(clubID)/club"
 
-        case .recordeExcelPrint:
-            return "/attend/excel"
-
         case .changeAttendStatus:
             return ""
 
@@ -35,7 +31,7 @@ extension ClubAttendAPI: GCMSAPI {
 
     var method: Moya.Method {
         switch self {
-        case .fetchAttendList, .recordeExcelPrint:
+        case .fetchAttendList:
             return .get
 
         case .changeAttendStatus, .statusAllApply:
@@ -55,7 +51,6 @@ extension ClubAttendAPI: GCMSAPI {
             ], encoding: URLEncoding.queryString)
 
         case .createAttendance,
-             .recordeExcelPrint,
              .changeAttendStatus,
              .statusAllApply:
             return .requestPlain
@@ -72,7 +67,7 @@ extension ClubAttendAPI: GCMSAPI {
     typealias ErrorType = ClubAttendError
     var errorMapper: [Int: ClubAttendError]? {
         switch self {
-        case .fetchAttendList, .recordeExcelPrint:
+        case .fetchAttendList:
             return [
                 401: .unauthorized,
                 403: .notClubMember,

@@ -4,7 +4,6 @@ import Foundation
 protocol ClubAttendRemoteProtocol {
     func fetchAttendList(clubID: Int, date: String?, period: Period?) -> Single<[ClubAttend]>
     func createAttendance(clubID: Int) -> Completable
-    func recordeExcelPrint() -> Completable
     func changeAttendStatus() -> Completable
     func statusAllApply() -> Completable
 }
@@ -18,11 +17,6 @@ final class ClubAttendRemote: BaseRemote<ClubAttendAPI>, ClubAttendRemoteProtoco
 
     func createAttendance(clubID: Int) -> Completable {
         self.request(.createAttendance(clubID: clubID))
-            .asCompletable()
-    }
-
-    func recordeExcelPrint() -> Completable {
-        self.request(.recordeExcelPrint)
             .asCompletable()
     }
 

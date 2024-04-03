@@ -16,10 +16,6 @@ final class DefaultClubAttendRepository: ClubAttendRepository {
         clubAttendRemote.createAttendance(clubID: clubID)
     }
 
-    func recordExcelPrint() -> Completable {
-        clubAttendRemote.recordeExcelPrint()
-    }
-
     func changeAttendStatus() -> Completable {
         clubAttendRemote.changeAttendStatus()
     }
