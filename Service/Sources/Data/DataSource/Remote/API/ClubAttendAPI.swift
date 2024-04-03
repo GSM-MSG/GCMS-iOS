@@ -69,22 +69,29 @@ extension ClubAttendAPI: GCMSAPI {
         }
     }
 
-    typealias ErrorType = GCMSError
-    var errorMapper: [Int: GCMSError]? {
+    typealias ErrorType = ClubAttendError
+    var errorMapper: [Int: ClubAttendError]? {
         switch self {
-        case .fetchAttendList, .recordeExcelPrint, .statusAllApply:
+        case .fetchAttendList, .recordeExcelPrint:
             return [
-                400: .invalidInput,
                 401: .unauthorized,
-                403: .notExistUser,
+                403: .notClubMember,
                 404: .notFoundClub,
                 500: .serverError
             ]
-
+            
+        case .statusAllApply:
+            return [
+                401: .unauthorized,
+                403: .notClubHeadOrClubTeacher,
+                404: .notFoundClub,
+                500: .serverError
+            ]
+            
         case .createAttendance:
             return [:]
 
-        case .changeAttendStatus                              :
+        case .changeAttendStatus:
             return [:]
         }
     }
