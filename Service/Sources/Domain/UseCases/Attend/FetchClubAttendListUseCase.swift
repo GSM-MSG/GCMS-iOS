@@ -8,7 +8,11 @@ public struct FetchClubAttendListUseCase {
 
     private let clubAttendRepository: ClubAttendRepository
 
-    public func execute(clubID: Int, date: String?, period: Period?) -> Single<[ClubAttend]> {
+    public func execute(
+        clubID: Int,
+        date: String?,
+        period: Period?
+    ) -> Single<[ClubAttend]> {
         clubAttendRepository.fetchAttendList(clubID: clubID, date: date, period: period)
     }
 }

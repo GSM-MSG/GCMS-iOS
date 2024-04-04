@@ -3,9 +3,9 @@ import Foundation
 
 enum ClubAttendAPI {
     case fetchAttendList(clubID: Int, date: String?, period: Period?)
-    case createAttendance(clubID: Int)
-    case changeAllAttendStatus()
-    case statusAllApply
+    case createAttendance(clubID: Int, name: String, date: String, period: [Period])
+    case changeAllAttendStatus(attendanceID: String, attendanceStatus: AttendanceStatus)
+    case statusAllApply(attendanceIDs: [String], attendanceStatus: AttendanceStatus)
 }
 
 extension ClubAttendAPI: GCMSAPI {
@@ -18,13 +18,13 @@ extension ClubAttendAPI: GCMSAPI {
         case let .fetchAttendList(clubID, _, _):
             return "/\(clubID)"
 
-        case let .createAttendance(clubID):
+        case let .createAttendance(clubID, _, _, _):
             return "/\(clubID)/club"
 
-        case .changeAllAttendStatus:
+        case .changeAllAttendStatus(_, _):
             return ""
 
-        case .statusAllApply:
+        case .statusAllApply(_, _):
             return "/batch"
         }
     }
@@ -50,9 +50,13 @@ extension ClubAttendAPI: GCMSAPI {
                 "period": period
             ], encoding: URLEncoding.queryString)
 
-        case .createAttendance,
-             .changeAllAttendStatus,
-             .statusAllApply:
+        case let .createAttendance(_, name, date, period):
+            return .requestPlain
+            
+        case .changeAllAttendStatus(_, _):
+            return .requestPlain
+            
+        case .statusAllApply(_, _):
             return .requestPlain
         }
     }
