@@ -4,7 +4,7 @@ import Foundation
 enum ClubAttendAPI {
     case fetchAttendList(clubID: Int, date: String?, period: Period?)
     case createAttendance(clubID: Int)
-    case changeAttendStatus
+    case changeAllAttendStatus()
     case statusAllApply
 }
 
@@ -21,7 +21,7 @@ extension ClubAttendAPI: GCMSAPI {
         case let .createAttendance(clubID):
             return "/\(clubID)/club"
 
-        case .changeAttendStatus:
+        case .changeAllAttendStatus:
             return ""
 
         case .statusAllApply:
@@ -34,7 +34,7 @@ extension ClubAttendAPI: GCMSAPI {
         case .fetchAttendList:
             return .get
 
-        case .changeAttendStatus, .statusAllApply:
+        case .changeAllAttendStatus, .statusAllApply:
             return .patch
 
         case .createAttendance:
@@ -51,7 +51,7 @@ extension ClubAttendAPI: GCMSAPI {
             ], encoding: URLEncoding.queryString)
 
         case .createAttendance,
-             .changeAttendStatus,
+             .changeAllAttendStatus,
              .statusAllApply:
             return .requestPlain
         }
@@ -86,7 +86,7 @@ extension ClubAttendAPI: GCMSAPI {
         case .createAttendance:
             return [:]
 
-        case .changeAttendStatus:
+        case .changeAllAttendStatus:
             return [:]
         }
     }

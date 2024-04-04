@@ -1,7 +1,7 @@
 import RxSwift
 import Foundation
 
-public struct ChangeAttendStatusUseCase {
+public struct ChangeAllAttendStatusUseCase {
     public init(clubAttendRepository: ClubAttendRepository) {
         self.clubAttendRepository = clubAttendRepository
     }
@@ -9,6 +9,6 @@ public struct ChangeAttendStatusUseCase {
     private let clubAttendRepository: ClubAttendRepository
 
     public func execute() -> Completable {
-        clubAttendRepository.changeAttendStatus()
+        clubAttendRepository.changeAllAttendStatus()
     }
 }

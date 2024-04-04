@@ -16,8 +16,8 @@ final class DefaultClubAttendRepository: ClubAttendRepository {
         clubAttendRemote.createAttendance(clubID: clubID)
     }
 
-    func changeAttendStatus() -> Completable {
-        clubAttendRemote.changeAttendStatus()
+    func changeAllAttendStatus() -> Completable {
+        clubAttendRemote.changeAllAttendStatus()
     }
 
     func statusAllApply() -> Completable {
