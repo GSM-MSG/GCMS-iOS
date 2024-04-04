@@ -1,18 +1,28 @@
 import Foundation
 
-struct FetchClubAttendListResponse: Decodable {
+public struct FetchClubAttendListResponse: Decodable {
     let date: String?
     let period: String?
     let users: [UsersResponse]
 
-    struct UsersResponse: Decodable {
-        let uuid: UUID
-        let attendanceID: String
-        let name: String
-        let grade: Int
-        let classNum: Int
-        let number: Int
-        let attendanceStatus: AttendanceStatus
+    public struct UsersResponse: Decodable {
+        public let uuid: UUID
+        public let attendanceID: String
+        public let name: String
+        public let grade: Int
+        public let classNum: Int
+        public let number: Int
+        public let attendanceStatus: AttendanceStatus
+        
+        enum CodingKeys: String, CodingKey, Decodable {
+            case uuid
+            case attendanceID = "attendanceId"
+            case name
+            case grade
+            case classNum
+            case number
+            case attendanceStatus
+        }
     }
 }
 
