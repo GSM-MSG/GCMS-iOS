@@ -33,7 +33,7 @@ extension ClubMemberError: LocalizedError {
             return "자기 자신은 방출할 수 없습니다"
 
         case .unauthorized, .serverError:
-            return "알수없는 에러가 발생했습니다. 잠시 후 다시 시도해 주세요."
+            return "알 수 없는 에러가 발생했습니다. 잠시 후 다시 시도해 주세요."
 
         case .delegationMyself:
             return "자기 자신에게 부장을 위임할 수 없습니다"

@@ -1,7 +1,16 @@
 import Foundation
 
 public struct UserProfile: Equatable {
-    public init(uuid: UUID, email: String, name: String, grade: Int, classNum: Int, number: Int, profileImg: String?, clubs: [ClubList]) {
+    public init(
+        uuid: UUID,
+        email: String,
+        name: String,
+        grade: Int,
+        classNum: Int,
+        number: Int,
+        profileImg: String?,
+        clubs: [ClubList]
+    ) {
         self.uuid = uuid
         self.email = email
         self.name = name

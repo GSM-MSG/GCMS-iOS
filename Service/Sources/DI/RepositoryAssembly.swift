@@ -27,5 +27,8 @@ public final class RepositoryAssembly: Assembly {
         container.register(ClubMemberRepository.self) { r in
             DefaultClubMemberRepository(clubMemberRemote: r.resolve(ClubMemberRemoteProtocol.self)!)
         }
+        container.register(ClubAttendRepository.self) { r in
+            DefaultClubAttendRepository(clubAttendRemote: r.resolve(ClubAttendRemoteProtocol.self)!)
+        }
     }
 }
