@@ -5,7 +5,7 @@ public enum Period: String, Codable, CaseIterable {
     case fourth = "FOURTH"
     case fifth = "FIFTH"
     case sixth = "SIXTH"
-    case seventh = "SEVNETH"
+    case seventh = "SEVENTH"
     case eighth = "EIGHTH"
     case ninth = "NINTH"
     case tenth = "TENTH"
