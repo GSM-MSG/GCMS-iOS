@@ -10,7 +10,7 @@ public struct Club: Equatable {
         notionLink: String,
         scope: MemberScope,
         isApplied: Bool,
-        isOpened: Bool,
+        isOpen: Bool,
         activityImgs: [String],
         member: [User],
         teacher: String?
@@ -25,7 +25,7 @@ public struct Club: Equatable {
         self.notionLink = notionLink
         self.scope = scope
         self.isApplied = isApplied
-        self.isOpened = isOpened
+        self.isOpen = isOpen
         self.activityImgs = activityImgs
         self.member = member
         self.teacher = teacher
@@ -45,7 +45,7 @@ public struct Club: Equatable {
     public var notionLink: String
     public var scope: MemberScope
     public var isApplied: Bool
-    public var isOpened: Bool
+    public var isOpen: Bool
     public var activityImgs: [String]
     public var member: [User]
     public var teacher: String?
@@ -63,7 +63,7 @@ public extension Club {
         notionLink: String? = nil,
         scope: MemberScope? = nil,
         isApplied: Bool? = nil,
-        isOpened: Bool? = nil,
+        isOpen: Bool? = nil,
         activityImgs: [String]? = nil,
         member: [User]? = nil,
         teacher: String? = nil
@@ -79,7 +79,7 @@ public extension Club {
             notionLink: notionLink ?? self.notionLink,
             scope: scope ?? self.scope,
             isApplied: isApplied ?? self.isApplied,
-            isOpened: isOpened ?? self.isOpened,
+            isOpen: isOpen ?? self.isOpen,
             activityImgs: activityImgs ?? self.activityImgs,
             member: member ?? self.member,
             teacher: teacher ?? self.teacher
