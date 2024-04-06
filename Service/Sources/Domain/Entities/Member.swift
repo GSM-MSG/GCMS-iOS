@@ -1,7 +1,16 @@
 import UIKit
 
 public struct Member: Equatable {
-    public init(uuid: UUID, email: String, name: String, grade: Int, classNum: Int, number: Int, profileImg: String?, scope: MemberScope) {
+    public init(
+        uuid: UUID,
+        email: String,
+        name: String,
+        grade: Int,
+        classNum: Int,
+        number: Int,
+        scope: MemberScope,
+        profileImg: String?
+    ) {
         self.uuid = uuid
         self.email = email
         self.name = name
