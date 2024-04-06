@@ -35,8 +35,8 @@ extension FetchClubMemberResponse.MemberResponse {
             grade: grade,
             classNum: classNum,
             number: number,
-            profileImg: profileImg?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-            scope: scope
+            scope: scope,
+            profileImg: profileImg?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         )
     }
 }
