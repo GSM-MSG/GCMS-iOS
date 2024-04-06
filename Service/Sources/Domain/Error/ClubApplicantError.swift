@@ -28,6 +28,7 @@ extension ClubApplicantError: LocalizedError {
         switch self {
         case let .error(message, _):
             return message
+            
         case .notClubMember:
             return "동아리 구성원이 아니면 사용할 수 없습니다."
 
@@ -35,7 +36,7 @@ extension ClubApplicantError: LocalizedError {
             return "요청이 잘못되었습니다"
 
         case .unauthorized, .serverError:
-            return "알수없는 에러가 발생했습니다. 잠시 후 다시 시도해 주세요."
+            return "알 수 없는 에러가 발생했습니다. 잠시 후 다시 시도해 주세요."
 
         case .alreadyClubMemberOrSameTypeClub:
             return "이미 같은 동아리 소속이거나 같은 타입의 동아리를 이미 신청했습니다."
