@@ -4,8 +4,8 @@ import Foundation
 protocol ClubAttendRemoteProtocol {
     func fetchAttendList(clubID: Int, date: String?, period: Period?) -> Single<[ClubAttend]>
     func createAttendance(clubID: Int, name: String, date: String, period: [Period]) -> Completable
-    func changeAllAttendStatus(attendanceID: String, attendanceStatus: AttendanceStatus) -> Completable
-    func statusAllApply(attendanceIDs: [String], attendanceStatus: AttendanceStatus) -> Completable
+    func changeAttendStatus(attendanceID: String, attendanceStatus: AttendanceStatus) -> Completable
+    func changeAllAttendStatus(attendanceID: [String], attendanceStatus: AttendanceStatus) -> Completable
 }
 
 final class ClubAttendRemote: BaseRemote<ClubAttendAPI>, ClubAttendRemoteProtocol {
@@ -20,13 +20,13 @@ final class ClubAttendRemote: BaseRemote<ClubAttendAPI>, ClubAttendRemoteProtoco
             .asCompletable()
     }
 
-    func changeAllAttendStatus(attendanceID: String, attendanceStatus: AttendanceStatus) -> Completable {
-        self.request(.changeAllAttendStatus(attendanceID: attendanceID, attendanceStatus: attendanceStatus))
+    func changeAttendStatus(attendanceID: String, attendanceStatus: AttendanceStatus) -> Completable {
+        self.request(.changeAttendStatus(attendanceID: attendanceID, attendanceStatus: attendanceStatus))
             .asCompletable()
     }
 
-    func statusAllApply(attendanceIDs: [String], attendanceStatus: AttendanceStatus) -> Completable {
-        self.request(.statusAllApply(attendanceIDs: attendanceIDs, attendanceStatus: attendanceStatus))
+    func changeAllAttendStatus(attendanceID: [String], attendanceStatus: AttendanceStatus) -> Completable {
+        self.request(.changeAllAttendStatus(attendanceID: attendanceID, attendanceStatus: attendanceStatus))
             .asCompletable()
     }
 }
