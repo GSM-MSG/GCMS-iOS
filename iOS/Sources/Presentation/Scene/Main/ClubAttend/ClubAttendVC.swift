@@ -65,7 +65,7 @@ extension ClubAttendVC: UITableViewDelegate, UITableViewDataSource {
     }
 
 func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: ClubMemberListCell.identifier, for: indexPath) as! ClubMemberListCell
+    let cell = tableView.dequeueReusableCell(for: indexPath, cellType: ClubMemberListCell.self)
     return cell
     }
 }
