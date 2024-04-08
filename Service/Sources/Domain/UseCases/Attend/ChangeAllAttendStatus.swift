@@ -8,7 +8,7 @@ public struct ChangeAllAttendStatusUseCase {
 
     private let clubAttendRepository: ClubAttendRepository
 
-    public func execute(attendanceIDs: [String], attendanceStatus: AttendanceStatus) -> Completable {
-        clubAttendRepository.changeAllAttendStatus(attendanceIDs: attendanceIDs, attendanceStatus: attendanceStatus)
+    public func execute(attendanceIds: [String], attendanceStatus: AttendanceStatus) -> Completable {
+        clubAttendRepository.changeAllAttendStatus(attendanceIds: attendanceIds, attendanceStatus: attendanceStatus)
     }
 }

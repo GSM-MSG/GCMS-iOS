@@ -4,8 +4,8 @@ import Foundation
 enum ClubAttendAPI {
     case fetchAttendList(clubID: Int, date: String?, period: Period?)
     case createAttendance(clubID: Int, name: String, date: String, period: [Period])
-    case changeAttendStatus(attendanceID: String, attendanceStatus: AttendanceStatus)
-    case changeAllAttendStatus(attendanceIDs: [String], attendanceStatus: AttendanceStatus)
+    case changeAttendStatus(attendanceId: String, attendanceStatus: AttendanceStatus)
+    case changeAllAttendStatus(attendanceIds: [String], attendanceStatus: AttendanceStatus)
 }
 
 extension ClubAttendAPI: GCMSAPI {
@@ -57,15 +57,15 @@ extension ClubAttendAPI: GCMSAPI {
                 "period": "\(period)"
             ], encoding: JSONEncoding.default)
             
-        case let .changeAttendStatus(attendanceID, attendanceStatus):
+        case let .changeAttendStatus(attendanceId, attendanceStatus):
             return .requestParameters(parameters: [
-                "attendanceID": "\(attendanceID)",
+                "attendanceId": "\(attendanceId)",
                 "attendanceStatus": "\(attendanceStatus)"
             ], encoding: JSONEncoding.default)
             
-        case let .changeAllAttendStatus(attendanceIDs, attendanceStatus):
+        case let .changeAllAttendStatus(attendanceIds, attendanceStatus):
             return .requestParameters(parameters: [
-                "attendanceID": "\(attendanceIDs)",
+                "attendanceIds": "\(attendanceIds)",
                 "attendanceStatus": "\(attendanceStatus)"
             ], encoding: JSONEncoding.default)
         }
