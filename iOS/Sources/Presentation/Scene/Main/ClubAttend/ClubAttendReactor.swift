@@ -25,7 +25,6 @@ final class ClubAttendReactor: Reactor, Stepper {
     }
 }
 
-
 extension ClubAttendReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {

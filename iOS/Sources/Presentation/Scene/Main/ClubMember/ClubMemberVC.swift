@@ -98,7 +98,7 @@ extension ClubMemberVC: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let reactor = reactor else { return .init() }
-        let header = tableView  .dequeueReusableHeaderFooterView(MemberHeaderView.self)
+        let header = tableView.dequeueReusableHeaderFooterView(MemberHeaderView.self)
         header?.section = section
         header?.model = reactor.currentState.users[section].header
         header?.delegate = self
