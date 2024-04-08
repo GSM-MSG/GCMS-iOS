@@ -31,10 +31,6 @@ final class ClubMemberListCell: BaseTableViewCell<Void> {
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func addView() {
         contentView.addSubViews(profileImageView, nameLabel, studentNumberLabel, attendCheckBox)
     }
@@ -70,5 +66,9 @@ final class ClubMemberListCell: BaseTableViewCell<Void> {
         } else {
             attendCheckBox.image = GCMSAsset.Images.checkBox.image
         }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
