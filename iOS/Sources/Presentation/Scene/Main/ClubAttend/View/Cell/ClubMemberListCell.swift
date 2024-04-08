@@ -4,8 +4,6 @@ import Configure
 import RxSwift
 
 final class ClubMemberListCell: BaseTableViewCell<Void> {
-    static let identifier = "ClubMemberListCell"
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(
             style: style,
