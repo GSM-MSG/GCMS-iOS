@@ -133,10 +133,10 @@ private extension DetailClubReactor {
             } else {
                 break
             }
-        case .other:
-            break
         case .admin:
             return club.isOpened ? clubClose() : clubOpen()
+        case .other:
+            break
         }
         return .empty()
     }
