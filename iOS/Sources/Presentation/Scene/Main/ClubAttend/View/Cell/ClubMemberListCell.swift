@@ -15,7 +15,6 @@ final class ClubMemberListCell: BaseTableViewCell<Void> {
     
     private let profileImageView = UIImageView().then {
         $0.image = GCMSAsset.Images.gcmsProfile.image.withRenderingMode(.alwaysOriginal)
-//        $0.layer.cornerRadius = 20
         $0.clipsToBounds = true
     }
     private let nameLabel = UILabel().then {
