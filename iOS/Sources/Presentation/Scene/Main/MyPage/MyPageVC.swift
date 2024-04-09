@@ -7,7 +7,7 @@ import RxDataSources
 import RxGesture
 import Service
 import PhotosUI
-import Then
+import Configure
 
 final class MyPageVC: BaseVC<MyPageReactor> {
     // MARK: - Properties

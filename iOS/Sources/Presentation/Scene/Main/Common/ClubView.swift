@@ -1,6 +1,6 @@
 import UIKit
 import SnapKit
-import Then
+import Configure
 import Kingfisher
 import Service
 

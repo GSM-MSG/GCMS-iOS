@@ -2,7 +2,7 @@ import UIKit
 import Service
 import SnapKit
 import Kingfisher
-import Then
+import Configure
 import RxSwift
 import RxCocoa
 import RxGesture

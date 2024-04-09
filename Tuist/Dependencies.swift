@@ -10,7 +10,6 @@ let dependencies = Dependencies(
             .remote(url: "https://github.com/Swinject/Swinject.git", requirement: .exact("2.8.3")),
             .remote(url: "https://github.com/RxSwiftCommunity/RxFlow.git", requirement: .exact("2.13.0")),
             .remote(url: "https://github.com/ReactorKit/ReactorKit.git", requirement: .exact("3.2.0")),
-            .remote(url: "https://github.com/devxoul/Then.git", requirement: .exact("3.0.0")),
             .remote(url: "https://github.com/onevcat/Kingfisher.git", requirement: .exact("7.7.0")),
             .remote(url: "https://github.com/RxSwiftCommunity/RxDataSources.git", requirement: .exact("5.0.2")),
             .remote(url: "https://github.com/AliSoftware/Reusable.git", requirement: .exact("4.1.2")),
@@ -28,7 +27,10 @@ let dependencies = Dependencies(
             .remote(url: "https://github.com/gmertk/ParkedTextField", requirement: .exact("1.0.0")),
             .remote(url: "https://github.com/krzysztofzablocki/Inject.git", requirement: .exact("1.2.2")),
             .remote(url: "https://github.com/GSM-MSG/MSGLayout.git", requirement: .exact("1.1.0")),
-            .remote(url: "https://github.com/GSM-MSG/GAuthSignin-Swift.git", requirement: .exact("0.0.3"))
+            .remote(url: "https://github.com/GSM-MSG/GAuthSignin-Swift.git", requirement: .exact("0.0.3")),
+            .package(url: "https://github.com/GSM-MSG/Configure.git", .upToNextMajor(from: "1.0.0"))
+
+            
         ],
         productTypes: [
             "ReactorKit": .framework,

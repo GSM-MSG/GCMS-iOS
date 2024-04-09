@@ -52,5 +52,9 @@ final class ReactorAssembly: Assembly {
                 clubCloseUseCase: r.resolve(ClubCloseUseCase.self)!
             )
         }
+        
+        container.register(ClubAttendReactor.self) { _ in
+            ClubAttendReactor()
+        }
     }
 }

@@ -17,8 +17,8 @@ public struct Member: Equatable {
         self.grade = grade
         self.classNum = classNum
         self.number = number
-        self.scope = scope
         self.profileImg = profileImg
+        self.scope = scope
     }
 
     public let uuid: UUID
@@ -27,6 +27,6 @@ public struct Member: Equatable {
     public let grade: Int
     public let classNum: Int
     public let number: Int
-    public let scope: MemberScope
     public let profileImg: String?
+    public let scope: MemberScope
 }

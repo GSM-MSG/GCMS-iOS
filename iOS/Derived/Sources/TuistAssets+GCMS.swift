@@ -43,7 +43,10 @@ public enum GCMSAsset {
     public static let gcmsMajor = GCMSImages(name: "GCMS_Major")
     public static let gcmsMajorGray = GCMSImages(name: "GCMS_Major_Gray")
     public static let gcmsNewClubPlaceholder = GCMSImages(name: "GCMS_NewClubPlaceholder")
+    public static let gcmsProfile = GCMSImages(name: "GCMS_Profile")
     public static let gcmsWhaleLogo = GCMSImages(name: "GCMS_WhaleLogo")
+    public static let checkBox = GCMSImages(name: "checkBox")
+    public static let checkBoxFill = GCMSImages(name: "checkBox_fill")
   }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name

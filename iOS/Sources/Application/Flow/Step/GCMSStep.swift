@@ -23,4 +23,5 @@ enum GCMSStep: Step {
 
     // MARK: Administrator
     case myPageIsRequired
+    case clubAttendIsRequired
 }
