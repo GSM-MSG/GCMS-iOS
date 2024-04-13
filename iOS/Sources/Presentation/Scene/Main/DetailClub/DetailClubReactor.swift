@@ -120,11 +120,11 @@ private extension DetailClubReactor {
         guard let club = currentState.clubDetail else { return .empty() }
         switch club.scope {
         case .head:
-            return club.isOpen ? clubClose() : clubOpen()
+            return club.isOpened ? clubClose() : clubOpen()
         case .member:
             break
         case .`default`:
-            if club.isOpen {
+            if club.isOpened {
                 if club.isApplied {
                     return clubCancel()
                 } else {
@@ -133,6 +133,8 @@ private extension DetailClubReactor {
             } else {
                 break
             }
+        case .admin:
+            return club.isOpened ? clubClose() : clubOpen()
         case .other:
             break
         }
@@ -142,9 +144,13 @@ private extension DetailClubReactor {
         let isHead = (currentState.clubDetail?.scope ?? .member) == .head
         let title = "동아리 탈퇴하기"
         var actions: [UIAlertAction] = []
+        actions.append(.init(title: "동아리 출석 관리하기", style: .default, handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.steps.accept(GCMSStep.clubAttendIsRequired)
+        }))
         actions.append(.init(title: "동아리 멤버 관리", style: .default, handler: { [weak self] _ in
             guard let self = self else { return }
-            self.steps.accept(GCMSStep.clubStatusIsRequired(clubID: self.clubID, isHead: isHead, isOpened: self.currentState.clubDetail?.isOpen ?? false))
+            self.steps.accept(GCMSStep.clubStatusIsRequired(clubID: self.clubID, isHead: isHead, isOpened: self.currentState.clubDetail?.isOpened ?? false))
         }))
         actions.append(.init(title: title, style: .destructive, handler: { [weak self] _ in
             guard let self = self else { return }
@@ -181,7 +187,7 @@ private extension DetailClubReactor {
                     .andThen(Observable.just(()))
                     .subscribe { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 마감되었습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
-                        self.action.onNext(.updateClub(self.currentState.clubDetail?.copyForChange(isOpen: false)))
+                        self.action.onNext(.updateClub(self.currentState.clubDetail?.copyForChange(isOpened: false)))
                     } onError: { e in
                         self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                     }
@@ -199,7 +205,7 @@ private extension DetailClubReactor {
                     .andThen(Observable.just(()))
                     .subscribe { _ in
                         self.steps.accept(GCMSStep.alert(title: "성공", message: "동아리 신청이 열렸습니다.", style: .alert, actions: [.init(title: "확인", style: .default)]))
-                        self.action.onNext(.updateClub(self.currentState.clubDetail?.copyForChange(isOpen: true)))
+                        self.action.onNext(.updateClub(self.currentState.clubDetail?.copyForChange(isOpened: true)))
                     } onError: { e in
                         self.steps.accept(GCMSStep.failureAlert(title: "실패", message: e.localizedDescription))
                     }

@@ -1,5 +1,5 @@
 import UIKit
-import Then
+import Configure
 import SnapKit
 import RxSwift
 import ViewAnimator

@@ -12,7 +12,6 @@ public extension TargetDependency.SPM{
     static let Swinject = TargetDependency.external(name: "Swinject")
     static let RxFlow = TargetDependency.external(name: "RxFlow")
     static let FCM = TargetDependency.package(product: "FirebaseMessaging")
-    static let Then = TargetDependency.external(name: "Then")
     static let IQKeyboardManager = TargetDependency.package(product: "IQKeyboardManagerSwift")
     static let ReactorKit = TargetDependency.external(name: "ReactorKit")
     static let Kingfisher = TargetDependency.external(name: "Kingfisher")
@@ -35,6 +34,7 @@ public extension TargetDependency.SPM{
     static let RealmSwift = TargetDependency.package(product: "RealmSwift")
     static let MSGLayout = TargetDependency.external(name: "MSGLayout")
     static let GAuthSignin = TargetDependency.external(name: "GAuthSignin")
+    static let Configure = TargetDependency.external(name: "Configure")
 }
 
 public extension Package {

@@ -10,7 +10,6 @@ let project = Project.dynamicFramework(
     ],
     deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
     dependencies: [
-        .SPM.Then,
         .SPM.FCM,
         .SPM.Swinject,
         .SPM.SnapKit,
@@ -37,6 +36,7 @@ let project = Project.dynamicFramework(
         .SPM.Realm,
         .SPM.RealmSwift,
         .SPM.MSGLayout,
-        .SPM.GAuthSignin
+        .SPM.GAuthSignin,
+        .SPM.Configure
     ]
 )

@@ -1,5 +1,5 @@
 import UIKit
-import Then
+import Configure
 import Reusable
 import SnapKit
 import RxSwift
