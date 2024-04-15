@@ -4,8 +4,8 @@ import Foundation
 enum ClubAttendAPI {
     case fetchAttendList(clubID: Int, date: String?, period: Period?)
     case createAttendance(clubID: Int, name: String, date: String, period: [Period])
-    case changeAllAttendStatus(attendanceID: String, attendanceStatus: AttendanceStatus)
-    case statusAllApply(attendanceIDs: [String], attendanceStatus: AttendanceStatus)
+    case changeAttendStatus(attendanceId: String, attendanceStatus: AttendanceStatus)
+    case changeAllAttendStatus(attendanceIds: [String], attendanceStatus: AttendanceStatus)
 }
 
 extension ClubAttendAPI: GCMSAPI {
@@ -21,10 +21,10 @@ extension ClubAttendAPI: GCMSAPI {
         case let .createAttendance(clubID, _, _, _):
             return "/\(clubID)/club"
 
-        case .changeAllAttendStatus(_, _):
+        case .changeAttendStatus(_, _):
             return ""
 
-        case .statusAllApply(_, _):
+        case .changeAllAttendStatus(_, _):
             return "/batch"
         }
     }
@@ -34,7 +34,7 @@ extension ClubAttendAPI: GCMSAPI {
         case .fetchAttendList:
             return .get
 
-        case .changeAllAttendStatus, .statusAllApply:
+        case .changeAttendStatus, .changeAllAttendStatus:
             return .patch
 
         case .createAttendance:
@@ -51,13 +51,23 @@ extension ClubAttendAPI: GCMSAPI {
             ], encoding: URLEncoding.queryString)
 
         case let .createAttendance(_, name, date, period):
-            return .requestPlain
+            return .requestParameters(parameters: [
+                "name": "\(name)",
+                "date": "\(date)",
+                "period": "\(period)"
+            ], encoding: JSONEncoding.default)
             
-        case .changeAllAttendStatus(_, _):
-            return .requestPlain
+        case let .changeAttendStatus(attendanceId, attendanceStatus):
+            return .requestParameters(parameters: [
+                "attendanceId": "\(attendanceId)",
+                "attendanceStatus": "\(attendanceStatus)"
+            ], encoding: JSONEncoding.default)
             
-        case .statusAllApply(_, _):
-            return .requestPlain
+        case let .changeAllAttendStatus(attendanceIds, attendanceStatus):
+            return .requestParameters(parameters: [
+                "attendanceIds": "\(attendanceIds)",
+                "attendanceStatus": "\(attendanceStatus)"
+            ], encoding: JSONEncoding.default)
         }
     }
 
@@ -79,7 +89,7 @@ extension ClubAttendAPI: GCMSAPI {
                 500: .serverError
             ]
             
-        case .statusAllApply:
+        case .changeAllAttendStatus:
             return [
                 401: .unauthorized,
                 403: .notClubHeadOrClubTeacher,
@@ -90,7 +100,7 @@ extension ClubAttendAPI: GCMSAPI {
         case .createAttendance:
             return [:]
 
-        case .changeAllAttendStatus:
+        case .changeAttendStatus:
             return [:]
         }
     }
