@@ -56,13 +56,13 @@ extension ClubAttendAPI: GCMSAPI {
                 "date": "\(date)",
                 "period": "\(period)"
             ], encoding: JSONEncoding.default)
-            
+
         case let .changeAttendStatus(attendanceId, attendanceStatus):
             return .requestParameters(parameters: [
                 "attendanceId": "\(attendanceId)",
                 "attendanceStatus": "\(attendanceStatus)"
             ], encoding: JSONEncoding.default)
-            
+
         case let .changeAllAttendStatus(attendanceIds, attendanceStatus):
             return .requestParameters(parameters: [
                 "attendanceIds": "\(attendanceIds)",

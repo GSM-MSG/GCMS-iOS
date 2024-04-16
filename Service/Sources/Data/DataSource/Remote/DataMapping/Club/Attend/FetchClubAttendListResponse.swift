@@ -13,7 +13,7 @@ public struct FetchClubAttendListResponse: Decodable {
         public let classNum: Int
         public let number: Int
         public let attendanceStatus: AttendanceStatus
-        
+
         public enum CodingKeys: String, CodingKey, Decodable {
             case uuid
             case attendanceID = "attendanceId"
