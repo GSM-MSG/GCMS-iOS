@@ -21,12 +21,12 @@ final class ClubAttendRemote: BaseRemote<ClubAttendAPI>, ClubAttendRemoteProtoco
     }
 
     func changeAttendStatus(attendanceID: String, attendanceStatus: AttendanceStatus) -> Completable {
-        self.request(.changeAttendStatus(attendanceId: attendanceID, attendanceStatus: attendanceStatus))
+        self.request(.changeAttendStatus(attendanceID: attendanceID, attendanceStatus: attendanceStatus))
             .asCompletable()
     }
 
     func changeAllAttendStatus(attendanceIDs: [String], attendanceStatus: AttendanceStatus) -> Completable {
-        self.request(.changeAllAttendStatus(attendanceIds: attendanceIDs, attendanceStatus: attendanceStatus))
+        self.request(.changeAllAttendStatus(attendanceIDs: attendanceIDs, attendanceStatus: attendanceStatus))
             .asCompletable()
     }
 }

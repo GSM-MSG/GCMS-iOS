@@ -4,8 +4,8 @@ import Foundation
 enum ClubAttendAPI {
     case fetchAttendList(clubID: Int, date: String?, period: Period?)
     case createAttendance(clubID: Int, name: String, date: String, period: [Period])
-    case changeAttendStatus(attendanceId: String, attendanceStatus: AttendanceStatus)
-    case changeAllAttendStatus(attendanceIds: [String], attendanceStatus: AttendanceStatus)
+    case changeAttendStatus(attendanceID: String, attendanceStatus: AttendanceStatus)
+    case changeAllAttendStatus(attendanceIDs: [String], attendanceStatus: AttendanceStatus)
 }
 
 extension ClubAttendAPI: GCMSAPI {
