@@ -96,13 +96,13 @@ public final class UseCaseAssembly: Assembly {
                 clubAttendRepository: r.resolve(ClubAttendRepository.self)!
             )
         }
-        container.register(ChangeAllAttendStatusUseCase.self) { r in
-            ChangeAllAttendStatusUseCase(
+        container.register(ChangeAttendStatusUseCase.self) { r in
+            ChangeAttendStatusUseCase(
                 clubAttendRepository: r.resolve(ClubAttendRepository.self)!
             )
         }
-        container.register(StatusAllApplyUseCase.self) { r in
-            StatusAllApplyUseCase(
+        container.register(ChangeAllAttendStatusUseCase.self) { r in
+            ChangeAllAttendStatusUseCase(
                 clubAttendRepository: r.resolve(ClubAttendRepository.self)!
             )
         }

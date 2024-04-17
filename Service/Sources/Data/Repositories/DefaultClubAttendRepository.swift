@@ -16,11 +16,11 @@ final class DefaultClubAttendRepository: ClubAttendRepository {
         clubAttendRemote.createAttendance(clubID: clubID, name: name, date: date, period: period)
     }
 
-    func changeAllAttendStatus(attendanceID: String, attendanceStatus: AttendanceStatus) -> Completable {
-        clubAttendRemote.changeAllAttendStatus(attendanceID: attendanceID, attendanceStatus: attendanceStatus)
+    func changeAttendStatus(attendanceID: String, attendanceStatus: AttendanceStatus) -> Completable {
+        clubAttendRemote.changeAttendStatus(attendanceID: attendanceID, attendanceStatus: attendanceStatus)
     }
 
-    func statusAllApply(attendanceIDs: [String], attendanceStatus: AttendanceStatus) -> Completable {
-        clubAttendRemote.statusAllApply(attendanceIDs: attendanceIDs, attendanceStatus: attendanceStatus)
+    func changeAllAttendStatus(attendanceIDs: [String], attendanceStatus: AttendanceStatus) -> Completable {
+        clubAttendRemote.changeAllAttendStatus(attendanceIDs: attendanceIDs, attendanceStatus: attendanceStatus)
     }
 }
