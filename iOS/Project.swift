@@ -1,10 +1,10 @@
 import ProjectDescriptionHelpers
 import ProjectDescription
 
-let project = Project.excutable(
+let project = Project.makeModule(
     name: "GCMS",
-    platform: .iOS,
-    deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
+    destinations: .iOS,
+    deploymentTarget: .iOS("14.0"),
     dependencies: [
         .project(target: "Service", path: "../Service")
     ],

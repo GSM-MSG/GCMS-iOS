@@ -1,11 +1,11 @@
 import ProjectDescription
 
 extension Project{
-    public static func excutable(
+    public static func makeModule(
         name: String,
-        platform: Platform,
+        destinations: Destinations = .iOS,
         product: Product = .app,
-        deploymentTarget: DeploymentTarget = .iOS(targetVersion: "13.0", devices: [.iphone, .ipad]),
+        deploymentTarget: DeploymentTargets = .iOS("15.0"),
         dependencies: [TargetDependency],
         resources: ResourceFileElements? = nil,
         settings: Settings? = nil
@@ -26,27 +26,27 @@ extension Project{
                                     .release(name: .release, xcconfig: .relativeToXCConfig(type: .release, name: name))
                                 ]),
             targets: [
-                Target(
+                .target(
                     name: name,
-                    platform: platform,
+                    destinations: destinations,
                     product: product,
                     bundleId: "\(publicOrganizationName).\(name)",
-                    deploymentTarget: deploymentTarget,
+                    deploymentTargets: deploymentTarget,
                     infoPlist: .file(path: Path("Support/Info.plist")),
                     sources: ["Sources/**"],
                     resources: resources,
-                    entitlements: Path("Support/\(name).entitlements"),
+                    entitlements: .file(path: Path("Support/\(name).entitlements")),
                     dependencies: [
                         .project(target: "ThirdPartyLib", path: Path("../ThirdPartyLib")),
                     ] + dependencies,
                     settings: settings
                 ),
-                Target(
+                .target(
                     name: "\(name)Test",
-                    platform: platform,
+                    destinations: destinations,
                     product: .unitTests,
                     bundleId: "\(publicOrganizationName).\(name)Test",
-                    deploymentTarget: deploymentTarget,
+                    deploymentTargets: deploymentTarget,
                     infoPlist: .default,
                     sources: ["Tests/**"],
                     dependencies: [

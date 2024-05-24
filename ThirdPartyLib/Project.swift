@@ -8,7 +8,7 @@ let project = Project.dynamicFramework(
         .Firebase,
         .IQKeyboardManager
     ],
-    deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone, .ipad]),
+    deploymentTarget: .iOS("14.0"),
     dependencies: [
         .SPM.FCM,
         .SPM.Swinject,
