@@ -1,42 +1,34 @@
 // swift-tools-version: 5.7
- import PackageDescription
 
- #if TUIST
-     import ProjectDescription
-     import ProjectDescriptionHelpers
+import PackageDescription
 
-     let packageSettings = PackageSettings(
-         productTypes: [
-             "Moordinator": .framework,
-             "CombineMiniature": .framework
-         ],
-         baseSettings: .settings(
-             configurations: [
-                 .debug(name: .dev),
-                 .debug(name: .stage),
-                 .release(name: .prod)
-             ]
-         )
-     )
- #endif
-
- let package = Package(
-     name: "Dotori",
-     dependencies: [
-         .package(url: "https://github.com/Yummypets/YPImagePicker.git", from: "5.2.2"),
-         .package(url: "https://github.com/airbnb/lottie-ios.git", from: "4.2.0"),
-         .package(url: "https://github.com/kean/Nuke.git", from: "12.1.4"),
-         .package(url: "https://github.com/GSM-MSG/Anim.git", from: "1.1.0"),
-         .package(url: "https://github.com/GSM-MSG/Miniature.git", from: "1.3.1"),
-         .package(url: "https://github.com/baekteun/NeiSwift.git", from: "2.0.2"),
-         .package(url: "https://github.com/krzysztofzablocki/Inject.git", from: "1.2.3"),
-         .package(url: "https://github.com/groue/GRDB.swift.git", from: "6.15.1"),
-         .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", from: "6.5.11"),
-         .package(url: "https://github.com/GSM-MSG/Store.git", from: "1.0.1"),
-         .package(url: "https://github.com/GSM-MSG/Moordinator.git", from: "2.2.0"),
-         .package(url: "https://github.com/GSM-MSG/Emdpoint.git", from: "3.4.0"),
-         .package(url: "https://github.com/GSM-MSG/MSGLayout.git", from: "1.3.0"),
-         .package(url: "https://github.com/Swinject/Swinject.git", from: "2.8.4"),
-         .package(url: "https://github.com/GSM-MSG/Configure.git", from: "1.0.1")
-     ]
- )
+let package = Package(
+    name: "PackageName",
+    dependencies: [
+        .package(url: "https://github.com/ReactiveX/RxSwift", exact: "6.5.0"),
+        .package(url: "https://github.com/Moya/Moya.git", exact: "15.0.3"),
+        .package(url: "https://github.com/SnapKit/SnapKit.git", exact: "5.6.0"),
+        .package(url: "https://github.com/Swinject/Swinject.git", exact: "2.8.3"),
+        .package(url: "https://github.com/RxSwiftCommunity/RxFlow.git", exact: "2.13.0"),
+        .package(url: "https://github.com/ReactorKit/ReactorKit.git", exact: "3.2.0"),
+        .package(url: "https://github.com/onevcat/Kingfisher.git", exact: "7.7.0"),
+        .package(url: "https://github.com/RxSwiftCommunity/RxDataSources.git", exact: "5.0.2"),
+        .package(url: "https://github.com/AliSoftware/Reusable.git", exact: "4.1.2"),
+        .package(url: "https://github.com/baekteun/BTImageView.git", exact: "1.1.2"),
+        .package(url: "https://github.com/RxSwiftCommunity/RxGesture.git", exact: "4.0.4"),
+        .package(url: "https://github.com/slackhq/PanModal.git", exact: "1.2.7"),
+        .package(url: "https://github.com/airbnb/lottie-ios.git", exact: "4.1.2"),
+        .package(url: "https://github.com/marcosgriselli/ViewAnimator.git", exact: "3.1.0"),
+        .package(url: "https://github.com/Quick/Quick.git", exact: "6.1.0"),
+        .package(url: "https://github.com/Quick/Nimble.git", exact: "11.2.1"),
+        .package(url: "https://github.com/Datt1994/DPOTPView.git", exact: "1.5.12"),
+        .package(url: "https://github.com/uias/Tabman.git", exact: "3.2.0"),
+        .package(url: "https://github.com/RxSwiftCommunity/RxKeyboard.git", exact: "2.0.0"),
+        .package(url: "https://github.com/schmidyy/Loaf", exact: "0.6.0"),
+        .package(url: "https://github.com/gmertk/ParkedTextField", exact: "1.0.0"),
+        .package(url: "https://github.com/krzysztofzablocki/Inject.git", exact: "1.2.2"),
+        .package(url: "https://github.com/GSM-MSG/MSGLayout.git", exact: "1.1.0"),
+        .package(url: "https://github.com/GSM-MSG/GAuthSignin-Swift.git", exact: "0.0.3"),
+        .package(url: "https://github.com/GSM-MSG/Configure.git", from: "1.0.0"),
+    ]
+)
