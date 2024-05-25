@@ -46,13 +46,14 @@ jobs:
       ENCRYPTED_GPLIST_FILE_PATH: ${{ 'iOS/Resources/GoogleService-Info.plist.gpg' }}
       DECRYPTED_GPLIST_FILE_PATH: ${{ 'iOS/Resources/GoogleService-Info.plist' }}
       GPLIST_PW: ${{ secrets.GOOGLE_SERVICE_ENCRYPTO_PW }}
-    runs-on: macos-latest
+    runs-on: macos14
     needs: prepare-dependency
 
     steps:
     - uses: actions/checkout@v2
+    - uses: jdx/mise-action@v2
       with:
-        xcode-version: latest
+        xcode-version: 15.2
 
     - name: install tuist
       run: mise install tuist
@@ -108,5 +109,5 @@ jobs:
       run: tuist install
 
     - name: test tuist
-      run: TUIST_CI=1 tuist test
+      run: TUIST_CI=1 tuist test--no-selective-testing
 
