@@ -55,7 +55,7 @@ jobs:
         xcode-version: latest
 
     - name: install tuist
-      run: curl -Ls https://install.tuist.io | bash
+      run: mise install tuist
 
     - name: configure GoogleService-Info.plist
       run: |
@@ -70,7 +70,7 @@ jobs:
 
     - name: Install dependencies
       if: steps.cache_dependencies.outputs.cache-hit != 'true'
-      run: tuist fetch
+      run: tuist install
 
     - name: build tuist
       run: TUIST_CI=1 tuist build
@@ -81,16 +81,16 @@ jobs:
       ENCRYPTED_GPLIST_FILE_PATH: ${{ 'iOS/Resources/GoogleService-Info.plist.gpg' }}
       DECRYPTED_GPLIST_FILE_PATH: ${{ 'iOS/Resources/GoogleService-Info.plist' }}
       GPLIST_PW: ${{ secrets.GOOGLE_SERVICE_ENCRYPTO_PW }}
-    runs-on: macos-latest
+    runs-on: macos-14
     needs: prepare-dependency
 
     steps:
     - uses: actions/checkout@v2
       with:
-        xcode-version: latest
+        xcode-version: 15.2
 
     - name: install tuist
-      run: curl -Ls https://install.tuist.io | bash
+      run: mise install tuist
 
     - name: configure GoogleService-Info.plist
       run: |
@@ -105,7 +105,7 @@ jobs:
 
     - name: Install dependencies
       if: steps.cache_dependencies.outputs.cache-hit != 'true'
-      run: tuist fetch
+      run: tuist install
 
     - name: test tuist
       run: TUIST_CI=1 tuist test
