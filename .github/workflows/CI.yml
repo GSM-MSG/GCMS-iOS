@@ -17,8 +17,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: jdx/mise-action@v2
-         with:
-           xcode-version: 15.2
+        with:
+          xcode-version: 15.2
 
       - name: Install Tuist
         run: mise install tuist
