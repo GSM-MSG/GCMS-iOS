@@ -1,12 +1,10 @@
 name: Caching with Tuist Dependencies
 
 on:
-  pull_request:
-    branches:
-      - master
   push:
-    branches:
-      - master
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "*" ]
 
 env:
   CACHED_DEPENDENCY_PATHS: ${{ github.workspace }}/Tuist/Dependencies
@@ -14,9 +12,12 @@ env:
 jobs:
   caching-dependencies:
     name: 🧩 Caching Dependencies
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v2
+      - uses: jdx/mise-action@v2
+         with:
+           xcode-version: 15.2
 
       - name: Compute dependency cache key
         id: compute_hash
@@ -31,11 +32,11 @@ jobs:
 
       - name: Install tuist
         if: steps.cache_dependencies.outputs.cache-hit != 'true'
-        run: curl -Ls https://install.tuist.io | bash
+        run: mise install tuist
 
       - name: Install dependencies
         if: steps.cache_dependencies.outputs.cache-hit != 'true'
-        run: tuist fetch
+        run: tuist install
 
     outputs:
       dependency_cache_key: ${{ steps.compute_hash.outputs.hash }}

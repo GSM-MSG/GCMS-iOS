@@ -7,7 +7,7 @@ let dependencies = Dependencies(
             .remote(url: "https://github.com/ReactiveX/RxSwift", requirement: .exact("6.5.0")),
             .remote(url: "https://github.com/GSM-MSG/Moya.git", requirement: .branch("master")),
             .remote(url: "https://github.com/SnapKit/SnapKit.git", requirement: .exact("5.6.0")),
-            .remote(url: "https://github.com/Swinject/Swinject.git", requirement: .exact("2.8.3")),
+            .remote(url: "https://github.com/Swinject/Swinject.git", requirement: .exact("2.8.8")),
             .remote(url: "https://github.com/RxSwiftCommunity/RxFlow.git", requirement: .exact("2.13.0")),
             .remote(url: "https://github.com/ReactorKit/ReactorKit.git", requirement: .exact("3.2.0")),
             .remote(url: "https://github.com/onevcat/Kingfisher.git", requirement: .exact("7.7.0")),

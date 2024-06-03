@@ -1,0 +1,284 @@
+{
+  "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire.git",
+      "state" : {
+        "revision" : "f455c2975872ccd2d9c81594c658af65716e9b9a",
+        "version" : "5.9.1"
+      }
+    },
+    {
+      "identity" : "btimageview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/baekteun/BTImageView.git",
+      "state" : {
+        "revision" : "dace5f951ec921fdf0d3cc48e05338d3cdd7fe80",
+        "version" : "1.1.2"
+      }
+    },
+    {
+      "identity" : "configure",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GSM-MSG/Configure.git",
+      "state" : {
+        "revision" : "60784ac8215d0c42b8b1d0964743dc5abadb39bd",
+        "version" : "1.0.1"
+      }
+    },
+    {
+      "identity" : "cwlcatchexception",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mattgallagher/CwlCatchException.git",
+      "state" : {
+        "revision" : "3ef6999c73b6938cc0da422f2c912d0158abb0a0",
+        "version" : "2.2.0"
+      }
+    },
+    {
+      "identity" : "cwlpreconditiontesting",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mattgallagher/CwlPreconditionTesting.git",
+      "state" : {
+        "revision" : "2ef56b2caf25f55fa7eef8784c30d5a767550f54",
+        "version" : "2.2.1"
+      }
+    },
+    {
+      "identity" : "dpotpview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Datt1994/DPOTPView.git",
+      "state" : {
+        "revision" : "950ecde0feef20f96abdd20a7442aa0ac2461626",
+        "version" : "1.5.12"
+      }
+    },
+    {
+      "identity" : "gauthsignin-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GSM-MSG/GAuthSignin-Swift.git",
+      "state" : {
+        "revision" : "ce6e6f82462fa861b3b10ae05307ec63b73c6cc9",
+        "version" : "0.0.3"
+      }
+    },
+    {
+      "identity" : "inject",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzysztofzablocki/Inject.git",
+      "state" : {
+        "revision" : "04925668f57e74bc40f21b185a41c5585a84a9fe",
+        "version" : "1.2.2"
+      }
+    },
+    {
+      "identity" : "kingfisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Kingfisher.git",
+      "state" : {
+        "revision" : "e8625b80c413457b13ea9be75d07f6e9f5830c19",
+        "version" : "7.7.0"
+      }
+    },
+    {
+      "identity" : "loaf",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/schmidyy/Loaf",
+      "state" : {
+        "revision" : "31f3b3fff28918c49d69ee76be72b041161b67c7",
+        "version" : "0.6.0"
+      }
+    },
+    {
+      "identity" : "lottie-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/airbnb/lottie-ios.git",
+      "state" : {
+        "revision" : "440a6eebb8a8ae9c773e9a3e21021b72a74ffbb7",
+        "version" : "4.1.2"
+      }
+    },
+    {
+      "identity" : "moya",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Moya/Moya.git",
+      "state" : {
+        "revision" : "c263811c1f3dbf002be9bd83107f7cdc38992b26",
+        "version" : "15.0.3"
+      }
+    },
+    {
+      "identity" : "msglayout",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GSM-MSG/MSGLayout.git",
+      "state" : {
+        "revision" : "100d859e56c35bf6e16fb9b9afbf0718ae37d1bb",
+        "version" : "1.1.0"
+      }
+    },
+    {
+      "identity" : "nimble",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Quick/Nimble.git",
+      "state" : {
+        "revision" : "b7f6c49acdb247e3158198c5448b38c3cc595533",
+        "version" : "11.2.1"
+      }
+    },
+    {
+      "identity" : "pageboy",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/uias/Pageboy",
+      "state" : {
+        "revision" : "be0c1f6f1964cfb07f9d819b0863f2c3f255f612",
+        "version" : "4.2.0"
+      }
+    },
+    {
+      "identity" : "panmodal",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/slackhq/PanModal.git",
+      "state" : {
+        "revision" : "b012aecb6b67a8e46369227f893c12544846613f",
+        "version" : "1.2.7"
+      }
+    },
+    {
+      "identity" : "parkedtextfield",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gmertk/ParkedTextField",
+      "state" : {
+        "revision" : "5e2838afd27d57edb399a9192fb10bb11f686ad3",
+        "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "quick",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Quick/Quick.git",
+      "state" : {
+        "revision" : "16910e406be96e08923918315388c3e989deac9e",
+        "version" : "6.1.0"
+      }
+    },
+    {
+      "identity" : "reactiveswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ReactiveCocoa/ReactiveSwift.git",
+      "state" : {
+        "revision" : "c43bae3dac73fdd3cb906bd5a1914686ca71ed3c",
+        "version" : "6.7.0"
+      }
+    },
+    {
+      "identity" : "reactorkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ReactorKit/ReactorKit.git",
+      "state" : {
+        "revision" : "8fa33f09c6f6621a2aa536d739956d53b84dd139",
+        "version" : "3.2.0"
+      }
+    },
+    {
+      "identity" : "reusable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AliSoftware/Reusable.git",
+      "state" : {
+        "revision" : "18674709421360e210c2ecd4e8e08b217d4ea61d",
+        "version" : "4.1.2"
+      }
+    },
+    {
+      "identity" : "rxdatasources",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RxSwiftCommunity/RxDataSources.git",
+      "state" : {
+        "revision" : "90c29b48b628479097fe775ed1966d75ac374518",
+        "version" : "5.0.2"
+      }
+    },
+    {
+      "identity" : "rxflow",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RxSwiftCommunity/RxFlow.git",
+      "state" : {
+        "revision" : "d8d4e53d05239f1ec1bd8bec173907868afa0fa1",
+        "version" : "2.13.0"
+      }
+    },
+    {
+      "identity" : "rxgesture",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RxSwiftCommunity/RxGesture.git",
+      "state" : {
+        "revision" : "1b137c576b4aaaab949235752278956697c9e4a0",
+        "version" : "4.0.4"
+      }
+    },
+    {
+      "identity" : "rxkeyboard",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RxSwiftCommunity/RxKeyboard.git",
+      "state" : {
+        "revision" : "085fd99d7bb4f98e671904fcfe7ff561e66574ad",
+        "version" : "2.0.0"
+      }
+    },
+    {
+      "identity" : "rxswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ReactiveX/RxSwift",
+      "state" : {
+        "revision" : "b4307ba0b6425c0ba4178e138799946c3da594f8",
+        "version" : "6.5.0"
+      }
+    },
+    {
+      "identity" : "snapkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SnapKit/SnapKit.git",
+      "state" : {
+        "revision" : "f222cbdf325885926566172f6f5f06af95473158",
+        "version" : "5.6.0"
+      }
+    },
+    {
+      "identity" : "swinject",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Swinject/Swinject.git",
+      "state" : {
+        "revision" : "8bc503e60965298984fb58cf47b71c541449fe2a",
+        "version" : "2.8.3"
+      }
+    },
+    {
+      "identity" : "tabman",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/uias/Tabman.git",
+      "state" : {
+        "revision" : "3b2213290eb93e55bb50b49d1a179033005c11ab",
+        "version" : "3.2.0"
+      }
+    },
+    {
+      "identity" : "viewanimator",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/marcosgriselli/ViewAnimator.git",
+      "state" : {
+        "revision" : "55f1c46241b181c3e0b68d70edb6d87926c7d183",
+        "version" : "3.1.0"
+      }
+    },
+    {
+      "identity" : "weakmaptable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ReactorKit/WeakMapTable.git",
+      "state" : {
+        "revision" : "cb05d64cef2bbf51e85c53adee937df46540a74e",
+        "version" : "1.2.1"
+      }
+    }
+  ],
+  "version" : 2
+}
